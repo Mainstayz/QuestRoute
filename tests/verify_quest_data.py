@@ -2,24 +2,39 @@
 
 Needs lupa (tests use lupa.lua51). Examples:
   python tests/verify_quest_data.py
-  python tests/verify_quest_data.py --addon path/to/QuestRoute.lua
-By default, this harness executes this repository's addons/QuestRoute/QuestRoute.lua
-against isolated, deterministic API fixtures. Use --addon to override the source file.
+  python tests/verify_quest_data.py --addon path/to/QuestRoute/QuestRoute.toc
+  python tests/verify_quest_data.py --addon path/to/legacy/QuestRoute.lua
+By default, this harness loads addons/QuestRoute/QuestRoute.toc in manifest order
+against isolated, deterministic API fixtures. --addon accepts an addon directory,
+a .toc file, or a .lua file. A Lua file listed in its adjacent QuestRoute.toc loads
+the whole manifest; otherwise it runs alone for legacy baseline comparisons.
 It does not connect to or change the game.
 """
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import argparse
 from lupa.lua51 import LuaRuntime
 
-DEFAULT_ADDON = Path(__file__).resolve().parents[1] / "addons" / "QuestRoute" / "QuestRoute.lua"
+DEFAULT_ADDON = Path(__file__).resolve().parents[1] / "addons" / "QuestRoute"
+EXPECTED_ADDON_GLOBALS = {"WoWBridgeNS", "QuestRouteDB", "SLASH_QUESTROUTEAPI1", "SLASH_QUESTROUTE1"}
 
 SETUP = r'''
 Fixture = {
     mapOrder = {101, 102, 103}, pois = {}, conversionFail = {},
     worldContinent = {}, worldOffset = {}, phase = 7,
     spawns = {[17] = {{0, 0}, {-1, -1}, {55, 20, 7}}, [718] = {{20, 20}}},
-    metadataVersion = 'test-version',
+    metadataVersion = 'test-version', frames = {}, exposures = {},
 }
+WoWBridge = {Bind=function(addonName)
+    assert(addonName=='QuestRoute','bridge binds the addon name')
+    return {
+        Emit=function() end,
+        Expose=function(_,name,callback)
+            Fixture.exposures[#Fixture.exposures+1]={name=name,callback=callback}
+        end,
+        Request=function(_,_,_,callback) callback(nil,'unavailable') end,
+    }
+end}
 local function clone(value)
     if type(value) ~= 'table' then return value end
     local out = {}; for k,v in pairs(value) do out[k] = clone(v) end; return out
@@ -48,6 +63,7 @@ end
 C_NamePlate={GetNamePlates=function() return Fixture.plates or {} end}
 function CreateFrame(kind,name,parent)
     local f={scripts={},events={},parent=parent}
+    Fixture.frames[#Fixture.frames+1]=f
     function f:GetFrameLevel() return self.level or 3 end
     function f:GetWidth() return self.width or 200 end
     function f:GetHeight() return self.height or 200 end
@@ -1980,18 +1996,153 @@ return 10
 '''
 
 
+LOAD_CHECKS = r'''
+local api=...
+assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==14,'manifest publishes the shared r14 namespace')
+local endpoints={
+    get_quests='GetQuests',get_player_context='GetPlayerContext',get_quest_pois='GetQuestPOIs',
+    get_quest_details='GetQuestDetails',get_database_entity='GetDatabaseEntity',get_quest_targets='GetQuestTargets',
+    get_plan='GetPlan',replan='Replan',set_quest_skip='SetQuestSkip',reset_quest_skips='ResetQuestSkips',
+    set_route_options='SetRouteOptions',change_quest_spot='ChangeQuestSpot',
+    clear_spot_avoidances='ClearSpotAvoidances',get_unit_tasks='GetUnitTasks',
+}
+local public={RegisterSettings=true,StartRoute=true,OnUnload=true,OnReload=true}
+for _,member in pairs(endpoints) do public[member]=true end
+for member in pairs(public) do assert(type(api[member])=='function','missing public API: '..member) end
+for member,value in pairs(api) do
+    assert(type(value)~='function' or public[member],'unexpected public API: '..tostring(member))
+end
+local exposed={}
+for _,entry in ipairs(Fixture.exposures) do
+    local member=endpoints[entry.name]
+    assert(member,'unexpected bridge endpoint: '..tostring(entry.name))
+    assert(not exposed[entry.name],'duplicate bridge endpoint: '..entry.name)
+    assert(entry.callback==api[member],'bridge endpoint uses current namespace API: '..entry.name)
+    exposed[entry.name]=true
+end
+for name in pairs(endpoints) do assert(exposed[name],'missing bridge endpoint: '..name) end
+local active=0
+for _,frame in ipairs(Fixture.frames) do
+    if frame:GetScript('OnUpdate') or frame.events.QUEST_LOG_UPDATE then
+        active=active+1
+        assert(frame==api.route.driver,'extra route driver remains active')
+    end
+end
+assert(active==(api.route.running and 1 or 0),'exactly one running route driver')
+if api.settingsUI then
+    assert(#Settings.categories==1 and Settings.registeredCount==1
+        and #api.settingsUI.eliteSetting.callbacks==1,'exactly one native settings category and callback')
+end
+return 4
+'''
+
+
+def read_addon_sources(addon):
+    """Resolve the manifest before executing anything, including missing-file checks."""
+    addon = Path(addon).resolve()
+    if addon.is_dir():
+        toc = addon / "QuestRoute.toc"
+    elif addon.suffix.lower() == ".toc":
+        toc = addon
+    elif addon.suffix.lower() == ".lua":
+        toc = addon.parent / "QuestRoute.toc"
+        if not toc.is_file():
+            return [(addon, addon.read_text(encoding="utf-8-sig"))]
+    else:
+        raise ValueError(f"expected an addon directory, .toc or .lua file: {addon}")
+
+    modules = []
+    for line in toc.read_text(encoding="utf-8-sig").splitlines():
+        entry = line.strip()
+        if entry and not entry.startswith("#") and entry.lower().endswith(".lua"):
+            modules.append((toc.parent / entry.replace("\\", "/")).resolve())
+    if addon.suffix.lower() == ".lua" and addon not in modules:
+        return [(addon, addon.read_text(encoding="utf-8-sig"))]
+    if not modules:
+        raise ValueError(f"{toc}: no Lua modules listed")
+    sources = []
+    for module in modules:
+        if not module.is_file():
+            raise FileNotFoundError(f"{toc}: Lua module not found: {module}")
+        sources.append((module, module.read_text(encoding="utf-8-sig")))
+    return sources
+
+
+def execute_addon(runtime, sources, namespace):
+    for path, source in sources:
+        runtime.execute(source, "QuestRoute", namespace, name=f"@{path}")
+
+
+def load_and_check(runtime, sources, namespace):
+    runtime.globals().Fixture.exposures = runtime.table()
+    global_names = set(runtime.globals())
+    execute_addon(runtime, sources, namespace)
+    unexpected = set(runtime.globals()) - global_names - EXPECTED_ADDON_GLOBALS
+    assert not unexpected, f"unexpected addon globals: {sorted(map(str, unexpected))}"
+    return 1 + runtime.execute(LOAD_CHECKS, namespace)
+
+
+def verify_loader():
+    """Use observable Lua effects to check ordering, shared varargs and path selection."""
+    with TemporaryDirectory(prefix="questroute-loader-") as temporary:
+        root = Path(temporary)
+        (root / "parts").mkdir()
+        toc = root / "QuestRoute.toc"
+        entry = root / "QuestRoute.lua"
+        (root / "ZFirst.lua").write_text(
+            "local name,ns=...; assert(name=='QuestRoute' and ns.step==nil); ns.step=1", encoding="utf-8")
+        (root / "parts" / "ASecond.lua").write_text(
+            "local name,ns=...; assert(name=='QuestRoute' and ns.step==1); ns.step=2", encoding="utf-8")
+        entry.write_text("local _,ns=...; assert(ns.step==2); ns.step=3", encoding="utf-8")
+        toc.write_text("## Title: Loader fixture\n\n# comment\n ZFirst.lua \nparts\\ASecond.lua\nQuestRoute.lua\n",
+                       encoding="utf-8-sig")
+        runtime = LuaRuntime(unpack_returned_tuples=True)
+        passed = 0
+        for target in (root, toc, entry):
+            namespace = runtime.table()
+            execute_addon(runtime, read_addon_sources(target), namespace)
+            assert namespace.step == 3, f"manifest order and shared namespace: {target}"
+            passed += 1
+
+        missing = root / "Missing.lua"
+        toc.write_text(toc.read_text(encoding="utf-8-sig") + "Missing.lua\n", encoding="utf-8-sig")
+        for target in (root, toc, entry):
+            try:
+                read_addon_sources(target)
+            except FileNotFoundError as error:
+                assert str(missing) in str(error) and str(toc) in str(error), str(error)
+            else:
+                raise AssertionError(f"missing manifest module accepted: {target}")
+        passed += 1
+
+        legacy = root / "legacy"
+        legacy.mkdir()
+        for target in (root / "Standalone.lua", legacy / "QuestRoute.lua"):
+            target.write_text("local _,ns=...; assert(ns.step==nil); ns.standalone=true", encoding="utf-8")
+            namespace = runtime.table()
+            execute_addon(runtime, read_addon_sources(target), namespace)
+            assert namespace.standalone, f"legacy Lua file runs independently: {target}"
+            passed += 1
+        return passed
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--addon", type=Path, default=DEFAULT_ADDON)
+    parser.add_argument("--addon", type=Path, default=DEFAULT_ADDON,
+                        help="addon directory, .toc manifest, or legacy .lua file")
     args = parser.parse_args()
+    try:
+        sources = read_addon_sources(args.addon)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
+    loading_passed = verify_loader()
     runtime = LuaRuntime(unpack_returned_tuples=True)
     runtime.execute(SETUP)
-    source = args.addon.read_text(encoding="utf-8-sig")
     namespace = runtime.table()
-    runtime.execute(source, "QuestRoute", namespace)
+    loading_passed += load_and_check(runtime, sources, namespace)
     passed = runtime.execute(CHECKS)
     namespace.OnUnload()
-    runtime.execute(source, "QuestRoute", namespace)
+    loading_passed += load_and_check(runtime, sources, namespace)
     passed += runtime.execute(RELOAD_CHECKS)
     runtime.execute("""
         local api=WoWBridgeNS.QuestRoute
@@ -2000,12 +2151,14 @@ def main():
         for _,step in ipairs(api.route.plan.steps) do step.groupIndex=nil;step.groupSize=nil;step.navigation=nil end
         QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201]=true
     """)
-    runtime.execute(source, "QuestRoute", namespace)
+    loading_passed += load_and_check(runtime, sources, namespace)
     passed += runtime.execute(LEGACY_RELOAD_CHECKS)
     namespace.OnUnload()
-    runtime.execute(source, "QuestRoute", runtime.table())
+    loading_passed += load_and_check(runtime, sources, runtime.table())
     passed += runtime.execute(FRESH_RELOAD_CHECKS)
-    print(f"PASS: {passed} isolated Lua 5.1 checks; addon={args.addon}")
+    print(f"PASS: {passed + loading_passed} isolated Lua 5.1 checks "
+          f"({passed} existing + {loading_passed} loading); "
+          f"{len(sources)} Lua file(s); addon={args.addon}")
 
 
 if __name__ == "__main__":

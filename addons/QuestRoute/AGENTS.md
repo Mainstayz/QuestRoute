@@ -1,6 +1,8 @@
 # QuestRoute · 给 Agent 的说明
 
-这是《魔兽世界》国服「无限」客户端的地图规划与任务数据 API 插件，用「无限工坊」开发。源码目录为 `addons/QuestRoute/`，主文件/加载清单为 `QuestRoute.lua` / `QuestRoute.toc`，Title 为 `QuestRoute`，SavedVariables 为 `QuestRouteDB`，Lua 命名空间为 `WoWBridgeNS.QuestRoute`。工坊 `call` 使用 `addon="QuestRoute"`；路线命令 `/questroute` 注册为 `SlashCmdList.QUESTROUTE`，只读任务列表命令为 `/questrouteapi`，不提供旧名称的运行时别名。
+这是《魔兽世界》国服「无限」客户端的地图规划与任务数据 API 插件，用「无限工坊」开发。源码目录为 `addons/QuestRoute/`，加载清单 `QuestRoute.toc` 按依赖顺序执行 16 个 Lua 文件，入口 `QuestRoute.lua` 最后加载，Title 为 `QuestRoute`，SavedVariables 为 `QuestRouteDB`，Lua 命名空间为 `WoWBridgeNS.QuestRoute`。工坊 `call` 使用 `addon="QuestRoute"`；路线命令 `/questroute` 注册为 `SlashCmdList.QUESTROUTE`，只读任务列表命令为 `/questrouteapi`，不提供旧名称的运行时别名。
+
+仓库已完成功能模块拆分，当前apiRevision=14。入口从2594行缩至204行，职责与加载顺序见[MODULES.md](MODULES.md)。685项Lua5.1检查（659业务＋26加载）及16文件离线check通过，零错误/警告；当前游戏离线、尚未同步安装，多文件启动待实机验收。以下r14设置页检查数与旧安装checkpoint为拆分前历史基线。
 
 仓库已完成重命名，当前apiRevision=14。原生“选项 → 插件 → QuestRoute”页使用一个勾选框控制`includeEliteQuests`（默认false，按角色保存、立即重排）；用户明确地图增强容易引起手柄焦点异常，本次不增加地图交互。未完成精英可选择加入，副本/专业等过滤保留，已完成精英交付不受开关影响。659项Lua5.1隔离检查及插件离线检查通过。游戏离线、安装尚未同步，设置页显示/手柄焦点与新名称实机验证待完成；历史checkpoint55属于旧插件 `YYQQuestAPI`。安装与旧配置迁移见根[README](../../README.md)，最新状态见[开发进度](../../开发进度.md)。
 
@@ -28,12 +30,13 @@
 ## 开发循环
 
 1. 涉及实机操作时先 `status`：`link.state` 是 `online` 才执行游戏调用（游戏在跑、开发组件 WoWBridge 连着）。离线时可继续仓库编辑与离线检查，实机验证登记为待完成。
-2. 改 `QuestRoute.lua`（新文件记得写进 `QuestRoute.toc`）。
+2. 按[模块说明](MODULES.md)修改对应职责文件，新文件记得写进 `QuestRoute.toc`。跨模块状态动态读取 `ns.route`，不要在文件顶层捕获旧表引用；换热点草稿期间规划/导航/热点必须读取同一份当前状态。
 3. `check`，target `QuestRoute`：不进游戏就找出会出错的地方——Lua 5.1 语法（客户端就是 5.1：没有 `//`、`goto`、位运算符）、
    这个客户端没有的库和函数（`os`、`io`、`utf8`、`require`、`table.unpack`…）、拼错的全局名和 API、忘了 `local` 的全局变量、
    受保护函数、受限事件、toc 与 XML；手册里查不到的名字，游戏在线时会直接问游戏。先把 `errors` 改掉，`warnings` 逐条看。
 4. `load`，target `QuestRoute`：按 toc 顺序把插件的 Lua 全部热加载进游戏，返回每个文件的结果。`load` 和 `watch` 自己也会查
    语法，有语法错误的文件不会送进游戏（`check_failed` 带文件和行号）。
+   模块在加载时取得其他模块的函数引用，因此每次修改后都加载整个插件，`watch` 也以插件目录为目标，不单独热加载某个 Lua 文件。
 5. 新目录已经完整重启加载后，`try` 把功能走一遍：执行斜杠命令（`slash`，例如 `/questrouteapi`）或一段代码，一次带回结果和之后几秒的报错（带调用栈）、
    `print`、被拦截的动作，需要时加 `events` 和截图；`ok` 为真才算这一步过了。也可以分开看：`logs`（kinds `ERR,OUT`）、
    `run` 查状态（例如 `return QuestRouteDB`）、`snap` 截图、`trace` 录事件、`inspect` 查框体。重复 2–5。
@@ -94,7 +97,7 @@
 
 ## 热加载约定（模板已经写好）
 
-- 文件开头登记命名空间：`local addonName, ns = ...`，`WoWBridgeNS[addonName] = ns`；插件名为 `QuestRoute` 时即 `WoWBridgeNS.QuestRoute`，热加载时文件拿到的是同一个 `ns`。
+- `Core.lua` 登记命名空间：`local addonName, ns = ...`，`WoWBridgeNS[addonName] = ns`；其余模块以 `local _, ns = ...` 取得同一个 `ns`，无需重复登记。插件名为 `QuestRoute` 时即 `WoWBridgeNS.QuestRoute`。
 - 热加载会把文件再跑一遍：事件框体、钩子只建一次（放在 `ns` 里复用，或先 `UnregisterAllEvents`）；`ns.OnUnload()`
   在重跑前收拾旧东西（藏起旧窗口、取消计时器）并返回要保留的状态，`ns.OnReload(state)` 在重跑后接回来。
 - `ADDON_LOADED`、`PLAYER_LOGIN` 在热加载时不会再触发：初始化写成函数，登录时和 `OnReload` 里都调用。
@@ -112,6 +115,12 @@
 
 ## 文件
 
-- `QuestRoute.toc`：插件信息和文件列表（Title `QuestRoute`、SavedVariables `QuestRouteDB`）。
-- `QuestRoute.lua`：地图路线、任务数据 API、斜杠命令与角色选项。
+- `QuestRoute.toc`：插件信息和16文件加载顺序（Title `QuestRoute`、SavedVariables `QuestRouteDB`）。
+- `Core.lua`：命名空间、桥接、工具与共享路线状态。
+- `QuestData.lua` / `Database.lua` / `Objectives.lua`：原生数据、数据库和目标解析。
+- `RouteOptions.lua` / `Priority.lua` / `Navigation.lua` / `Hotspots.lua`：角色配置、权重、导航与热点规则。
+- `Planner.lua` / `RouteActions.lua`：路线快照与玩家主动修改。
+- `MapPins.lua` / `WorldMap.lua` / `Minimap.lua` / `Nameplates.lua` / `Settings.lua`：地图共用图元、两图、姓名板和原生设置。
+- `QuestRoute.lua`：命令/API注册、事件驱动与登录/热加载生命周期。
+- `MODULES.md`：模块职责、内部接口和维护约定；`README.md`：玩家使用与公开API。
 - `AGENTS.md`：这份说明；`CLAUDE.md` 引用它。

@@ -2,9 +2,9 @@
 
 《魔兽世界：无限》地图规划与任务数据 API 插件：在原生大地图、小地图规划当前任务路线，并提供只读任务日志、玩家上下文、原生 POI 和可选 QuestieDB 补充查询。任务日志包括折叠分类下的任务、日志中可枚举的隐藏任务，以及完成后尚未交付的任务，不包含已交付的历史任务和尚未接取的任务。
 
-统一标识：目录 `addons/QuestRoute/`，文件 `QuestRoute.lua` / `QuestRoute.toc`，Title `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。路线命令为 `/questroute`（`SlashCmdList.QUESTROUTE`），只读任务列表命令为 `/questrouteapi`。不提供旧名称的运行时别名。安装、停用旧目录及手动配置迁移见根 [README](../../README.md)。
+统一标识：目录 `addons/QuestRoute/`，加载清单 `QuestRoute.toc`，入口 `QuestRoute.lua`（在其余模块后加载），Title `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。路线命令为 `/questroute`（`SlashCmdList.QUESTROUTE`），只读任务列表命令为 `/questrouteapi`。不提供旧名称的运行时别名。安装、停用旧目录及手动配置迁移见根 [README](../../README.md)。
 
-当前代码修订为 **apiRevision=14**，schemaVersion=1。新增原生插件设置页与按角色保存的精英任务规划开关，659项Lua5.1隔离检查全部通过，插件离线检查无错误或警告。游戏离线，安装尚未同步，新名称启动、设置页实际显示和手柄焦点待验证；下述交付步骤和地图截图来自重命名前的现场记录。
+当前代码修订为 **apiRevision=14**，schemaVersion=1。已将单文件按职责拆成 16 个 Lua 模块，原生命令、API、角色存档及路线策略沿用 r14。685 项 Lua5.1 隔离检查通过（659 项原有业务＋26 项加载检查），插件离线检查无错误或警告。模块边界和维护方式见 [MODULES.md](MODULES.md)。游戏离线，安装尚未同步，多文件启动、设置页实际显示和手柄焦点待验证；下述交付步骤和地图截图来自重命名前的现场记录。
 
 已完成待交任务纳入当前地图路线，副本/精英/专业类型不再挡住交付；未完成时仍按既有类型过滤。交付编号带?，悬停注明交任务；已完成但客户端尚未确认可交时带~并提示等待确认。保留每未完目标一个主热点+最多两个地图备选、直线/升级权重/稳定和手动跳过。上轮626项隔离检查通过，4个原生交付步骤已在线核对，M地图?编号/悬停及b备选显示已截图确认；真正交付后的移除和备选点击手感仍待现场验收。原有 `get_quests` 保持默认100的分页和字段契约，提供可选原生 `tag={id,name,isElite?,tradeskillLineID?}`。
 
@@ -368,7 +368,7 @@ navigationRules公开120码进入、180码退出、300码进度扩展、90秒进
 
 离线测试位于工作区 `C:\Users\Pillar\Desktop\WowFac\tests\verify_quest_data.py`，使用lupa.lua51在独立环境运行，不连接游戏。
 
-本次已同步重命名目录、Lua、toc、命令、存档变量及测试入口，apiRevision仍为13。新路径下626项离线检查通过，可在仓库根目录运行 `python tests/verify_quest_data.py`，或用 `--addon addons/QuestRoute/QuestRoute.lua` 显式指定源码。
+当前按 `QuestRoute.toc` 顺序加载全部 16 个 Lua 文件，apiRevision 仍为 14。仓库根目录运行 `python tests/verify_quest_data.py`，或用 `--addon addons/QuestRoute` / `--addon addons/QuestRoute/QuestRoute.toc` 指定插件。兼容旧 `--addon addons/QuestRoute/QuestRoute.lua` 写法，存在同目录清单时同样加载整个插件。685 项检查覆盖既有业务与整插件重载、清单顺序/缺文件、共享命名空间、14 个桥接入口和意外全局变量。
 
 安装时完整退出游戏，禁用或移走旧 `YYQQuestAPI` 目录后复制 `addons/QuestRoute`，再启动游戏；新目录、新文件和 `.toc` 变更都需要完整重启，不能用热加载或 `/reload` 代替。SavedVariables 文件改为 `QuestRoute.lua`，不会自动读取旧文件；退出游戏后按根 README 备份并迁移旧顶层变量，已有新配置先备份，保留完整 routes 内容。
 

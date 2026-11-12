@@ -5,10 +5,10 @@
 ## 安装
 
 1. 完整退出游戏，先禁用或移走旧 `Interface/AddOns/YYQQuestAPI` 目录，避免两版同时运行。
-2. 将仓库中的 `addons/QuestRoute` 文件夹复制到游戏的 `Interface/AddOns/` 目录，最终为 `Interface/AddOns/QuestRoute/`，其中应包含 `QuestRoute.lua` 和 `QuestRoute.toc`，插件 Title 为 `QuestRoute`。
+2. 将仓库中的整个 `addons/QuestRoute` 文件夹复制到游戏的 `Interface/AddOns/` 目录，最终为 `Interface/AddOns/QuestRoute/`。保留 `QuestRoute.toc` 及其列出的全部 16 个 Lua 文件，插件 Title 为 `QuestRoute`。
 3. 需要沿用旧配置时，先按下方步骤迁移，再启动游戏；在插件列表中确认仅启用 QuestRoute。
 
-插件目录改名、增加新文件或修改 `.toc` 后，必须完整退出并重新启动游戏，`/reload` 不够。本次重命名尚未同步到游戏安装，也未在新名称下完成实机验证。
+插件目录改名、增加新文件或修改 `.toc` 后，必须完整退出并重新启动游戏，`/reload` 不够。本次模块拆分尚未同步到游戏安装，新名称及多文件启动仍待实机验证。
 
 原生客户端数据决定任务状态与进度；可选安装 QuestieDB 补充目标实体和静态刷新点。插件可以独立运行，无限工坊用于开发调试与 API 调用。
 
@@ -42,7 +42,9 @@
 - 切换后立即重排，按服务器与角色保存，正常退出或重载界面时由游戏写盘。
 - 副本、专业、失败、手动跳过、外图及无可靠位置的过滤继续生效；已完成的精英任务不受此开关影响，仍可顺路交付。
 
-当前仓库 apiRevision=14，659项离线检查及插件静态检查通过。游戏离线，安装同步、设置页实际显示与手柄焦点尚待实机验证。
+当前仓库 apiRevision=14，已按功能拆为 16 个 Lua 文件；`QuestRoute.lua` 从 2594 行缩至 204 行，负责命令、API 注册和运行生命周期。685 项离线检查（原有 659 项业务检查＋26 项加载检查）及插件静态检查通过。游戏离线，安装同步、多文件启动、设置页实际显示与手柄焦点尚待实机验证。
+
+模块职责、加载顺序与修改约定见 [模块说明](addons/QuestRoute/MODULES.md)。
 
 ## 离线验证
 
@@ -50,10 +52,10 @@
 
 ```powershell
 python -m pip install lupa
-python tests/verify_quest_data.py --addon addons/QuestRoute/QuestRoute.lua
+python tests/verify_quest_data.py
 ```
 
-验证在隔离的 Lua 5.1 环境运行，不连接或修改游戏。
+验证在隔离的 Lua 5.1 环境按 `.toc` 顺序加载整个插件，不连接或修改游戏。`--addon` 可指定插件目录或 `.toc`；旧的 `--addon addons/QuestRoute/QuestRoute.lua` 写法也会加载同目录的完整清单。
 
 ## 目录
 

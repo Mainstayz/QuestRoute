@@ -7,4 +7,19 @@
 ## OptionalDeps: WoWBridge
 ## X-Made-With: 无限工坊
 
+Core.lua
+Database.lua
+QuestData.lua
+Objectives.lua
+RouteOptions.lua
+Priority.lua
+Navigation.lua
+Hotspots.lua
+Nameplates.lua
+Planner.lua
+RouteActions.lua
+Settings.lua
+MapPins.lua
+WorldMap.lua
+Minimap.lua
 QuestRoute.lua
