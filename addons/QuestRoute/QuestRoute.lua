@@ -1,4 +1,4 @@
--- YYQ 角色任务 API：实时读取当前角色已接取的任务，不改变任务日志或追踪设置。
+-- QuestRoute：当前角色任务规划、地图导航与只读任务数据 API。
 local addonName, ns = ...
 WoWBridgeNS = WoWBridgeNS or {}
 WoWBridgeNS[addonName] = ns
@@ -72,7 +72,7 @@ local function ReadQuest(info, category, includeObjectives)
     return quest
 end
 
--- 供其他 Lua 代码调用：WoWBridgeNS.YYQQuestAPI.GetQuests({ ... })。
+-- 供其他 Lua 代码调用：WoWBridgeNS.QuestRoute.GetQuests({ ... })。
 -- offset 为从 0 开始的偏移，limit 默认为 100；每次调用都重新读取角色当前日志。
 function ns.GetQuests(args)
     if args == nil then args = {} end
@@ -144,10 +144,10 @@ WB:Expose("get_quests", ns.GetQuests,
     .. "每项含 questID/title/category/status 及 objectives 目标进度。"
     .. "不包含已交付任务历史或尚未接取任务。")
 
-SLASH_YYQQUESTAPI1 = "/yyqquestapi"
-SlashCmdList["YYQQUESTAPI"] = function()
+SLASH_QUESTROUTEAPI1 = "/questrouteapi"
+SlashCmdList["QUESTROUTEAPI"] = function()
     local result = ns.GetQuests({ includeObjectives = false })
-    print("|cffd8a85aYYQQuestAPI|r 当前任务：" .. result.total)
+    print("|cffd8a85aQuestRoute|r 当前任务：" .. result.total)
     for _, quest in ipairs(result.quests) do
         print("[" .. quest.questID .. "] " .. quest.title .. " (" .. quest.status .. ")")
     end
@@ -794,13 +794,13 @@ local function RouteSettings()
         route.temporary = route.temporary or { skipped = {}, moveThreshold = 100, enabled = true }
         return route.temporary
     end
-    YYQQuestAPIDB = YYQQuestAPIDB or {}
-    YYQQuestAPIDB.routes = YYQQuestAPIDB.routes or {}
+    QuestRouteDB = QuestRouteDB or {}
+    QuestRouteDB.routes = QuestRouteDB.routes or {}
     local key = GetRealmName() .. ":" .. name
-    local settings = YYQQuestAPIDB.routes[key]
+    local settings = QuestRouteDB.routes[key]
     if not settings then
         settings = { skipped = {}, moveThreshold = 100, enabled = true }
-        YYQQuestAPIDB.routes[key] = settings
+        QuestRouteDB.routes[key] = settings
     end
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end
     return settings
@@ -1913,7 +1913,7 @@ local function ConfigureRoutePin(pin)
             if shift then
                 local result = ns.ChangeQuestSpot({ questID = self.step.questID, objectiveKey = self.step.objectiveKey,
                     hotspotID = self.hotspot and self.hotspot.id })
-                print("|cff31cee8YYQ升级路线|r " .. (result.ok and "已更换地点，旧点附近临时避开10分钟。" or result.error.message))
+                print("|cff31cee8QuestRoute|r " .. (result.ok and "已更换地点，旧点附近临时避开10分钟。" or result.error.message))
             else ns.SetQuestSkip({ questID = self.step.questID }) end
             route.hoveredPin = nil
             GameTooltip:Hide()
@@ -1980,12 +1980,12 @@ local function ConfigureRoutePin(pin)
             end
         end
         if self.step.index == 1 and route.plan.stability and route.plan.stability.retained then
-            GameTooltip:AddLine("继续当前目标；可用 /yyqroute replan 重新选择", 0.7, 0.85, 1)
+            GameTooltip:AddLine("继续当前目标；可用 /questroute replan 重新选择", 0.7, 0.85, 1)
         end
         if self.shifted then GameTooltip:AddLine("编号为防重叠略作偏移，细线连接实际位置", 0.7, 0.85, 1) end
         if self.onEdge then GameTooltip:AddLine("目标在小地图视野外，边缘编号指示方向", 1, 0.7, 0.2) end
         if self.step.objectiveKey then GameTooltip:AddLine("Shift+右键换同目标地点（旧点150码内避开10分钟）", 1, 0.85, 0.3) end
-        GameTooltip:AddLine("右键跳过整项任务 · /yyqroute unskip " .. self.step.questID .. " 恢复", 0.6, 0.9, 1)
+        GameTooltip:AddLine("右键跳过整项任务 · /questroute unskip " .. self.step.questID .. " 恢复", 0.6, 0.9, 1)
         GameTooltip:Show()
     end)
     pin:SetScript("OnLeave", function(self)
@@ -2475,8 +2475,8 @@ function ns.StartRoute()
     RenderMinimapRoute()
 end
 
-SLASH_YYQROUTE1 = "/yyqroute"
-SlashCmdList["YYQROUTE"] = function(text)
+SLASH_QUESTROUTE1 = "/questroute"
+SlashCmdList["QUESTROUTE"] = function(text)
     local command, value = (text or ""):match("^(%S*)%s*(.-)%s*$")
     local result
     if command == "skip" then result = ns.SetQuestSkip({ questID = tonumber(value) })
@@ -2495,15 +2495,15 @@ SlashCmdList["YYQROUTE"] = function(text)
         result = ns.ClearSpotAvoidances({ questID = id })
     elseif command == "nameplates" then
         result = (value == "on" or value == "off") and ns.SetRouteOptions({ nameplatesEnabled = value == "on" })
-            or InvalidArguments("用法：/yyqroute nameplates on/off")
+            or InvalidArguments("用法：/questroute nameplates on/off")
     else
         local plan = ns.GetPlan({})
-        print("|cff31cee8YYQ升级路线|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
-        print("/yyqroute skip ID · unskip ID/all · distance 100 · replan · on/off")
+        print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
+        print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
         print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off")
         return
     end
-    if result.ok then print("|cff31cee8YYQ升级路线|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
+    if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
 end
 
 WB:Expose("get_plan", ns.GetPlan, "获取当前地图升级与交付路线。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定。args:{}。")

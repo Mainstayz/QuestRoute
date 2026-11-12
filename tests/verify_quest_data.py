@@ -1,15 +1,17 @@
 """Offline Lua 5.1 checks of public quest-data contracts and failure isolation.
 
-Needs lupa (tests use lupa.lua51). Example:
+Needs lupa (tests use lupa.lua51). Examples:
   python tests/verify_quest_data.py
-This harness executes the installed addon against isolated, deterministic API fixtures.
+  python tests/verify_quest_data.py --addon path/to/QuestRoute.lua
+By default, this harness executes this repository's addons/QuestRoute/QuestRoute.lua
+against isolated, deterministic API fixtures. Use --addon to override the source file.
 It does not connect to or change the game.
 """
 from pathlib import Path
 import argparse
 from lupa.lua51 import LuaRuntime
 
-DEFAULT_ADDON = Path(r"C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\YYQQuestAPI\YYQQuestAPI.lua")
+DEFAULT_ADDON = Path(__file__).resolve().parents[1] / "addons" / "QuestRoute" / "QuestRoute.lua"
 
 SETUP = r'''
 Fixture = {
@@ -161,7 +163,7 @@ end
 '''
 
 CHECKS = r'''
-local api=WoWBridgeNS.YYQQuestAPI
+local api=WoWBridgeNS.QuestRoute
 local passed=0
 local function check(value,label)
     if not value then error('FAIL: '..label) end
@@ -306,7 +308,7 @@ check(why[104]=='instance' and why[105]=='elite' and why[106]=='profession','fil
 api.SetQuestSkip({questID=102})
 plan=api.GetPlan({})
 check(plan.count==2 and plan.steps[1].questID==101 and plan.steps[2].questID==103,'skip removes entire quest')
-check(YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[102],'skip saved per character')
+check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[102],'skip saved per character')
 api.SetQuestSkip({questID=102,skipped=false})
 check(api.GetPlan({}).count==3,'restore skipped quest')
 -- Tick without the map: movement below threshold does not trigger replanning.
@@ -506,7 +508,7 @@ check(api.route.minimapView==cached and cached.overlay:IsVisible(),'hot reload r
 local pinID=mini.pins[1].step.questID
 GameTooltip={Hide=function() end}
 mini.pins[1]:GetScript('OnClick')(mini.pins[1],'RightButton')
-check(YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[pinID],'minimap right click uses quest skip')
+check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[pinID],'minimap right click uses quest skip')
 api.SetQuestSkip({questID=pinID,skipped=false})
 -- Intelligent route scenarios use independent quest rows; they never touch the live game.
 Minimap=nil;WorldMapFrame=nil
@@ -560,7 +562,7 @@ local function scenario(rows,playerX)
     Fixture.routeRows=rows;Fixture.playerX=(playerX or 0)/Fixture.worldScale;Fixture.playerY=0
     Fixture.playerMapID=101;Fixture.time=Fixture.time+10
     api.route.plan=nil;api.route.progress={};api.route.spotAvoidances={};api.route.nextSpotCheck=nil
-    YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped={}
+    QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped={}
     syncPOIs();return api.Replan({})
 end
 local function autoPlan()
@@ -720,7 +722,7 @@ plan=autoPlan();check(plan.steps[1].questID==203,'ordinary event after manual ch
 rows={routeRow(201,500),routeRow(202,900)}
 scenario(rows);rows[1].fulfilled=1;rows[2].x=610;Fixture.playerX=.6;plan=autoPlan()
 check(plan.steps[1].questID==201,'protected target before slash replan')
-SlashCmdList['YYQROUTE']('replan');plan=api.GetPlan({})
+SlashCmdList['QUESTROUTE']('replan');plan=api.GetPlan({})
 check(plan.steps[1].questID==202 and plan.stability.reason=='manual_replan','slash replan bypasses proximity and progress protection')
 -- Read-only POIs changing to no available location should yield an empty route, not stale1.
 for _,row in ipairs(rows) do row.noPOI=true end
@@ -879,7 +881,7 @@ check(plan.steps[1].questID==202,'manual choice applies updated reward and bypas
 plan=scenario({routeRow(201,500,{complete=true}),routeRow(202,900)})
 check(stepFor(201).action=='completion_pending' and stepFor(201).priority.reason=='completion_pending','pending completion never claims turnin availability in priority explanation')
 -- r8 navigation state uses position samples, not the100yard route-rebuild threshold.
-YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].moveThreshold=5000
+QuestRouteDB.routes['FixtureRealm:FixturePlayer'].moveThreshold=5000
 local function samplePosition(yards,advance)
     if yards then Fixture.playerX=yards/Fixture.worldScale end
     Fixture.time=Fixture.time+(advance or .6)
@@ -1062,7 +1064,7 @@ check(#phaseEvents==beforeEvents+1 and phaseEvents[#phaseEvents].phase=='working
 samplePosition(401)
 check(#phaseEvents==beforeEvents+1,'ordinary working samples do not spam phase events')
 api.WB.Emit=originalEmit
-YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].moveThreshold=100
+QuestRouteDB.routes['FixtureRealm:FixturePlayer'].moveThreshold=100
 -- r9 fixture uses full exact localized text and a deliberately shuffled database order.
 Fixture.worldScale=1000
 local savedQuestObjectives=FixtureDB.Quest.objectives
@@ -1365,7 +1367,7 @@ do
     samplePosition(nil)
     local skipPin=worldView.pins[1]
     skipPin:GetScript('OnClick')(skipPin,'RightButton');plan=api.GetPlan({})
-    check(plan.count==0 and YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'plain right click on any goal still skips the entire quest and all sibling goals')
+    check(plan.count==0 and QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'plain right click on any goal still skips the entire quest and all sibling goals')
     WorldMapFrame=nil;Minimap=nil;C_Map.GetMapPosFromWorldPos=originalProjection
     plan=targetsScenario();local before=plan.sequence
     for _,args in ipairs({{objectiveKey='npc:11'},{questID=201,objectiveKey=false},{questID=201,objectiveKey='invalid'}}) do
@@ -1453,7 +1455,7 @@ do
     end
     WorldMapFrame=nil;Minimap=nil;C_Map.GetMapPosFromWorldPos=originalProjection
     api.SetQuestSkip({questID=201});plan=api.GetPlan({})
-    check(plan.turnInCount==3 and YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'manual task skip remains authoritative even when task is ready')
+    check(plan.turnInCount==3 and QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'manual task skip remains authoritative even when task is ready')
     rows={routeRow(201,500,{instance=true})};scenario(rows)
     check(api.GetPlan({}).count==0,'unfinished dungeon baseline remains excluded')
     rows[1].ready=true;plan=autoPlan()
@@ -1602,7 +1604,7 @@ do
     plan=api.GetPlan({})
     check(changed.ok and plan.steps[1].questID==201 and plan.steps[1].objectiveKey=='npc:11','explicit change chooses same quest and subgoal despite nearer goals/tasks')
     check(near(plan.steps[1].world.x,900),'r12 change selects a distinct density hotspot instead of another scattered point of the same area')
-    check(not YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201] and #plan.avoidedSpots==1,'changing a spot never skips the task')
+    check(not QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201] and #plan.avoidedSpots==1,'changing a spot never skips the task')
     check(plan.stability.reason=='manual_spot_change' and plan.navigation.workStartedAt==nil,'spot change releases old work-area protection')
     check(plan.spotRules.duration==600 and plan.spotRules.radius==150,'spot rules are visible in read-only plan')
     plan=targetsScenario()
@@ -1648,10 +1650,10 @@ do
     rows[#rows+1]=routeRow(202,1200)
     plan=api.ClearSpotAvoidances({questID=201})
     check(#plan.avoidedSpots==1 and plan.avoidedSpots[1].questID==202,'clearing one task avoids changing other task avoidances')
-    YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[202]=true
+    QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[202]=true
     plan=api.ClearSpotAvoidances({})
-    check(#plan.avoidedSpots==0 and YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[202],'clear all locations preserves player task skips')
-    check(YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].spotAvoidances==nil,'uptime-based temporary avoidances never enter SavedVariables')
+    check(#plan.avoidedSpots==0 and QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[202],'clear all locations preserves player task skips')
+    check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].spotAvoidances==nil,'uptime-based temporary avoidances never enter SavedVariables')
     singleSpotScenario();Fixture.playerMapID=102;changed=api.ChangeQuestSpot({})
     check(not changed.ok and #api.route.spotAvoidances==0,'a stale map pin cannot switch a point after the player changes map')
     singleSpotScenario();rows[1].ready=true;plan=autoPlan()
@@ -1666,13 +1668,13 @@ do
     samplePosition(nil)
     local routePin=api.route.minimapView.pins[1]
     Fixture.shift=true;routePin:GetScript('OnClick')(routePin,'RightButton');Fixture.shift=false
-    check(near(api.GetPlan({}).steps[1].world.x,800) and not YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'Shift right click switches place without taking skip branch')
+    check(near(api.GetPlan({}).steps[1].world.x,800) and not QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'Shift right click switches place without taking skip branch')
     routePin:GetScript('OnClick')(routePin,'RightButton')
-    check(YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'plain right click still skips task')
+    check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201],'plain right click still skips task')
     Minimap=nil
     singleSpotScenario();api.ChangeQuestSpot({})
     local invalidCommandSequence=api.GetPlan({}).sequence
-    SlashCmdList.YYQROUTE('nextspot not_an_id');SlashCmdList.YYQROUTE('resetspots not_an_id')
+    SlashCmdList.QUESTROUTE('nextspot not_an_id');SlashCmdList.QUESTROUTE('resetspots not_an_id')
     check(api.GetPlan({}).sequence==invalidCommandSequence and #api.route.spotAvoidances==1,'invalid slash IDs cannot accidentally change current spot or clear all avoidances')
     -- NPC identity classification combines all eligible tasks and each exact subgoal, not route locations.
     Fixture.units={target={id=11},nameplate1={id=11},nameplate2={id=12}}
@@ -1803,7 +1805,7 @@ return passed
 
 
 RELOAD_CHECKS = r'''
-local api=WoWBridgeNS.YYQQuestAPI
+local api=WoWBridgeNS.QuestRoute
 local passed=0
 local function check(value,label)
     if not value then error('FAIL: '..label) end
@@ -1843,7 +1845,7 @@ return passed
 '''
 
 LEGACY_RELOAD_CHECKS = r'''
-local api=WoWBridgeNS.YYQQuestAPI
+local api=WoWBridgeNS.QuestRoute
 assert(api.apiRevision==13 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
@@ -1852,7 +1854,7 @@ return 4
 '''
 
 FRESH_RELOAD_CHECKS = r'''
-local api=WoWBridgeNS.YYQQuestAPI
+local api=WoWBridgeNS.QuestRoute
 assert(api.route.driver~=FixtureHotload.driver,'new namespace creates own driver')
 assert(FixtureHotload.driver:GetScript('OnUpdate')==nil and next(FixtureHotload.driver.events)==nil,'old driver is inactive after namespace replacement')
 assert(api.route.plan.steps[1].questID==202,'fresh login preserves saved skip preferences')
@@ -1871,22 +1873,22 @@ def main():
     runtime.execute(SETUP)
     source = args.addon.read_text(encoding="utf-8-sig")
     namespace = runtime.table()
-    runtime.execute(source, "YYQQuestAPI", namespace)
+    runtime.execute(source, "QuestRoute", namespace)
     passed = runtime.execute(CHECKS)
     namespace.OnUnload()
-    runtime.execute(source, "YYQQuestAPI", namespace)
+    runtime.execute(source, "QuestRoute", namespace)
     passed += runtime.execute(RELOAD_CHECKS)
     runtime.execute("""
-        local api=WoWBridgeNS.YYQQuestAPI
+        local api=WoWBridgeNS.QuestRoute
         api.OnUnload()
         api.route.progress=nil;api.route.plan.groups=nil;api.route.plan.stability=nil;api.route.plan.navigation=nil
         for _,step in ipairs(api.route.plan.steps) do step.groupIndex=nil;step.groupSize=nil;step.navigation=nil end
-        YYQQuestAPIDB.routes['FixtureRealm:FixturePlayer'].skipped[201]=true
+        QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[201]=true
     """)
-    runtime.execute(source, "YYQQuestAPI", namespace)
+    runtime.execute(source, "QuestRoute", namespace)
     passed += runtime.execute(LEGACY_RELOAD_CHECKS)
     namespace.OnUnload()
-    runtime.execute(source, "YYQQuestAPI", runtime.table())
+    runtime.execute(source, "QuestRoute", runtime.table())
     passed += runtime.execute(FRESH_RELOAD_CHECKS)
     print(f"PASS: {passed} isolated Lua 5.1 checks; addon={args.addon}")
 

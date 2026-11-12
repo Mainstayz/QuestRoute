@@ -1,18 +1,22 @@
-# YYQ 角色任务 API
+# QuestRoute
 
-《魔兽世界：无限》只读插件，读取当前登录角色任务日志中的全部任务，包括折叠分类下的任务、日志中可枚举的隐藏任务，以及完成后尚未交付的任务。不包含已交付的历史任务和尚未接取的任务。
+《魔兽世界：无限》地图规划与任务数据 API 插件：在原生大地图、小地图规划当前任务路线，并提供只读任务日志、玩家上下文、原生 POI 和可选 QuestieDB 补充查询。任务日志包括折叠分类下的任务、日志中可枚举的隐藏任务，以及完成后尚未交付的任务，不包含已交付的历史任务和尚未接取的任务。
 
-当前修订为 **apiRevision=13**。已完成待交任务纳入当前地图路线，副本/精英/专业类型不再挡住交付；未完成时仍按既有类型过滤。交付编号带?，悬停注明交任务；已完成但客户端尚未确认可交时带~并提示等待确认。保留每未完目标一个主热点+最多两个地图备选、直线/升级权重/稳定和手动跳过。626项隔离检查通过；当前4个原生交付步骤已在线核对，M地图?编号/悬停及b备选显示已截图确认，真正交付后的移除和备选点击手感仍待现场验收。原有 `get_quests` 保持 schemaVersion=1、默认100的分页和字段兼容，提供可选原生 `tag={id,name,isElite?,tradeskillLineID?}`。另外提供玩家状态、原生任务POI、任务详情和可选QuestieDB实体查询，数据结构继续使用schemaVersion=1。
+统一标识：目录 `addons/QuestRoute/`，文件 `QuestRoute.lua` / `QuestRoute.toc`，Title `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。路线命令为 `/questroute`（`SlashCmdList.QUESTROUTE`），只读任务列表命令为 `/questrouteapi`。不提供旧名称的运行时别名。安装、停用旧目录及手动配置迁移见根 [README](../../README.md)。
+
+当前代码修订仍为 **apiRevision=13**，schemaVersion=1。已完成仓库重命名，新路径下626项Lua5.1隔离检查全部通过，插件离线检查无错误或警告。游戏安装尚未同步，新名称启动及实机调用待验证；下述交付步骤和地图截图来自重命名前的现场记录。
+
+已完成待交任务纳入当前地图路线，副本/精英/专业类型不再挡住交付；未完成时仍按既有类型过滤。交付编号带?，悬停注明交任务；已完成但客户端尚未确认可交时带~并提示等待确认。保留每未完目标一个主热点+最多两个地图备选、直线/升级权重/稳定和手动跳过。上轮626项隔离检查通过，4个原生交付步骤已在线核对，M地图?编号/悬停及b备选显示已截图确认；真正交付后的移除和备选点击手感仍待现场验收。原有 `get_quests` 保持默认100的分页和字段契约，提供可选原生 `tag={id,name,isElite?,tradeskillLineID?}`。
 
 原生数据决定当前任务状态、进度及目标行为；QuestieDB补充数据独立放置并标记来源。无需安装QuestieDB即可使用原生接口。
 
-## 从 YYQ 调用
+## 通过无限工坊调用
 
 使用无限工坊的 `mcp__wuxian__call`：
 
 ```json
 {
-  "addon": "YYQQuestAPI",
+  "addon": "QuestRoute",
   "name": "get_quests",
   "args": {}
 }
@@ -24,7 +28,7 @@
 
 ```json
 {
-  "addon": "YYQQuestAPI",
+  "addon": "QuestRoute",
   "name": "get_quests",
   "args": {
     "offset": 0,
@@ -44,10 +48,10 @@
 
 ## 其他插件中的 Lua 调用
 
-在依赖中声明 `YYQQuestAPI`，并在它加载后调用：
+在依赖中声明 `QuestRoute`，并在它加载后调用：
 
 ```lua
-local api = WoWBridgeNS and WoWBridgeNS.YYQQuestAPI
+local api = WoWBridgeNS and WoWBridgeNS.QuestRoute
 if api and api.GetQuests then
     local result = api.GetQuests({ limit = 100 })
     if result.ok then
@@ -58,7 +62,7 @@ if api and api.GetQuests then
 end
 ```
 
-游戏内输入 `/yyqquestapi`，会在自己的聊天窗口显示当前任务列表。
+游戏内输入 `/questrouteapi`，会在自己的聊天窗口只读显示当前任务列表。
 
 ## 返回结构
 
@@ -123,7 +127,7 @@ end
 ## 新增：玩家上下文
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_player_context","args":{}}
+{"addon":"QuestRoute","name":"get_player_context","args":{}}
 ```
 
 返回原生 `character`（姓名、服务器、阵营、等级）、`experience`（current、maximum、rested、可选fraction）、`location`。位置包含 `available`、`coordinateMapID`、地图名和0..1的x/y，可能有 `world={continentID,x,y}`。无可用位置时提供reason，不填入虚构坐标；不会读取玩家生命或能量。
@@ -131,7 +135,7 @@ end
 ## 新增：原生任务 POI
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_quest_pois","args":{"questID":881}}
+{"addon":"QuestRoute","name":"get_quest_pois","args":{"questID":881}}
 ```
 
 参数 mapID、questID 均可选，必须为正整数。mapID必须是当前客户端地图。offset默认0，limit默认50、最大100。
@@ -151,13 +155,13 @@ POI的inProgress不能判断任务完成，numObjectives也不是实际完成进
 ## 新增：任务详情（原生优先）
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_quest_details","args":{"questID":881}}
+{"addon":"QuestRoute","name":"get_quest_details","args":{"questID":881}}
 ```
 
 只要官方数据：
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_quest_details","args":{"questID":881,"allowDatabase":false}}
+{"addon":"QuestRoute","name":"get_quest_details","args":{"questID":881,"allowDatabase":false}}
 ```
 
 参数：questID必填；allowDatabase默认true；includePOIs默认true；offset/limit仅对数据库references分页，默认0/50、最大100。
@@ -173,11 +177,11 @@ POI的inProgress不能判断任务完成，numObjectives也不是实际完成进
 ## 新增：QuestieDB实体查询
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_database_entity","args":{"kind":"item","id":5100}}
+{"addon":"QuestRoute","name":"get_database_entity","args":{"kind":"item","id":5100}}
 ```
 
 ```json
-{"addon":"YYQQuestAPI","name":"get_database_entity","args":{"kind":"npc","id":3475}}
+{"addon":"QuestRoute","name":"get_database_entity","args":{"kind":"npc","id":3475}}
 ```
 
 kind为npc、object或item，id为正整数；offset默认0，limit默认50、最大100。
@@ -189,7 +193,7 @@ kind为npc、object或item，id为正整数；offset默认0，limit默认50、�
 - 支持映射表和本版本的数字赋值数据字符串，基础映射后应用override，不执行字符串，不自动进行Era→Forever二次换算。
 - 数据库不存在时 `ok=true,available=false,reason=not_loaded`；实体不存在为entity_not_found；读取异常返回 `ok=false,error.code=database_error`。
 
-其他Lua代码可使用 `WoWBridgeNS.YYQQuestAPI.GetPlayerContext/GetQuestPOIs/GetQuestDetails/GetDatabaseEntity`，参数与MCP入口一致。数据库在每次调用时动态发现，不需要新增游戏文件或修改toc。
+其他Lua代码可使用 `WoWBridgeNS.QuestRoute.GetPlayerContext/GetQuestPOIs/GetQuestDetails/GetDatabaseEntity`，参数与MCP入口一致。数据库在每次调用时动态发现；此机制沿用原实现，重命名安装仍须完整重启。
 
 ## 简易地图升级路线
 
@@ -203,24 +207,24 @@ kind为npc、object或item，id为正整数；offset默认0，limit默认50、�
 - 其他地图的任务保留在get_plan.excluded，reason=outside_current_map；缺少原生POI或无法换算坐标也给出原因，不用假点连线。
 - 自有图层挂在地图canvas下，随缩放/平移变化；仅在查看玩家当前地区时显示，浏览其他地区隐藏。不会主动打开或切换暴雪地图。
 
-命令：
+路线命令注册为 `SlashCmdList.QUESTROUTE`：
 
 | 命令 | 作用 |
 | --- | --- |
-| `/yyqroute` | 显示状态和命令提示 |
-| `/yyqroute skip 852` | 跳过指定任务 |
-| `/yyqroute unskip 852` | 恢复指定任务 |
-| `/yyqroute unskip all` | 恢复全部手动跳过任务 |
-| `/yyqroute distance 150` | 将移动重排阈值设为150码，范围10..5000 |
-| `/yyqroute replan` | 解除本轮目标保持，按当前位置重新选择1号并归组 |
-| `/yyqroute off`、`on` | 隐藏、显示路线和任务标识 |
-| `/yyqroute nextspot` | 为当前1号换同一未完目标的地点 |
-| `/yyqroute nextspot 878` | 为该questID换地点；ID不是地图步骤序号 |
-| `/yyqroute resetspots` | 清除全部临时地点避让并重排 |
-| `/yyqroute resetspots 878` | 只清该任务的地点避让 |
-| `/yyqroute nameplates off`、`on` | 单独关闭、开启任务姓名板提示 |
+| `/questroute` | 显示状态和命令提示 |
+| `/questroute skip 852` | 跳过指定任务 |
+| `/questroute unskip 852` | 恢复指定任务 |
+| `/questroute unskip all` | 恢复全部手动跳过任务 |
+| `/questroute distance 150` | 将移动重排阈值设为150码，范围10..5000 |
+| `/questroute replan` | 解除本轮目标保持，按当前位置重新选择1号并归组 |
+| `/questroute off`、`/questroute on` | 隐藏、显示路线和任务标识 |
+| `/questroute nextspot` | 为当前1号换同一未完目标的地点 |
+| `/questroute nextspot 878` | 为该questID换地点；ID不是地图步骤序号 |
+| `/questroute resetspots` | 清除全部临时地点避让并重排 |
+| `/questroute resetspots 878` | 只清该任务的地点避让 |
+| `/questroute nameplates off`、`/questroute nameplates on` | 单独关闭、开启任务姓名板提示 |
 
-额外的WoWBridge入口，addon仍为YYQQuestAPI：
+额外的WoWBridge入口，addon为 `QuestRoute`：
 
 - `get_plan({})`：当前steps、excluded、origin、sequence、moveThreshold和policy。scope=current_player_map_active_quests，policy=stable_grouped_leveling_straight_line；mapID/mapName为玩家地区，levelPriority保留referenceLevel，perLevelBonus=0、maxWeight=1.25、method=client_difficulty_and_reward。levelingPriority提供经验参照、难度权重、低收益阈值、pendingRewardCount及rewardRetrySeconds。每步priority给难度/经验来源与可用性、因子及排序原因。每步含targetMapID、priorityWeight/weightedDistance和groupIndex/groupSize，segmentDistance仍是真实直线距离。groups含index/anchor、去重questIDs、count步骤数和questCount任务数，groupRadius=200。stability含retained/reason/previousQuestID/questID/previousObjectiveKey/objectiveKey/可选lastProgressAt。count现在是目标/交付步骤数，questCount为任务数，objectiveStepCount/nativeStepCount分别计细目标和原生步骤，stepUnit=unfinished_objective_or_quest。每步stepKey稳定区分同任务不同目标，displayTitle带目标名或交付状态，questStepCount给同任务步骤数量。r13新增turnInCount和completionPendingCount，分别为本图可交与完成待确认步骤数。
 - `replan({})`：主动重排，绕过当前目标保持和旧区域延续，以新1号重新归组。
@@ -228,7 +232,7 @@ kind为npc、object或item，id为正整数；offset默认0，limit默认50、�
 - `reset_quest_skips({})`：清空当前角色手动跳过。
 - `set_route_options({moveThreshold:100,enabled:true})`：路线选项。
 
-对应Lua函数为GetPlan、Replan、SetQuestSkip、ResetQuestSkips、SetRouteOptions。原生任务POI是参考点；路线按用户要求只表示直线，不做道路寻路。Shift+M区域图尚未在当前客户端验证。
+对应Lua函数为 `WoWBridgeNS.QuestRoute` 下的 GetPlan、Replan、SetQuestSkip、ResetQuestSkips、SetRouteOptions。原生任务POI是参考点；路线按用户要求只表示直线，不做道路寻路。Shift+M区域图尚未在当前客户端验证。
 
 ### 完成任务顺路交付（r13）
 
@@ -333,7 +337,7 @@ navigationRules公开120码进入、180码退出、300码进度扩展、90秒进
 - 原生目标数据暂缺/空表/读取异常时不伪造进度；计数重置、目标结构或顺序变化也不刷新90秒保护。时间戳只保存在本次UI会话内，不写进SavedVariables。
 - 一个任务组以首个点为固定中心，先安排其200码内的任务，再选下一组。不会沿着相邻点不断扩大分组。组内仍用距离/适合升级的权重排序；同任务多点只选择符合本组距离的一处，每个任务只出现一次。
 - 当前任务完成/消失/跳过后，玩家仍在原区域300码内时，优先接着安排原组剩余有效任务；不满足时重新选区。悬停编号显示“附近还有N个任务”和最多3个任务名。
-- `/yyqroute replan`或API replan可随时主动重新选择，不受上述保持/旧组影响。热加载复用框体但重新绑定回调，确保两张地图提示同步更新。
+- `/questroute replan`或API replan可随时主动重新选择，不受上述保持/旧组影响。热加载复用框体但重新绑定回调，确保两张地图提示同步更新。
 
 ### 右上角小地图
 
@@ -341,17 +345,21 @@ navigationRules公开120码进入、180码退出、300码进度扩展、90秒进
 - 使用原生C_Minimap.GetViewRadius读取实时视野半径，配合世界坐标投影；缩放变化无需重新规划，旋转模式结合GetPlayerFacing和IsRotateMinimapIgnored更新方向。
 - 线段按圆形边界裁剪，只画真实路线在视野内的部分，不把多个视野外点夹到边缘后重新连线。中心留出角色箭头位置。
 - 绘制每0.1秒更新；位置采样与原有移动重排仍每0.5秒进行。附近点随移动更新，无需先走满100码。
-- 小地图编号也可右键跳过。`/yyqroute off`、`on`和set_route_options.enabled同时控制大地图、小地图。
+- 小地图编号也可右键跳过。`/questroute off`、`/questroute on`和set_route_options.enabled同时控制大地图、小地图。
 - 当前小地图为圆形；对其他外形保留内接椭圆范围。没有位置/视野半径或旋转朝向时隐藏本次图层，不保留错误方向。
 
 ## 验证与安装
 
-2026-11-12 在客户端1.60.1.70888、Interface16001验证。热加载检查无错误、无警告。当前Lua5.1隔离检查共626项通过：r12原598项+28项交付检查（已完成各活动类型/未完成仍过滤、失败/skip优先、外图/无POI、完成待确认、两图?和~显示、事件插入/到点不算交付/实际日志移除）。保留r11原557项+41项热点/备选检查；旧散点轮换用例改为区域轮换，保留原150码边界/600秒到期/精确目标/skip/回退/工作计时语义。新增密度/实际中心/重复与混源去重、链/环/稀疏分布、主备最多3且不加路线/里程、两图备选渲染和指定c点击、二次读取失败无副作用、2400点冷/暖缓存及70个不同目标的64项淘汰边界。
+历史验证：2026-11-12 在客户端1.60.1.70888、Interface16001，以旧插件名完成热加载检查，无错误、无警告。上轮Lua5.1隔离检查共626项通过：r12原598项+28项交付检查（已完成各活动类型/未完成仍过滤、失败/skip优先、外图/无POI、完成待确认、两图?和~显示、事件插入/到点不算交付/实际日志移除）。保留r11原557项+41项热点/备选检查；旧散点轮换用例改为区域轮换，保留原150码边界/600秒到期/精确目标/skip/回退/工作计时语义。新增密度/实际中心/重复与混源去重、链/环/稀疏分布、主备最多3且不加路线/里程、两图备选渲染和指定c点击、二次读取失败无副作用、2400点冷/暖缓存及70个不同目标的64项淘汰边界。
 
 离线验证还实际重执行源码，覆盖同namespace复用、旧revision缺字段升级、新namespace启动；确认driver不重复、两张地图共用步骤、旧回调被替换、跳过记录继续有效、不跨UI会话恢复基于GetTime的工作保护。
 
-最新r13在线：贫瘠之地8任务12步骤，其中4交付；断言所有点targetMapID为本图，可交各任务一条且无objectiveKey/热点，turnInCount一致。小地图1?可见；用户手动打开M图后截图确认金色1?/2?/4?/5?、交任务悬停和紫色6b/7b/9b备选可见。load/try无错误/拦截，ERR/BLOCKED空。r12真实878完成前后/地卜师战斗8/12及13.91ms暖重排证据保留；实际备选点击、交付日志移除及第4整轮继续待验收。
+历史r13在线快照：贫瘠之地8任务12步骤，其中4交付；断言所有点targetMapID为本图，可交各任务一条且无objectiveKey/热点，turnInCount一致。小地图1?可见；用户手动打开M图后截图确认金色1?/2?/4?/5?、交任务悬停和紫色6b/7b/9b备选可见。load/try无错误/拦截，ERR/BLOCKED空。r12真实878完成前后/地卜师战斗8/12及13.91ms暖重排证据保留；实际备选点击、交付日志移除及第4整轮继续待验收。
 
 离线测试位于工作区 `C:\Users\Pillar\Desktop\WowFac\tests\verify_quest_data.py`，使用lupa.lua51在独立环境运行，不连接游戏。
 
-本次只改已有Lua和本文档，热加载已生效，无需再次重启。运行时修订以apiRevision=13为准；toc包版本仍0.1.0，未改toc。修改前checkpoint=53。当前保存版与备份见开发进度.md及任务交付路线.md；M图交付和b备选实际显示已有截图，实机备选点击、真正交付与完整工作过程仍待验收，隔离模拟不替代现场证据。完整状态保留在待办事项.md。
+本次已同步重命名目录、Lua、toc、命令、存档变量及测试入口，apiRevision仍为13。新路径下626项离线检查通过，可在仓库根目录运行 `python tests/verify_quest_data.py`，或用 `--addon addons/QuestRoute/QuestRoute.lua` 显式指定源码。
+
+安装时完整退出游戏，禁用或移走旧 `YYQQuestAPI` 目录后复制 `addons/QuestRoute`，再启动游戏；新目录、新文件和 `.toc` 变更都需要完整重启，不能用热加载或 `/reload` 代替。SavedVariables 文件改为 `QuestRoute.lua`，不会自动读取旧文件；退出游戏后按根 README 备份并迁移旧顶层变量，已有新配置先备份，保留完整 routes 内容。
+
+历史r13修改前checkpoint=53、保存版55和 `YYQQuestAPI-r*.zip` 备份见开发进度.md及任务交付路线.md，仍保留原名。历史M图交付和b备选显示已有截图，实机备选点击、真正交付与完整工作过程仍待验收，隔离模拟不替代现场证据。完整状态保留在待办事项.md。
