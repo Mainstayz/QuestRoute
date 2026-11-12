@@ -80,6 +80,39 @@ function CreateFrame(kind,name,parent)
     function f:Hide() self.shown=false end
     return f
 end
+-- Native AddOnSetting keeps the supplied SavedVariables table; UI changes write before the callback.
+Settings = {categories={}, settings={}, checkboxCount=0, registeredCount=0}
+function Settings.RegisterVerticalLayoutCategory(name)
+    local category={name=name,ID=#Settings.categories+1}
+    function category:GetID() return self.ID end
+    Settings.categories[#Settings.categories+1]=category
+    return category,{}
+end
+function Settings.RegisterAddOnSetting(category,variable,key,storage,valueType,name,defaultValue)
+    assert(valueType=='boolean' and type(defaultValue)=='boolean','native boolean setting signature')
+    assert(not Settings.settings[variable],'native settings must not be registered twice')
+    local setting={category=category,storage=storage,key=key,name=name,defaultValue=defaultValue,callbacks={}}
+    function setting:GetValue() return self.storage[self.key] end
+    -- Blizzard appends callbacks; a second registration must not silently replace the first.
+    function setting:SetValueChangedCallback(callback) self.callbacks[#self.callbacks+1]=callback end
+    function setting:SetValue(value)
+        assert(type(value)=='boolean','native checkbox values are boolean')
+        if self:GetValue()==value then return end
+        self.storage[self.key]=value
+        for _,callback in ipairs(self.callbacks) do callback(self,value) end
+    end
+    Settings.settings[variable]=setting
+    return setting
+end
+function Settings.CreateCheckbox(category,setting,tooltip)
+    Settings.checkboxCount=Settings.checkboxCount+1
+    setting.tooltip=tooltip
+end
+function Settings.RegisterAddOnCategory(category)
+    assert(not category.registered,'native categories must not be registered twice')
+    category.registered=true
+    Settings.registeredCount=Settings.registeredCount+1
+end
 SlashCmdList = {}
 C_PlayerInfo={GetContentDifficultyQuestForPlayer=function(id)
     local value=Fixture.difficulties and Fixture.difficulties[id]
@@ -305,6 +338,51 @@ check(plan.steps[1].level==40,'no unsolicited quest level filter')
 check(plan.steps[2].action=='turn_in','turn-in action preserved')
 local why={};for _,q in ipairs(plan.excluded) do why[q.questID]=q.reason end
 check(why[104]=='instance' and why[105]=='elite' and why[106]=='profession','filter reasons')
+-- r14: elite participation is opt-in, per character, and never overrides other filters or delivery.
+do
+    local settings=QuestRouteDB.routes['FixtureRealm:FixturePlayer']
+    settings.includeEliteQuests=nil
+    plan=api.Replan({})
+    check(plan.includeEliteQuests==false and settings.includeEliteQuests==false,'old settings gain default-off elite option')
+    check(settings.moveThreshold==100 and settings.enabled and next(settings.skipped)==nil,'elite migration preserves other character settings')
+    plan=api.SetRouteOptions({includeEliteQuests=true})
+    local included={};for _,step in ipairs(plan.steps) do included[step.questID]=step end
+    check(plan.includeEliteQuests and settings.includeEliteQuests and included[105],'enabling option immediately includes unfinished elite quest')
+    check(not included[104] and not included[106] and not included[107],'elite opt-in retains instance profession and failed filters')
+    api.SetQuestSkip({questID=105})
+    check(api.GetPlan({}).count==3 and settings.skipped[105],'elite opt-in cannot override manual task skip')
+    api.SetQuestSkip({questID=105,skipped=false})
+    check(api.GetPlan({}).count==4,'restoring elite task respects enabled elite option')
+    local getName=UnitName
+    UnitName=function() return 'OtherFixturePlayer' end
+    check(not api.SetRouteOptions({}).includeEliteQuests,'new character defaults off independently')
+    UnitName=getName
+    check(api.SetRouteOptions({}).includeEliteQuests,'original character keeps enabled elite preference')
+    local before=api.GetPlan({})
+    check(not api.SetRouteOptions({includeEliteQuests='yes',enabled=false}).ok
+        and api.GetPlan({})==before and settings.enabled and settings.includeEliteQuests,'invalid elite option is rejected before changing any settings')
+    plan=api.SetRouteOptions({includeEliteQuests=false})
+    check(plan.count==3 and not settings.includeEliteQuests,'disabling elite option immediately removes unfinished elite quest')
+    local getTag,getElite=C_QuestLog.GetQuestTagInfo,C_QuestLog.IsEliteQuest
+    C_QuestLog.IsEliteQuest=function() return false end
+    C_QuestLog.GetQuestTagInfo=function(id) return id==105 and {isElite=true} or getTag(id) end
+    local excluded={};for _,quest in ipairs(api.Replan({}).excluded) do excluded[quest.questID]=quest.reason end
+    check(excluded[105]=='elite','native elite tag is excluded when option is off')
+    check(api.SetRouteOptions({includeEliteQuests=true}).count==4,'native elite tag also honors opt-in')
+    api.SetRouteOptions({includeEliteQuests=false})
+    C_QuestLog.GetQuestTagInfo,C_QuestLog.IsEliteQuest=getTag,getElite
+    local getComplete,getReady=C_QuestLog.IsComplete,C_QuestLog.ReadyForTurnIn
+    C_QuestLog.IsComplete=function(id) return id==105 or getComplete(id) end
+    C_QuestLog.ReadyForTurnIn=function(id) return id==105 or getReady(id) end
+    local delivered
+    for _,step in ipairs(api.Replan({}).steps) do if step.questID==105 then delivered=step end end
+    check(delivered and delivered.action=='turn_in' and not api.GetPlan({}).includeEliteQuests,'completed elite delivery remains included while option is off')
+    api.SetQuestSkip({questID=105})
+    check(api.GetPlan({}).count==3,'manual skip still excludes completed elite delivery')
+    api.SetQuestSkip({questID=105,skipped=false})
+    C_QuestLog.IsComplete,C_QuestLog.ReadyForTurnIn=getComplete,getReady
+    plan=api.Replan({})
+end
 api.SetQuestSkip({questID=102})
 plan=api.GetPlan({})
 check(plan.count==2 and plan.steps[1].questID==101 and plan.steps[2].questID==103,'skip removes entire quest')
@@ -314,7 +392,28 @@ check(api.GetPlan({}).count==3,'restore skipped quest')
 -- Tick without the map: movement below threshold does not trigger replanning.
 Fixture.loggedIn=true
 Fixture.time=100
-api.StartRoute()
+do
+    local nativeSettings=Settings
+    Settings=nil
+    api.StartRoute()
+    check(api.route.running and api.settingsUI==nil,'route still starts when native Settings is temporarily unavailable')
+    Settings=nativeSettings
+    api.loginFrame:GetScript('OnEvent')(api.loginFrame,'ADDON_LOADED','Blizzard_Settings')
+    local ui=api.settingsUI
+    check(ui and ui.category.registered and ui.category.name=='QuestRoute','late native Settings load registers QuestRoute addon page')
+    check(#Settings.categories==1 and Settings.checkboxCount==1 and Settings.registeredCount==1,'settings page contains one native checkbox')
+    check(ui.eliteSetting:GetValue()==false and ui.eliteSetting.defaultValue==false,'native elite checkbox starts unchecked')
+    local oldSequence=api.GetPlan({}).sequence
+    ui.eliteSetting:SetValue(true)
+    check(api.GetPlan({}).includeEliteQuests and api.GetPlan({}).count==4 and api.GetPlan({}).sequence==oldSequence+1,'native checkbox enables elite route with exactly one replan')
+    check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].includeEliteQuests,'native checkbox writes current character preference')
+    ui.eliteSetting:SetValue(false)
+    check(not api.GetPlan({}).includeEliteQuests and api.GetPlan({}).count==3,'native checkbox disables elite route immediately')
+    api.SetRouteOptions({includeEliteQuests=true})
+    check(ui.eliteSetting:GetValue()==true,'public option updates same native setting storage')
+    ui.eliteSetting:SetValue(ui.eliteSetting.defaultValue)
+    check(not api.GetPlan({}).includeEliteQuests,'native default reset restores elite exclusion')
+end
 local driver=api.route.driver
 local tick=driver:GetScript('OnUpdate')
 local sequence=api.GetPlan({}).sequence
@@ -350,6 +449,7 @@ check(api.route.driver==driver and driver:GetScript('OnUpdate')~=nil,'reload reu
 local started=api.GetPlan({}).sequence
 api.StartRoute()
 check(api.GetPlan({}).sequence==started,'initialization idempotent')
+check(#Settings.categories==1 and Settings.registeredCount==1 and #api.settingsUI.eliteSetting.callbacks==1,'route restarts never duplicate native settings category or callback')
 -- Regression: a foreign target can project inside the current map (including extremely nearby points).
 Fixture.playerX=0;Fixture.playerMapID=101;Fixture.time=200
 C_QuestLog.GetNumQuestLogEntries=function() return 10,10 end
@@ -1762,6 +1862,10 @@ do
     check(not api.GetUnitTasks({unit='target'}).needed,'dungeon task exclusion applies to nameplates')
     C_QuestLog.GetQuestType=getType;C_QuestLog.IsEliteQuest=function() return true end;autoPlan()
     check(not api.GetUnitTasks({unit='target'}).needed,'elite task exclusion applies to nameplates')
+    api.SetRouteOptions({includeEliteQuests=true})
+    check(api.GetUnitTasks({unit='target'}).needed,'elite opt-in also enables matching task nameplate needs')
+    api.SetRouteOptions({includeEliteQuests=false})
+    check(not api.GetUnitTasks({unit='target'}).needed,'disabling elite opt-in clears matching task nameplate needs')
     C_QuestLog.IsEliteQuest=getElite;C_QuestLog.GetQuestTagInfo=function() return {tradeskillLineID=356} end;autoPlan()
     check(not api.GetUnitTasks({unit='target'}).needed,'profession task exclusion applies to nameplates')
     C_QuestLog.GetQuestTagInfo=getTag;autoPlan();samplePosition(nil)
@@ -1798,8 +1902,10 @@ WorldMapFrame=CreateFrame('Frame');WorldMapFrame.GetCanvas=function() return hot
 WorldMapFrame.GetMapID=function() return 101 end;WorldMapFrame:Show()
 C_Map.GetMapPosFromWorldPos=function(continent,point,mapID) return mapID,{x=point.x/1000,y=point.y/1000} end
 Fixture.time=Fixture.time+1;activeTick(driver,.2)
-FixtureHotload={driver=api.route.driver,mini=api.route.minimapView,world=api.route.views[#api.route.views]}
+api.SetRouteOptions({includeEliteQuests=true})
+FixtureHotload={driver=api.route.driver,mini=api.route.minimapView,world=api.route.views[#api.route.views],settingsUI=api.settingsUI}
 FixtureHotload.oldEnter=FixtureHotload.mini.pins[1]:GetScript('OnEnter')
+FixtureHotload.oldSettingDispatch=api.settingsUI.applyElite
 return passed
 '''
 
@@ -1812,6 +1918,9 @@ local function check(value,label)
     passed=passed+1
 end
 local h=FixtureHotload
+check(api.settingsUI==h.settingsUI and #Settings.categories==1,'source reload reuses the native settings category')
+check(api.settingsUI.applyElite~=h.oldSettingDispatch and #api.settingsUI.eliteSetting.callbacks==1,'source reload updates dispatch without appending native callbacks')
+check(api.GetPlan({}).includeEliteQuests and api.settingsUI.eliteSetting:GetValue(),'source reload retains enabled elite preference')
 check(api.route.driver==h.driver and api.route.driver:GetScript('OnUpdate')~=nil,'source re-execution reuses one live driver')
 check(api.route.minimapView==h.mini,'source re-execution reuses small-map pool')
 check(api.route.views[#api.route.views]==h.world,'source re-execution reuses world-map pool')
@@ -1846,7 +1955,7 @@ return passed
 
 LEGACY_RELOAD_CHECKS = r'''
 local api=WoWBridgeNS.QuestRoute
-assert(api.apiRevision==13 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
+assert(api.apiRevision==14 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
 assert(api.route.driver==FixtureHotload.driver,'legacy upgrade still reuses driver')
@@ -1861,7 +1970,13 @@ assert(api.route.plan.steps[1].questID==202,'fresh login preserves saved skip pr
 assert(api.route.plan.stability.retained==false,'fresh session does not restore uptime-based target hold')
 assert(api.route.plan.navigation.phase=='travel' and api.route.plan.navigation.workStartedAt==nil,'fresh namespace does not inherit prior work timers')
 assert(api.route.minimapView.pins[1].step==api.route.views[1].pins[1].step,'fresh namespace maps share same steps')
-return 6
+assert(api.settingsUI==FixtureHotload.settingsUI and #Settings.categories==1,'new namespace reuses registered native settings page')
+assert(api.route.plan.includeEliteQuests and api.settingsUI.eliteSetting:GetValue(),'new namespace preserves saved elite preference')
+local oldSequence=WoWBridgeNS.QuestRoute.route.plan.sequence
+api.settingsUI.eliteSetting:SetValue(false)
+assert(not api.route.plan.includeEliteQuests and api.route.plan.sequence==oldSequence+1 and #api.settingsUI.eliteSetting.callbacks==1,'one reused native callback replans only the new namespace once')
+assert(FixtureHotload.driver:GetScript('OnUpdate')==nil,'native checkbox callback never restarts unloaded namespace')
+return 10
 '''
 
 

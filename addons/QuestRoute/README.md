@@ -4,7 +4,7 @@
 
 统一标识：目录 `addons/QuestRoute/`，文件 `QuestRoute.lua` / `QuestRoute.toc`，Title `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。路线命令为 `/questroute`（`SlashCmdList.QUESTROUTE`），只读任务列表命令为 `/questrouteapi`。不提供旧名称的运行时别名。安装、停用旧目录及手动配置迁移见根 [README](../../README.md)。
 
-当前代码修订仍为 **apiRevision=13**，schemaVersion=1。已完成仓库重命名，新路径下626项Lua5.1隔离检查全部通过，插件离线检查无错误或警告。游戏安装尚未同步，新名称启动及实机调用待验证；下述交付步骤和地图截图来自重命名前的现场记录。
+当前代码修订为 **apiRevision=14**，schemaVersion=1。新增原生插件设置页与按角色保存的精英任务规划开关，659项Lua5.1隔离检查全部通过，插件离线检查无错误或警告。游戏离线，安装尚未同步，新名称启动、设置页实际显示和手柄焦点待验证；下述交付步骤和地图截图来自重命名前的现场记录。
 
 已完成待交任务纳入当前地图路线，副本/精英/专业类型不再挡住交付；未完成时仍按既有类型过滤。交付编号带?，悬停注明交任务；已完成但客户端尚未确认可交时带~并提示等待确认。保留每未完目标一个主热点+最多两个地图备选、直线/升级权重/稳定和手动跳过。上轮626项隔离检查通过，4个原生交付步骤已在线核对，M地图?编号/悬停及b备选显示已截图确认；真正交付后的移除和备选点击手感仍待现场验收。原有 `get_quests` 保持默认100的分页和字段契约，提供可选原生 `tag={id,name,isElite?,tradeskillLineID?}`。
 
@@ -197,9 +197,9 @@ kind为npc、object或item，id为正整数；offset默认0，limit默认50、�
 
 ## 简易地图升级路线
 
-在原生 **M 地区地图**上显示编号和青色直线，橙色1号为下一步；右上角小地图同步显示附近路线。大地图关闭后小地图继续工作。不创建额外面板，不改变原生任务追踪或放弃任务。
+在原生 **M 地区地图**上显示编号和青色直线，橙色1号为下一步；右上角小地图同步显示附近路线。大地图关闭后小地图继续工作。不创建额外常驻任务面板，不改变原生任务追踪或放弃任务；r14的设置入口位于游戏原生选项页，没有新增地图交互。
 
-- 未完成任务默认排除副本/团队副本、精英和专业任务；官方确认完成后，以上类型也可作为交付步骤加入。手动跳过及失败状态始终优先。副本/精英以原生分类为准；专业优先原生、缺失时用QuestieDB.requiredSkill补充。
+- 未完成任务默认排除副本/团队副本、精英和专业任务；r14可在原生设置页允许精英任务参与，副本与专业过滤仍保留。官方确认完成后，以上类型都可作为交付步骤加入，精英开关不影响交付。手动跳过及失败状态始终优先。副本/精英以原生分类为准；专业优先原生、缺失时用QuestieDB.requiredSkill补充。
 - 只安排目标实际属于**玩家当前所在地图**的任务：用POI.reportedMapID判定目标归属，用coordinateMapID解释坐标。邻区任务即使能投影到当前地图内，也不纳入。当前地图由玩家位置决定，浏览其他地图不会切换规划范围。
 - 以直线距离为基础，按客户端相对难度和已就绪的奖励经验校准权重，按 `直线距离 / 权重` 逐步选择。容易任务略优先、困难/极难及琐碎任务靠后，低收益主要顺路做/交；每个未完目标一次，奖励参照仍每任务一次，不增加地形或交通评分，不按旧版等级阈值猜难度。
 - 默认玩家相对上次规划位置移动100码后重排，每0.5秒检查；玩家跨地图或升级，即使位移不足100码也重排。任务进度更新在短暂合并事件后重排。
@@ -230,9 +230,19 @@ kind为npc、object或item，id为正整数；offset默认0，limit默认50、�
 - `replan({})`：主动重排，绕过当前目标保持和旧区域延续，以新1号重新归组。
 - `set_quest_skip({questID:852,skipped:true})`：跳过；false恢复。
 - `reset_quest_skips({})`：清空当前角色手动跳过。
-- `set_route_options({moveThreshold:100,enabled:true})`：路线选项。
+- `set_route_options({moveThreshold:100,enabled:true,includeEliteQuests:false})`：路线选项。`includeEliteQuests`必须为boolean，默认false；按角色保存并立即重排。`get_plan.includeEliteQuests`返回当前值。现有`nameplatesEnabled`开关不变。
 
 对应Lua函数为 `WoWBridgeNS.QuestRoute` 下的 GetPlan、Replan、SetQuestSkip、ResetQuestSkips、SetRouteOptions。原生任务POI是参考点；路线按用户要求只表示直线，不做道路寻路。Shift+M区域图尚未在当前客户端验证。
+
+### 原生设置页与精英任务开关（r14）
+
+打开游戏 **选项 → 插件 → QuestRoute**，使用原生勾选框“将精英任务加入路线规划”。没有新增地图按钮、键位或焦点操作。默认不勾选，旧角色配置仅补上`includeEliteQuests=false`，保留原跳过记录和选项。
+
+开关控制未完成精英任务是否参与规划，开启时仍受副本、专业、失败、手动跳过、当前地图和可靠位置约束；完成后的交付始终沿用r13规则。路线与姓名板需求共用过滤，所以开启后相关精英任务的击杀/材料提示也可出现。
+
+选项直接绑定当前服务器/角色的`QuestRouteDB.routes`配置；切换后立即重排，正常退出或重载时由客户端写盘。客户端原生`Settings.RegisterVerticalLayoutCategory/RegisterAddOnSetting/CreateCheckbox/RegisterAddOnCategory`负责界面。原生设置API暂缺时路线仍可启动，后续`ADDON_LOADED`时补注册。同命名空间热加载或替换命名空间均复用同一设置页；原生回调只注册一次（`SetValueChangedCallback`会累加监听），加载时更新当前分发函数，卸载时关闭分发，确保一次勾选只重排一次。
+
+659项Lua5.1检查包含默认/旧配置迁移、按角色隔离、原生勾选/默认值恢复、类型拒绝无副作用、其他过滤、完成精英交付、姓名板需求和新旧命名空间回调；静态检查零错误/警告。游戏离线，原生页实际布局、手柄焦点与重启后的真实写盘尚待现场验收。
 
 ### 完成任务顺路交付（r13）
 

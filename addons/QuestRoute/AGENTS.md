@@ -2,7 +2,7 @@
 
 这是《魔兽世界》国服「无限」客户端的地图规划与任务数据 API 插件，用「无限工坊」开发。源码目录为 `addons/QuestRoute/`，主文件/加载清单为 `QuestRoute.lua` / `QuestRoute.toc`，Title 为 `QuestRoute`，SavedVariables 为 `QuestRouteDB`，Lua 命名空间为 `WoWBridgeNS.QuestRoute`。工坊 `call` 使用 `addon="QuestRoute"`；路线命令 `/questroute` 注册为 `SlashCmdList.QUESTROUTE`，只读任务列表命令为 `/questrouteapi`，不提供旧名称的运行时别名。
 
-仓库已完成重命名，代码修订仍为apiRevision=13。新路径下626项Lua5.1隔离检查及插件离线检查通过。游戏安装尚未同步，新名称实机验证待完成；历史checkpoint55属于旧插件 `YYQQuestAPI`。安装与旧配置迁移见根[README](../../README.md)，最新状态见[开发进度](../../开发进度.md)。
+仓库已完成重命名，当前apiRevision=14。原生“选项 → 插件 → QuestRoute”页使用一个勾选框控制`includeEliteQuests`（默认false，按角色保存、立即重排）；用户明确地图增强容易引起手柄焦点异常，本次不增加地图交互。未完成精英可选择加入，副本/专业等过滤保留，已完成精英交付不受开关影响。659项Lua5.1隔离检查及插件离线检查通过。游戏离线、安装尚未同步，设置页显示/手柄焦点与新名称实机验证待完成；历史checkpoint55属于旧插件 `YYQQuestAPI`。安装与旧配置迁移见根[README](../../README.md)，最新状态见[开发进度](../../开发进度.md)。
 
 无限工坊的 MCP 服务器 `wuxian`（命令行同名：`wuxian`）连接在线游戏后，可热加载已有 Lua 文件、读报错和 print 输出、执行 Lua 查状态、录事件、查界面和截图。插件目录改名、新文件和 `.toc` 变更必须完整退出并重启游戏；仓库编辑与离线检查不依赖游戏在线。
 

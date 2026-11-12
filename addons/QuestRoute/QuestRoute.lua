@@ -1,6 +1,8 @@
 -- QuestRoute：当前角色任务规划、地图导航与只读任务数据 API。
 local addonName, ns = ...
 WoWBridgeNS = WoWBridgeNS or {}
+local previousNS = WoWBridgeNS[addonName]
+ns.settingsUI = ns.settingsUI or (previousNS and previousNS.settingsUI)
 WoWBridgeNS[addonName] = ns
 
 local WB = WoWBridge and WoWBridge.Bind and WoWBridge.Bind(addonName) or {
@@ -155,7 +157,7 @@ end
 
 -- 数据层修订 2：客户端原生数据优先，QuestieDB 仅提供独立标注的补充。
 -- 动态发现数据库：不在文件加载时持有它，未安装或尚未加载也能使用原生接口。
-ns.apiRevision = 13
+ns.apiRevision = 14
 
 local function IsFinite(value)
     return canaccessvalue(value) and type(value) == "number"
@@ -790,19 +792,22 @@ local professionCategories = {
 
 local function RouteSettings()
     local name = Accessible(UnitName("player"))
+    local settings
     if not name then
         route.temporary = route.temporary or { skipped = {}, moveThreshold = 100, enabled = true }
-        return route.temporary
-    end
-    QuestRouteDB = QuestRouteDB or {}
-    QuestRouteDB.routes = QuestRouteDB.routes or {}
-    local key = GetRealmName() .. ":" .. name
-    local settings = QuestRouteDB.routes[key]
-    if not settings then
-        settings = { skipped = {}, moveThreshold = 100, enabled = true }
-        QuestRouteDB.routes[key] = settings
+        settings = route.temporary
+    else
+        QuestRouteDB = QuestRouteDB or {}
+        QuestRouteDB.routes = QuestRouteDB.routes or {}
+        local key = GetRealmName() .. ":" .. name
+        settings = QuestRouteDB.routes[key]
+        if not settings then
+            settings = { skipped = {}, moveThreshold = 100, enabled = true }
+            QuestRouteDB.routes[key] = settings
+        end
     end
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end
+    if settings.includeEliteQuests == nil then settings.includeEliteQuests = false end
     return settings
 end
 
@@ -819,7 +824,9 @@ local function RouteExclusion(quest, db, settings)
     local tag = quest.tag
     local questType = C_QuestLog.GetQuestType(quest.questID)
     if instanceTags[questType] or (tag and instanceTags[tag.id]) then return "instance", "client" end
-    if C_QuestLog.IsEliteQuest(quest.questID) or (tag and tag.isElite) then return "elite", "client" end
+    if not settings.includeEliteQuests and (C_QuestLog.IsEliteQuest(quest.questID) or (tag and tag.isElite)) then
+        return "elite", "client"
+    end
     if (tag and IsID(tag.tradeskillLineID)) or professionCategories[quest.category] then
         return "profession", "client"
     end
@@ -1726,7 +1733,7 @@ local function RebuildRoute(reason)
         turnInCount = turnInCount, completionPendingCount = completionPendingCount,
         stepUnit = "unfinished_objective_or_quest", steps = steps, excluded = excluded,
         pendingLocationCount = pendingLocations, locationRetrySeconds = 5,
-        moveThreshold = settings.moveThreshold, enabled = settings.enabled,
+        moveThreshold = settings.moveThreshold, enabled = settings.enabled, includeEliteQuests = settings.includeEliteQuests,
         totalStraightDistance = pathLength, reason = reason, plannedAt = now,
     }
     UpdateNavigation(route.plan, origin, now, previousNavigation, reason == "manual" or requested ~= nil)
@@ -1861,14 +1868,42 @@ function ns.SetRouteOptions(args)
     if type(args) ~= "table" then return InvalidArguments("args must be an object") end
     if args.enabled ~= nil and type(args.enabled) ~= "boolean" then return InvalidArguments("enabled must be a boolean") end
     if args.nameplatesEnabled ~= nil and type(args.nameplatesEnabled) ~= "boolean" then return InvalidArguments("nameplatesEnabled must be a boolean") end
+    if args.includeEliteQuests ~= nil and type(args.includeEliteQuests) ~= "boolean" then return InvalidArguments("includeEliteQuests must be a boolean") end
     if args.moveThreshold ~= nil and (not IsFinite(args.moveThreshold) or args.moveThreshold < 10 or args.moveThreshold > 5000) then
         return InvalidArguments("moveThreshold must be from 10 to 5000")
     end
     local settings = RouteSettings()
     if args.enabled ~= nil then settings.enabled = args.enabled end
     if args.nameplatesEnabled ~= nil then settings.nameplatesEnabled = args.nameplatesEnabled end
+    if args.includeEliteQuests ~= nil then settings.includeEliteQuests = args.includeEliteQuests end
     if args.moveThreshold ~= nil then settings.moveThreshold = args.moveThreshold end
     return RebuildRoute("options_changed")
+end
+
+-- 原生选项页使用客户端自己的控件，不向地图添加焦点或交互入口。
+function ns.RegisterSettings()
+    if not IsLoggedIn() or not Accessible(UnitName("player")) then return false end
+    if not Settings or type(Settings.RegisterVerticalLayoutCategory) ~= "function"
+        or type(Settings.RegisterAddOnSetting) ~= "function" or type(Settings.CreateCheckbox) ~= "function"
+        or type(Settings.RegisterAddOnCategory) ~= "function" then return false end
+    local ui = ns.settingsUI or {}
+    ns.settingsUI = ui
+    ui.owner = ns
+    ui.applyElite = function(value) ns.SetRouteOptions({ includeEliteQuests = value }) end
+    if not ui.category then
+        ui.category = Settings.RegisterVerticalLayoutCategory("QuestRoute")
+        ui.eliteSetting = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_includeEliteQuests",
+            "includeEliteQuests", RouteSettings(), "boolean", "将精英任务加入路线规划", false)
+        -- 原生SetValueChangedCallback追加监听而非覆盖；只注册一次，分发给当前加载实例。
+        ui.eliteSetting:SetValueChangedCallback(function(_, value)
+            if ui.applyElite then ui.applyElite(value) end
+        end)
+        Settings.CreateCheckbox(ui.category, ui.eliteSetting,
+            "开启后，未完成的精英任务也会参与当前地区的路线规划，切换后立即生效。\n"
+            .. "副本、专业任务和手动跳过的任务仍按原规则过滤；已完成任务始终可安排交付。\n此设置仅对当前角色生效。")
+        Settings.RegisterAddOnCategory(ui.category)
+    end
+    return true
 end
 
 -- 纯几何裁剪，不把地图外的线段连成一条虚假的地图内路线。
@@ -2436,7 +2471,9 @@ local function RouteTick(_, elapsed)
 end
 
 function ns.StartRoute()
-    if not IsLoggedIn() or route.running then return end
+    if not IsLoggedIn() then return end
+    ns.RegisterSettings()
+    if route.running then return end
     route.running = true
     -- 工作时间只属于当前UI；热加载也不沿用旧版本未完成的导航计时。
     if route.plan then route.plan.navigation = nil end
@@ -2510,13 +2547,14 @@ WB:Expose("get_plan", ns.GetPlan, "获取当前地图升级与交付路线。已
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")
-WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）、enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true），均为boolean。")
+WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false），后三项为boolean。按角色保存，立即重排；精英开关不影响已完成任务交付及其他过滤。")
 WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args:questID可选默认1号；objectiveKey可选需questID。hotspotID可选需同时带questID/objectiveKey，取get_plan.steps[].hotspots[].id以指定备选；省略选其他最近热点。旧点150码内避开600秒，无备选保留路线/跳过。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")
 
 function ns.OnUnload()
     HideTaskMarkers()
+    if ns.settingsUI and ns.settingsUI.owner == ns then ns.settingsUI.applyElite = nil end
     if route.hoveredPin then route.hoveredPin = nil; GameTooltip:Hide() end
     route.running = false
     if route.driver then route.driver:UnregisterAllEvents(); route.driver:SetScript("OnUpdate", nil); route.driver:SetScript("OnEvent", nil) end
@@ -2548,5 +2586,9 @@ end
 ns.loginFrame = ns.loginFrame or CreateFrame("Frame")
 ns.loginFrame:UnregisterAllEvents()
 ns.loginFrame:RegisterEvent("PLAYER_LOGIN")
-ns.loginFrame:SetScript("OnEvent", function() ns.StartRoute() end)
+ns.loginFrame:RegisterEvent("ADDON_LOADED")
+ns.loginFrame:SetScript("OnEvent", function(_, event)
+    if event == "PLAYER_LOGIN" then ns.StartRoute()
+    elseif IsLoggedIn() then ns.RegisterSettings() end
+end)
 if IsLoggedIn() then ns.StartRoute() end
