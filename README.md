@@ -78,13 +78,12 @@
 | --- | --- |
 | [插件 README](addons/QuestRoute/README.md) | 完整命令、参数及返回字段 |
 | [方案](任务升级助手方案.md) | 产品范围与当前行为 |
-| [路线优化计划](路线优化计划.md) | 提效方向的取舍与分期 |
 | [技术说明](docs/技术说明.md) | 数据来源、坐标、目标映射、权重与导航规则 |
 | [模块说明](addons/QuestRoute/MODULES.md) | 源码职责、加载顺序与维护约定 |
 | [开发进度](开发进度.md) | 当前版本、验证证据与恢复入口 |
 | [待办事项](待办事项.md) | 未完成工作和实机验收 |
 
-阶段调研与旧实现记录已合并到当前文档，原文可通过 Git 历史查看。`backups/` 为本地备份目录，由 `.gitignore` 排除，不随仓库分发。
+已完成的阶段计划与旧实现记录通过 Git 历史查看；仍有效的规则与取舍见技术说明。`backups/` 为本地备份目录，由 `.gitignore` 排除，不随仓库分发。
 
 ## 离线验证
 
@@ -96,4 +95,4 @@ python tests/verify_quest_data.py
 python tests/verify_associations.py
 ```
 
-验证在隔离的 Lua 5.1 环境按 `.toc` 顺序加载整个插件，不连接或修改游戏。`--addon` 可指定插件目录或 `.toc`；旧的 `--addon addons/QuestRoute/QuestRoute.lua` 写法也会加载同目录的完整清单。
+验证在隔离的 Lua 5.1 环境按 `.toc` 顺序加载整个插件，不连接或修改游戏。`--addon` 可指定插件目录或 `.toc`；旧的 `--addon addons/QuestRoute/QuestRoute.lua` 写法也会加载同目录的完整清单。按改动范围选择检查见[开发约定](addons/QuestRoute/AGENTS.md)；纯文档修改只检查链接、引用和差异。
