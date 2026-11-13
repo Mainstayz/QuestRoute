@@ -123,6 +123,9 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities)
                 end
                 if #locations > 1200 then return Fallback("too_many_spawn_locations") end
                 for _, location in ipairs(locations) do
+                    if location.available and not location.world and (location.phase == nil or location.phase == 0) then
+                        return Fallback("world_position_unavailable")
+                    end
                     if location.available and location.world and (location.phase == nil or location.phase == 0) then
                         local fingerprint = key .. ":" .. location.areaID .. ":" .. location.spawnIndex
                         if not seen[fingerprint] then

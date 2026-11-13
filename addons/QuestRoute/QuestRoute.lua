@@ -1,7 +1,7 @@
 -- QuestRoute 入口：命令/API 注册、事件驱动及登录/热重载生命周期。
 -- 业务模块按 QuestRoute.toc 顺序先加载；入口最后启动路线。
 local _, ns = ...
-local InvalidArguments, DistanceSquared = ns.Util.InvalidArguments, ns.Util.DistanceSquared
+local InvalidArguments, DistanceSquared, IsFinite = ns.Util.InvalidArguments, ns.Util.DistanceSquared, ns.Util.IsFinite
 local RouteSettings, RebuildRoute, UpdateNavigation = ns.RouteOptions.Get, ns.Planner.Rebuild, ns.Navigation.Update
 local ConfigureRoutePin, WB = ns.MapPins.Configure, ns.WB
 local HideTaskMarkers, RenderTaskNameplates = ns.Nameplates.Hide, ns.Nameplates.Render
@@ -102,11 +102,56 @@ SlashCmdList["QUESTROUTEAPI"] = function()
     end
 end
 
+-- 前三步给出得分构成，让玩家自己看懂"为什么这步在前"；只重排已有字段，不参与规划。
+local function PrintStepScores(plan)
+    for _, step in ipairs(plan.steps) do
+        if step.index > 3 then break end
+        local own, effective = step.priorityWeight, nil
+        if IsFinite(step.segmentDistance) and IsFinite(step.weightedDistance) and step.weightedDistance > 0 then
+            -- 规划得分是“距离÷权重”；weightedDistance 存的是已除过的距离，除回去就是有效权重。
+            effective = step.segmentDistance / step.weightedDistance
+        end
+        local parts = {}
+        if effective then parts[#parts + 1] = string.format("有效权重 %.2f", effective) end
+        -- 剩余工作量系数已计入权重，单独列出才能看出它是否生效。
+        if IsFinite(step.workFactor) and step.workFactor ~= 1 then
+            parts[#parts + 1] = string.format("剩余×%.2f", step.workFactor)
+        end
+        if effective and own and effective > own + 0.001 then parts[#parts + 1] = "含同组加成" end
+        local score = IsFinite(step.segmentDistance) and string.format("距离 %.0f 码", step.segmentDistance) or "距离未知"
+        local line = step.index .. ". " .. (step.displayTitle or step.title or "?") .. " — " .. score
+        if #parts > 0 then line = line .. "（" .. table.concat(parts, "，") .. "）" end
+        print(line)
+    end
+end
+
+-- 玩家主动查询才输出：哪些任务没有上路线及原因，以及当前地图做完后的去向。
+local function PrintWhy()
+    local plan = ns.GetPlan({})
+    local labels, prefix = ns.Planner.exclusionLabels, "|cff31cee8QuestRoute|r "
+    print(prefix .. plan.count .. " 步路线；" .. #plan.excluded .. " 个任务未上路线。")
+    PrintStepScores(plan)
+    for index, item in ipairs(plan.excluded) do
+        if index > 8 then print("…另有 " .. (#plan.excluded - 8) .. " 项"); break end
+        local why = labels[item.reason] or item.reason
+        if item.reason == "outside_current_map" and item.otherMapName then why = why .. "：" .. item.otherMapName end
+        print("[" .. item.questID .. "] " .. (item.title or "?") .. " — " .. why)
+    end
+    local hint = plan.nextMapHint
+    if hint then
+        print("当前地图已无可做任务，可前往：" .. (hint.mapName or ("地图" .. hint.mapID)) .. (hint.title and ("（" .. hint.title .. "）") or ""))
+    end
+end
+
 SLASH_QUESTROUTE1 = "/questroute"
 SlashCmdList["QUESTROUTE"] = function(text)
     local command, value = (text or ""):match("^(%S*)%s*(.-)%s*$")
     local result
-    if command == "skip" then result = ns.SetQuestSkip({ questID = tonumber(value) })
+    if command == "why" then PrintWhy(); return
+    elseif command == "notice" then
+        result = (value == "on" or value == "off") and ns.SetRouteOptions({ switchNotice = value == "on" })
+            or InvalidArguments("用法：/questroute notice on/off")
+    elseif command == "skip" then result = ns.SetQuestSkip({ questID = tonumber(value) })
     elseif command == "unskip" then
         result = value == "all" and ns.ResetQuestSkips({}) or ns.SetQuestSkip({ questID = tonumber(value), skipped = false })
     elseif command == "distance" then result = ns.SetRouteOptions({ moveThreshold = tonumber(value) or false })
@@ -127,7 +172,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
         local plan = ns.GetPlan({})
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
-        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off")
+        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · why")
         return
     end
     if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
@@ -153,11 +198,11 @@ WB:Expose("get_database_entity", ns.GetDatabaseEntity,
 WB:Expose("get_quest_targets", ns.GetQuestTargets,
     "只读解析未完成目标位置：官方进度为准，任务内按客户端格式与数据库完整名称精确唯一匹配后补QuestieDB静态点；未知回原生POI。"
     .. "args:questID必填，mapID可选，allowDatabase默认true，offset/limit默认0/50最大100；targets分页，objectives含完成状态与映射依据。")
-WB:Expose("get_plan", ns.GetPlan, "获取当前地图升级与交付路线。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定。args:{}。")
+WB:Expose("get_plan", ns.GetPlan, "获取当前地图升级与交付路线。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定；自由选点时同组其他步骤计入加成，steps[].workFactor/remainingWork给剩余工作量修正；当前地图无步骤时nextMapHint给最近外图任务提示，excluded[].otherMapID/otherMapName给外图任务所在地图。args:{}。")
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")
-WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false），后三项为boolean。按角色保存，立即重排；精英开关不影响已完成任务交付及其他过滤。")
+WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false）、switchNotice控制1号自动变化/本图做完时的屏幕提示（默认true），后四项为boolean。按角色保存，立即重排；精英开关不影响已完成任务交付及其他过滤。")
 WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args:questID可选默认1号；objectiveKey可选需questID。hotspotID可选需同时带questID/objectiveKey，取get_plan.steps[].hotspots[].id以指定备选；省略选其他最近热点。旧点150码内避开600秒，无备选保留路线/跳过。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")

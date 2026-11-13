@@ -1,6 +1,6 @@
 -- 两图共用的投影、编号图元、悬停交互、防重叠和备选热点绘制。
 local _, ns = ...
-local IsFinite, Accessible = ns.Util.IsFinite, ns.Util.Accessible
+local IsFinite, Accessible, FormatDistance = ns.Util.IsFinite, ns.Util.Accessible, ns.Util.FormatDistance
 local tooltipPhases = { travel = "赶路中", working = "在此完成目标", unavailable = "等待位置更新" }
 
 local function ProjectWorld(world, mapID)
@@ -42,6 +42,16 @@ local function ConfigureRoutePin(pin)
             if step.action == "turn_in" then status = "可交任务"
             elseif step.action == "completion_pending" then status = "已完成，等待确认交付"
             elseif navigation then status = tooltipPhases[navigation.phase] end
+            -- 距离并入状态行，不增加行数：1 号显示距玩家，其后显示距上一站。
+            local distanceText
+            if step.index == 1 then
+                local distance = FormatDistance(step.navigation and step.navigation.distance)
+                distanceText = distance and ("约" .. distance .. "码")
+            else
+                local distance = FormatDistance(step.segmentDistance)
+                if distance then status, distanceText = status or "后续", "距上一站约" .. distance .. "码" end
+            end
+            if distanceText then status = status and (status .. " · " .. distanceText) or distanceText end
         end
         GameTooltip:AddLine(status and (status .. " · " .. location) or location, 1, 0.85, 0.3)
         local actions = "右键跳过任务"

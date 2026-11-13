@@ -10,19 +10,36 @@ function ns.RegisterSettings()
     local ui = ns.settingsUI or {}
     ns.settingsUI = ui
     ui.owner = ns
+    -- 手柄用户尽量少操作，能在原生设置页改的选项就不要只留命令。
     ui.applyElite = function(value) ns.SetRouteOptions({ includeEliteQuests = value }) end
-    if not ui.category then
-        ui.category = Settings.RegisterVerticalLayoutCategory("QuestRoute")
-        ui.eliteSetting = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_includeEliteQuests",
-            "includeEliteQuests", RouteSettings(), "boolean", "将精英任务加入路线规划", false)
+    ui.applySwitchNotice = function(value) ns.SetRouteOptions({ switchNotice = value }) end
+    ui.applyNameplates = function(value) ns.SetRouteOptions({ nameplatesEnabled = value }) end
+    -- 每个设置项单独判断：热加载时 category 会被保留，整体判断会让后来新增的项永远注册不上。
+    if not ui.category then ui.category = Settings.RegisterVerticalLayoutCategory("QuestRoute") end
+    local function AddCheckbox(key, variable, name, defaultValue, help, apply)
+        local field = key .. "Setting"
+        if ui[field] then return end
+        ui[field] = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_" .. variable,
+            variable, RouteSettings(), "boolean", name, defaultValue)
         -- 原生SetValueChangedCallback追加监听而非覆盖；只注册一次，分发给当前加载实例。
-        ui.eliteSetting:SetValueChangedCallback(function(_, value)
-            if ui.applyElite then ui.applyElite(value) end
-        end)
-        Settings.CreateCheckbox(ui.category, ui.eliteSetting,
-            "开启后，未完成的精英任务也会参与当前地区的路线规划，切换后立即生效。\n"
-            .. "副本、专业任务和手动跳过的任务仍按原规则过滤；已完成任务始终可安排交付。\n此设置仅对当前角色生效。")
+        ui[field]:SetValueChangedCallback(function(_, value) if ui[apply] then ui[apply](value) end end)
+        Settings.CreateCheckbox(ui.category, ui[field], help)
+    end
+    AddCheckbox("elite", "includeEliteQuests", "将精英任务加入路线规划", false,
+        "开启后，未完成的精英任务也会参与当前地区的路线规划，切换后立即生效。\n"
+        .. "副本、专业任务和手动跳过的任务仍按原规则过滤；已完成任务始终可安排交付。\n此设置仅对当前角色生效。",
+        "applyElite")
+    AddCheckbox("notice", "switchNotice", "目标变化时显示屏幕提示", true,
+        "开启后，1 号目标自动改变或本图做完时，屏幕上方显示一行提示。\n"
+        .. "启动、手动重排/换点/跳过及两次提示间隔过短时不提示。\n此设置仅对当前角色生效。",
+        "applySwitchNotice")
+    AddCheckbox("nameplate", "nameplatesEnabled", "在任务怪姓名板上显示提示", true,
+        "开启后，你自行打开的敌方姓名板上会标出相关任务怪（当前目标为橙色）。\n"
+        .. "关闭不影响地图路线，也不会自动打开姓名板。\n此设置仅对当前角色生效。",
+        "applyNameplates")
+    if not ui.registered then
         Settings.RegisterAddOnCategory(ui.category)
+        ui.registered = true
     end
     return true
 end

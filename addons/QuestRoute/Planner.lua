@@ -14,8 +14,58 @@ local hotspotRules, spotRules = Hotspots.rules, Hotspots.spotRules
 local BuildHotspots, VisibleHotspots, SpotBlocked = Hotspots.Build, Hotspots.Visible, Hotspots.Blocked
 local QuestHasAvoidance, RetireFinishedAvoidances, PruneSpotAvoidances = Hotspots.HasAvoidance, Hotspots.RetireFinished, Hotspots.Prune
 local AddNPCGoals, WB = ns.Nameplates.AddGoals, ns.WB
+local WorkFactor, FormatDistance, Accessible = ns.Priority.WorkFactor, Util.FormatDistance, Util.Accessible
 
-local function ChooseCandidate(remaining, cursor, anchor, members)
+local exclusionLabels = {
+    skipped = "已手动跳过", failed = "任务已失败", instance = "副本任务", elite = "精英任务（设置中可放开）",
+    profession = "专业任务", spots_temporarily_avoided = "地点临时避开中", spot_data_unavailable = "地点数据暂缺",
+    no_native_poi = "暂无任务位置", outside_current_map = "目标在其他地图",
+    player_position_unavailable = "等待玩家位置", world_position_unavailable = "等待位置数据", player_map_unavailable = "等待玩家地图",
+}
+
+-- 格宽取邻域半径的两倍，避免浮点舍入把边界内的点隔开两格；网格只在本轮规划内复用。
+local function GroupGrid(remaining)
+    if routeRules.groupBonus == 0 then return end
+    local grid, size = {}, routeRules.groupRadius * 2
+    for _, candidate in ipairs(remaining) do
+        for _, point in ipairs(candidate.points) do
+            local x, y = math.floor(point.world.x / size), math.floor(point.world.y / size)
+            grid[x] = grid[x] or {}
+            grid[x][y] = grid[x][y] or {}
+            local cell = grid[x][y]
+            cell[#cell + 1] = { candidate = candidate, world = point.world }
+        end
+    end
+    return grid
+end
+
+-- 邻域查询缩小扫描范围；仍按剩余步骤顺序各计一次，保持原得分与并列选择规则。
+local function GroupWeight(remaining, candidate, point, grid)
+    local own, bonus, radius = candidate.priorityWeight, 0, routeRules.groupRadius ^ 2
+    if not grid or #remaining < 2 then return own end
+    local size = routeRules.groupRadius * 2
+    local x, y = math.floor(point.world.x / size), math.floor(point.world.y / size)
+    local nearby = {}
+    for dx = -1, 1 do
+        local column = grid[x + dx]
+        if column then
+            for dy = -1, 1 do
+                for _, entry in ipairs(column[y + dy] or {}) do
+                    if entry.candidate ~= candidate and not nearby[entry.candidate] then
+                        local distance = DistanceSquared(point.world, entry.world)
+                        if distance and distance <= radius then nearby[entry.candidate] = true end
+                    end
+                end
+            end
+        end
+    end
+    for _, other in ipairs(remaining) do
+        if nearby[other] then bonus = bonus + other.priorityWeight end
+    end
+    return math.min(own + routeRules.groupBonus * bonus, own * routeRules.groupBonusCap)
+end
+
+local function ChooseCandidate(remaining, cursor, anchor, members, grid)
     local bestIndex, bestPoint, bestDistance, bestScore
     for index, candidate in ipairs(remaining) do
         if not members or members[candidate.stepKey] == candidate.quest.status then
@@ -23,7 +73,8 @@ local function ChooseCandidate(remaining, cursor, anchor, members)
                 local localDistance = anchor and DistanceSquared(anchor, point.world)
                 if not anchor or (localDistance and localDistance <= routeRules.groupRadius ^ 2) then
                     local distance = DistanceSquared(cursor, point.world)
-                    local score = distance and distance / (candidate.priorityWeight * candidate.priorityWeight)
+                    local weight = anchor and candidate.priorityWeight or GroupWeight(remaining, candidate, point, grid)
+                    local score = distance and distance / (weight * weight)
                     local prior = bestIndex and remaining[bestIndex]
                     local earlier = prior and (candidate.quest.questID < prior.quest.questID
                         or (candidate.quest.questID == prior.quest.questID and candidate.stepKey < prior.stepKey))
@@ -38,8 +89,8 @@ local function ChooseCandidate(remaining, cursor, anchor, members)
     return bestIndex, bestPoint, bestDistance, bestScore
 end
 
-local function StableFirst(remaining, origin, mapID, reason, now)
-    local bestIndex, bestPoint, bestDistance, bestScore = ChooseCandidate(remaining, origin)
+local function StableFirst(remaining, origin, mapID, reason, now, grid)
+    local bestIndex, bestPoint, bestDistance, bestScore = ChooseCandidate(remaining, origin, nil, nil, grid)
     local previous = ns.route.plan
     local first = previous and previous.steps[1]
     local decision = { retained = false, reason = reason == "manual" and "manual_replan" or "nearest_weighted" }
@@ -63,7 +114,8 @@ local function StableFirst(remaining, origin, mapID, reason, now)
     if previousIndex then
         local candidate = remaining[previousIndex]
         local distance = DistanceSquared(origin, previousPoint.world)
-        local score = distance / (candidate.priorityWeight * candidate.priorityWeight)
+        local previousWeight = GroupWeight(remaining, candidate, previousPoint, grid)
+        local score = distance / (previousWeight * previousWeight)
         local oldWeighted, newWeighted = math.sqrt(score), math.sqrt(bestScore)
         local progress = TargetProgress(first.questID, previousPoint.objectiveKey)
         local nav = NavigationForStep({ questID = first.questID, status = candidate.quest.status, world = previousPoint.world,
@@ -117,6 +169,70 @@ local function StableFirst(remaining, origin, mapID, reason, now)
     return bestIndex, bestPoint, bestDistance, bestScore, decision
 end
 
+local function MapName(mapID)
+    local ok, info = pcall(C_Map.GetMapInfo, mapID)
+    local name = ok and type(info) == "table" and Accessible(info.name)
+    return type(name) == "string" and name or nil
+end
+
+-- 任务只有其他地图的位置时，取离玩家最近（同大陆）的一个，仅用于"下一张图"提示，不参与规划。
+local function NearestForeignPoint(points, mapID, origin)
+    local best
+    for _, point in ipairs(points) do
+        if IsID(point.reportedMapID) and point.reportedMapID ~= mapID then
+            local distance = DistanceSquared(origin, point.world)
+            if not best or (distance and (not best.squared or distance < best.squared)) then
+                best = { mapID = point.reportedMapID, squared = distance }
+            end
+        end
+    end
+    if best then
+        best.mapName = MapName(best.mapID)
+        best.distance = best.squared and math.sqrt(best.squared) or nil
+    end
+    return best
+end
+
+-- 只在 1 号自动变化（更优候选、原目标完成/消失后的下一站）或当前地图做完时给一行提示；
+-- 启动、手动操作、跨图和保护期内保持不提示，同一目标不重复，两次之间有最小间隔。
+local noticePrefixes = { clearly_better_candidate = "已改为：", previous_target_changed = "下一站：", continue_nearby_group = "下一站：" }
+local quietNoticeReasons = { startup = true, manual = true, quest_skipped = true, quest_restored = true,
+    skips_reset = true, options_changed = true, spot_changed = true }
+
+local function NotifyChange(previousPlan, plan, reason, stability, settings, now)
+    local first, previousFirst = plan.steps[1], previousPlan and previousPlan.steps[1]
+    local previousTarget = ns.route.noticeTarget or previousFirst
+    -- 回退期间保留最后一个已知目标，恢复时才能区分同一目标与真正完成后的下一站。
+    if first and not first.objectiveKey and previousTarget and previousPlan and previousPlan.mapID == plan.mapID
+        and previousTarget.questID == first.questID and previousTarget.action == first.action then
+        ns.route.noticeTarget = previousTarget
+    else
+        ns.route.noticeTarget = first
+    end
+    if not settings.switchNotice or quietNoticeReasons[reason] then return end
+    if not previousPlan or previousPlan.mapID ~= plan.mapID then return end
+    local key, text
+    if first then
+        local prefix = noticePrefixes[stability.reason]
+        if not prefix or not previousFirst then return end
+        if previousTarget.questID == first.questID and previousTarget.action == first.action
+            and (previousTarget.objectiveKey == first.objectiveKey or not previousTarget.objectiveKey or not first.objectiveKey) then return end
+        key = first.stepKey .. ":" .. first.action
+        local distance = FormatDistance(first.segmentDistance)
+        text = "QuestRoute " .. prefix .. first.displayTitle .. (distance and ("（约" .. distance .. "码）") or "")
+    else
+        local hint = plan.nextMapHint
+        if not hint or ((previousPlan.count or 0) == 0 and previousPlan.nextMapHint) then return end
+        key = "map:" .. hint.mapID
+        text = "QuestRoute 当前地图已无可做任务，可前往：" .. (hint.mapName or ("地图" .. hint.mapID))
+            .. (hint.title and ("（" .. hint.title .. "）") or "")
+    end
+    local last = ns.route.lastNotice
+    if last and (last.key == key or now - last.at < routeRules.noticeInterval) then return end
+    ns.route.lastNotice = { key = key, at = now }
+    Util.Notify(text)
+end
+
 local function RebuildRoute(reason)
     local settings = RouteSettings()
     local context = ns.GetPlayerContext({})
@@ -146,7 +262,7 @@ local function RebuildRoute(reason)
         quest.objectives = quest.objectivesLoaded and objectives or {}
         local why, source = RouteExclusion(quest, db, settings)
         local options, allLocalPoints, hasLocalPoint, avoidedCount = {}, {}, false, 0
-        local resolved
+        local resolved, foreign
         if not why then
             local identities = ReadObjectiveIdentities(db, dbInfo, quest)
             AddNPCGoals(mobIndex, db, quest, identities)
@@ -180,12 +296,17 @@ local function RebuildRoute(reason)
                     or not hasLocalPoint and "outside_current_map"
                     or not origin.world and "player_position_unavailable" or "world_position_unavailable"
                 source = source or "client"
+                if why == "outside_current_map" then foreign = NearestForeignPoint(sourcePoints, mapID, origin.world) end
             end
         end
         TrackProgress(quest, now, options, mapID, origin.world)
         if why then
             if temporaryLocationReasons[why] or why == "spot_data_unavailable" then pendingLocations = pendingLocations + 1 end
-            excluded[#excluded + 1] = { questID = id, title = quest.title, reason = why, source = source }
+            local entry = { questID = id, title = quest.title, reason = why, source = source }
+            if foreign then
+                entry.otherMapID, entry.otherMapName, entry.otherDistance = foreign.mapID, foreign.mapName, foreign.distance
+            end
+            excluded[#excluded + 1] = entry
         else
             remaining[#remaining + 1] = {
                 quest = quest, points = options, allPoints = allLocalPoints, priority = ReadLevelingData(quest), resolution = resolved,
@@ -250,7 +371,12 @@ local function RebuildRoute(reason)
             pendingRewards = pendingRewards + 1
         end
     end
-    for _, candidate in ipairs(remaining) do candidate.priorityWeight = weights[candidate.quest.questID] end
+    -- 剩余工作量只对有键的未完目标做小幅修正；任务级权重和经验参照保持不变。
+    for _, candidate in ipairs(remaining) do
+        local factor, left = WorkFactor(candidate.quest, candidate.objectiveKey)
+        candidate.workFactor, candidate.remainingWork = factor, left
+        candidate.priorityWeight = weights[candidate.quest.questID] * factor
+    end
     -- 奖励缓存可独立于任务信息就绪；只在仍有暂缺数据时轻量重试，避免依赖单一事件。
     ns.route.nextRewardCheck = pendingRewards > 0 and now + 5 or nil
     ns.route.nextLocationCheck = pendingLocations > 0 and now + 5 or nil
@@ -258,9 +384,11 @@ local function RebuildRoute(reason)
     ns.route.activeQuestIDs = active
     for id in pairs(ns.route.progress) do if not active[id] then ns.route.progress[id] = nil end end
     ns.route.mobIndex = mobIndex
-    local previousNavigation = ns.route.plan and ns.route.plan.navigation
+    local previousPlan = ns.route.plan
+    local previousNavigation = previousPlan and previousPlan.navigation
+    local grid = GroupGrid(remaining)
     local firstIndex, firstPoint, firstDistance, firstScore, stability, firstAnchor =
-        StableFirst(remaining, origin.world, mapID, reason, now)
+        StableFirst(remaining, origin.world, mapID, reason, now, grid)
     local requested = ns.route.pendingSpotChange
     local requestedFound
     if requested then
@@ -272,7 +400,8 @@ local function RebuildRoute(reason)
                         requestedFound = true
                         firstIndex, firstPoint = index, point
                         firstDistance = DistanceSquared(origin.world, point.world)
-                        firstScore = firstDistance / (candidate.priorityWeight ^ 2)
+                        local requestedWeight = GroupWeight(remaining, candidate, point, grid)
+                        firstScore = firstDistance / (requestedWeight * requestedWeight)
                         stability = { retained = false, reason = "manual_spot_change", questID = requested.questID }
                         firstAnchor = nil
                     end
@@ -293,7 +422,7 @@ local function RebuildRoute(reason)
             bestIndex, bestPoint, bestDistance, bestScore = ChooseCandidate(remaining, cursor, group.anchor)
         end
         if not bestIndex then
-            bestIndex, bestPoint, bestDistance, bestScore = ChooseCandidate(remaining, cursor)
+            bestIndex, bestPoint, bestDistance, bestScore = ChooseCandidate(remaining, cursor, nil, nil, grid)
             group = nil
         end
         if not bestIndex then break end
@@ -326,6 +455,7 @@ local function RebuildRoute(reason)
             locationVersion = bestPoint.version, targetMode = selected.resolution and selected.resolution.mode or "native_poi",
             targetReason = selected.resolution and selected.resolution.reason,
             segmentDistance = distance, priorityWeight = selected.priorityWeight, weightedDistance = math.sqrt(bestScore),
+            workFactor = selected.workFactor, remainingWork = selected.remainingWork,
             priority = selected.priority,
             objectiveRevision = (TargetProgress(quest.questID, bestPoint.objectiveKey) or {}).revision or 0,
             objectivesAvailable = quest.objectivesLoaded and #quest.objectives > 0,
@@ -344,6 +474,18 @@ local function RebuildRoute(reason)
         step.questStepCount = taskStepCounts[step.questID]
     end
     stability.questID, stability.objectiveKey = steps[1] and steps[1].questID, steps[1] and steps[1].objectiveKey
+    -- 暂缺位置或目标数据不能证明本图已做完，等待恢复后再给外图建议。
+    local nextMapHint
+    if #steps == 0 and origin.world and pendingLocations == 0 and pendingObjectives == 0 then
+        local bestDistance
+        for _, item in ipairs(excluded) do
+            if item.reason == "outside_current_map" and IsID(item.otherMapID)
+                and (not nextMapHint or (item.otherDistance and (not bestDistance or item.otherDistance < bestDistance))) then
+                nextMapHint = { questID = item.questID, title = item.title, mapID = item.otherMapID, mapName = item.otherMapName }
+                bestDistance = item.otherDistance or bestDistance
+            end
+        end
+    end
     ns.route.sequence = ns.route.sequence + 1
     ns.route.plan = {
         ok = true, schemaVersion = 1, apiRevision = ns.apiRevision, sequence = ns.route.sequence,
@@ -364,7 +506,9 @@ local function RebuildRoute(reason)
             difficultyWeights = { trivial = 0.4, easy = 1.25, fair = 1, difficult = 0.65, impossible = 0.4 },
             rewardThresholds = { veryLowRatio = 0.25, lowRatio = 0.5, veryLowLevelFraction = 0.005, lowLevelFraction = 0.01 },
             pendingRewardCount = pendingRewards, rewardRetrySeconds = 5, unknownWeight = 1,
-            turnInMinimumExperienceWeight = 0.85 },
+            turnInMinimumExperienceWeight = 0.85,
+            workFactorBands = ns.Priority.workBands, groupBonus = routeRules.groupBonus, groupBonusCap = routeRules.groupBonusCap },
+        nextMapHint = nextMapHint, switchNotice = settings.switchNotice,
         origin = origin, count = #steps, questCount = eligibleQuestCount,
         objectiveStepCount = objectiveStepCount, nativeStepCount = nativeStepCount,
         turnInCount = turnInCount, completionPendingCount = completionPendingCount,
@@ -374,6 +518,7 @@ local function RebuildRoute(reason)
         totalStraightDistance = pathLength, reason = reason, plannedAt = now,
     }
     UpdateNavigation(ns.route.plan, origin, now, previousNavigation, reason == "manual" or requested ~= nil)
+    NotifyChange(previousPlan, ns.route.plan, reason, stability, settings, now)
     ns.route.pendingSpotChange = nil
     ns.route.playerLocation, ns.route.lastOrigin = origin, origin.world
     ns.route.dirty, ns.route.pendingReason = false, nil
@@ -391,4 +536,4 @@ function ns.Replan(args)
     return RebuildRoute("manual")
 end
 
-ns.Planner = { Rebuild = RebuildRoute }
+ns.Planner = { Rebuild = RebuildRoute, exclusionLabels = exclusionLabels }

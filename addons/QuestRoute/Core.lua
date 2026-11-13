@@ -12,7 +12,7 @@ ns.WB = WoWBridge and WoWBridge.Bind and WoWBridge.Bind(addonName) or {
         callback(nil, "unavailable")
     end,
 }
-ns.apiRevision = 14
+ns.apiRevision = 15
 -- 状态只保存在这里；各模块动态读取 ns.route，使换热点的草稿可跨模块生效。
 ns.route = ns.route or { views = {}, sequence = 0 }
 
@@ -79,8 +79,25 @@ local function RouteStepKey(questID, objectiveKey)
     return questID .. ":" .. (objectiveKey or "quest")
 end
 
+-- 提示里的距离只取粗略整数：100 码内按 5 码，之外按 10 码；不可读时返回 nil。
+local function FormatDistance(distance)
+    if not IsFinite(distance) or distance < 0 then return nil end
+    local step = distance < 100 and 5 or 10
+    return string.format("%d", math.floor(distance / step + 0.5) * step)
+end
+
+-- 屏幕上方的一行轻提示；不创建面板，客户端没有该框体时退回聊天窗口。
+local function Notify(text)
+    local frame = UIErrorsFrame
+    if frame and type(frame.AddMessage) == "function" then
+        if pcall(frame.AddMessage, frame, text, 0.19, 0.81, 0.91, 1, 4) then return end
+    end
+    print(text)
+end
+
 ns.Util = {
     InvalidArguments = InvalidArguments, IsFinite = IsFinite, IsID = IsID, Accessible = Accessible,
     ParsePage = ParsePage, AddPage = AddPage, ToWorld = ToWorld,
-    DistanceSquared = DistanceSquared, RouteStepKey = RouteStepKey,
+    DistanceSquared = DistanceSquared, RouteStepKey = RouteStepKey, FormatDistance = FormatDistance,
+    Notify = Notify,
 }

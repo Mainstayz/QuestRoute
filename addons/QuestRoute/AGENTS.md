@@ -1,6 +1,6 @@
 # QuestRoute · Agent 开发约定
 
-《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 按依赖顺序加载 16 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=14`、`schemaVersion=1`。
+《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 按依赖顺序加载 16 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=15`、`schemaVersion=1`。
 
 统一标识：Title/目录 `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。命令 `/questroute`（`SlashCmdList.QUESTROUTE`）和 `/questrouteapi`（`SlashCmdList.QUESTROUTEAPI`），无旧名运行时别名。
 
@@ -19,7 +19,8 @@
 - 官方任务状态和进度优先，QuestieDB 只补缺失实体关系与静态地点；来源、精度和坐标系分开表达。
 - 简单直线规划，只安排当前地图。默认过滤未完成副本、精英和专业任务，原生精英开关可单独放开精英；整项完成后的交付不受活动类型限制，跳过/失败仍优先。
 - 不增加常驻任务面板。用户使用掌机/手柄，地图增强可能干扰焦点；后续配置用原生设置页，不额外增加地图交互。
-- `MapPins.lua` 两图共用悬停最多四行（含标题）：任务名、所指目标进度、简短状态/位置性质、操作。不要重新加入经验、算法统计、同组清单、偏移解释或长命令。
+- `MapPins.lua` 两图共用悬停最多四行（含标题）：任务名、所指目标进度、简短状态/位置性质、操作。距离只并入状态行（`赶路中 · 约 N 码 · …`），不加行；不要重新加入经验、算法统计、同组清单、偏移解释或长命令。
+- 手柄用户应尽量少操作插件：新增交互优先用命令或原生设置页；提示只用屏幕上方一行轻提示（`ns.Util.Notify`），不增加面板、地图交互或按键绑定。路线优化的取舍见[路线优化计划](../../路线优化计划.md)。
 - 未知/受限数据不当成零、已完成、无关或精确位置。离线模拟与历史实机样本不能替代未完成的现场验收。
 
 ## 代码结构与状态
@@ -30,11 +31,18 @@
 
 模块在加载时捕获其他模块的函数引用，修改一个模块后也要按 `.toc` 顺序热加载整个插件；`watch` 目标同样使用整个目录，不单独加载某个 Lua。
 
-事件框体、图元和设置页复用，卸载清理旧回调/绑定。原生 `SetValueChangedCallback` 会追加监听，只注册一次，热加载更新当前分发函数。`PLAYER_LOGIN/ADDON_LOADED` 不会因热加载重发，初始化应同时支持登录和 `OnReload`。
+事件框体、图元和设置页复用，卸载清理旧回调/绑定。原生 `SetValueChangedCallback` 会追加监听，只注册一次，热加载更新当前分发函数。**新增设置项必须按项判断（`ui.<x>Setting` 是否已存在），不能只判断 `ui.category`**：热加载会保留旧 category，整段判断会让新项永远注册不上；分类注册本身用 `ui.registered` 防重复。设置项只在登录期注册，增改后需重载界面（`reload`）才在设置页可见。`PLAYER_LOGIN/ADDON_LOADED` 不会因热加载重发，初始化应同时支持登录和 `OnReload`。
 
 ## 验证与部署
 
-1. 修改前保留可恢复基线。已安装插件用工坊 `checkpoint`，仓库副本用 Git；仓库与游戏 AddOns 不会自动同步，找不到安装目录不能把旧插件检查点当新版本。
+1. 修改前保留可恢复基线。已安装插件用工坊 `checkpoint`，仓库副本用 Git；找不到安装目录不能把旧插件检查点当新版本。
+   - 本机 `Interface/AddOns/QuestRoute` 是指向仓库 `addons/QuestRoute` 的目录联接（junction），编辑仓库即等于改安装，**不要复制**。要换机器或联接丢失时重建（先删掉 `AddOns\QuestRoute`，不要删仓库）：
+     ```powershell
+     cmd /c mklink /J "C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\QuestRoute" "C:\Users\Pillar\Desktop\WowFac\addons\QuestRoute"
+     ```
+     每次游戏启动都会沿联接读取；改完 Lua 后仍按下方第 3 步走 `load`，新增文件或改 `.toc` 仍须重启游戏。
+   - **推荐工作流：直接改仓库并依赖 `watch`**。`watch {action:"start", target:"QuestRoute"}` 监控 16 个文件，每次保存就热加载该文件并自动保留旧版（`history`），无需手工 `load`、无需重启、无需复制。会话开始（或重载界面后）先用 `watch {action:"list"}` 确认仍在监控；已断则重新 start。看结果用 `logs` 的 WATCH/RUN 条目（`ok @...<文件名>` 才算加载成功）。
+   - 注意：`watch` 只在**文件保存到磁盘**时触发。用 `write_file`/`edit_file` 写入即可；只跑测试不写文件不会触发。热加载后 `PLAYER_LOGIN/ADDON_LOADED` 不重发，初始化依赖 `OnReload`。
 2. 文档修改检查链接、引用和事实；代码修改运行相应离线验证：
 
    ```powershell
@@ -42,9 +50,9 @@
    ```
 
    依赖 `lupa.lua51`。`--addon` 可为目录、`.toc` 或入口 `.lua`，按同目录清单加载整插件。
-3. 涉及实机先 `status`，在线才调用游戏。编辑并部署已有 Lua 后直接 `load {target:"QuestRoute"}`；它内置静态检查，先修全部 errors，逐条审阅 warnings，检查每个文件结果。只检查不加载时才单独 `check`，未安装的仓库可用绝对路径离线检查。
+3. 涉及实机先 `status`，在线才调用游戏。编辑并部署已有 Lua 后直接 `load {target:"QuestRoute"}`；它内置静态检查，先修全部 errors，逐条审阅 warnings，检查每个文件结果。只检查不加载时才单独 `check`，未安装的仓库可用绝对路径离线检查。日常单文件改动靠 `watch` 自动加载；改了多个互相依赖的文件时再手动 `load` 整插件一次，因为模块在加载时捕获其他模块的函数引用。
 4. 通过 `call` 使用公开 API，优先用 `try` 收集动作、后续报错和拦截；`ok=true` 才算该步通过。界面修改后截图核对，布局问题用 `inspect`，事件行为用 `trace`，排错用 `logs`。游戏离线时继续仓库工作，把实机项留在待办。
-5. 插件目录改名、增加文件或修改 `.toc` 后必须完整退出并重启游戏，`/reload` 和热加载不能替代启动发现。新 SavedVariables 文件不会自动读取旧文件，迁移按根 README。
+5. 插件目录改名、增加文件或修改 `.toc` 后必须完整退出并重启游戏，`/reload` 和热加载不能替代启动发现（联接方式下同样成立：启动时读取当时仓库里的文件）。新 SavedVariables 文件不会自动读取旧文件，迁移按根 README。
 6. 只有存档写盘、XML 或登录期逻辑需要界面重载时，说明原因并用 `reload` 提供按钮，由玩家点击。Lua 修改可热加载时不要求重载。
 7. 完成代码阶段后更新进度与待办，保留检查点/本地备份；备份在忽略的 `backups/`，旧包名和检查点编号保持真实归属。恢复已有版本前说明目标，再 `restore` 并整插件加载。
 

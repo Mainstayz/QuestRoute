@@ -115,4 +115,28 @@ local function ApplyLevelingPriority(candidate, reference)
     candidate.priorityWeight = data.weight
 end
 
-ns.Priority = { Read = ReadLevelingData, Reference = RewardReference, Apply = ApplyLevelingPriority, labels = priorityLabels }
+-- 剩余数量只做 0.9~1.1 的小幅修正：少量收尾略优先，大批量略靠后；缺数据、进度条类和对应不到目标时为 1。
+local workBands = { { maxRemaining = 2, factor = 1.1 }, { maxRemaining = 6, factor = 1 },
+    { maxRemaining = 12, factor = 0.95 }, { maxRemaining = math.huge, factor = 0.9 } }
+
+local function WorkFactor(quest, objectiveKey)
+    if not objectiveKey or type(quest.resolvedObjectives) ~= "table" or type(quest.objectives) ~= "table" then return 1 end
+    for index, resolved in ipairs(quest.resolvedObjectives) do
+        if resolved.key == objectiveKey then
+            local objective = quest.objectives[index]
+            if type(objective) ~= "table" then return 1 end
+            local kind = ns.Util.Accessible(objective.type)
+            local required, fulfilled = objective.numRequired, objective.numFulfilled
+            if kind == "progressbar" or not IsFinite(required) or not IsFinite(fulfilled) then return 1 end
+            local remaining = required - fulfilled
+            if remaining <= 0 then return 1 end
+            for _, band in ipairs(workBands) do
+                if remaining <= band.maxRemaining then return band.factor, remaining end
+            end
+        end
+    end
+    return 1
+end
+
+ns.Priority = { Read = ReadLevelingData, Reference = RewardReference, Apply = ApplyLevelingPriority, labels = priorityLabels,
+    WorkFactor = WorkFactor, workBands = workBands }

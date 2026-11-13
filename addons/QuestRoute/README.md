@@ -2,13 +2,13 @@
 
 《魔兽世界：无限》当前任务路线与数据插件，在原生 M 地图、小地图绘制导航，并提供任务怪姓名板提示。安装、旧配置迁移和快速上手见根 [README](../../README.md)。
 
-当前 `apiRevision=14`、`schemaVersion=1`，16 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。
+当前 `apiRevision=15`、`schemaVersion=1`，16 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。
 
 [开发进度](../../开发进度.md)记录最近验证与部署状态，[待办事项](../../待办事项.md)记录尚未完成的实机验收。[技术说明](../../docs/技术说明.md)解释数据、坐标与规划边界，[MODULES.md](MODULES.md)说明源码职责。
 
 ## 地图与设置
 
-路线只安排当前已接、有效且位于玩家当前地图的任务。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 的精英开关可单独放开未完成精英任务。整项官方完成后，上述类型均可顺路交付，手动跳过和失败仍优先。
+路线只安排当前已接、有效且位于玩家当前地图的任务。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框：精英任务、屏幕提示、任务怪姓名板。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。整项官方完成后，上述类型均可顺路交付，手动跳过和失败仍优先。
 
 - 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`。
 - 每个可靠未完目标各一步，一个主热点和最多两个紫色 `Nb/Nc` 备选。备选不增加路线步数或里程。
@@ -29,7 +29,7 @@
 
 姓名板功能默认启用，玩家自行开启敌方姓名板（默认 `V`）。黄色“! 击杀 2/6 · 材料 1/5”表示仍有已确认用途，关联当前路线目标时为橙色。覆盖所有有效未跳过任务，击杀够数但材料仍缺时继续提示；未知、身份受限或无可靠用途时隐藏，不将其判成确定无关。
 
-原生精英开关默认关闭，切换立即重排；跳过记录、移动阈值、总显示、姓名板和精英选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
+原生设置页的三个复选框默认值：精英关闭，屏幕提示与任务怪姓名板开启，切换后立即重排；跳过记录、移动阈值、总显示、姓名板和精英选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
 
 ## 命令
 
@@ -47,9 +47,13 @@
 | `/questroute nextspot [ID]` | 为当前 1 号或指定任务换同一未完目标的地点；ID 为任务 ID |
 | `/questroute resetspots [ID/all]` | 清全部或指定任务的临时地点避让，省略等同 all |
 | `/questroute nameplates on`、`/questroute nameplates off` | 单独控制任务姓名板提示 |
+| `/questroute notice on`、`/questroute notice off` | 开关屏幕上方的一行切换提示（默认开） |
+| `/questroute why` | 前三步给出距离与有效权重，再列出未上路线的任务及原因；本图做完时给出下一张地图 |
 | `/questrouteapi` | 只读显示当前任务列表 |
 
 换地点后旧点 150 码内避开 600 秒；无备选或状态失效时保留原路线、计时与任务跳过。清地点避让不会恢复手动跳过的任务。
+
+`why` 的前三行形如 `1. 滚岩峡谷 — 距离 415 码（有效权重 1.25）`：有效权重是难度/奖励与剩余数量修正后的合成权重，同组加成生效时额外标出 `含同组加成`，剩余数量修正不为 1 时标出 `剩余×N`。它只重排已有字段，不参与规划。
 
 ## 调用方式与共用约定
 
@@ -164,9 +168,12 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 | objectiveResolution / pendingObjectiveCount / objectiveRetrySeconds | 细目标采用/回退与暂缺重试 |
 | pendingLocationCount / locationRetrySeconds | 原生位置暂缺重试 |
 | hotspotRules / spotRules / avoidedSpots | 热点、临时避让规则与记录 |
-| enabled / moveThreshold / includeEliteQuests / nameplates | 当前选项和姓名板解析摘要 |
+| enabled / moveThreshold / includeEliteQuests / switchNotice / nameplates | 当前选项和姓名板解析摘要 |
+| nextMapHint | 仅当前地图无步骤、有外图任务、玩家世界坐标可用且无等待恢复的位置/目标数据时存在：`questID/title/mapID/mapName`，只是提示，不跨图规划 |
 
-steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending，表示步骤类型；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
+steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance（含自由选点时的有界任务群加成）、workFactor/remainingWork（剩余数量对权重的 0.9~1.1 修正，缺数据为 1）、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending，表示步骤类型；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
+
+excluded 每项含 questID/title/reason/source；reason 为 `outside_current_map` 时另有 otherMapID/otherMapName/otherDistance（离玩家最近的外图位置）。
 
 groups 的 count 为步骤数、questCount 为任务数，questIDs 去重。stability 含 retained/reason、previousQuestID/questID、previousObjectiveKey/objectiveKey 和可选 lastProgressAt。奖励样本与读取按任务计一次。levelPriority 保留 referenceLevel，perLevelBonus=0、maxWeight=1.25、method 为 client_difficulty_and_reward；levelingPriority 提供难度权重、经验参照、阈值及 pendingRewardCount/rewardRetrySeconds。每步 priority 描述来源、可用性与因子，未知经验不按零处理。
 
@@ -183,7 +190,7 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 | `replan` / `Replan` | `{}`；主动重排，绕过当前保持和旧组延续 |
 | `set_quest_skip` / `SetQuestSkip` | `{questID,skipped?}`；默认 true，false 恢复，不放弃任务 |
 | `reset_quest_skips` / `ResetQuestSkips` | `{}`；清当前角色全部任务跳过 |
-| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,enabled?,nameplatesEnabled?,includeEliteQuests?}`；后三项必须 boolean，精英默认 false、姓名板默认 true，立即重排并按角色保存 |
+| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,enabled?,nameplatesEnabled?,includeEliteQuests?,switchNotice?}`；后四项必须 boolean，精英默认 false、姓名板和切换提示默认 true，立即重排并按角色保存 |
 | `change_quest_spot` / `ChangeQuestSpot` | `{questID?,objectiveKey?,hotspotID?}`；省略取1号，key需questID，hotspotID需同时带questID/key，来自当前 hotspots[].id |
 | `clear_spot_avoidances` / `ClearSpotAvoidances` | `{questID?}`；省略清全部，返回重排计划，不改任务跳过 |
 | `get_unit_tasks` / `GetUnitTasks` | `{unit?}`；默认 target，仅接受 target/mouseover/nameplateN，只读当前单位任务用途 |
@@ -201,6 +208,6 @@ WoWBridge 事件由工坊 `events` 读取，addon 为 QuestRoute：
 - `route.navigation_changed`：当前目标、阶段或保护语义变化，含 questID/objectiveKey、phase/reason/protected/stale/distance/mapID；不逐帧发送位置。
 - `route.spot_changed`：成功手动换点的任务、目标、地图与到期信息。
 
-修改 Lua 后热加载整个插件，模块会捕获其他模块的函数引用，不能仅加载单文件。新增目录、文件或 `.toc` 变更须完整重启。原生设置回调只注册一次，热加载只更新分发函数，避免追加监听。详细开发约定见 [AGENTS.md](AGENTS.md)。
+修改 Lua 后热加载整个插件，模块会捕获其他模块的函数引用，不能仅加载单文件。新增目录、文件或 `.toc` 变更须完整重启。原生设置回调只注册一次，热加载只更新分发函数，避免追加监听；新增设置项时按项判断是否已注册（不能只看 category），并在 `ui.registered` 上防止重复注册分类。详细开发约定见 [AGENTS.md](AGENTS.md)。
 
 仓库根目录执行 `python tests/verify_quest_data.py`，使用 `lupa.lua51` 隔离验证，不连接游戏。`--addon` 接受插件目录、`.toc` 或旧入口 `.lua` 路径，有同目录清单时均加载完整插件。最近代码验证与实机边界统一见[开发进度](../../开发进度.md)，避免把历史样本或离线模拟当成当前部署验收。

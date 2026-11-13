@@ -122,6 +122,7 @@ function ns.SetRouteOptions(args)
     if args.enabled ~= nil and type(args.enabled) ~= "boolean" then return InvalidArguments("enabled must be a boolean") end
     if args.nameplatesEnabled ~= nil and type(args.nameplatesEnabled) ~= "boolean" then return InvalidArguments("nameplatesEnabled must be a boolean") end
     if args.includeEliteQuests ~= nil and type(args.includeEliteQuests) ~= "boolean" then return InvalidArguments("includeEliteQuests must be a boolean") end
+    if args.switchNotice ~= nil and type(args.switchNotice) ~= "boolean" then return InvalidArguments("switchNotice must be a boolean") end
     if args.moveThreshold ~= nil and (not IsFinite(args.moveThreshold) or args.moveThreshold < 10 or args.moveThreshold > 5000) then
         return InvalidArguments("moveThreshold must be from 10 to 5000")
     end
@@ -129,6 +130,7 @@ function ns.SetRouteOptions(args)
     if args.enabled ~= nil then settings.enabled = args.enabled end
     if args.nameplatesEnabled ~= nil then settings.nameplatesEnabled = args.nameplatesEnabled end
     if args.includeEliteQuests ~= nil then settings.includeEliteQuests = args.includeEliteQuests end
+    if args.switchNotice ~= nil then settings.switchNotice = args.switchNotice end
     if args.moveThreshold ~= nil then settings.moveThreshold = args.moveThreshold end
     return RebuildRoute("options_changed")
 end

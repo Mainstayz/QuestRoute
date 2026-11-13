@@ -417,7 +417,17 @@ do
     api.loginFrame:GetScript('OnEvent')(api.loginFrame,'ADDON_LOADED','Blizzard_Settings')
     local ui=api.settingsUI
     check(ui and ui.category.registered and ui.category.name=='QuestRoute','late native Settings load registers QuestRoute addon page')
-    check(#Settings.categories==1 and Settings.checkboxCount==1 and Settings.registeredCount==1,'settings page contains one native checkbox')
+    check(#Settings.categories==1 and Settings.checkboxCount==3 and Settings.registeredCount==1,'settings page contains three native checkboxes')
+    check(ui.noticeSetting:GetValue()==true and ui.noticeSetting.defaultValue==true,'native notice checkbox starts checked')
+    check(ui.nameplateSetting:GetValue()==true and ui.nameplateSetting.defaultValue==true,'native nameplate checkbox starts checked')
+    ui.noticeSetting:SetValue(false)
+    check(api.GetPlan({}).switchNotice==false and not QuestRouteDB.routes['FixtureRealm:FixturePlayer'].switchNotice,'native notice checkbox writes character preference and replans')
+    ui.noticeSetting:SetValue(true)
+    check(api.GetPlan({}).switchNotice==true,'native notice checkbox restores switchNotice')
+    ui.nameplateSetting:SetValue(false)
+    check(api.GetPlan({}).nameplates.enabled==false,'native nameplate checkbox disables nameplate markers')
+    ui.nameplateSetting:SetValue(true)
+    check(api.GetPlan({}).nameplates.enabled==true,'native nameplate checkbox restores nameplate markers')
     check(ui.eliteSetting:GetValue()==false and ui.eliteSetting.defaultValue==false,'native elite checkbox starts unchecked')
     local oldSequence=api.GetPlan({}).sequence
     ui.eliteSetting:SetValue(true)
@@ -495,7 +505,9 @@ Fixture.pois[101][3].x=.4
 Fixture.difficulties={[103]=0};Fixture.trivial={[103]=true};Fixture.rewards={[103]=100}
 plan=api.Replan({})
 check(plan.steps[1].questID==101,'farther old low-level quest no longer wins only by level gap')
-check(math.abs(plan.steps[1].weightedDistance-plan.steps[1].segmentDistance/plan.steps[1].priorityWeight)<.0001,'score still physical distance divided by weight')
+-- r15: free picks may add a bounded same-group bonus (<=1.6x weight), never a larger or negative one.
+do local s=plan.steps[1]
+check(s.weightedDistance<=s.segmentDistance/s.priorityWeight+.0001 and s.weightedDistance>=s.segmentDistance/(s.priorityWeight*1.6)-.0001,'score is physical distance divided by weight with a bounded group bonus') end
 local measured={};for _,q in ipairs(plan.steps) do measured[q.questID]=q end
 check(measured[103].priorityWeight<1,'native trivial task is deprioritized')
 Fixture.questLevels[103]=1
@@ -627,6 +639,10 @@ mini.pins[1]:GetScript('OnClick')(mini.pins[1],'RightButton')
 check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[pinID],'minimap right click uses quest skip')
 api.SetQuestSkip({questID=pinID,skipped=false})
 -- Intelligent route scenarios use independent quest rows; they never touch the live game.
+-- The legacy scenarios below pin plain weighted distances (their fixtures are tightly clustered, so the r15
+-- group bonus would rescale both sides of every comparison); the r15 group scenarios re-enable it explicitly.
+local groupRules=api.Navigation.rules;local defaultGroupBonus=groupRules.groupBonus
+groupRules.groupBonus=0
 Minimap=nil;WorldMapFrame=nil
 Fixture.worldScale=1000;Fixture.playerMapID=101;Fixture.playerY=0;Fixture.time=1000
 FixtureDB.Quest.requiredSkill=function() return nil end
@@ -1443,7 +1459,9 @@ do
     rows[#rows+1]=routeRow(202,800,{xp=1000});rows[#rows+1]=routeRow(203,1000,{xp=3000})
     plan=autoPlan()
     check(plan.questCount==3 and plan.count==4 and plan.levelingPriority.reference.sampleCount==3 and plan.levelingPriority.reference.value==1000,'multi-goal task cannot duplicate its reward or bias the difficulty/XP reference')
-    check(findGoal('npc:11').priorityWeight==findGoal('npc:12').priorityWeight,'same quest goals share the same native difficulty and reward calibration')
+    check(findGoal('npc:11').priority.weight==findGoal('npc:12').priority.weight,'same quest goals share the same native difficulty and reward calibration')
+    -- r15: only the bounded remaining-work factor may separate goals of one quest.
+    check(findGoal('npc:11').priorityWeight==findGoal('npc:11').priority.weight*findGoal('npc:11').workFactor,'step weight is quest calibration times the work factor')
     -- Distinct goals can share exact spawn coordinates; show both pins with visual-only displacement and leader lines.
     plan=targetsScenario(nil,nil,nil,nil,400);targetEntities.npc[12].x=500;plan=autoPlan()
     check(plan.count==2 and plan.groups[1].count==2 and plan.groups[1].questCount==1 and #plan.groups[1].questIDs==1,'same quest contributes two nearby goals while group quest IDs remain unique')
@@ -1921,9 +1939,321 @@ do
     check(not marker:IsVisible(),'disappearing plate without explicit removal cannot leave stale label')
     check(not api.SetRouteOptions({nameplatesEnabled='yes'}).ok,'invalid marker option rejected')
 end
+-- r15: the official remaining count only nudges a goal's weight inside the documented 0.9..1.1 band.
+plan=targetsScenario({goal('monster','野猪',4,6),goal('monster','迅猛龙',0,14)})
+local function goalStep(key) for _,s in ipairs(plan.steps) do if s.objectiveKey==key then return s end end end
+check(goalStep('npc:11') and goalStep('npc:11').workFactor==1.1 and goalStep('npc:11').remainingWork==2,'two remaining kills get the small finishing bonus')
+check(goalStep('npc:12') and goalStep('npc:12').workFactor==.9 and goalStep('npc:12').remainingWork==14,'a large remaining batch is nudged later')
+check(math.abs(goalStep('npc:12').priorityWeight-goalStep('npc:12').priority.weight*.9)<1e-9,'step weight combines quest calibration and work factor')
+-- Data precision changes do not announce a new target; real goal completion and turn-in still do.
+do
+    local oldFrame=UIErrorsFrame
+    UIErrorsFrame={messages={},AddMessage=function(self,text) self.messages[#self.messages+1]=text end}
+    api.RouteOptions.Get().switchNotice=true
+    groupRules.groupBonus=defaultGroupBonus
+    targetsScenario({goal('monster','野猪',0,6)},{[1]={{11,nil,0}}},
+        {npc={[11]={name='野猪',x=500}},object={},item={}},nil,500)
+    api.route.lastNotice=nil
+    rows[1].missing=true;plan=autoPlan()
+    check(plan.steps[1].stepKey=='201:quest' and #UIErrorsFrame.messages==0,'temporary objective loss silently falls back to native precision')
+    Fixture.time=Fixture.time+9;rows[1].missing=false;plan=autoPlan()
+    check(plan.steps[1].stepKey=='201:npc:11' and #UIErrorsFrame.messages==0,'restoring the same exact goal never announces a next stop')
+    Fixture.time=Fixture.time+9;targetEntities.npc[11].readError=true;plan=autoPlan()
+    check(plan.steps[1].targetReason=='database_read_error' and #UIErrorsFrame.messages==0,'database failure is a silent precision fallback')
+    Fixture.time=Fixture.time+9;targetEntities.npc[11].readError=false;autoPlan()
+    check(#UIErrorsFrame.messages==0,'database recovery is silent even outside the notice interval')
+    rows[1].ready=true;plan=autoPlan()
+    check(plan.steps[1].action=='turn_in' and #UIErrorsFrame.messages==1,'official turn-in transition still announces the changed action')
+    targetsScenario(nil,nil,nil,nil,500);UIErrorsFrame.messages={};api.route.lastNotice=nil
+    rows[1].objectives[1]=goal('monster','野猪',6,6,true);plan=autoPlan()
+    check(plan.steps[1].objectiveKey=='npc:12' and #UIErrorsFrame.messages==1,'finishing one known goal still announces its unfinished sibling')
+    for _,player in ipairs({0,500}) do
+        targetsScenario(nil,nil,nil,nil,player);UIErrorsFrame.messages={};api.route.lastNotice=nil;api.route.noticeTarget=nil
+        rows[1].missing=true;autoPlan();autoPlan()
+        Fixture.time=Fixture.time+9;rows[1].missing=false
+        rows[1].objectives[1]=goal('monster','野猪',6,6,true);plan=autoPlan()
+        check(plan.steps[1].objectiveKey=='npc:12' and #UIErrorsFrame.messages==1,
+            'completion during data loss still announces the different recovered goal while traveling or working')
+        autoPlan();check(#UIErrorsFrame.messages==1,'recovered completed-goal transition is announced only once')
+    end
+    targetsScenario({goal('monster','野猪',0,6)},{[1]={{11,nil,0}}},
+        {npc={[11]={name='野猪',x=500}},object={},item={}},{map=102},400)
+    UIErrorsFrame.messages={};api.route.lastNotice=nil
+    local oldWorld=C_Map.GetWorldPosFromMapPos
+    C_Map.GetWorldPosFromMapPos=function(map,pos)
+        if map==101 and pos.x==.5 then return nil end
+        return oldWorld(map,pos)
+    end
+    plan=autoPlan()
+    check(plan.count==0 and plan.objectiveResolution[1].reason=='world_position_unavailable'
+        and plan.pendingObjectiveCount==1 and not plan.nextMapHint and #UIErrorsFrame.messages==0,
+        'unconvertible local goal cannot turn its foreign native POI into a finished-map hint')
+    check(api.route.nextObjectiveCheck~=nil,'temporarily unconvertible goal coordinates are retried')
+    C_Map.GetWorldPosFromMapPos=oldWorld;plan=samplePosition(nil,5)
+    check(plan.count==1 and plan.steps[1].objectiveKey=='npc:11' and plan.pendingObjectiveCount==0
+        and api.route.nextObjectiveCheck==nil and #UIErrorsFrame.messages==0,'goal world-coordinate recovery restores local routing and stops retries')
+    targetEntities.npc[11].spawns={[17]={{50,0},{90,0}}}
+    C_Map.GetWorldPosFromMapPos=function(map,pos)
+        if map==101 and pos.x==.5 then return nil end
+        return oldWorld(map,pos)
+    end
+    plan=autoPlan()
+    check(plan.pendingObjectiveCount==1 and not plan.nextMapHint,
+        'another usable spawn cannot conceal a temporarily unconvertible goal location')
+    C_Map.GetWorldPosFromMapPos=oldWorld;autoPlan()
+    UIErrorsFrame=oldFrame
+end
+-- A reachable 25-goal, 20-hotspot fixture must not regress into all-pairs scans on each free pick.
+do
+    local oldScale,oldObjectives=Fixture.worldScale,FixtureDB.Quest.objectives
+    Fixture.worldScale=8000
+    targetEntities={npc={},object={},item={}}
+    FixtureDB.Quest.objectives=function(id) return {[1]={{id+200,nil,0}}} end
+    local tasks={}
+    for i=1,25 do
+        local name,spawns='批量怪'..i,{}
+        for j=1,20 do
+            local k=(i-1)*20+j-1
+            local x,y=(k%25)*310+100,math.floor(k/25)*310+100
+            spawns[#spawns+1]={x/80,y/80};spawns[#spawns+1]={(x+10)/80,y/80}
+        end
+        targetEntities.npc[400+i]={name=name,spawns={[17]=spawns}}
+        tasks[#tasks+1]=routeRow(200+i,450,{objectives={goal('monster',name,0,6)}})
+    end
+    local distanceIndex,rawDistance
+    for i=1,100 do
+        local name,value=debug.getupvalue(api.Planner.Rebuild,i)
+        if name=='DistanceSquared' then distanceIndex,rawDistance=i,value;break end
+    end
+    check(distanceIndex~=nil,'planner distance counter is attached for the performance regression check')
+    local calls=0
+    debug.setupvalue(api.Planner.Rebuild,distanceIndex,function(a,b) calls=calls+1;return rawDistance(a,b) end)
+    local ok,grouped,onCalls,plain,offCalls=pcall(function()
+        groupRules.groupBonus=defaultGroupBonus
+        local grouped=scenario(tasks);local onCalls=calls
+        calls=0;groupRules.groupBonus=0
+        local plain=scenario(tasks)
+        return grouped,onCalls,plain,calls
+    end)
+    debug.setupvalue(api.Planner.Rebuild,distanceIndex,rawDistance)
+    Fixture.worldScale,FixtureDB.Quest.objectives=oldScale,oldObjectives
+    groupRules.groupBonus=defaultGroupBonus
+    check(ok,'large hotspot fixture rebuilds successfully')
+    check(grouped.count==25 and grouped.objectiveStepCount==25,'large fixture keeps one step per exact goal')
+    check(onCalls<100000,'group scoring stays below five percent of the original all-pairs hotspot scans: '..onCalls)
+    check(offCalls<20000,'zero group bonus bypasses neighborhood scoring')
+    for i,step in ipairs(grouped.steps) do
+        check(step.questID==plain.steps[i].questID and step.world.x==plain.steps[i].world.x
+            and step.world.y==plain.steps[i].world.y,'sparse hotspot route stays unchanged by the scoring acceleration')
+    end
+end
 FixtureDB.Quest.objectives=savedQuestObjectives
 FixtureDB.Npc=savedEntity.Npc;FixtureDB.Object=savedEntity.Object;FixtureDB.Item=savedEntity.Item
 QUEST_MONSTERS_KILLED=nil;QUEST_ITEMS_NEEDED=nil;QUEST_OBJECTS_FOUND=nil
+-- r15 group-aware free picks, bounded bonus, remaining-work factor, notices, why and next-map hint.
+groupRules.groupBonus=defaultGroupBonus
+local function near15(a,b) return math.abs(a-b)<1e-6 end
+local denseCluster={routeRow(201,300),routeRow(202,750),routeRow(203,770),routeRow(204,790)}
+plan=scenario(denseCluster,500)
+check(plan.steps[1].questID==202 and plan.steps[2].questID==203 and plan.steps[3].questID==204 and plan.steps[4].questID==201,'dense nearby cluster is chosen before a slightly nearer lone task and finished as a group')
+check(near15(plan.steps[1].weightedDistance,plan.steps[1].segmentDistance/1.6),'group bonus is reflected in the weighted distance at the 1.6 cap')
+groupRules.groupBonus=0
+plan=scenario(denseCluster,500)
+check(plan.steps[1].questID==201,'disabling the bonus restores plain nearest-weighted choice')
+groupRules.groupBonus=defaultGroupBonus
+plan=scenario({routeRow(201,300),routeRow(202,840),routeRow(203,850),routeRow(204,860),routeRow(205,870),routeRow(206,880)},500)
+check(plan.steps[1].questID==201,'group bonus is capped so a far dense area cannot beat a much nearer task')
+plan=scenario(denseCluster,500);Fixture.playerX=.74;plan=autoPlan()
+check(plan.steps[1].questID==202,'moving toward the chosen cluster keeps its first target')
+check(plan.levelingPriority.groupBonus==groupRules.groupBonus and plan.levelingPriority.groupBonusCap==1.6,'plan exposes the group bonus rules')
+plan=scenario({routeRow(201,300),routeRow(202,320),routeRow(203,340),routeRow(204,780)},500)
+Fixture.playerX=.62;plan=autoPlan()
+check(plan.steps[1].questID==203 and plan.stability.reason=='avoid_small_switch','incumbent and challenger use the same group bonus in the switch threshold')
+-- Compare full routes to the original brute-force formula, including removed steps and radius/cell boundaries.
+do
+    local function verifyGroupRoute(rows,offset)
+        local oldOffset=Fixture.worldOffset[101];Fixture.worldOffset[101]=offset
+        local measured=scenario(rows,450)
+        Fixture.worldOffset[101]=oldOffset
+        local remaining={}
+        for _,row in ipairs(rows) do
+            local weight
+            for _,step in ipairs(measured.steps) do if step.questID==row.id then weight=step.priorityWeight;break end end
+            local points={row.x};for _,x in ipairs(row.otherX or {}) do points[#points+1]=x end;table.sort(points)
+            remaining[#remaining+1]={id=row.id,weight=weight,points=points}
+        end
+        local cursor,anchor=450,nil
+        local function choose(center)
+            local best
+            for index,c in ipairs(remaining) do
+                for _,x in ipairs(c.points) do
+                    if not center or math.abs(x-center)<=200 then
+                        local weight=c.weight
+                        if not center then
+                            local bonus=0
+                            for _,other in ipairs(remaining) do
+                                if other~=c then
+                                    for _,otherX in ipairs(other.points) do
+                                        if math.abs(x-otherX)<=200 then bonus=bonus+other.weight;break end
+                                    end
+                                end
+                            end
+                            weight=math.min(weight+groupRules.groupBonus*bonus,weight*groupRules.groupBonusCap)
+                        end
+                        local distance=(x-cursor)^2;local score=distance/(weight*weight)
+                        if not best or score<best.score or (score==best.score and (distance<best.distance
+                            or (distance==best.distance and c.id<best.id))) then
+                            best={index=index,id=c.id,x=x,score=score,distance=distance}
+                        end
+                    end
+                end
+            end
+            return best
+        end
+        for _,step in ipairs(measured.steps) do
+            local best=anchor and choose(anchor)
+            if not best then best=choose();anchor=best.x end
+            check(step.questID==best.id and near15(step.world.x-offset,best.x)
+                and near15(step.weightedDistance,math.sqrt(best.score)),'indexed group route matches the brute-force weighted formula')
+            table.remove(remaining,best.index);cursor=best.x
+        end
+    end
+    for _,offset in ipairs({0,-400}) do
+        verifyGroupRoute({routeRow(201,100,{otherX={450,800},difficulty=3}),routeRow(202,300,{otherX={650},difficulty=1}),
+            routeRow(203,500,{otherX={850},difficulty=0}),routeRow(204,700)},offset)
+        verifyGroupRoute({routeRow(201,200,{otherX={600}}),routeRow(202,400,{otherX={800}}),routeRow(203,1000)},offset)
+    end
+    for _,axis in ipairs({'x','y'}) do
+        local oldWorld=C_Map.GetWorldPosFromMapPos
+        local coordinates={{x=-1e-14,y=0},{x=200,y=0},{x=275,y=300},{x=-1e-14,y=300}}
+        if axis=='y' then for _,p in ipairs(coordinates) do p.x,p.y=p.y,p.x end end
+        C_Map.GetWorldPosFromMapPos=function(_,pos)
+            local i=math.floor(pos.x*10+.5)
+            local p=coordinates[i]
+            return 1,{x=p.x,y=p.y}
+        end
+        plan=scenario({routeRow(201,100),routeRow(202,200),routeRow(203,300)},400)
+        C_Map.GetWorldPosFromMapPos=oldWorld
+        check(plan.steps[1].questID==201 and near15(plan.steps[1].weightedDistance,300/1.3),
+            'floating-point radius boundary across grid cells preserves the old score on '..axis..' axis')
+    end
+end
+local function workQuest(required,fulfilled,kind,key)
+    return {resolvedObjectives={{key=key or 'npc:1'}},objectives={{type=kind or 'monster',numRequired=required,numFulfilled=fulfilled}}}
+end
+for _,case in ipairs({{10,8,1.1,2},{10,7,1,3},{10,4,1,6},{10,3,.95,7},{20,8,.95,12},{20,7,.9,13},{20,0,.9,20},{1,0,1.1,1}}) do
+    local factor,left=api.Priority.WorkFactor(workQuest(case[1],case[2]),'npc:1')
+    check(near15(factor,case[3]) and left==case[4],'work factor band boundary '..case[4])
+end
+for _,case in ipairs({{workQuest(100,0,'progressbar'),'npc:1'},{workQuest(10,0),nil},{workQuest(10,0),'npc:9'},{workQuest(5,5),'npc:1'},
+    {workQuest(nil,0),'npc:1'},{workQuest(10,nil),'npc:1'},{{resolvedObjectives={{key='npc:1'}},objectives={}},'npc:1'},{{},'npc:1'}}) do
+    check(api.Priority.WorkFactor(case[1],case[2])==1,'unknown, finished or progress-bar work leaves weight unchanged')
+end
+check(api.Util.FormatDistance(0)=='0' and api.Util.FormatDistance(47)=='45' and api.Util.FormatDistance(99)=='100'
+    and api.Util.FormatDistance(123)=='120' and api.Util.FormatDistance(125)=='130','distances round to 5 under 100 and 10 above')
+check(api.Util.FormatDistance(nil)==nil and api.Util.FormatDistance(-1)==nil and api.Util.FormatDistance('x')==nil and api.Util.FormatDistance(0/0)==nil,'unreadable distances are omitted')
+-- Notices are one screen line, throttled, de-duplicated, opt-out, and never fire for startup/manual changes.
+local oldFrame,oldPrint=UIErrorsFrame,print
+UIErrorsFrame={messages={},AddMessage=function(self,text) self.messages[#self.messages+1]=text end}
+local printed={}
+print=function(...) local parts={};for i=1,select('#',...) do parts[#parts+1]=tostring((select(i,...))) end;printed[#printed+1]=table.concat(parts,' ') end
+local function noticeCount() return #UIErrorsFrame.messages end
+api.route.lastNotice=nil
+scenario({routeRow(201,450),routeRow(202,900),routeRow(203,100)})
+check(noticeCount()==0,'manual replan and startup never emit a switch notice')
+Fixture.playerX=.76;plan=autoPlan()
+check(plan.steps[1].questID==202 and plan.stability.reason=='clearly_better_candidate','notice scenario switches automatically')
+check(noticeCount()==1 and UIErrorsFrame.messages[1]:find('已改为',1,true) and UIErrorsFrame.messages[1]:find('Stable 202',1,true)
+    and UIErrorsFrame.messages[1]:find('约140码',1,true),'automatic switch emits one line with the target and a rounded distance')
+autoPlan();check(noticeCount()==1,'unchanged target is not announced again')
+table.remove(Fixture.routeRows,2);plan=autoPlan()
+check(plan.steps[1].questID==201 and noticeCount()==1,'a second change inside the interval is throttled')
+Fixture.time=Fixture.time+9;table.remove(Fixture.routeRows,1);plan=autoPlan()
+check(plan.steps[1].questID==203 and plan.stability.reason=='previous_target_changed' and noticeCount()==2
+    and UIErrorsFrame.messages[2]:find('下一站',1,true),'finishing the target after the interval announces the next stop')
+api.route.lastNotice=nil;Fixture.time=Fixture.time+9
+SlashCmdList['QUESTROUTE']('notice off')
+check(not api.GetPlan({}).switchNotice and not QuestRouteDB.routes['FixtureRealm:FixturePlayer'].switchNotice,'notice option saves per character and appears in the plan')
+scenario({routeRow(201,500),routeRow(202,900)});Fixture.playerX=.76;plan=autoPlan()
+check(plan.steps[1].questID==202 and noticeCount()==2,'disabled notices stay silent')
+SlashCmdList['QUESTROUTE']('notice on')
+check(api.GetPlan({}).switchNotice,'notice option can be restored')
+check(not api.SetRouteOptions({switchNotice='yes'}).ok,'invalid notice option rejected')
+-- Finishing the last local task points to the nearest other map, but never plans across maps.
+api.route.lastNotice=nil;Fixture.time=Fixture.time+9
+scenario({routeRow(201,500),routeRow(202,700,{map=103})},500)
+check(api.GetPlan({}).nextMapHint==nil and api.GetPlan({}).count==1,'next-map hint appears only when the current map has no steps')
+local noticesBefore=noticeCount()
+rowFor(201).map=102;plan=autoPlan()
+check(plan.count==0 and plan.nextMapHint and plan.nextMapHint.questID==201 and plan.nextMapHint.mapID==102 and plan.nextMapHint.mapName=='Map 102',
+    'empty route offers the nearest other map as a hint')
+check(noticeCount()==noticesBefore+1 and UIErrorsFrame.messages[noticeCount()]:find('当前地图已无可做任务',1,true)
+    and UIErrorsFrame.messages[noticeCount()]:find('Map 102',1,true),'finishing the last local task announces where to go next')
+autoPlan();check(noticeCount()==noticesBefore+1,'the next-map hint is not repeated')
+local foreignExcluded
+for _,item in ipairs(plan.excluded) do if item.questID==201 then foreignExcluded=item end end
+check(foreignExcluded and foreignExcluded.reason=='outside_current_map' and foreignExcluded.otherMapID==102 and foreignExcluded.otherMapName=='Map 102',
+    'excluded foreign task reports its nearest other map')
+printed={};SlashCmdList['QUESTROUTE']('why')
+local whyText=table.concat(printed,'\n')
+check(whyText:find('Stable 201',1,true) and whyText:find('目标在其他地图：Map 102',1,true) and whyText:find('可前往：Map 102',1,true),'why lists the reason and the next map')
+check(not whyText:find('nil',1,true),'why output has no nil placeholders')
+do
+    local function quietScenario(rows)
+        UIErrorsFrame.messages={};api.route.lastNotice=nil
+        return scenario(rows)
+    end
+    quietScenario({routeRow(201,500),routeRow(202,900)})
+    api.SetQuestSkip({questID=201})
+    check(api.GetPlan({}).steps[1].questID==202 and noticeCount()==0,'manual skip does not announce an automatic next stop')
+    api.SetQuestSkip({questID=201,skipped=false})
+    check(noticeCount()==0,'manual restore does not emit an automatic switch notice')
+    api.SetQuestSkip({questID=201});api.ResetQuestSkips({})
+    check(noticeCount()==0,'resetting skips remains silent')
+    local oldTag,oldElite=C_QuestLog.GetQuestTagInfo,api.RouteOptions.Get().includeEliteQuests
+    C_QuestLog.GetQuestTagInfo=function(id) return id==201 and {isElite=true} or nil end
+    api.RouteOptions.Get().includeEliteQuests=true
+    quietScenario({routeRow(201,500),routeRow(202,900)})
+    plan=api.SetRouteOptions({includeEliteQuests=false})
+    check(plan.steps[1].questID==202 and noticeCount()==0,'manual filter changes do not announce a next stop')
+    C_QuestLog.GetQuestTagInfo=oldTag;api.RouteOptions.Get().includeEliteQuests=oldElite
+    quietScenario({routeRow(201,500),routeRow(202,800,{map=102})})
+    api.SetQuestSkip({questID=201});autoPlan()
+    check(api.GetPlan({}).nextMapHint and noticeCount()==0,'skipping the last local task is silent even on the following automatic update')
+    quietScenario({routeRow(201,500),routeRow(202,800,{map=102})})
+    rowFor(201).noPOI=true;plan=autoPlan()
+    check(plan.count==0 and plan.pendingLocationCount==1 and plan.navigation.phase=='unavailable'
+        and not plan.nextMapHint and noticeCount()==0,'missing local POI cannot claim the map is finished or suggest leaving')
+    printed={};SlashCmdList['QUESTROUTE']('why')
+    check(not table.concat(printed,'\n'):find('可前往',1,true),'why waits for missing locations instead of recommending another map')
+    rowFor(201).noPOI=false;plan=autoPlan()
+    check(plan.count==1 and not plan.nextMapHint and noticeCount()==0,'local POI recovery restores the task without a false map notice')
+    local oldPosition=C_Map.GetPlayerMapPosition
+    C_Map.GetPlayerMapPosition=function() return nil end;plan=autoPlan()
+    check(plan.navigation.phase=='unavailable' and not plan.nextMapHint and noticeCount()==0,'missing player position suppresses next-map hints')
+    C_Map.GetPlayerMapPosition=oldPosition;autoPlan()
+    quietScenario({routeRow(201,500),routeRow(202,800,{map=102})})
+    rowFor(201).noPOI=true;autoPlan()
+    rowFor(201).noPOI=false;rowFor(201).map=102;plan=autoPlan()
+    check(plan.nextMapHint and noticeCount()==1,'first confirmed foreign destination is announced after location data recovers')
+    autoPlan();check(noticeCount()==1,'recovered next-map hint is announced only once')
+    quietScenario({routeRow(201,500,{map=102,missing=true})})
+    plan=api.GetPlan({})
+    check(plan.pendingObjectiveCount==1 and not plan.nextMapHint,'unresolved objective data cannot prove that every remaining goal is foreign')
+    rowFor(201).missing=false;plan=autoPlan()
+    check(plan.nextMapHint and noticeCount()==1,'objective recovery permits one confirmed next-map notice')
+    quietScenario({routeRow(201,500,{map=102})})
+    C_Map.GetPlayerMapPosition=function() return nil end;plan=autoPlan()
+    check(plan.pendingLocationCount==0 and not plan.nextMapHint,'unknown player coordinates suppress hints even with only foreign tasks')
+    C_Map.GetPlayerMapPosition=oldPosition;autoPlan()
+end
+UIErrorsFrame,print=oldFrame,oldPrint
+-- UIErrorsFrame missing: notice falls back to chat instead of failing.
+printed={};print=function(text) printed[#printed+1]=text end
+api.Util.Notify('fallback line');check(printed[1]=='fallback line','notice falls back to print without the error frame')
+UIErrorsFrame={AddMessage=function() error('frame rejected message') end}
+api.Util.Notify('fallback after error');check(printed[2]=='fallback after error','a failing error frame falls back to print')
+UIErrorsFrame,print=oldFrame,oldPrint
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
 scenario({routeRow(201,500),routeRow(202,680)},500)
@@ -1971,6 +2301,17 @@ end
 check(not verbose and #GameTooltip.lines<=3,'reused map pin keeps compact hover after source reload')
 check(skipTip,'reused pin keeps the essential skip action after source reload')
 check(phaseTip,'reused map pin exposes concise live work state in tooltip')
+local distanceTip=false
+for _,line in ipairs(GameTooltip.lines) do if line:find('在此完成目标 · 约%d+码 · ') then distanceTip=true end end
+check(distanceTip and #GameTooltip.lines<=3,'status line carries the rounded distance without adding a line')
+if h.world.pins[2] and h.world.pins[2].step then
+    GameTooltip.lines={};h.world.pins[2]:GetScript('OnEnter')(h.world.pins[2])
+    local queuedTip=false
+    for _,line in ipairs(GameTooltip.lines) do if line:find('后续 · 距上一站约%d+码 · ') then queuedTip=true end end
+    check(queuedTip and #GameTooltip.lines<=3,'queued steps show distance from the previous stop in the same line')
+    h.world.pins[2]:GetScript('OnLeave')(h.world.pins[2])
+    GameTooltip.lines={};h.mini.pins[1]:GetScript('OnEnter')(h.mini.pins[1])
+end
 Fixture.playerX=.3;Fixture.time=Fixture.time+1
 api.route.driver:GetScript('OnUpdate')(api.route.driver,.2)
 local travelTip=false
@@ -1986,7 +2327,7 @@ return passed
 
 LEGACY_RELOAD_CHECKS = r'''
 local api=WoWBridgeNS.QuestRoute
-assert(api.apiRevision==14 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
+assert(api.apiRevision==15 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
 assert(api.route.driver==FixtureHotload.driver,'legacy upgrade still reuses driver')
@@ -2013,7 +2354,7 @@ return 10
 
 LOAD_CHECKS = r'''
 local api=...
-assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==14,'manifest publishes the shared r14 namespace')
+assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==15,'manifest publishes the shared r15 namespace')
 local endpoints={
     get_quests='GetQuests',get_player_context='GetPlayerContext',get_quest_pois='GetQuestPOIs',
     get_quest_details='GetQuestDetails',get_database_entity='GetDatabaseEntity',get_quest_targets='GetQuestTargets',

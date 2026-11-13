@@ -5,6 +5,10 @@ local DistanceSquared, WB = ns.Util.DistanceSquared, ns.WB
 local routeRules = {
     groupRadius = 200, arrivalRadius = 120, departureRadius = 180, progressRadius = 300, progressWindow = 90,
     idleTimeout = 180, switchRatio = 0.7, minSaving = 50, poiTolerance = 100,
+    -- 自由选点时同组其他步骤的加成：每个其他步骤按自身权重的比例计入，总有效权重不超过自身的 cap 倍。
+    groupBonus = 0.3, groupBonusCap = 1.6,
+    -- 切换提示：同一目标不重复，两次提示至少间隔这么多秒。
+    noticeInterval = 8,
 }
 ns.route.progress = ns.route.progress or {}
 
@@ -93,7 +97,7 @@ local navigationLabels = {
 local temporaryLocationReasons = { no_native_poi = true, player_position_unavailable = true,
     world_position_unavailable = true, player_map_unavailable = true, spot_data_unavailable = true }
 local temporaryObjectiveReasons = { objectives_unavailable = true, objective_state_unavailable = true,
-    entity_name_unavailable = true, database_read_error = true }
+    entity_name_unavailable = true, database_read_error = true, world_position_unavailable = true }
 
 local function SameWorkTarget(previous, step, mapID)
     local shift = previous and step and DistanceSquared(previous.targetWorld, step.world)

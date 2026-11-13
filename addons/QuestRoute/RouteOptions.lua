@@ -27,6 +27,7 @@ local function RouteSettings()
     end
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end
     if settings.includeEliteQuests == nil then settings.includeEliteQuests = false end
+    if settings.switchNotice == nil then settings.switchNotice = true end
     return settings
 end
 

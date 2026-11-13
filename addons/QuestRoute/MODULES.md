@@ -2,22 +2,22 @@
 
 插件按 `QuestRoute.toc` 顺序执行全部 Lua 文件；不使用 `require`、`loadfile` 或额外加载框架。每个文件通过 `local _, ns = ...` 取得同一份插件命名空间。业务模块只定义功能，最后的 `QuestRoute.lua` 注册命令、桥接 API 和事件，并启动路线。
 
-当前 `apiRevision=14`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 14 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
+当前 `apiRevision=15`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 14 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
 
 ## 职责与加载顺序
 
 | 文件 | 职责 | 内部接口 |
 | --- | --- | --- |
-| `Core.lua` | 命名空间、WoWBridge 空壳、共用验证/分页/坐标工具、路线状态初始化 | `ns.Util`、`ns.WB`、`ns.route` |
+| `Core.lua` | 命名空间、WoWBridge 空壳、共用验证/分页/坐标/距离格式化/屏幕提示工具、路线状态初始化 | `ns.Util`、`ns.WB`、`ns.route` |
 | `Database.lua` | 动态发现 QuestieDB、AreaID 映射、实体坐标和任务补充 | `ns.Database` |
 | `QuestData.lua` | 原生任务日志、玩家上下文、POI 去重、客户端优先的任务详情 | `ns.QuestData` |
 | `Objectives.lua` | 官方进度与数据库实体精确匹配、未完目标地点与原生回退 | `ns.Objectives` |
 | `RouteOptions.lua` | 按角色取配置、默认值、规划与姓名板共用的任务过滤 | `ns.RouteOptions` |
-| `Priority.lua` | 难度/奖励读取、经验参照与直线距离权重 | `ns.Priority` |
+| `Priority.lua` | 难度/奖励读取、经验参照、剩余工作量系数与直线距离权重 | `ns.Priority` |
 | `Navigation.lua` | 逐目标进度历史、工作会话、状态转换及保护规则 | `ns.Navigation` |
 | `Hotspots.lua` | 密度热点、几何缓存、主备摘要、临时避让与清理 | `ns.Hotspots` |
 | `Nameplates.lua` | NPC 用途索引、单位任务查询、姓名板图元与清理 | `ns.Nameplates` |
-| `Planner.lua` | 候选选择、当前目标保持、归组和路线快照 | `ns.Planner` |
+| `Planner.lua` | 候选选择（含任务群加成）、当前目标保持、归组、切换提示、下一张地图提示和路线快照 | `ns.Planner` |
 | `RouteActions.lua` | 跳过/恢复、换热点草稿提交、清避让、更新选项 | 既有 `ns.SetQuestSkip` 等公开 API |
 | `Settings.lua` | 原生设置页和单次原生回调分发 | `ns.RegisterSettings` |
 | `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠和备选图元 | `ns.MapPins` |
@@ -52,4 +52,4 @@ python tests/verify_quest_data.py
 
 `--addon` 接受插件目录、`.toc` 或旧入口 `.lua` 路径；入口存在同目录清单时会加载全部文件。测试在隔离 Lua 5.1 中运行，覆盖业务行为与清单加载，并真正重执行整个插件验证同命名空间重载、旧状态补全和新命名空间启动。
 
-新增目录、文件或修改 `.toc` 后，复制整个插件目录并完整退出、重启游戏。安装和实机验收进度见[开发进度](../../开发进度.md)，不要用仓库离线结果代替实际启动验证。
+新增目录、文件或修改 `.toc` 后，完整退出并重启游戏（本机 `AddOns/QuestRoute` 为指向仓库的目录联接，无需复制）。安装和实机验收进度见[开发进度](../../开发进度.md)，不要用仓库离线结果代替实际启动验证。
