@@ -1463,9 +1463,14 @@ do
     check(plan.steps[1].world.x==plan.steps[2].world.x and plan.steps[1].world.y==plan.steps[2].world.y,'visual separation never modifies navigation coordinates or distance')
     GameTooltip={lines={},SetOwner=function() end,SetText=function(self,text) self.title=text end,AddLine=function(self,text) self.lines[#self.lines+1]=text end,Show=function() end,Hide=function() end}
     worldView.pins[1]:GetScript('OnEnter')(worldView.pins[1])
-    local siblingTip=false
-    for _,line in ipairs(GameTooltip.lines) do if line:find('迅猛龙',1,true) then siblingTip=true end end
-    check(siblingTip,'nearby tooltip includes another objective from the same quest')
+    local goalTip,siblingTip=false,false
+    for _,line in ipairs(GameTooltip.lines) do
+        if line==worldView.pins[1].step.objective.text then goalTip=true end
+        if line:find('迅猛龙',1,true) then siblingTip=true end
+    end
+    check(goalTip and not siblingTip and #GameTooltip.lines<=3
+        and GameTooltip.title==worldView.pins[1].step.index..'. '..worldView.pins[1].step.title,
+        'compact hover keeps current goal progress once without sibling list or duplicated goal in title')
     worldView.pins[1]:GetScript('OnLeave')(worldView.pins[1])
     -- Shift-click the second goal: its own objectiveKey must reach ChangeQuestSpot, not first goal of the quest.
     targetEntities.npc[12].spawns={[17]={{50,0},{90,0}}};autoPlan();samplePosition(nil)
@@ -1567,7 +1572,14 @@ do
     local view=api.route.views[#api.route.views];local mini=api.route.minimapView
     for _,s in ipairs(plan.steps) do
         local suffix=s.action=='turn_in' and '?' or s.action=='completion_pending' and '~' or ''
-        check(view.pins[s.index].text.text==s.index..suffix and mini.pins[s.index].text.text==s.index..suffix,'both map labels distinguish delivery question mark and pending tilde from combat points')
+        GameTooltip={lines={},SetOwner=function() end,SetText=function(self,text) self.title=text end,
+            AddLine=function(self,text) self.lines[#self.lines+1]=text end,Show=function() end,Hide=function() end}
+        view.pins[s.index]:GetScript('OnEnter')(view.pins[s.index])
+        local state=s.action=='turn_in' and '可交任务' or s.action=='completion_pending' and '已完成，等待确认交付' or '任务参考位置'
+        check(view.pins[s.index].text.text==s.index..suffix and mini.pins[s.index].text.text==s.index..suffix
+            and GameTooltip.lines[1]:find(state,1,true) and GameTooltip.lines[1]:find('任务参考位置',1,true)
+            and #GameTooltip.lines==2,'both map labels and compact hover retain official completion state and reference position')
+        view.pins[s.index]:GetScript('OnLeave')(view.pins[s.index])
     end
     WorldMapFrame=nil;Minimap=nil;C_Map.GetMapPosFromWorldPos=originalProjection
     api.SetQuestSkip({questID=201});plan=api.GetPlan({})
@@ -1661,7 +1673,10 @@ do
     for _,pin in pairs(view.alternatives) do if pin.hotspot and pin.hotspot.id==farID then clicked=pin end end
     GameTooltip={lines={},SetOwner=function() end,SetText=function(self,text) self.title=text end,AddLine=function(self,text) self.lines[#self.lines+1]=text end,Show=function() end,Hide=function() end}
     clicked:GetScript('OnEnter')(clicked)
-    check(GameTooltip.title:find('备选热点',1,true)~=nil,'backup hover explains optional hotspot rather than current working state')
+    check(GameTooltip.title:find('备选热点',1,true)~=nil and #GameTooltip.lines==3
+        and GameTooltip.lines[1]==clicked.step.objective.text and GameTooltip.lines[2]=='静态刷新区域'
+        and GameTooltip.lines[3]:find('切换至此',1,true),
+        'compact backup hover keeps optional identity, progress, static area and exact switch hint without current working state')
     clicked:GetScript('OnLeave')(clicked)
     Fixture.shift=true;clicked:GetScript('OnClick')(clicked,'RightButton');Fixture.shift=false;plan=api.GetPlan({})
     check(near(plan.steps[1].world.x,900) and plan.steps[1].hotspots[1].id==farID,'Shift right click c chooses exact displayed hotspot instead of nearer b')
@@ -1947,15 +1962,15 @@ check(api.route.plan.groups[1].count==2,'source reload keeps grouped route valid
 GameTooltip={lines={},SetOwner=function() end,SetText=function(self,text) self.title=text end,
     AddLine=function(self,text) self.lines[#self.lines+1]=text end,Show=function() end,Hide=function() end}
 h.mini.pins[1]:GetScript('OnEnter')(h.mini.pins[1])
-local nearby,experienceTip,phaseTip=false,false,false
+local verbose,skipTip,phaseTip=false,false,false
 for _,line in ipairs(GameTooltip.lines) do
-    if line:find('附近还有',1,true) then nearby=true end
-    if line:find('客户端奖励经验',1,true) then experienceTip=true end
-    if line:find('在这一带完成任务目标',1,true) then phaseTip=true end
+    if line:find('附近还有',1,true) or line:find('奖励经验',1,true) or line:find('/questroute',1,true) then verbose=true end
+    if line:find('右键跳过任务',1,true) then skipTip=true end
+    if line:find('在此完成目标',1,true) then phaseTip=true end
 end
-check(nearby,'reused map pin exposes updated group tooltip after source reload')
-check(experienceTip,'reused pin shows new native reward explanation after source reload')
-check(phaseTip,'reused map pin exposes new work state in tooltip')
+check(not verbose and #GameTooltip.lines<=3,'reused map pin keeps compact hover after source reload')
+check(skipTip,'reused pin keeps the essential skip action after source reload')
+check(phaseTip,'reused map pin exposes concise live work state in tooltip')
 Fixture.playerX=.3;Fixture.time=Fixture.time+1
 api.route.driver:GetScript('OnUpdate')(api.route.driver,.2)
 local travelTip=false

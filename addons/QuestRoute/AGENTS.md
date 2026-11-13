@@ -2,6 +2,8 @@
 
 这是《魔兽世界》国服「无限」客户端的地图规划与任务数据 API 插件，用「无限工坊」开发。源码目录为 `addons/QuestRoute/`，加载清单 `QuestRoute.toc` 按依赖顺序执行 16 个 Lua 文件，入口 `QuestRoute.lua` 最后加载，Title 为 `QuestRoute`，SavedVariables 为 `QuestRouteDB`，Lua 命名空间为 `WoWBridgeNS.QuestRoute`。工坊 `call` 使用 `addon="QuestRoute"`；路线命令 `/questroute` 注册为 `SlashCmdList.QUESTROUTE`，只读任务列表命令为 `/questrouteapi`，不提供旧名称的运行时别名。
 
+用户要求地图标点描述只保留关键信息。`MapPins.lua`已将两图共用悬停提示压至最多四行（含标题）：任务名、当前目标/进度、简短状态及静态区域/任务参考位置、操作。去除经验/排序依据、热点统计、同组清单、偏移解释和长命令；不要重新堆入这些信息。apiRevision仍14；685项检查及16文件离线check通过，游戏离线尚未同步，实际显示待验收。
+
 仓库已完成功能模块拆分，当前apiRevision=14。入口从2594行缩至204行，职责与加载顺序见[MODULES.md](MODULES.md)。685项Lua5.1检查（659业务＋26加载）及16文件离线check通过，零错误/警告；当前游戏离线、尚未同步安装，多文件启动待实机验收。以下r14设置页检查数与旧安装checkpoint为拆分前历史基线。
 
 仓库已完成重命名，当前apiRevision=14。原生“选项 → 插件 → QuestRoute”页使用一个勾选框控制`includeEliteQuests`（默认false，按角色保存、立即重排）；用户明确地图增强容易引起手柄焦点异常，本次不增加地图交互。未完成精英可选择加入，副本/专业等过滤保留，已完成精英交付不受开关影响。659项Lua5.1隔离检查及插件离线检查通过。游戏离线、安装尚未同步，设置页显示/手柄焦点与新名称实机验证待完成；历史checkpoint55属于旧插件 `YYQQuestAPI`。安装与旧配置迁移见根[README](../../README.md)，最新状态见[开发进度](../../开发进度.md)。

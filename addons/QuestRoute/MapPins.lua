@@ -1,7 +1,7 @@
 -- 两图共用的投影、编号图元、悬停交互、防重叠和备选热点绘制。
 local _, ns = ...
 local IsFinite, Accessible = ns.Util.IsFinite, ns.Util.Accessible
-local priorityLabels = ns.Priority.labels
+local tooltipPhases = { travel = "赶路中", working = "在此完成目标", unavailable = "等待位置更新" }
 
 local function ProjectWorld(world, mapID)
     if not world then return nil end
@@ -26,72 +26,29 @@ local function ConfigureRoutePin(pin)
         end
     end)
     pin:SetScript("OnEnter", function(self)
-        if not self.step then return end
+        local step = self.step
+        if not step then return end
         ns.route.hoveredPin = self
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText((self.hotspot and (self.step.index .. self.hotspotLabel .. " 备选热点：") or (self.step.index .. ". "))
-            .. (self.step.displayTitle or self.step.title))
-        if self.hotspot then
-            GameTooltip:AddLine(self.step.objective.text, 0.7, 1, 0.8)
-            GameTooltip:AddLine("此处是备选区域，尚未接入主路线", 0.65, 0.8, 1)
-            GameTooltip:AddLine("周围150码，数据库记录 " .. self.hotspot.pointCount .. " 处不同刷新位置", 0.7, 0.9, 1)
-            GameTooltip:AddLine("静态分布不代表当前怪物数量或掉落概率", 0.7, 0.8, 0.9)
-            GameTooltip:AddLine("Shift+右键：切换到这个热点", 1, 0.85, 0.3)
-            GameTooltip:AddLine("右键：跳过整项任务", 0.6, 0.9, 1)
-            GameTooltip:Show()
-            return
+        GameTooltip:SetText((self.hotspot and (step.index .. self.hotspotLabel .. " 备选热点：") or (step.index .. ". "))
+            .. step.title)
+        if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8) end
+
+        -- 状态与位置性质合并一行；静态区域、任务参考位置不表示实时实体坐标。
+        local location = step.objective and "静态刷新区域" or "任务参考位置"
+        local status
+        if not self.hotspot then
+            local navigation = step.navigation
+            if step.action == "turn_in" then status = "可交任务"
+            elseif step.action == "completion_pending" then status = "已完成，等待确认交付"
+            elseif navigation then status = tooltipPhases[navigation.phase] end
         end
-        if self.step.objective then
-            GameTooltip:AddLine("当前目标：" .. self.step.objective.text, 0.7, 1, 0.8)
-            GameTooltip:AddLine("位置来源：QuestieDB静态刷新点（可能出现的位置）", 0.65, 0.85, 1)
-            local hotspot = self.step.hotspots and self.step.hotspots[1]
-            if hotspot then
-                GameTooltip:AddLine("热点周围150码记录 " .. hotspot.pointCount .. " 处不同刷新位置，另有 "
-                    .. (#self.step.hotspots - 1) .. " 个地图备选", 0.7, 0.9, 1)
-            end
-        else
-            GameTooltip:AddLine("位置：原生任务参考点", 0.65, 0.85, 1)
+        GameTooltip:AddLine(status and (status .. " · " .. location) or location, 1, 0.85, 0.3)
+        local actions = "右键跳过任务"
+        if step.objectiveKey then
+            actions = actions .. (self.hotspot and " · Shift+右键切换至此" or " · Shift+右键换地点")
         end
-        local navigation = self.step.navigation
-        GameTooltip:AddLine(navigation and navigation.phase ~= "queued" and navigation.label
-            or self.step.action == "turn_in" and "后续：前往交付任务"
-            or self.step.action == "completion_pending" and "任务已完成，请确认交付信息" or "后续：前往任务区域", 1, 0.85, 0.3)
-        if self.step.action == "turn_in" then
-            GameTooltip:AddLine("日志已标记可交付；此处仍是原生任务参考点，交付位置以游戏提示为准", 0.75, 0.85, 1, true)
-        end
-        if navigation and navigation.phase == "working" then
-            GameTooltip:AddLine("参考点只表示任务区域；目标完成以任务日志为准", 0.7, 0.85, 1)
-            if navigation.stale then
-                GameTooltip:AddLine("一段时间没有进展，已允许重新比较附近任务；也可主动 replan", 1, 0.75, 0.3)
-            elseif navigation.reason == "recent_objective_progress" then
-                GameTooltip:AddLine("最近有任务进展，继续完成这一带的目标", 0.6, 1, 0.7)
-            end
-            if navigation.objectivesAvailable == false then GameTooltip:AddLine("目标进度暂缺，等待客户端更新", 0.8, 0.85, 1) end
-        end
-        local priority = self.step.priority
-        if priority then
-            GameTooltip:AddLine(priorityLabels[priority.reason] or "按距离安排", 0.8, 0.9, 0.7)
-            GameTooltip:AddLine(priority.experience.available and ("客户端奖励经验：" .. priority.experience.value)
-                or "奖励经验尚未知", 0.75, 0.85, 1)
-        end
-        if self.step.groupSize and self.step.groupSize > 1 then
-            GameTooltip:AddLine("同一区域，附近还有 " .. (self.step.groupSize - 1) .. " 个目标/交付点", 0.5, 1, 0.75)
-            local shown = 0
-            for _, step in ipairs(ns.route.plan.steps) do
-                if step.groupIndex == self.step.groupIndex and step.index ~= self.step.index then
-                    GameTooltip:AddLine(step.index .. ". " .. (step.displayTitle or step.title), 0.75, 0.9, 0.85)
-                    shown = shown + 1
-                    if shown == 3 then break end
-                end
-            end
-        end
-        if self.step.index == 1 and ns.route.plan.stability and ns.route.plan.stability.retained then
-            GameTooltip:AddLine("继续当前目标；可用 /questroute replan 重新选择", 0.7, 0.85, 1)
-        end
-        if self.shifted then GameTooltip:AddLine("编号为防重叠略作偏移，细线连接实际位置", 0.7, 0.85, 1) end
-        if self.onEdge then GameTooltip:AddLine("目标在小地图视野外，边缘编号指示方向", 1, 0.7, 0.2) end
-        if self.step.objectiveKey then GameTooltip:AddLine("Shift+右键换同目标地点（旧点150码内避开10分钟）", 1, 0.85, 0.3) end
-        GameTooltip:AddLine("右键跳过整项任务 · /questroute unskip " .. self.step.questID .. " 恢复", 0.6, 0.9, 1)
+        GameTooltip:AddLine(actions, 0.6, 0.9, 1)
         GameTooltip:Show()
     end)
     pin:SetScript("OnLeave", function(self)
