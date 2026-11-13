@@ -23,7 +23,7 @@ local function RenderMinimapRoute()
     local view = ns.route.minimapView
     local plan, player = ns.route.plan, ns.route.playerLocation
     if not plan or not plan.enabled or not Minimap:IsVisible() or not player or not player.world
-        or player.coordinateMapID ~= plan.mapID or #plan.steps == 0 then
+        or player.coordinateMapID ~= plan.mapID then
         if view then view.overlay:Hide() end
         return
     end
@@ -97,6 +97,7 @@ local function RenderMinimapRoute()
         previous = position
     end
     RenderAlternativePins(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
+    Pins.RenderOpportunities(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
 end
 
 ns.Minimap = { Render = RenderMinimapRoute }

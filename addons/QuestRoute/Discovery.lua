@@ -4,6 +4,10 @@ local Util = ns.Util
 local Accessible, IsID, IsFinite = Util.Accessible, Util.IsID, Util.IsFinite
 local GetDatabase, ReadLocations = ns.Database.Get, ns.Database.ReadLocations
 local batchSize, cellSize = 64, 400
+local battlegroundSorts = { [-25] = true, [2597] = true, [3277] = true, [3358] = true, [16603] = true, [16653] = true }
+local holidaySorts = { [-404] = true, [-402] = true, [-378] = true, [-376] = true, [-375] = true,
+    [-374] = true, [-370] = true, [-369] = true, [-366] = true, [-365] = true, [-364] = true,
+    [-41] = true, [-22] = true, [-21] = true }
 local cache, indexDB, questIDs
 
 local function Call(fn, ...)
@@ -44,7 +48,7 @@ local function Point(point, shareable)
     if type(key) ~= "string" or (key ~= "quest" and not key:match("^[a-z]+:%d+$")) then return end
     return { key = key, world = world, coordinateMapID = point.coordinateMapID,
         reportedMapID = Accessible(point.reportedMapID), x = point.x, y = point.y,
-        entityKind = kind, entityID = id, shareable = shareable == true and key ~= "quest",
+        entityKind = kind, entityID = id, entityName = Accessible(point.entityName), shareable = shareable == true and key ~= "quest",
         relation = Accessible(point.relation),
         source = Accessible(point.source), precision = Accessible(point.precision),
         objectiveKey = Accessible(point.objectiveKey) }
@@ -84,35 +88,55 @@ local function Checkpoint(state)
     if state.operations >= 128 or now and state.started and now - state.started >= 3 then coroutine.yield() end
 end
 
-local function Locations(state, kind, id)
+local function Locations(state, kind, id, record)
     local key = Key(kind, id)
     if not key then return {} end
-    if state.locations[key] then return state.locations[key] end
-    local out = {}
+    local cached = state.locations[key]
+    if cached and (not cached.retryAt or GetTime() < cached.retryAt) then
+        if cached.retryAt then record.locationsPending = true end
+        return cached
+    end
+    local out, pending = cached or {}, {}
     local entity = kind == "npc" and state.db.Npc or kind == "object" and state.db.Object
-    local locations = entity and ReadLocations(state.db, entity, id, state.mapID, function() Checkpoint(state) end)
+    local entityName = entity and Call(entity.name, id)
+    -- 保留已转换的点；仅重试本图地图信息或 world 暂缺。
+    local locations = cached and cached.pending
+        or entity and ReadLocations(state.db, entity, id, state.mapID, function() Checkpoint(state) end)
     for _, location in ipairs(Table(locations) or {}) do
+        if type(location) == "table" and location.reason == "unsupported_map"
+            and location.coordinateMapID == state.mapID and (location.phase == nil or location.phase == 0) then
+            if Table(Call(C_Map.GetMapInfo, state.mapID)) then
+                location.available, location.x, location.y = true, location.originalX / 100, location.originalY / 100
+                location.reason = nil
+            else pending[#pending + 1] = location end
+        end
         if type(location) == "table" and location.available == true
             and location.coordinateMapID == state.mapID and (location.phase == nil or location.phase == 0) then
+            if cached or not location.world then location.world = Util.ToWorld(state.mapID, location.x, location.y) end
             local point = Point({ world = location.world, coordinateMapID = state.mapID, reportedMapID = state.mapID,
-                x = location.x, y = location.y, entityKind = kind, entityID = id,
+                x = location.x, y = location.y, entityKind = kind, entityID = id, entityName = entityName,
                 source = "QuestieDB", precision = "static_spawn" }, false)
-            if point then out[#out + 1] = point end
+            if point then out[#out + 1] = point
+            elseif not World(location.world) then pending[#pending + 1] = location end
         end
         Checkpoint(state)
     end
+    out.pending = #pending > 0 and pending or nil
+    out.retryAt = out.pending and GetTime() + 5 or nil
+    if out.retryAt then record.locationsPending = true end
     state.locations[key] = out
     return out
 end
 
-local function ItemSources(state, itemID, add)
+local function ItemSources(state, itemID, add, record)
     local item = state.db.Item
     if type(item) ~= "table" or not IsID(itemID) then return end
     for _, pair in ipairs({ { "npcDrops", "npc" }, { "objectDrops", "object" } }) do
         for _, id in ipairs(Table(Call(item[pair[1]], itemID)) or {}) do
             if IsID(id) then
-                for _, point in ipairs(Locations(state, pair[2], id)) do add(point); Checkpoint(state) end
+                for _, point in ipairs(Locations(state, pair[2], id, record)) do add(point); Checkpoint(state) end
             end
+            Checkpoint(state)
         end
     end
 end
@@ -125,27 +149,75 @@ local function ReadRecord(state, id)
     local db = state.db
     if type(db.Quest.Exists) == "function" and db.Quest.Exists(id) ~= true then return end
     local record = { questID = id, conditionsKnown = true, starters = {}, finishers = {}, targets = {},
-        items = {}, drops = {}, defaultKeys = {}, conditions = {} }
+        items = {}, drops = {}, questItems = {}, defaultKeys = {}, conditions = {} }
     record.title, record.level = Field(db, "name", id), Field(db, "questLevel", id)
+    record.specialFlags, record.zoneOrSort = Field(db, "specialFlags", id), Accessible(Field(db, "zoneOrSort", id))
     record.preAll = IDs(Field(db, "preQuestGroup", id, record), record)
     record.preAny = IDs(Field(db, "preQuestSingle", id, record), record)
     record.exclusiveTo = IDs(Field(db, "exclusiveTo", id, record), record)
     record.children = IDs(Field(db, "childQuests", id), record)
     for _, field in ipairs(conditionFields) do record.conditions[field] = Field(db, field, id, record) end
     local starters, finishers = Field(db, "startedBy", id), Field(db, "finishedBy", id)
+    local groups, objectItems = Field(db, "objectives", id), {}
+    local item = Table(db.Item) or {}
+    -- 唯一直接来源的物件只收集任务物品，不代表已接取任务。
+    for _, row in ipairs(type(groups) == "table" and groups[3] or {}) do
+        local itemID = type(row) == "table" and row[1]
+        if IsID(itemID) and Call(item.startQuest, itemID) == 0 then
+            local sources = Table(Call(item.objectDrops, itemID))
+            if sources and #sources == 1 and IsID(sources[1]) and not next(Table(Call(item.npcDrops, itemID)) or {}) then
+                for _, objectID in ipairs(type(starters) == "table" and starters[2] or {}) do
+                    if objectID == sources[1] then
+                        record.questItems[itemID] = true
+                        objectItems[objectID] = objectItems[objectID] or {}
+                        objectItems[objectID][#objectItems[objectID] + 1] = itemID
+                    end
+                    Checkpoint(state)
+                end
+            end
+        end
+        Checkpoint(state)
+    end
     for group, kind in ipairs({ "npc", "object" }) do
         for _, pair in ipairs({ { starters, record.starters }, { finishers, record.finishers } }) do
             for _, entityID in ipairs(type(pair[1]) == "table" and pair[1][group] or {}) do
-                for _, point in ipairs(Locations(state, kind, entityID)) do pair[2][#pair[2] + 1] = point end
+                local collecting = kind == "object" and pair[2] == record.starters and objectItems[entityID]
+                for _, point in ipairs(Locations(state, kind, entityID, record)) do
+                    if collecting then
+                        for _, itemID in ipairs(collecting) do
+                            record.drops[#record.drops + 1] = { point = point, itemID = itemID }
+                            Checkpoint(state)
+                        end
+                    else pair[2][#pair[2] + 1] = point end
+                end
             end
+        end
+    end
+    if next(record.questItems) and type(db.Npc) == "table" then
+        -- shortcut: 外图 NPC 坐标暂缺时等待索引重建，需要原地恢复提示时再加外图重试。
+        for _, entities in ipairs({ type(starters) == "table" and starters[1] or {}, type(finishers) == "table" and finishers[1] or {} }) do
+            for _, entityID in ipairs(entities) do
+                local locations = IsID(entityID) and ReadLocations(db, db.Npc, entityID, nil, function() Checkpoint(state) end)
+                for _, location in ipairs(locations or {}) do
+                    if location.available and (location.phase == nil or location.phase == 0) then
+                        record.carriedPoint = Point({ world = location.world,
+                            coordinateMapID = location.coordinateMapID, reportedMapID = location.coordinateMapID,
+                            x = location.x, y = location.y, entityKind = "npc", entityID = entityID,
+                            entityName = Call(db.Npc.name, entityID), source = "QuestieDB", precision = "static_spawn" }, false)
+                        if record.carriedPoint then break end
+                    end
+                    Checkpoint(state)
+                end
+                if record.carriedPoint then break end
+            end
+            if record.carriedPoint then break end
         end
     end
     record.items = IDs(type(starters) == "table" and starters[3] or nil, record)
     for _, itemID in ipairs(record.items) do
-        ItemSources(state, itemID, function(point) record.drops[#record.drops + 1] = { point = point, itemID = itemID } end)
+        ItemSources(state, itemID, function(point) record.drops[#record.drops + 1] = { point = point, itemID = itemID } end, record)
     end
-    local groups = Field(db, "objectives", id)
-    local extra = Field(db, "extraObjectives", id)
+    local extra, trigger = Field(db, "extraObjectives", id), Field(db, "triggerEnd", id)
     local simple = type(groups) == "table" and (type(db.Quest.extraObjectives) == "function" or type(db.Quest.Get) == "function")
         and (extra == nil or (type(extra) == "table" and next(extra) == nil))
     for group = 4, 6 do
@@ -165,8 +237,8 @@ local function ReadRecord(state, id)
             local key = objectiveKey .. ":" .. point.entityKind .. ":" .. point.entityID .. ":" .. point.x .. ":" .. point.y
             if not seen[key] then record.targets[#record.targets + 1], seen[key] = point, true end
         end
-        if kind == "item" then ItemSources(state, entityID, Add)
-        else for _, point in ipairs(Locations(state, kind, entityID)) do Add(point); Checkpoint(state) end end
+        if kind == "item" then ItemSources(state, entityID, Add, record)
+        else for _, point in ipairs(Locations(state, kind, entityID, record)) do Add(point); Checkpoint(state) end end
         if count == 0 then covered = false end
     end
     for group, kind in ipairs({ "npc", "object", "item" }) do
@@ -180,6 +252,8 @@ local function ReadRecord(state, id)
         end
     end
     record.targetsComplete = simple and covered and goalCount > 0
+        and (type(db.Quest.triggerEnd) == "function" or type(db.Quest.Get) == "function")
+        and (trigger == nil or type(trigger) == "table" and next(trigger) == nil)
     for _, row in ipairs(type(groups) == "table" and groups[5] or {}) do
         if type(row) == "table" then
             for _, entityID in ipairs(type(row[1]) == "table" and row[1] or {}) do Reference("npc", entityID) end
@@ -201,7 +275,10 @@ local function Link(state, from, to)
     state.children[from][to] = true
 end
 
-local function IndexPoint(grid, id, point, action, itemID)
+local function IndexPoint(grid, id, point, indexed, action, itemID)
+    local key = (action or "target") .. ":" .. (itemID or 0) .. ":" .. point.key .. ":"
+        .. point.entityKind .. ":" .. point.entityID .. ":" .. point.x .. ":" .. point.y
+    if indexed[key] then return end
     local world = point.world
     local continent, x, y = world.continentID, math.floor(world.x / cellSize), math.floor(world.y / cellSize)
     grid[continent] = grid[continent] or {}
@@ -209,10 +286,19 @@ local function IndexPoint(grid, id, point, action, itemID)
     local column = grid[continent][x]
     column[y] = column[y] or {}
     column[y][#column[y] + 1] = { questID = id, point = point, action = action, itemID = itemID }
+    indexed[key] = true
+    return true
 end
 
 local function Store(state, record)
     local id = record.questID
+    local previous = state.records[id]
+    record.indexed = previous and previous.indexed or {}
+    if previous then
+        for _, field in ipairs({ "starters", "finishers", "targets", "drops" }) do
+            if #record[field] ~= #previous[field] then state.changed = true end
+        end
+    end
     for _, child in ipairs(record.children) do Link(state, id, child) end
     for _, list in ipairs({ record.preAll, record.preAny }) do
         for _, parent in ipairs(list) do Link(state, parent, id) end
@@ -221,16 +307,17 @@ local function Store(state, record)
         state.exclusive[other] = state.exclusive[other] or {}
         state.exclusive[other][id] = true
     end
-    for _, point in ipairs(record.starters) do IndexPoint(state.starts, id, point, "pick_up"); Checkpoint(state) end
-    for _, drop in ipairs(record.drops) do IndexPoint(state.starts, id, drop.point, "possible_item_drop", drop.itemID); Checkpoint(state) end
+    for _, point in ipairs(record.starters) do IndexPoint(state.starts, id, point, record.indexed, "pick_up"); Checkpoint(state) end
+    for _, drop in ipairs(record.drops) do IndexPoint(state.starts, id, drop.point, record.indexed, "possible_item_drop", drop.itemID); Checkpoint(state) end
     for _, point in ipairs(record.targets) do
-        IndexPoint(state.targets, id, point)
-        state.byKey[point.key] = state.byKey[point.key] or {}
-        state.byKey[point.key][id] = true
-        local entityKey = Key(point.entityKind, point.entityID)
-        if entityKey then
-            state.byKey[entityKey] = state.byKey[entityKey] or {}
-            state.byKey[entityKey][id] = true
+        if IndexPoint(state.targets, id, point, record.indexed) then
+            state.byKey[point.key] = state.byKey[point.key] or {}
+            state.byKey[point.key][id] = true
+            local entityKey = Key(point.entityKind, point.entityID)
+            if entityKey then
+                state.byKey[entityKey] = state.byKey[entityKey] or {}
+                state.byKey[entityKey][id] = true
+            end
         end
         Checkpoint(state)
     end
@@ -238,17 +325,26 @@ local function Store(state, record)
         state.byItem[itemID] = state.byItem[itemID] or {}
         state.byItem[itemID][id] = true
     end
+    for itemID in pairs(record.questItems) do
+        state.byItem[itemID] = state.byItem[itemID] or {}
+        state.byItem[itemID][id] = true
+    end
     state.records[id] = record
+    if record.locationsPending then state.pendingRecords[#state.pendingRecords + 1] = id end
 end
 
 local function Pump()
     local state = cache
-    if not state or not state.building then return false end
+    if not state then return false end
+    if not state.queue then
+        if not state.retryAt or GetTime() < state.retryAt then return false end
+        state.queue, state.cursor, state.pendingRecords = state.pendingRecords, 0, {}
+    end
     if Call(GetDatabase) ~= state.db then cache = nil; return false end
-    local last = math.min(state.scanned + batchSize, #questIDs)
+    local last = math.min(state.cursor + batchSize, #state.queue)
     state.started, state.operations = Call(debugprofilestop), 0
-    while state.scanned < last do
-        local id = questIDs[state.scanned + 1]
+    while state.cursor < last do
+        local id = state.queue[state.cursor + 1]
         if not state.worker then
             state.worker = coroutine.create(function()
                 if IsID(id) then
@@ -258,15 +354,24 @@ local function Pump()
             end)
         end
         local ok = coroutine.resume(state.worker)
-        if not ok then state.records[id] = { questID = id, readError = true } end
+        if not ok then
+            if state.building then state.records[id] = { questID = id, readError = true }
+            else state.pendingRecords[#state.pendingRecords + 1] = id end
+        end
         if ok and coroutine.status(state.worker) ~= "dead" then break end
-        state.worker, state.scanned = nil, state.scanned + 1
+        state.worker, state.cursor = nil, state.cursor + 1
+        if state.building then state.scanned = state.cursor end
         local now = Call(debugprofilestop)
         if now and state.started and now - state.started >= 3 then break end
     end
     local plan = ns.route.plan
     if plan and plan.mapID == state.mapID and plan.discovery then plan.discovery.scanned = state.scanned end
-    if state.scanned == #questIDs then state.building = false; return true end
+    if state.cursor == #state.queue then
+        local changed = state.building or state.changed
+        state.queue, state.building, state.changed = nil, false, nil
+        state.retryAt = #state.pendingRecords > 0 and GetTime() + 5 or nil
+        return changed == true
+    end
     return false
 end
 
@@ -282,6 +387,7 @@ local function Initialize(db, mapID)
     end
     if not cache or cache.db ~= db or cache.mapID ~= mapID then
         cache = { db = db, mapID = mapID, scanned = 0, building = true, records = {}, locations = {},
+            queue = questIDs, cursor = 0, pendingRecords = {},
             children = {}, starts = {}, targets = {}, byKey = {}, byItem = {}, exclusive = {} }
     end
     return cache
@@ -370,10 +476,26 @@ local function Eligibility(record, quest, active, settings, character, completed
     if completed(id) == nil then unknown = "completion_unknown" end
     if not filterOK or not record.conditionsKnown or record.invalidConditions then unknown = unknown or "conditions_unavailable" end
     local api = Table(C_QuestLog) or {}
+    -- 本客户端原生重复标志可能为 false；QuestieDB specialFlags 最低位补齐。
+    if Call(api.IsRepeatableQuest, id) == true or IsID(record.specialFlags) and record.specialFlags % 2 == 1 then
+        return "blocked", "repeatable", missing
+    end
+    local questType = Call(api.GetQuestType, id)
+    if questType == 41 or IsFinite(record.zoneOrSort) and battlegroundSorts[record.zoneOrSort] then
+        return "blocked", "battleground", missing
+    end
+    if IsFinite(record.zoneOrSort) and holidaySorts[record.zoneOrSort] then return "blocked", "holiday", missing end
+    local title = Accessible(record.title)
+    if type(title) == "string" then
+        if title:match("^捐献") or title:match("^贡献") then return "blocked", "donation", missing end
+        -- shortcut: 仅过滤纯 ASCII 英文标题，遇到带重音或特殊标点的漏网标题时再扩展。
+        if title:find("[A-Za-z]") and not title:find("[\128-\255]") then return "blocked", "unlocalized", missing end
+    end
+    if IsID(record.level) and record.level < settings.minPickupLevel then return "blocked", "quest_below_minimum", missing end
     local onQuest = Call(api.IsOnQuest, id)
     if onQuest == true then return "blocked", "already_accepted", missing end
     if onQuest ~= false then unknown = unknown or "quest_log_membership_unknown" end
-    if not IsFinite(Call(api.GetQuestType, id)) then unknown = unknown or "quest_type_unknown" end
+    if not IsFinite(questType) then unknown = unknown or "quest_type_unknown" end
     if not settings.includeEliteQuests and type(Call(api.IsEliteQuest, id)) ~= "boolean" then unknown = unknown or "elite_state_unknown" end
     local c = record.conditions
     for _, field in ipairs({ "requiredLevel", "requiredMaxLevel" }) do
@@ -478,10 +600,14 @@ end
 
 local function Collect(context, active, candidates, settings)
     local result = { available = false, building = false, scanned = 0, total = 0,
-        quests = {}, opportunities = {}, blocked = {}, completed = {} }
+        quests = {}, opportunities = {}, announcedOpportunities = {}, carriedItems = {}, blocked = {}, completed = {} }
     context, active, candidates = Table(context) or {}, Table(active) or {}, Table(candidates) or {}
     local location = Table(context.location) or {}
     local mapID = Accessible(location.coordinateMapID)
+    local announced = ns.route.announcedOpportunities
+    if announced and IsID(mapID) and announced.mapID ~= mapID then
+        ns.route.announcedOpportunities, announced = nil, nil
+    end
     local db, info = Call(GetDatabase)
     db = Table(db)
     if not db then cache = nil; result.reason = (Table(info) or {}).reason or "database_unavailable"; return result end
@@ -490,12 +616,19 @@ local function Collect(context, active, candidates, settings)
     if not state then result.reason = reason; return result end
     result.available, result.building, result.scanned, result.total = true, state.building, state.scanned, #questIDs
     result.reason = state.building and "building" or "ready"
+    result.pendingLocationCount = #state.pendingRecords + (not state.building and state.queue and (#state.queue - state.cursor) or 0)
     settings = Table(settings) or Table(Call(ns.RouteOptions.Get)) or {}
-    settings = { skipped = Table(settings.skipped) or {}, includeEliteQuests = Accessible(settings.includeEliteQuests) == true }
+    settings = { skipped = Table(settings.skipped) or {}, includeEliteQuests = Accessible(settings.includeEliteQuests) == true,
+        minPickupLevel = settings.minPickupLevel or ns.RouteOptions.Get().minPickupLevel,
+        maxMonsterLevelOffset = settings.maxMonsterLevelOffset or ns.RouteOptions.Get().maxMonsterLevelOffset }
     state.requests = state.requests or {}
     local requestCount = 0
     result.pendingQuestIDs, result.pendingCount = {}, 0
     local origin, native, activeTargets, activeKeys, coverage, weights, deliveries = World(location.world), {}, {}, {}, {}, {}, {}
+    local combatLevels, playerLevel = {}, (Table(context.character) or {}).level
+    local function TargetAboveLevel(point)
+        return ns.RouteOptions.TargetAboveLevel(db, point, playerLevel, combatLevels, settings.maxMonsterLevelOffset)
+    end
     local nextPoint, nextID, bestScore, retainedPoint, retainedID, retainedShift
     local plan = ns.route and ns.route.plan
     local previous = plan and plan.mapID == mapID and plan.steps and plan.steps[1]
@@ -523,7 +656,7 @@ local function Collect(context, active, candidates, settings)
                 if Accessible(raw.reportedMapID) == mapID then
                     local objectiveKey = Accessible(raw.objectiveKey) or Accessible(candidate.objectiveKey)
                     local point = Point(raw, reliable and record and record.defaultKeys and record.defaultKeys[objectiveKey])
-                    if point then
+                    if point and (native[id].status ~= "in_progress" or not TargetAboveLevel(point)) then
                         point.objectiveKey = objectiveKey
                         local distance = Distance(origin, point.world)
                         local weight = Accessible(candidate.priorityWeight)
@@ -562,6 +695,7 @@ local function Collect(context, active, candidates, settings)
         if IsID(related) and related ~= id then hints[id].related[related] = true end
     end
     local function Propose(id, point, action, itemID)
+        if action == "possible_item_drop" and TargetAboveLevel(point) then return end
         local distance = Distance(origin, point.world)
         if not distance then return end
         local extra = direct and Distance(point.world, destination)
@@ -604,8 +738,15 @@ local function Collect(context, active, candidates, settings)
         end
     end
     local held, bagQuests = Inventory(db)
+    local carriedQuests = {}
     for itemID in pairs(held) do
-        for id in pairs(state.byItem[itemID] or {}) do bagQuests[id] = itemID end
+        for id in pairs(state.byItem[itemID] or {}) do
+            if state.records[id].questItems[itemID] then
+                carriedQuests[id] = true
+                if bagQuests[id] == itemID then bagQuests[id] = nil end
+                Hint(id, "item_in_bags")
+            else bagQuests[id] = itemID end
+        end
     end
     local offered, gossip = {}, Table(C_GossipInfo) or {}
     for _, row in ipairs(Table(Call(gossip.GetAvailableQuests)) or {}) do
@@ -619,7 +760,10 @@ local function Collect(context, active, candidates, settings)
         if originPoint then Propose(id, originPoint, "start_item", itemID) end
     end
     for id in pairs(offered) do
-        if originPoint then Propose(id, originPoint, "pick_up") end
+        if originPoint then
+            proposals[id .. ":pick_up:0"] = nil
+            Propose(id, originPoint, "pick_up")
+        end
     end
     for id in pairs(active) do if IsID(id) then seeds[id] = true end end
     local initial = {}
@@ -632,6 +776,7 @@ local function Collect(context, active, candidates, settings)
             for _, parent in ipairs(list) do seeds[parent] = true end
         end
     end
+    for _, item in pairs(announced and announced.items or {}) do seeds[item.questID] = true end
     local completionSeen = {}
     local function Completed(id)
         if not completionSeen[id] then
@@ -648,7 +793,7 @@ local function Collect(context, active, candidates, settings)
     table.sort(ordered)
     for _, id in ipairs(ordered) do
         local record, entry = state.records[id], active[id]
-        if entry or (record and (record.localData or bagQuests[id] or offered[id])) then
+        if entry or (record and (record.localData or bagQuests[id] or carriedQuests[id] or offered[id])) then
             local quest = native[id]
             if not quest and entry then quest = ActiveData(id, entry) end
             quest = quest or { questID = id, title = record and record.title, level = record and record.level,
@@ -697,16 +842,29 @@ local function Collect(context, active, candidates, settings)
             for _, field in ipairs({ "starters", "finishers" }) do
                 for _, point in ipairs(record and record[field] or {}) do out[field][#out[field] + 1] = Point(point, false) end
             end
+            if offered[id] and originPoint then out.starters = { Point(originPoint, false) } end
             if deliveries[id] then out.finishers = deliveries[id] end
             local targets
             if entry then
                 if quest.status == "in_progress" then targets = activeTargets[id] end
             elseif bagQuests[id] or #out.starters > 0 then targets = record and record.targets
             else out.targetsComplete = false end
-            local present = {}
+            local present, unsafe = {}, {}
             for _, point in ipairs(targets or {}) do
                 local copied = Point(point, point.shareable)
-                if copied then out.targets[#out.targets + 1] = copied; present[copied.key] = true end
+                if copied then
+                    if TargetAboveLevel(copied) then unsafe[copied.key] = true
+                    else out.targets[#out.targets + 1] = copied; present[copied.key] = true end
+                end
+            end
+            for key in pairs(unsafe) do
+                if not present[key] then
+                    out.targetsComplete = false
+                    if not entry and (eligibility == "eligible" or why == "prerequisite") then
+                        eligibility, why = "blocked", "target_above_level"
+                        out.eligibility, out.conditionReason = eligibility, why
+                    end
+                end
             end
             if entry and coverage[id] then
                 local full = coverage[id].complete and next(coverage[id].required) ~= nil
@@ -714,6 +872,15 @@ local function Collect(context, active, candidates, settings)
                 out.targetsComplete = full
             end
             result.quests[id] = out
+            if not state.building and not entry and eligibility == "eligible" and carriedQuests[id] and record.carriedPoint then
+                for itemID in pairs(record.questItems) do
+                    if held[itemID] then
+                        result.carriedItems[#result.carriedItems + 1] = { questID = id, title = title,
+                            itemID = itemID, itemName = Call(db.Item.name, itemID), point = Point(record.carriedPoint, false),
+                            reasons = { "item_in_bags" } }
+                    end
+                end
+            end
             if eligibility ~= "eligible" then result.blocked[#result.blocked + 1] = {
                 questID = id, title = out.title, eligibility = eligibility, reason = why, missingPrerequisites = CopyList(missing) } end
         end
@@ -728,7 +895,9 @@ local function Collect(context, active, candidates, settings)
                 for qid in pairs(hints[id].related) do related[#related + 1] = qid end
                 table.sort(reasons); table.sort(related)
                 result.opportunities[#result.opportunities + 1] = { questID = id, title = quest.title, action = proposal.action,
-                    point = Point(proposal.point, false), itemID = proposal.itemID, reasons = reasons, relatedQuestIDs = related,
+                    point = Point(proposal.point, false), itemID = proposal.itemID,
+                    questItem = proposal.action == "possible_item_drop" and state.records[id].questItems[proposal.itemID] or nil,
+                    reasons = reasons, relatedQuestIDs = related,
                     certainty = proposal.action == "possible_item_drop" and "possible"
                         or (proposal.action == "start_item" or offered[id]) and "confirmed" or "estimated",
                     distance = proposal.distance, extraDistance = proposal.extraDistance }
@@ -740,6 +909,32 @@ local function Collect(context, active, candidates, settings)
             return (a.itemID or 0) < (b.itemID or 0)
         end)
     end
+    -- 已提示地点只保留为地图参考，重新校验资格，不重新加入决策候选。
+    local current = {}
+    for _, item in ipairs(result.opportunities) do
+        current[item.questID .. ":" .. item.action .. ":" .. (item.itemID or 0)] = true
+    end
+    for key, item in pairs(announced and announced.items or {}) do
+        local quest = result.quests[item.questID]
+        if active[item.questID] or item.itemID and held[item.itemID]
+            or item.action == "possible_item_drop" and TargetAboveLevel(item.point)
+            or quest and (quest.active or quest.eligibility == "blocked") then
+            announced.items[key] = nil
+        elseif not state.building and quest and quest.eligibility == "eligible" and not current[key] then
+            local point = Point(item.point, false)
+            if point and point.coordinateMapID == mapID then
+                result.announcedOpportunities[#result.announcedOpportunities + 1] = {
+                    questID = quest.questID, title = quest.title, action = item.action, itemID = item.itemID,
+                    questItem = item.questItem, point = point, reasons = { "previous_notice" },
+                    certainty = item.action == "possible_item_drop" and "possible" or quest.certainty }
+            end
+        end
+    end
+    table.sort(result.announcedOpportunities, function(a, b)
+        if a.questID ~= b.questID then return a.questID < b.questID end
+        if a.action ~= b.action then return a.action < b.action end
+        return (a.itemID or 0) < (b.itemID or 0)
+    end)
     if not origin then result.reason = "player_position_unavailable" end
     return result
 end

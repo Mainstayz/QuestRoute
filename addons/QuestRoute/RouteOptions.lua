@@ -1,6 +1,6 @@
 -- 按角色保存路线偏好，以及路线/姓名板共用的任务过滤。
 local _, ns = ...
-local IsID, Accessible = ns.Util.IsID, ns.Util.Accessible
+local IsID, IsFinite, Accessible = ns.Util.IsID, ns.Util.IsFinite, ns.Util.Accessible
 local instanceTags = { [62] = true, [81] = true, [85] = true, [88] = true, [89] = true, [98] = true, [288] = true }
 local professionCategories = {
     ["炼金术"] = true, ["锻造"] = true, ["附魔"] = true, ["工程学"] = true,
@@ -28,7 +28,28 @@ local function RouteSettings()
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end
     if settings.includeEliteQuests == nil then settings.includeEliteQuests = false end
     if settings.switchNotice == nil then settings.switchNotice = true end
+    local offset = settings.maxMonsterLevelOffset
+    if not IsFinite(offset) or offset % 1 ~= 0 or offset < 0 or offset > 5 then settings.maxMonsterLevelOffset = 2 end
+    local minimum = settings.minPickupLevel
+    if not IsFinite(minimum) or minimum % 1 ~= 0 or minimum < 0 or minimum > 60 then settings.minPickupLevel = 15 end
     return settings
+end
+
+local function TargetAboveLevel(db, point, playerLevel, levels, maxOffset)
+    if type(point) ~= "table" or point.entityKind ~= "npc" or not IsID(point.entityID) then return false end
+    local id, npc = point.entityID, db and db.Npc
+    local level = levels and levels[id]
+    if level == nil then
+        for _, field in ipairs({ "maxLevel", "minLevel" }) do
+            local getter = type(npc) == "table" and npc[field]
+            local ok, value
+            if type(getter) == "function" then ok, value = pcall(getter, id) end
+            if ok and IsID(value) then level = value; break end
+        end
+        if levels then levels[id] = level or false end
+    end
+    maxOffset = maxOffset or RouteSettings().maxMonsterLevelOffset
+    return IsID(level) and IsID(playerLevel) and level > playerLevel + maxOffset, level
 end
 
 local function RouteExclusion(quest, db, settings)
@@ -51,4 +72,4 @@ local function RouteExclusion(quest, db, settings)
     end
 end
 
-ns.RouteOptions = { Get = RouteSettings, Exclusion = RouteExclusion }
+ns.RouteOptions = { Get = RouteSettings, Exclusion = RouteExclusion, TargetAboveLevel = TargetAboveLevel }

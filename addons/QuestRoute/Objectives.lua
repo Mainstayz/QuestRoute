@@ -89,8 +89,10 @@ local function ReadObjectiveIdentities(db, info, quest)
         objectives = {}, points = {}, mappingComplete = false, message = tostring(result) }
 end
 
-local function ResolveObjectiveLocations(db, info, quest, cache, identities)
+local function ResolveObjectiveLocations(db, info, quest, cache, identities, playerLevel)
     local result = identities or ReadObjectiveIdentities(db, info, quest)
+    local combatLevels = {}
+    local maxOffset = IsID(playerLevel) and ns.RouteOptions.Get().maxMonsterLevelOffset
     if not result.mappingComplete then return result end
     local function Fallback(reason)
         result.mode, result.reason, result.points = "native_poi", reason, {}
@@ -111,6 +113,16 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities)
             else sources[1] = { kind = objective.kind, id = objective.id, relation = "objective_entity" } end
             if #sources == 0 then return Fallback("direct_location_source_missing") end
             if #sources > 32 then return Fallback("too_many_location_sources") end
+            if IsID(playerLevel) then
+                local allowed = {}
+                for _, source in ipairs(sources) do
+                    if ns.RouteOptions.TargetAboveLevel(db, { entityKind = source.kind, entityID = source.id }, playerLevel, combatLevels, maxOffset) then
+                        result.unsafeSourcesExcluded = true
+                    else allowed[#allowed + 1] = source end
+                end
+                sources = allowed
+                if #sources == 0 then return Fallback("target_above_level") end
+            end
             local pointCount, seen = 0, {}
             for _, source in ipairs(sources) do
                 local key = source.kind .. ":" .. source.id
@@ -150,8 +162,8 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities)
     return result
 end
 
-local function ReadObjectiveLocations(db, info, quest, cache, identities)
-    local ok, result = pcall(ResolveObjectiveLocations, db, info, quest, cache or {}, identities)
+local function ReadObjectiveLocations(db, info, quest, cache, identities, playerLevel)
+    local ok, result = pcall(ResolveObjectiveLocations, db, info, quest, cache or {}, identities, playerLevel)
     if ok then return result end
     return { mode = "native_poi", reason = "database_read_error", source = "QuestieDB",
         objectives = {}, points = {}, message = tostring(result) }

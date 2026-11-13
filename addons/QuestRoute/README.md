@@ -8,12 +8,12 @@
 
 ## 地图与设置
 
-路线只安排玩家当前地图的有效任务；QuestieDB 补充附近接取、目的地漏接、直接前置和物品启动关系，有限前瞻有明确收益时可先安排接取或前置。未接任务的工作目标只进入预测，实际接取后才加入正式路线。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框：精英任务、屏幕提示、任务怪姓名板。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。整项官方完成后，上述类型均可顺路交付，手动跳过和失败仍优先。
+路线只安排玩家当前地图的有效任务；QuestieDB 补充附近接取、目的地漏接、直接前置和物品启动关系，有限前瞻有明确收益时可先安排接取或前置。未接任务的工作目标只进入预测，实际接取后才加入正式路线。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框（精英任务、屏幕提示、任务怪姓名板）及“怪物最多高出角色几级”“接取建议最低任务等级”两个滑条。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。战斗等级范围只查任务怪/材料来源怪的已知等级上限，不按任务标注等级过滤；另有未接任务的最低等级过滤，minPickupLevel为0..60整数、默认15，0关闭，等于阈值或等级未知时保留，已接任务不受此下限影响。maxMonsterLevelOffset为0..5整数、默认2：0只允许不高于角色的怪，1允许高1级。超出设置的来源不安排，普通路线/关联前瞻/换热点共用；同一材料可选择较低等级来源，改设置或升级后立即重评。整项官方完成后的交付不受类型和等级限制，手动跳过和失败仍优先。
 
-- 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`，接取或背包物品启动用 `N!`。
+- 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`，接取或背包物品启动用 `N!`。未采用的接取建议用独立黄色 `!`，取物来源用 `~!`，不计入路线步数。
 - 每个可靠未完目标各一步，一个主热点和最多两个紫色 `Nb/Nc` 备选。备选不增加路线步数或里程。
 - 普通右键跳过整项任务；Shift + 右键备选切到所点热点，Shift + 右键主点选择该目标其他地点。
-- 小地图显示附近线路，视野外仅当前 1 号在边缘指方向；大地图关闭后仍工作。浏览其他地图不改变规划范围。
+- 小地图显示附近线路，视野外的当前 1 号和接取/取物建议在边缘指方向。已提示且仍有效的地点在本次地图会话中保留，走远或路线改变后仍可悬停查询，空路线也显示；接取、跳过、取得对应物品、资格失效或切图后清除，不写入存档。大地图关闭后仍工作，浏览其他地图不改变规划范围。
 - 同地点编号作像素避让，以细线指向实际位置，不改导航坐标。
 
 悬停最多四行（含标题），大地图与小地图共用：
@@ -29,7 +29,7 @@
 
 姓名板功能默认启用，玩家自行开启敌方姓名板（默认 `V`）。黄色“! 击杀 2/6 · 材料 1/5”表示仍有已确认用途，关联当前路线目标时为橙色。覆盖所有有效未跳过任务，击杀够数但材料仍缺时继续提示；未知、身份受限或无可靠用途时隐藏，不将其判成确定无关。
 
-原生设置页的三个复选框默认值：精英关闭，屏幕提示与任务怪姓名板开启，切换后立即重排；跳过记录、移动阈值、总显示、姓名板和精英选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
+原生设置页的默认值：精英关闭，屏幕提示与任务怪姓名板开启，怪物等级滑条为2，接取建议最低任务等级为15；修改后立即重排。跳过记录、移动阈值、总显示、姓名板、精英、怪物等级与接取等级选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
 
 ## 命令
 
@@ -47,11 +47,13 @@
 | `/questroute nextspot [ID]` | 为当前 1 号或指定任务换同一未完目标的地点；ID 为任务 ID |
 | `/questroute resetspots [ID/all]` | 清全部或指定任务的临时地点避让，省略等同 all |
 | `/questroute nameplates on`、`/questroute nameplates off` | 单独控制任务姓名板提示 |
-| `/questroute notice on`、`/questroute notice off` | 开关屏幕上方的一行切换提示（默认开） |
+| `/questroute notice on`、`/questroute notice off` | 同时开关屏幕与聊天框提示（默认开）；每条 Toast 在聊天框保留同一份文字供回看 |
+| `/questroute monsterlevel 0..5` | 设置怪物最多高出角色几级（默认2），0为同级及以下；只查怪物等级，立即重排 |
+| `/questroute minlevel 0..60` | 接取建议最低任务等级（默认15），0关闭；只影响未接任务，立即重排 |
 | `/questroute why` | 前三步距离与权重、排除原因、附近/目的地相关任务与启动物品机会；索引构建进度和本图做完后的下一图提示 |
 | `/questrouteapi` | 只读显示当前任务列表 |
 
-换地点后旧点 150 码内避开 600 秒；无备选或状态失效时保留原路线、计时与任务跳过。清地点避让不会恢复手动跳过的任务。
+换地点后旧点 150 码内避开 600 秒，期间保留仍有效的手动热点，普通背包/任务更新不会用关联推荐覆盖；目标完成、跳过、切图、到期或主动 `replan` 后解除保持。无备选或状态失效时保留原路线、计时与任务跳过。清地点避让不会恢复手动跳过的任务。
 
 `why` 的前三行形如 `1. 滚岩峡谷 — 距离 415 码（有效权重 1.25）`：有效权重是难度/奖励与剩余数量修正后的合成权重，同组加成生效时额外标出 `含同组加成`，剩余数量修正不为 1 时标出 `剩余×N`。它只重排已有字段，不参与规划。
 
@@ -175,9 +177,9 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 
 steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance（含自由选点时的有界任务群加成）、workFactor/remainingWork（剩余数量对权重的 0.9~1.1 修正，缺数据为 1）、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending/pick_up/start_item，表示步骤类型；接取另有 certainty（estimated/confirmed）、可选 itemID 和 opportunityReason；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
 
-excluded 每项含 questID/title/reason/source；reason 为 `outside_current_map` 时另有 otherMapID/otherMapName/otherDistance（离玩家最近的外图位置）。
+excluded 每项含 questID/title/reason/source；`target_above_level` 表示所需目标怪超出已配置的等级范围，并非手动跳过；`why` 提示升级或调整设置后再做，不再使用任务等级门槛。reason 为 `outside_current_map` 时另有 otherMapID/otherMapName/otherDistance（离玩家最近的外图位置）。
 
-groups 的 count 为步骤数、questCount 为任务数，questIDs 去重。stability 含 retained/reason、previousQuestID/questID、previousObjectiveKey/objectiveKey 和可选 lastProgressAt。奖励样本与读取按任务计一次。levelPriority 保留 referenceLevel，perLevelBonus=0、maxWeight=1.25、method 为 client_difficulty_and_reward；levelingPriority 提供难度权重、经验参照、阈值及 pendingRewardCount/rewardRetrySeconds。每步 priority 描述来源、可用性与因子，未知经验不按零处理。
+groups 的 count 为步骤数、questCount 为任务数，questIDs 去重。stability 含 retained/reason、previousQuestID/questID、previousObjectiveKey/objectiveKey 和可选 lastProgressAt。奖励样本与读取按任务计一次。levelPriority 保留 referenceLevel，perLevelBonus=0、maxWeight=1.25、method 为 client_difficulty_and_reward；levelingPriority 提供难度权重、经验参照、阈值及 pendingRewardCount/rewardRetrySeconds。顶层 maxMonsterLevelOffset 为当前怪物等级设置，levelingPriority.maxLevelOffset 保留同值兼容字段。每步 priority 描述来源、可用性与因子，未知经验不按零处理。NPC 来源等级在坐标展开之前检查，已排除危险来源时不回退到无法识别来源的原生 POI；完成交付、接取 NPC 与原始 `get_quest_targets` 查询保留原语义。
 
 steps[].hotspots 第一项为 selected=true 的主点，其余最多两个备选，含 id/selected/pointCount/radius/sparseFallback/x/y/world/coordinateMapID/targetMapID/source/precision=static_hotspot。hotspotRules 为 radius150/separation300/maxDisplayed3/deduplicateRadius3，algorithm 为 fixed_radius_density_real_spawn，alternativesJoinRoute=false。pointCount 不是实时怪数。
 
@@ -187,13 +189,13 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 
 ### 任务关联与前瞻
 
-关联知识全部来自 QuestieDB，按其数据有效设计；客户端只读校验角色等级、种族/职业、任务历史、当前进度、背包与实际交互可接列表。`preQuestGroup` 按 AND、`preQuestSingle` 按 OR，完成目标仍需交付才满足前置。缺字段/不可读条件保留未知；特殊目标关系不当成击杀任务。
+关联知识全部来自 QuestieDB，按其数据有效设计；客户端只读校验角色等级、种族/职业、任务历史、当前进度、背包与实际交互可接列表。未接的重复、战场/PvP、节日/安其拉筹备活动、捐献类、纯ASCII英文标题和低于minPickupLevel的任务不进入接取建议、两图标记或前瞻，旧提示同步清除；已接任务仍正常导航和交付。对应 `discovery.blocked[].reason` 为repeatable、battleground、holiday、donation、unlocalized、quest_below_minimum。重复性采用原生 `IsRepeatableQuest=true` 或 QuestieDB `specialFlags` 的 REPEATABLE 位，补齐本客户端原生 false 的漏报；战场结合原生PvP类型41与数据库战场分类/AreaID，节日按数据库明确分类，捐献按中文标题“捐献/贡献”前缀。英文只过滤纯ASCII标题，中文夹英文缩写保留；标题或等级未知不当成英文/低级。捐献毛料原生等级为60且非重复，因此单独按捐献类排除。对话确认可接时使用当前接取位置，并保留客户端来源；其他接取点仍标注静态位置。`preQuestGroup` 按 AND、`preQuestSingle` 按 OR，完成目标仍需交付才满足前置。缺字段/不可读条件保留未知；未覆盖的 `triggerEnd` 探索/事件条件不能据普通目标预测完整交付，跳过/失败等被过滤的已接任务也不参与预测。
 
-索引按当前地图分批构建，每批最多 64 任务，坐标、来源展开与索引写入内每 128 次操作或约 3 ms 让出，保留内部游标续跑，不在每次移动时全扫数据库。机会包括 400 码内接取点、现有第一目的地 200 码内或同目标关系、直线途中额外绕路不超过 150 码的接取点、实际背包启动物品及附近可能掉落/拾取启动物品的来源。静态来源不表示实体在场或必掉。
+索引按当前地图分批构建，每批最多 64 任务，坐标、来源展开与索引写入内每 128 次操作或约 3 ms 让出，零本图地点的来源也计入预算。地图信息或世界坐标暂缺时，每 5 秒仅重试受影响记录，保留成功点并对新增索引去重；`discovery.pendingLocationCount` 给出待恢复数量，恢复前不提示本图已完成。机会包括 400 码内接取点、现有第一目的地 200 码内或同目标关系、直线途中额外绕路不超过 150 码的接取点、实际背包启动物品及附近可能掉落/拾取启动物品的来源。静态来源不表示实体在场或必掉。
 
-`discovery.opportunities[]` 提供 questID/title/action/point、certainty、reasons、relatedQuestIDs、distance/extraDistance 及可选 itemID；action 为 pick_up/start_item/possible_item_drop。blocked 列出条件未满足或未知的相关候选。两类摘要各限 25 项（已采用机会额外保留），opportunityTotal/blockedTotal 给完整数量，summaryLimit 给上限；搜索内部仍用完整候选。`decision.predicted[]` 是局部预测行动，不写回任务日志；正式步骤只采用当前可执行的下一动作。搜索深度 6、束宽 4，最多 18 项任务、6 个首动作与每层 4 个动作，复用本轮距离计算；没有可接或可解锁的收益时不展开。保留强制从原 1 号开始的独立基线。评分用任务目标/交付收益与直线行程、粗略工作成本，不是经验/小时预测，也不保证全局最优。
+`discovery.opportunities[]` 提供 questID/title/action/point、certainty、reasons、relatedQuestIDs、distance/extraDistance 及可选 itemID；action 为 pick_up/start_item/possible_item_drop。`questItem=true` 的来源表示拾取任务所需物品，不是使用后接任务；point.entityName 给人物/物件名称（有数据时）。`discovery.carriedItems[]` 提供已持有但任务尚未接取的 questID/title/itemID/itemName/point/reasons，point 为 NPC 接交参考位置，可在外图；只提示，不跨图排正式步骤或认定任务可交。`discovery.announcedOpportunities[]` 给已提示、当前已离开候选范围且资格仍有效的地图参考点，字段沿用机会格式，reasons 为 previous_notice；不重入决策、不重复提示，重新进入候选范围时使用最新机会而不重复画点。blocked 列出条件未满足或未知的相关候选。两类即时摘要各限 25 项（已采用机会额外保留），opportunityTotal/blockedTotal 给完整数量，summaryLimit 给上限；搜索内部仍用完整候选。`decision.predicted[]` 是局部预测行动，不写回任务日志；正式步骤只采用当前可执行的下一动作。搜索深度 6、束宽 4，最多 18 项任务、6 个首动作与每层 4 个动作，复用本轮距离计算；没有可接或可解锁的收益时不展开。保留强制从原 1 号开始的独立基线。评分用任务目标/交付收益与直线行程、粗略工作成本，不是经验/小时预测，也不保证全局最优。
 
-同区域不自动算共同完成；可靠同目标共享一次工作成本，不同目标但同 NPC 掉落来源只计部分协同，不据此认定材料已齐。当前工作保护和手动热点优先；仍有效的已选接取点也作为独立稳定基线，微小移动不来回切换。屏幕一行提示与原有屏幕提示开关共用，`why` 可查看关联理由，无新增面板或操作绑定。
+同区域不自动算共同完成；可靠同目标共享一次工作成本，不同目标但同 NPC 掉落来源只计部分协同，不据此认定材料已齐。当前工作保护和手动热点优先；目标暂缺回退到原生 POI 时沿用工作计时，不重启保护期。仍有效的已选接取点也作为独立稳定基线，微小移动不来回切换。屏幕一行提示与原有屏幕提示开关共用，本图完成的单次提示优先于新关联提示，遇到提示间隔则在间隔结束后自动补发；提示和 `why` 都给出顺路/同目标等理由、地图坐标及 NPC/物件类型；只有实际采用的接取才说“建议先接”。物件同时是非启动任务物品的唯一直接来源时，提示“顺路取物”；拾取后清除来源点，显示“已取得”及需向 NPC 确认接取/交付的位置，正式任务状态仍以客户端为准。`why` 保留这些信息供提示消失后查询，无新增面板或操作绑定。
 
 ### 路线操作
 
@@ -202,7 +204,7 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 | `replan` / `Replan` | `{}`；主动重排，绕过当前保持和旧组延续 |
 | `set_quest_skip` / `SetQuestSkip` | `{questID,skipped?}`；默认 true，false 恢复，不放弃任务 |
 | `reset_quest_skips` / `ResetQuestSkips` | `{}`；清当前角色全部任务跳过 |
-| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,enabled?,nameplatesEnabled?,includeEliteQuests?,switchNotice?}`；后四项必须 boolean，精英默认 false、姓名板和切换提示默认 true，立即重排并按角色保存 |
+| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,maxMonsterLevelOffset?,minPickupLevel?,enabled?,nameplatesEnabled?,includeEliteQuests?,switchNotice?}`；maxMonsterLevelOffset为0..5整数、默认2，只限制怪物等级差；minPickupLevel为0..60整数、默认15，0关闭，仅过滤未接任务的标注等级下限；后四项boolean。立即重排并按角色保存 |
 | `change_quest_spot` / `ChangeQuestSpot` | `{questID?,objectiveKey?,hotspotID?}`；省略取1号，key需questID，hotspotID需同时带questID/key，来自当前 hotspots[].id |
 | `clear_spot_avoidances` / `ClearSpotAvoidances` | `{questID?}`；省略清全部，返回重排计划，不改任务跳过 |
 | `get_unit_tasks` / `GetUnitTasks` | `{unit?}`；默认 target，仅接受 target/mouseover/nameplateN，只读当前单位任务用途 |

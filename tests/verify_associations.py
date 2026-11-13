@@ -34,6 +34,7 @@ end
 C_QuestLog.GetQuestTagInfo=function() return nil end
 C_QuestLog.GetQuestType=function() return 0 end
 C_QuestLog.IsEliteQuest=function(id) return Fixture.quests[id] and Fixture.quests[id].elite==true or false end
+C_QuestLog.IsRepeatableQuest=function(id) return Fixture.quests[id] and Fixture.quests[id].repeatable==true or false end
 C_QuestLog.IsFailed=function(id) return Fixture.status[id]=='failed' end
 C_QuestLog.IsComplete=function(id)
     return Fixture.status[id]=='complete' or Fixture.status[id]=='ready_for_turn_in'
@@ -140,7 +141,7 @@ local function place(kind,id,x,y)
     Fixture.locations[kind][id]={[17]={{x/100,(y or 0)/100}}}
 end
 local function record(id,x,fields)
-    local row={name='Quest '..id,questLevel=19,requiredLevel=1,
+    local row={name='任务 '..id,questLevel=19,requiredLevel=1,
         startedBy={[1]={10000+id}},finishedBy={[1]={20000+id}},
         objectives={[1]={{501,nil,0}}},preQuestSingle={},preQuestGroup={},exclusiveTo={},childQuests={}}
     for key,value in pairs(fields or {}) do row[key]=value end
@@ -162,6 +163,22 @@ end
 local function finishIndex()
     for _=1,10000 do if ns.Discovery.Pump() then return end end
     error('fixture index failed to finish')
+end
+local function setupMaps()
+    C_Map.GetMapPosFromWorldPos=function(_,p,id) return id,CreateVector2D(p.x/10000,p.y/10000) end
+    WorldMapFrame=CreateFrame('Frame'); WorldMapFrame.canvas=CreateFrame('Frame')
+    WorldMapFrame.canvas:SetSize(600,400)
+    function WorldMapFrame:GetMapID() return Fixture.playerMapID or 101 end
+    function WorldMapFrame:GetCanvas() return self.canvas end
+    Minimap=CreateFrame('Frame'); Minimap:SetSize(200,200)
+    C_Minimap={GetViewRadius=function() return 100 end,IsRotateMinimapIgnored=function() return false end}
+    C_CVar={GetCVarBool=function() return false end}
+    GameTooltip={lines={}}
+    function GameTooltip:SetOwner() end
+    function GameTooltip:SetText(text) self.lines={text} end
+    function GameTooltip:AddLine(text) self.lines[#self.lines+1]=text end
+    function GameTooltip:Show() end
+    function GameTooltip:Hide() end
 end
 local function collect(items)
     local context,active=ns.GetPlayerContext({}),ns.QuestData.ActiveQuestIndex()
@@ -350,6 +367,122 @@ for id,reason in pairs({[301]='level_too_low',[302]='class_restricted',[303]='ex
     check(not action(data.opportunities,id,'pick_up'),'filtered quest is never offered')
 end
 check(action(data.opportunities,304,'pick_up'),'matching player class remains eligible')
+'''),
+    ("Discovery: repeatable pickups are filtered without hiding accepted work or delivery", r'''
+record(201,100,{specialFlags=1,repeatable=true}); record(202,100,{specialFlags=1,repeatable=true})
+Fixture.log={201,202}; Fixture.status[202]='ready_for_turn_in'
+record(301,100,{specialFlags=1,preQuestGroup={202}})
+record(302,100,{specialFlags=3}); record(303,100,{specialFlags=2})
+record(304,100,{specialFlags=0,repeatable=true}); record(305,100)
+record(306,100,{specialFlags='1'}); record(307,100,{specialFlags=-1})
+local native=C_QuestLog.IsRepeatableQuest
+C_QuestLog.IsRepeatableQuest=function(id)
+    if id==302 then error('fixture native flag unavailable') end
+    return native(id)
+end
+local data=collect()
+for _,id in ipairs({301,302,304}) do
+    check(data.quests[id].eligibility=='blocked' and data.quests[id].conditionReason=='repeatable',
+        'positive native or DB repeat flag blocks unaccepted quest '..id)
+    check(not action(data.opportunities,id,'pick_up'),'repeatable quest has no pickup opportunity '..id)
+end
+for _,id in ipairs({303,305,306,307}) do
+    check(action(data.opportunities,id,'pick_up'),'unrelated missing or invalid DB flags do not suppress ordinary quest '..id)
+end
+check(data.quests[201].eligibility=='eligible' and #data.quests[201].targets>0,'accepted repeatable work remains eligible')
+check(data.quests[202].eligibility=='eligible' and #data.quests[202].finishers>0,'accepted repeatable delivery remains eligible')
+local result=ns.Decision.Evaluate(data,candidates(),point(1,0).world,nil)
+for _,step in ipairs(result.predicted) do
+    check(step.questID~=301 and step.questID~=302 and step.questID~=304,'lookahead cannot revive repeatable pickups through prerequisites')
+end
+'''),
+    ("Map pins: old repeatable announcements clear both pooled map markers", r'''
+record(301,100,{specialFlags=1,objectives={}})
+local result=plan(); setupMaps()
+local old={questID=301,title='Old repeatable pickup',action='pick_up',point=point(10301,100),reasons={'nearby'}}
+result.discovery.opportunities={old}
+ns.WorldMap.Render(); ns.Minimap.Render()
+local worldPin,miniPin=ns.route.views[1].opportunities[1],ns.route.minimapView.opportunities[1]
+check(worldPin:IsVisible() and miniPin:IsVisible(),'fixture reproduces markers drawn before repeatable filtering')
+ns.route.announcedOpportunities={mapID=101,items={['301:pick_up:0']=old}}
+Fixture.playerX=.5
+result=ns.Replan({}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.opportunities==0 and #result.discovery.announcedOpportunities==0,'old repeatable pickup is removed outside the discovery radius')
+check(not ns.route.announcedOpportunities.items['301:pick_up:0'],'repeatable announcement is retired from session history')
+check(not worldPin:IsVisible() and not miniPin:IsVisible() and not worldPin.step and not miniPin.step,'both pooled markers hide and release the old quest')
+check(not ns.RouteOptions.Get().skipped[301],'filtering never writes a manual skip')
+'''),
+    ("Discovery: unwanted pickup categories share one filter and preserve accepted quests", r'''
+record(201,100,{name='Mirrorscale',questLevel=10,specialFlags=1,zoneOrSort=3358})
+record(202,100,{zoneOrSort=-366}); Fixture.log={201,202}; Fixture.status[202]='ready_for_turn_in'
+record(301,100,{pvp=true,preQuestGroup={202}}); record(302,100,{zoneOrSort=3277})
+record(303,100,{zoneOrSort=-366}); record(304,100,{zoneOrSort=-22})
+record(305,100,{name='捐献毛料',questLevel=60}); record(306,100,{name='Mirrorscale',questLevel=50})
+record(307,100,{questLevel=14}); record(308,100,{name='NPC的委托',questLevel=15})
+record(309,100,{questLevel=0}); record(310,100,{questLevel=-1})
+record(311,100,{zoneOrSort=-367}); record(312,100,{zoneOrSort=-365})
+C_QuestLog.GetQuestType=function(id) return Fixture.quests[id] and Fixture.quests[id].pvp and 41 or 0 end
+local data=collect()
+local blocked={[301]='battleground',[302]='battleground',[303]='holiday',[304]='holiday',
+    [305]='donation',[306]='unlocalized',[307]='quest_below_minimum',[312]='holiday'}
+for id,reason in pairs(blocked) do
+    check(data.quests[id].conditionReason==reason and data.quests[id].eligibility=='blocked','shared category reason '..reason)
+    check(not action(data.opportunities,id,'pick_up'),'filtered category cannot create a pickup '..id)
+end
+for _,id in ipairs({308,309,310,311}) do
+    check(action(data.opportunities,id,'pick_up'),'Chinese mixed title, threshold boundary, unknown level or reputation stays eligible '..id)
+end
+check(data.quests[201].eligibility=='eligible' and #data.quests[201].targets>0,'accepted English low-level repeatable battleground work remains eligible')
+check(data.quests[202].eligibility=='eligible' and #data.quests[202].finishers>0,'accepted holiday turn-in remains eligible')
+local decision=ns.Decision.Evaluate(data,candidates(),point(1,0).world,nil)
+for _,step in ipairs(decision.predicted) do check(not blocked[step.questID],'lookahead cannot unlock any filtered category') end
+'''),
+    ("Map pins: all filtered pickup categories retire remembered markers", r'''
+record(301,100,{zoneOrSort=3358,objectives={}}); record(302,100,{zoneOrSort=-366,objectives={}})
+record(303,100,{name='Mirrorscale',objectives={}}); record(304,100,{name='捐献毛料',objectives={}})
+record(305,100,{questLevel=14,objectives={}}); record(306,100,{objectives={}})
+local result=plan(); setupMaps(); local old={}
+ns.route.announcedOpportunities={mapID=101,items={}}
+for id=301,306 do
+    local item={questID=id,title=Fixture.quests[id].name,action='pick_up',point=point(10000+id,100),reasons={'nearby'}}
+    old[#old+1]=item; ns.route.announcedOpportunities.items[id..':pick_up:0']=item
+end
+result.discovery.opportunities=old; ns.WorldMap.Render(); ns.Minimap.Render()
+Fixture.playerX=.5; result=ns.Replan({}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.announcedOpportunities==1 and result.discovery.announcedOpportunities[1].questID==306,'only the ordinary remembered pickup survives outside the search radius')
+for _,view in ipairs({ns.route.views[1],ns.route.minimapView}) do
+    local shown=0
+    for _,pin in ipairs(view.opportunities) do
+        if pin:IsVisible() then shown=shown+1; check(pin.step.questID==306,'neither map retains a filtered quest') end
+    end
+    check(shown==1,'pooled map markers shrink to the one ordinary pickup')
+end
+for id=301,305 do check(not ns.route.announcedOpportunities.items[id..':pick_up:0'] and not ns.RouteOptions.Get().skipped[id],'retired history never writes a manual skip') end
+'''),
+    ("Pickup level: saved minimum validates atomically and changes recommendations immediately", r'''
+record(301,100,{questLevel=14,objectives={}}); record(302,100,{questLevel=15,objectives={}})
+record(303,100,{questLevel=60,objectives={}}); record(304,100,{questLevel=0,objectives={}})
+local result=plan()
+check(result.minPickupLevel==15 and not action(result.discovery.opportunities,301,'pick_up') and action(result.discovery.opportunities,302,'pick_up'),'default15 excludes only strictly lower known levels')
+result=ns.SetRouteOptions({minPickupLevel=0})
+check(result.minPickupLevel==0 and action(result.discovery.opportunities,301,'pick_up'),'zero turns off only the minimum-level filter')
+result=ns.SetRouteOptions({minPickupLevel=60})
+check(not action(result.discovery.opportunities,302,'pick_up') and action(result.discovery.opportunities,303,'pick_up') and action(result.discovery.opportunities,304,'pick_up'),'maximum60 keeps its boundary and unknown levels')
+local before=ns.GetPlan({}); local enabled=ns.RouteOptions.Get().enabled
+for _,value in ipairs({-1,61,1.5,'1',false,math.huge,0/0,{}}) do
+    local rejected=ns.SetRouteOptions({minPickupLevel=value,enabled=not enabled,maxMonsterLevelOffset=0})
+    check(not rejected.ok and ns.GetPlan({}).sequence==before.sequence and ns.RouteOptions.Get().minPickupLevel==60
+        and ns.RouteOptions.Get().maxMonsterLevelOffset==2 and ns.RouteOptions.Get().enabled==enabled,'invalid minimum has no partial settings or plan changes')
+end
+local oldName=UnitName; UnitName=function() return 'OtherCharacter' end
+check(ns.RouteOptions.Get().minPickupLevel==15,'minimum default belongs to each character')
+ns.SetRouteOptions({minPickupLevel=20}); UnitName=oldName
+check(ns.RouteOptions.Get().minPickupLevel==60,'other character does not change original minimum')
+SlashCmdList.QUESTROUTE('minlevel 15')
+check(ns.GetPlan({}).minPickupLevel==15 and action(ns.GetPlan({}).discovery.opportunities,302,'pick_up'),'slash command shares validation and immediate replan')
+local settings=ns.RouteOptions.Get(); settings.minPickupLevel=nil
+check(ns.RouteOptions.Get().minPickupLevel==15,'old saves receive a valid minimum')
+settings.minPickupLevel='bad'; check(ns.RouteOptions.Get().minPickupLevel==15,'malformed saved minimum recovers')
 '''),
     ("Discovery: AND OR and official delivery history", r'''
 record(401,100,{objectives={}}); record(402,100,{objectives={}}); Fixture.log={401,402}
@@ -676,6 +809,842 @@ pin:GetScript('OnEnter')(pin)
 check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('预计可接任务',1,true),
     'pickup hover preserves the compact estimated-availability status')
 check(GameTooltip.lines[2]:find('静态接取位置',1,true),'pickup does not claim a monster work area')
+Fixture.offered={{questID=301}}
+result=ns.Replan({}); pin.step=result.steps[1]
+check(pin.step.questID==301 and pin.step.world.x==0 and pin.step.source=='client'
+    and pin.step.precision=='player_position','formal pickup preserves the official current point and provenance')
+pin:GetScript('OnEnter')(pin)
+check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('当前接取位置',1,true),
+    'official starter hover does not claim a static location')
+'''),
+    ("Map pins: unselected pickup remains locatable without an active route", r'''
+record(301,300,{objectives={}})
+local result=plan(); setupMaps()
+check(result.count==0 and action(result.discovery.opportunities,301,'pick_up'),'nearby pickup is advisory without invented work')
+ns.WorldMap.Render(); ns.Minimap.Render()
+local mapView,miniView=ns.route.views[1],ns.route.minimapView
+local worldPin,miniPin=mapView.opportunities[1],miniView.opportunities[1]
+check(worldPin:IsVisible() and miniPin:IsVisible() and worldPin.text.text=='!' and miniPin.text.text=='!',
+    'unselected pickup has persistent yellow markers on both maps with zero steps')
+check(miniPin.onEdge,'pickup outside the minimap radius keeps a direction marker')
+worldPin:GetScript('OnEnter')(worldPin)
+check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('Map 101 3.0, 0.0',1,true)
+    and GameTooltip.lines[2]:find('NPC',1,true),'hover gives map coordinates and giver type within four lines')
+check(GameTooltip.lines[3]:find('就在附近',1,true) and GameTooltip.lines[3]:find('预计可接',1,true),
+    'advisory hover explains discovery without claiming confirmed acceptance')
+local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
+ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
+ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),30)
+check(#notices==1 and notices[1]:find('就在附近',1,true) and notices[1]:find('Map 101 3.0, 0.0',1,true),
+    'one-line hint includes its reason and coordinates')
+check(not notices[1]:find('建议先接',1,true),'advisory cannot claim it won first-step priority')
+Fixture.time=100; ns.Planner.Rebuild('BAG_UPDATE_DELAYED'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(worldPin:IsVisible() and miniPin:IsVisible() and #notices==1,'markers survive toast expiration and unrelated rebuild without repeating the hint')
+local printed={}; local realPrint=print; print=function(text) printed[#printed+1]=text end
+SlashCmdList.QUESTROUTE('why'); print=realPrint
+check(table.concat(printed,'\n'):find('Map 101 3.0, 0.0',1,true),'why retains a queryable pickup location')
+Fixture.shift=true; worldPin:GetScript('OnClick')(worldPin); Fixture.shift=false
+check(not ns.RouteOptions.Get().skipped[301],'unadvertised Shift click cannot change or skip an advisory')
+worldPin:GetScript('OnClick')(worldPin); ns.WorldMap.Render(); ns.Minimap.Render()
+check(ns.RouteOptions.Get().skipped[301] and not worldPin:IsVisible() and not miniPin:IsVisible(),
+    'existing right-click skip clears both advisory markers')
+ns.SetQuestSkip({questID=301,skipped=false}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(worldPin:IsVisible() and miniPin:IsVisible(),'restoring the task reuses pooled markers')
+ns.OnUnload()
+check(not worldPin:IsVisible() and not miniPin:IsVisible() and not worldPin.step and not miniPin.step,'unload clears every advisory target')
+Fixture.loggedIn=true; ns.StartRoute()
+check(ns.route.views[1].opportunities[1]==worldPin and ns.route.minimapView.opportunities[1]==miniPin
+    and worldPin:IsVisible() and miniPin:IsVisible(),'startup reuses advisory pools and callbacks')
+ns.SetRouteOptions({enabled=false}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(not worldPin:IsVisible() and not miniPin:IsVisible(),'global display switch hides advisory markers')
+ns.SetRouteOptions({enabled=true}); Fixture.log={301}
+ns.Planner.Rebuild('QUEST_LOG_UPDATE'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(not worldPin:IsVisible() and not miniPin:IsVisible() and not worldPin.step and not miniPin.step,
+    'actual acceptance removes the unaccepted marker')
+'''),
+    ("Map pins: announced pickup survives leaving the discovery radius without changing the route", r'''
+record(301,100,{objectives={}}); record(302,200,{objectives={}})
+local result=plan(); setupMaps()
+local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
+ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
+ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),30)
+check(#notices==1 and ns.route.announcedOpportunities.items['301:pick_up:0'],
+    'only a displayed toast remembers its actionable location')
+Fixture.playerX=.5; Fixture.time=100
+result=ns.Planner.Rebuild('player_moved'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.opportunities==0 and #result.discovery.announcedOpportunities==1,
+    'leaving the radius retains the advertised pickup separately from live candidates')
+check(result.discovery.announcedOpportunities[1].questID==301 and result.count==0
+    and result.decision.considered==0 and not result.decision.applied,
+    'unannounced nearby tasks are not retained and display history cannot start a route search')
+local worldPin,miniPin=ns.route.views[1].opportunities[1],ns.route.minimapView.opportunities[1]
+check(worldPin:IsVisible() and miniPin:IsVisible() and miniPin.onEdge and miniPin.step.questID==301,
+    'both maps keep the original pickup after moving far away')
+worldPin:GetScript('OnEnter')(worldPin)
+check(#GameTooltip.lines<=4 and GameTooltip.lines[3]:find('先前提示的地点',1,true)
+    and not GameTooltip.lines[3]:find('就在附近',1,true),'retained location cannot claim it is still nearby')
+local printed={}; local realPrint=print; print=function(text) printed[#printed+1]=text end
+SlashCmdList.QUESTROUTE('why'); print=realPrint
+check(table.concat(printed,'\n'):find('先前提示的地点',1,true),'why retains the same location and historical reason')
+Fixture.playerX=0; Fixture.time=110; result=ns.Planner.Rebuild('player_moved'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.announcedOpportunities==0 and action(result.discovery.opportunities,301,'pick_up'),
+    'returning near the giver uses its current opportunity rather than a duplicate remembered point')
+local shown=0
+for _,pin in ipairs(ns.route.minimapView.opportunities) do if pin:IsVisible() and pin.step.questID==301 then shown=shown+1 end end
+check(shown==1 and #notices==1,'fresh and remembered versions never duplicate markers or repeat the toast')
+Fixture.playerX=.5; result=ns.Planner.Rebuild('player_moved')
+ns.OnUnload(); Fixture.loggedIn=true; ns.StartRoute()
+check(#ns.GetPlan({}).discovery.announcedOpportunities==1,'same-map UI restart retains a validated remembered point')
+ns.SetQuestSkip({questID=301}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#ns.GetPlan({}).discovery.announcedOpportunities==0 and not worldPin:IsVisible() and not miniPin:IsVisible(),
+    'skipping removes the retained location from both maps')
+ns.SetQuestSkip({questID=301,skipped=false})
+check(#ns.GetPlan({}).discovery.announcedOpportunities==0,'restoring a far-away task cannot revive a discarded announcement')
+'''),
+    ("Discovery: retained announcements revalidate unknown metadata and official acceptance", r'''
+record(301,100,{objectives={}})
+local result=plan(); ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
+ns.Util.Notify=function() end
+ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),30)
+Fixture.playerX=.5; Fixture.time=100
+local haveData=HaveQuestData; HaveQuestData=function(id) return id~=301 end
+result=ns.Planner.Rebuild('QUEST_DATA_LOAD_RESULT')
+check(#result.discovery.announcedOpportunities==0 and result.discovery.pendingCount==1,
+    'temporarily unknown eligibility hides a remembered point and requests metadata')
+check(ns.route.announcedOpportunities.items['301:pick_up:0'],
+    'temporary metadata loss preserves the announcement for recovery')
+HaveQuestData=haveData; result=ns.Planner.Rebuild('QUEST_DATA_LOAD_RESULT')
+check(#result.discovery.announcedOpportunities==1,'eligibility recovery restores the point outside the search radius')
+Fixture.log={301}; result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(#result.discovery.announcedOpportunities==0 and not ns.route.announcedOpportunities.items['301:pick_up:0'],
+    'official acceptance removes historical pickup guidance')
+'''),
+    ("Discovery: retained announcements clear after collection, completion and a real map change", r'''
+record(301,100,{startedBy={[3]={601}},objectives={}})
+Fixture.items[601]={quest=301,objectDrops={701}}; place('object',701,100)
+local result=plan(); ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
+ns.Util.Notify=function() end
+ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),30)
+Fixture.playerX=.5; Fixture.time=100; result=ns.Planner.Rebuild('player_moved')
+check(action(result.discovery.announcedOpportunities,301,'possible_item_drop'),
+    'uncollected item source also survives leaving its radius')
+Fixture.bags={601}; result=ns.Planner.Rebuild('BAG_UPDATE_DELAYED')
+check(#result.discovery.announcedOpportunities==0 and not ns.route.announcedOpportunities.items['301:possible_item_drop:601'],
+    'actual item possession invalidates the remembered collection point')
+Fixture.bags={}; Fixture.playerX=0; result=ns.Replan({}); result.reason='player_moved'
+ns.route.associationNotice=nil; ns.route.lastNotice=nil; ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),200)
+Fixture.playerX=.5; Fixture.completed[301]=true; result=ns.Planner.Rebuild('QUEST_TURNED_IN')
+check(#result.discovery.announcedOpportunities==0 and not ns.route.announcedOpportunities.items['301:possible_item_drop:601'],
+    'completed history removes a remembered source')
+Fixture.completed[301]=false; Fixture.playerX=0; result=ns.Replan({}); result.reason='player_moved'
+ns.route.associationNotice=nil; ns.route.lastNotice=nil; ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),300)
+Fixture.playerX=.5; Fixture.playerMapID=102; ns.Planner.Rebuild('player_map_changed')
+check(not ns.route.announcedOpportunities,'a confirmed map change clears the map-scoped announcement history')
+Fixture.playerMapID=101; result=ns.Replan({}); if result.discovery.building then finishIndex() end
+result=ns.Replan({})
+check(#result.discovery.announcedOpportunities==0,'returning far away does not resurrect previous-map-session markers')
+'''),
+    ("Hints: reasons and source types describe an opportunity without inventing priority", r'''
+local p=point(701,7440,8570); p.entityKind='object'; p.entityName='Scrolls'
+local item={questID=301,title='Book',itemName='Book',action='possible_item_drop',questItem=true,
+    point=p,reasons={'nearby'}}
+local text=ns.Decision.Describe(item,false)
+check(text:find('顺路取物',1,true) and text:find('就在附近',1,true) and text:find('74.4, 85.7',1,true)
+    and text:find('物件：Scrolls',1,true),'book source is pickup of an object with reason, coordinates and entity name')
+check(not text:find('启动',1,true) and not text:find('可接',1,true),'objective book cannot be advertised as a quest starter')
+item.action='pick_up'; item.itemName=nil; item.questItem=nil; item.reasons={'same_target','nearby'}
+text=ns.Decision.Describe(item,true)
+check(text:find('建议先接',1,true) and text:find('可合做目标',1,true),'adopted pickup gives the actual shared-work reason')
+item.action=nil; item.point=point(702,7340,3300); item.point.coordinateMapID=102
+item.point.entityName='Librarian'; item.reasons={'item_in_bags'}
+text=ns.Decision.Describe(item,false)
+check(text:find('已取得',1,true) and text:find('确认接取/交付',1,true) and text:find('NPC：Librarian',1,true)
+    and text:find('Map 102 73.4, 33.0',1,true),'carried item points to its actual NPC without asserting quest acceptance')
+item.itemName={}
+check(ns.Decision.Describe(item,false):find('Book',1,true),'malformed optional item name falls back to the validated quest title')
+check(ns.Util.FormatLocation(nil)==nil and ns.Util.FormatLocation({coordinateMapID=101,x=-.1,y=0})==nil,
+    'unavailable or invalid coordinates are never fabricated')
+local mapInfo=C_Map.GetMapInfo; C_Map.GetMapInfo=function() error('temporary map lookup error') end
+check(ns.Util.FormatLocation(item.point):find('地图102',1,true),'map-name lookup failure preserves valid coordinate information')
+C_Map.GetMapInfo=mapInfo
+'''),
+    ("Book pickup: loot changes the hint to its NPC without inventing an accepted quest", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+Fixture.mapOrder={101,102}
+record(301,100,{name='书籍任务',startedBy={[1]={501},[2]={701}},finishedBy={[1]={501}},objectives={[3]={{601,nil,0}}}})
+Fixture.items[601]={quest=0,objectDrops={701}}
+Fixture.locations.npc[501]={[18]={{73.4,33}}}; place('object',701,300)
+local result=plan(); setupMaps()
+local source=action(result.discovery.opportunities,301,'possible_item_drop')
+check(source and source.questItem and source.itemID==601 and source.point.entityKind=='object',
+    'objective book is a collection source, not a quest-acceptance point')
+check(not action(result.discovery.opportunities,301,'pick_up') and result.count==0,
+    'unaccepted collection work cannot become a formal pickup step')
+ns.WorldMap.Render(); ns.Minimap.Render()
+local worldPin=ns.route.views[1].opportunities[1]
+check(worldPin:IsVisible() and worldPin.text.text=='~!','book source remains visible after its toast')
+worldPin:GetScript('OnEnter')(worldPin)
+check(GameTooltip.lines[3]:find('拾取任务物品',1,true) and not GameTooltip.lines[3]:find('启动物品',1,true),
+    'book tooltip distinguishes collecting an objective from using a quest starter')
+Fixture.loggedIn=true; ns.StartRoute(); ns.RouteOptions.Get().switchNotice=true
+local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
+ns.route.associationNotice={key='301:possible_item_drop:601',at=30}; ns.route.lastNotice={key='301:possible_item_drop:601',at=30}
+Fixture.time=31; Fixture.bags={601}
+local driver=ns.route.driver; driver:GetScript('OnEvent')(driver,'BAG_UPDATE_DELAYED')
+Fixture.time=31.5; driver:GetScript('OnUpdate')(driver,.2)
+result=ns.GetPlan({})
+check(result.reason=='BAG_UPDATE_DELAYED' and not action(result.discovery.opportunities,301,'possible_item_drop'),
+    'normal bag event removes the already collected book source')
+check(#result.discovery.carriedItems==1 and result.discovery.carriedItems[1].itemID==601,
+    'carried book exposes its new stage to the plan')
+local destination=result.discovery.carriedItems[1].point
+check(destination.coordinateMapID==102 and destination.entityKind=='npc' and destination.entityID==501
+    and math.abs(destination.x-.734)<1e-10 and math.abs(destination.y-.33)<1e-10,'carried book points at the actual foreign-map NPC')
+check(result.count==0 and not action(result.decision.predicted,301,'turn_in') and #Fixture.log==0,
+    'owning the book does not fabricate acceptance or official completion')
+check(#notices==1 and notices[1]:find('已取得',1,true) and notices[1]:find('确认接取/交付',1,true)
+    and notices[1]:find('Map 102 73.4, 33.0',1,true),'acquisition immediately explains the next NPC even inside the earlier hint interval')
+check(not worldPin:IsVisible() and not worldPin.step,'old collection marker is cleared rather than pointing back at the looted source')
+Fixture.time=32; driver:GetScript('OnEvent')(driver,'BAG_UPDATE_DELAYED')
+Fixture.time=32.5; driver:GetScript('OnUpdate')(driver,.2)
+check(#notices==1,'unchanged inventory does not repeat the acquired-book notice')
+Fixture.playerMapID=102
+result=ns.Planner.Rebuild('player_map_changed'); if result.discovery.building then finishIndex() end
+result=ns.Planner.Rebuild('association_index_ready'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(result.discovery.carriedItems[1] and ns.route.views[1].opportunities[1]:IsVisible()
+    and ns.route.views[1].opportunities[1].carried,'NPC guidance survives the map change without reacquiring the book')
+ns.RouteOptions.Get().skipped[301]=true
+check(#ns.Planner.Rebuild('quest_skipped').discovery.carriedItems==0,'explicitly skipped book suppresses NPC guidance even when owned')
+ns.RouteOptions.Get().skipped[301]=nil
+Fixture.log={301}; Fixture.status[301]='ready_for_turn_in'; Fixture.pois={[102]={NewPOI(102,.734,301)}}
+result=ns.Planner.Rebuild('QUEST_LOG_UPDATE'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.carriedItems==0 and result.steps[1] and result.steps[1].action=='turn_in',
+    'actual official acceptance/completion replaces advisory guidance with the normal delivery route')
+'''),
+    ("Book pickup: ordinary object quest givers and ambiguous drops keep their meaning", r'''
+record(301,100,{startedBy={[2]={701}},objectives={[1]={{501,nil,0}}}}); place('object',701,50)
+record(302,100,{startedBy={[2]={702}},objectives={[3]={{602,nil,0}}}}); place('object',702,60)
+Fixture.items[602]={quest=0,objectDrops={702,703}}; place('object',703,70)
+record(303,100,{startedBy={[2]={704}},objectives={[3]={{603,nil,0}}}}); place('object',704,80)
+Fixture.items[603]={quest=303,objectDrops={704}}
+local data=collect({})
+check(action(data.opportunities,301,'pick_up'),'ordinary object quest giver is still a real pickup')
+check(action(data.opportunities,302,'pick_up') and not action(data.opportunities,302,'possible_item_drop'),
+    'ambiguous item sources cannot reclassify a quest giver')
+Fixture.bags={603}; data=collect({})
+check(action(data.opportunities,303,'start_item') and #data.carriedItems==0,
+    'a real use-to-start item remains a start-item action rather than a carried objective')
+ns.RouteOptions.Get().skipped[301]=true; data=collect({})
+check(not action(data.opportunities,301,'pick_up'),'skipped unaccepted quest cannot leave a source marker')
+'''),
+    ("Level comfort: creature level controls work and chains regardless of quest level", r'''
+ns.RouteOptions.Get().minPickupLevel=0
+local playerLevel=23; UnitLevel=function() return playerLevel end
+local readInfo=C_QuestLog.GetInfo
+C_QuestLog.GetInfo=function(i) local row=readInfo(i); row.level=Fixture.quests[row.questID].questLevel; return row end
+record(201,10,{questLevel=10}); record(202,200,{questLevel=60,objectives={[1]={{502,nil,0}}}})
+record(301,10,{questLevel=10,preQuestSingle={201}}); place('npc',502,300)
+FixtureDB.Npc.maxLevel=function(id) return id==501 and 26 or 24 end
+Fixture.log={201,202}; Fixture.pois={[101]={NewPOI(101,.001,201)}}
+local result=plan()
+check(not action(result.steps,201,'quest_area') and result.steps[1].questID==202,
+    'level10 quest with a level26 monster cannot override level60 quest with suitable monsters')
+local why; for _,q in ipairs(result.excluded) do if q.questID==201 then why=q.reason end end
+check(why=='target_above_level','why explains the actual creature limit rather than the quest-level label')
+check(not ns.RouteOptions.Get().skipped[201] and result.levelingPriority.maxLevelOffset==2,'deferral is automatic and exposes the two-level margin')
+for _,step in ipairs(result.decision.predicted) do check(step.questID~=201 and step.questID~=301,'chain gain cannot simulate blocked high-level work or unlock its child') end
+local data=collect(); check(data.quests[301].eligibility=='blocked' and data.quests[301].conditionReason=='target_above_level',
+    'unaccepted chain candidates share the creature limit despite their low quest labels')
+Fixture.loggedIn=true; ns.StartRoute(); local driver=ns.route.driver
+playerLevel=24; Fixture.time=10; driver:GetScript('OnUpdate')(driver,.6); result=ns.GetPlan({})
+check(result.reason=='player_level_changed' and action(result.steps,201,'quest_area'),
+    'level-up while stationary restores level-26 work without changing skip preferences')
+playerLevel=23; Fixture.status[201]='ready_for_turn_in'; result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(action(result.steps,201,'turn_in'),'officially completed high-level quest remains eligible for delivery')
+Fixture.status[201]='complete'; result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(action(result.steps,201,'completion_pending'),'completed quest waiting for official turn-in confirmation also bypasses work limits')
+'''),
+    ("Monster-level options: limits are configurable, character-scoped and independent of quest labels", r'''
+UnitLevel=function() return 23 end
+record(201,10,{questLevel=10}); record(202,100,{questLevel=60,objectives={[1]={{502,nil,0}}}})
+record(301,20,{questLevel=99}); place('npc',502,200)
+FixtureDB.Npc.maxLevel=function(id) return id==501 and 26 or 23 end
+Fixture.log={201,202}; local result=plan()
+check(result.maxMonsterLevelOffset==2 and not action(result.steps,201,'quest_area') and action(result.steps,202,'quest_area'),
+    'defaults restrict monsters, not low/high quest labels')
+result=ns.SetRouteOptions({maxMonsterLevelOffset=3})
+check(result.ok and result.maxMonsterLevelOffset==3 and action(result.steps,201,'quest_area')
+    and ns.RouteOptions.Get().maxMonsterLevelOffset==3,'raising the allowed monster gap restores work immediately')
+local data=collect()
+check(data.quests[301].eligibility=='eligible','high quest label cannot hide a now-allowed creature goal from lookahead')
+result=ns.SetRouteOptions({maxMonsterLevelOffset=0})
+check(result.ok and result.maxMonsterLevelOffset==0 and action(result.steps,202,'quest_area') and not action(result.steps,201,'quest_area'),
+    'zero permits same-level monsters and excludes higher monsters')
+data=collect()
+check(data.quests[301].conditionReason=='target_above_level' and not action(data.opportunities,301,'pick_up'),
+    'discovery and future chains immediately use the configured creature gap')
+local before=ns.GetPlan({}); local enabled=ns.RouteOptions.Get().enabled
+for _,value in ipairs({-1,6,1.5,'1',false,math.huge,0/0,{}}) do
+    local rejected=ns.SetRouteOptions({maxMonsterLevelOffset=value,enabled=not enabled})
+    check(not rejected.ok and ns.GetPlan({}).sequence==before.sequence and ns.RouteOptions.Get().maxMonsterLevelOffset==0
+        and ns.RouteOptions.Get().enabled==enabled,'invalid numeric option has no partial settings or route side effects')
+end
+local oldName=UnitName; UnitName=function() return 'OtherCharacter' end
+check(ns.RouteOptions.Get().maxMonsterLevelOffset==2,'another character starts with the default')
+ns.SetRouteOptions({maxMonsterLevelOffset=1}); UnitName=oldName
+check(ns.RouteOptions.Get().maxMonsterLevelOffset==0,'character-specific changes do not leak to the previous character')
+SlashCmdList.QUESTROUTE('monsterlevel 1')
+check(ns.GetPlan({}).maxMonsterLevelOffset==1,'slash command updates the same saved monster setting')
+local settings=ns.RouteOptions.Get(); settings.maxMonsterLevelOffset=nil
+check(ns.RouteOptions.Get().maxMonsterLevelOffset==2,'old saved settings receive the default without migration')
+settings.maxMonsterLevelOffset='bad'
+check(ns.RouteOptions.Get().maxMonsterLevelOffset==2,'malformed saved value recovers to a valid default')
+'''),
+    ("Monster-level settings: late native slider registers once and reloads callbacks", r'''
+record(201,100); plan()
+local sliderOptions,slider=Settings.CreateSliderOptions,Settings.CreateSlider
+Settings.CreateSliderOptions,Settings.CreateSlider=nil,nil
+Fixture.loggedIn=true; ns.StartRoute()
+local ui=ns.settingsUI
+check(ui.category.registered and not ui.monsterLevelSetting,'old native category can exist before the new slider is available')
+Settings.CreateSliderOptions,Settings.CreateSlider=sliderOptions,slider
+ns.RegisterSettings(); ns.RegisterSettings()
+check(ui.monsterLevelSetting and Settings.sliderCount==2 and #ui.monsterLevelSetting.callbacks==1,
+    'new slider registers independently of an already registered category without duplicate callbacks')
+local before=ns.GetPlan({}).sequence; ui.monsterLevelSetting:SetValue(1)
+check(ns.GetPlan({}).maxMonsterLevelOffset==1 and ns.GetPlan({}).sequence==before+1,'native slider performs exactly one immediate rebuild')
+ui.monsterLevelSetting.callbacks[1](ui.monsterLevelSetting,1)
+check(ns.GetPlan({}).sequence==before+1,'duplicate native value notification cannot rebuild the route twice')
+ns.OnUnload(); before=ns.GetPlan({}).sequence; ui.monsterLevelSetting:SetValue(0)
+check(ns.GetPlan({}).sequence==before,'unloaded namespace has no live settings callback')
+ns.OnReload(); before=ns.GetPlan({}).sequence; ui.monsterLevelSetting:SetValue(2)
+check(ns.GetPlan({}).maxMonsterLevelOffset==2 and ns.GetPlan({}).sequence==before+1 and Settings.sliderCount==2
+    and #ui.monsterLevelSetting.callbacks==1,'reload redirects one existing callback to the current namespace')
+check(ui.pickupLevelSetting and #ui.pickupLevelSetting.callbacks==1,'minimum-level slider also registers once after the category exists')
+before=ns.GetPlan({}).sequence; ui.pickupLevelSetting:SetValue(20)
+check(ns.GetPlan({}).minPickupLevel==20 and ns.GetPlan({}).sequence==before+1,'minimum-level slider applies exactly once')
+ui.pickupLevelSetting.callbacks[1](ui.pickupLevelSetting,20)
+check(ns.GetPlan({}).sequence==before+1,'duplicate minimum-level notification cannot replan twice')
+ns.OnUnload(); before=ns.GetPlan({}).sequence; ui.pickupLevelSetting:SetValue(0)
+check(ns.GetPlan({}).sequence==before,'unloaded minimum-level dispatcher stays inactive')
+ns.OnReload(); before=ns.GetPlan({}).sequence; ui.pickupLevelSetting:SetValue(15)
+check(ns.GetPlan({}).minPickupLevel==15 and ns.GetPlan({}).sequence==before+1
+    and #ui.pickupLevelSetting.callbacks==1 and Settings.sliderCount==2,'minimum-level callback returns to the current namespace after reload')
+'''),
+    ("Level comfort: material routes and hotspot changes choose suitable NPC sources", r'''
+UnitLevel=function() return 23 end
+record(201,100,{questLevel=23,objectives={[3]={{601,nil,0}}}})
+record(202,100,{questLevel=23,objectives={[1]={{503,nil,0}}}})
+Fixture.items[601]={npcDrops={501,502}}; place('npc',501,500); place('npc',503,10)
+Fixture.locations.npc[502]={[17]={{3,0},{8,0}}}
+FixtureDB.Npc.maxLevel=function(id) return id==502 and 24 or 27 end
+Fixture.log={201,202}; local result=plan()
+check(result.steps[1] and result.steps[1].questID==201 and result.steps[1].entityID==502,
+    'a lower-level material source wins even when an unsafe source is closer')
+for _,step in ipairs(result.steps) do
+    check(step.entityID~=501 and step.entityID~=503,'unsafe NPCs cannot enter formal work steps')
+    for _,spot in ipairs(step.hotspots) do check(spot.world.x~=500,'unsafe sources cannot enter visible hotspot alternatives') end
+end
+local reason; for _,q in ipairs(result.excluded) do if q.questID==202 then reason=q.reason end end
+check(reason=='target_above_level','low quest labels cannot hide a required high-level monster')
+local changed=ns.ChangeQuestSpot({questID=201})
+check(changed.ok and ns.GetPlan({}).steps[1].entityID==502 and ns.GetPlan({}).steps[1].world.x==800,
+    'manual next hotspot uses the same combat limit instead of switching to the closer unsafe source')
+'''),
+    ("Level comfort: lookahead cannot complete a goal whose only monster sources are too high", r'''
+UnitLevel=function() return 23 end
+record(201,100,{questLevel=23,objectives={[1]={{502,nil,0}}}}); Fixture.log={201}
+record(301,20,{questLevel=23,objectives={[1]={{501,nil,0}}}})
+record(302,30,{questLevel=23,objectives={[3]={{601,nil,0}}}})
+record(303,40,{questLevel=23,objectives={[3]={{602,nil,0}}}})
+Fixture.items[601]={npcDrops={501,502}}; Fixture.items[602]={npcDrops={501}}
+place('npc',501,100); place('npc',502,200)
+FixtureDB.Npc.maxLevel=function(id) return id==501 and 27 or 24 end
+local data=collect()
+check(data.quests[301].eligibility=='blocked' and data.quests[301].conditionReason=='target_above_level',
+    'a tempting pickup cannot bypass its required combat level')
+check(data.quests[303].eligibility=='blocked' and not data.quests[303].targetsComplete,
+    'removing the only unsafe item source cannot imply a complete objective')
+check(data.quests[302].eligibility=='eligible' and data.quests[302].targetsComplete and #data.quests[302].targets==1
+    and data.quests[302].targets[1].entityID==502,'a material with a safe alternative remains fully supported')
+check(not action(data.opportunities,301,'pick_up') and not action(data.opportunities,303,'pick_up'),
+    'nearby hints do not advertise combat that cannot be recommended')
+local result=plan()
+for _,step in ipairs(result.decision.predicted) do
+    check(step.questID~=301 and step.questID~=303 and (step.action~='quest_area' or step.point.entityID~=501),
+        'predicted shared work, rewards and unlocks cannot use blocked monsters')
+end
+'''),
+    ("Level comfort: completed goals, NPC interactions and unknown levels keep their meaning", r'''
+UnitLevel=function() return 23 end
+record(201,10,{questLevel=23,objectives={[1]={{501,nil,0},{502,nil,0}}}}); Fixture.log={201}
+record(301,100,{questLevel=23,objectives={}})
+Fixture.official[201]={{text='npc501: 1/1',type='monster',finished=true,numFulfilled=1,numRequired=1},
+    {text='npc502: 0/1',type='monster',finished=false,numFulfilled=0,numRequired=1}}
+place('npc',502,200); FixtureDB.Npc.maxLevel=function(id) return id==501 and 27 or 24 end
+local result=plan()
+check(result.steps[1] and result.steps[1].entityID==502,'an already-finished high-level objective cannot block the remaining suitable goal')
+FixtureDB.Npc.maxLevel=function(id) return id>10000 and 60 or id==501 and 27 or 24 end
+local data=collect()
+check(action(data.opportunities,301,'pick_up'),'high-level friendly quest givers are not mistaken for combat targets')
+local point=point(501,100); local levels={}
+check(ns.RouteOptions.TargetAboveLevel(FixtureDB,point,23,levels)==true
+    and ns.RouteOptions.TargetAboveLevel(FixtureDB,point,25,{})==false,'NPC threshold changes precisely at the two-level boundary')
+point.entityKind='object'
+check(not ns.RouteOptions.TargetAboveLevel(FixtureDB,point,23,{}),'object interactions have no NPC combat level')
+point.entityKind='npc'; FixtureDB.Npc.maxLevel=function() error('missing level') end
+check(not ns.RouteOptions.TargetAboveLevel(FixtureDB,point,23,{}),'unavailable level is unknown rather than fabricated high or zero')
+FixtureDB.Npc.minLevel=function() return 26 end
+check(ns.RouteOptions.TargetAboveLevel(FixtureDB,point,23,{})==true,'known minimum above the limit remains sufficient when maximum is missing')
+check(not ns.RouteOptions.TargetAboveLevel({Npc=42},point,23,{}) and not ns.RouteOptions.TargetAboveLevel(FixtureDB,42,23,{}),
+    'malformed optional level data cannot crash route planning')
+UnitLevel=function() return nil end
+check(not ns.RouteOptions.Exclusion({questID=301,level=26,status='in_progress'},FixtureDB,ns.RouteOptions.Get()),
+    'unknown player level does not create a guessed level restriction')
+'''),
+    ("Level comfort: missing unsafe coordinates cannot bypass the limit through native POI", r'''
+UnitLevel=function() return 23 end
+record(201,100,{questLevel=25}); Fixture.log={201}
+FixtureDB.Npc.maxLevel=function() return 27 end
+Fixture.locations.npc[501]={}; Fixture.pois={[101]={NewPOI(101,.6,201)}}
+local result=plan()
+check(result.count==0 and result.excluded[1].reason=='target_above_level',
+    'known unsafe required NPC is deferred before reading its missing coordinates')
+check(result.objectiveResolution[1].reason=='target_above_level','native POI cannot erase the rejected NPC identity')
+local raw=ns.GetQuestTargets({questID=201,mapID=101})
+check(raw.mode=='native_poi' and raw.targets[1] and raw.targets[1].x==.6,
+    'read-only target query retains the raw native fallback independent of route comfort limits')
+'''),
+    ("Level comfort: unsafe source conversion cannot mask a safe alternative or create a fallback", r'''
+UnitLevel=function() return 23 end
+record(201,100,{questLevel=25,objectives={[3]={{601,nil,0}}}}); Fixture.log={201}
+Fixture.items[601]={npcDrops={501,502}}; place('npc',501,500); place('npc',502,800)
+FixtureDB.Npc.maxLevel=function(id) return id==501 and 27 or 24 end
+Fixture.pois={[101]={NewPOI(101,.6,201)}}
+local convert=C_Map.GetWorldPosFromMapPos
+C_Map.GetWorldPosFromMapPos=function(map,p) if math.abs(p.x-.05)<1e-8 then return nil end; return convert(map,p) end
+local result=plan()
+check(result.steps[1] and result.steps[1].entityID==502 and result.steps[1].targetMode=='objective_locations',
+    'unsafe source is removed before its bad world conversion could erase the safe source')
+C_Map.GetWorldPosFromMapPos=function(map,p) if math.abs(p.x-.08)<1e-8 then return nil end; return convert(map,p) end
+result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(result.count==0 and result.excluded[1].reason=='world_position_unavailable' and result.pendingObjectiveCount==1,
+    'missing safe coordinates cannot redirect work toward an unidentified POI when a dangerous alternative was excluded')
+C_Map.GetWorldPosFromMapPos=convert; Fixture.time=10
+result=ns.Planner.Rebuild('objective_data_refresh')
+check(result.steps[1] and result.steps[1].entityID==502 and result.pendingObjectiveCount==0,
+    'safe coordinate recovery restores the allowed source')
+local raw=ns.GetQuestTargets({questID=201,mapID=101})
+local dangerous=false; for _,p in ipairs(raw.targets) do if p.entityID==501 then dangerous=true end end
+check(dangerous and raw.mode=='objective_locations','raw target data still reports unsafe sources when explicitly queried')
+'''),
+    ("Planner: temporary objective fallback preserves work protection and its timer", r'''
+record(201); record(301,50); place('npc',501,100); Fixture.log={201}
+Fixture.pois={[101]={NewPOI(101,.01,201)}}
+ns.RouteOptions.Get().switchNotice=false
+local original=ns.Replan({})
+check(original.navigation.protected and original.steps[1].objectiveKey=='npc:501','precise work is initially protected')
+if original.discovery.building then finishIndex() end
+local read=C_QuestLog.GetQuestObjectives
+C_QuestLog.GetQuestObjectives=function(id) if id==201 then return nil end return read(id) end
+Fixture.time=1
+local result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(result.decision.recommendation~=nil,'fallback still has a competing association')
+check(result.steps[1].questID==201 and result.navigation.phase=='working' and result.navigation.protected,
+    'temporary identity loss cannot replace current work')
+check(result.decision.deferred=='working_target_protected' and not result.decision.applied,'association respects fallback work protection')
+check(result.navigation.workStartedAt==original.navigation.workStartedAt,'fallback does not renew the work timer')
+Fixture.time=180; result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(not result.navigation.protected and (result.steps[1].questID~=201 or result.navigation.stale),
+    'repeated fallback still releases protection at the original idle timeout')
+C_QuestLog.GetQuestObjectives=read
+Fixture.time=181; result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(result.decision.applied and result.steps[1].questID==301,'restored identity does not revive expired protection')
+'''),
+    ("Planner: skipped active quests cannot occupy the recommendation", r'''
+record(201); record(301,100)
+record(101,100,{preQuestSingle={201,401}}); place('npc',20101,50)
+Fixture.pois={[101]={NewPOI(101,.005,101)}}
+Fixture.completed[401]=true; Fixture.log={101,201}; Fixture.status[101]='ready_for_turn_in'
+ns.RouteOptions.Get().skipped[101]=true
+local result=plan()
+check(result.decision.applied and result.steps[1].questID==301 and result.steps[1].action=='pick_up',
+    'blocked delivery cannot crowd out an executable shared pickup')
+check(not action(result.decision.predicted,101,'turn_in'),'skipped active quest has no predicted delivery')
+check(not action(result.steps,101,'turn_in') and C_QuestLog.IsOnQuest(101),'skip preserves official membership while excluding route work')
+local a,b,c=model(201,true),model(301,false),model(101,true)
+c.eligibility='blocked'; c.conditionReason='skipped'; c.exclusiveTo={301}
+local blocked=evaluate({[201]=a,[301]=b,[101]=c},201)
+check(not action(blocked.predicted,301,'pick_up'),'skipped active quests still enforce official exclusivity')
+'''),
+    ("Planner: manual hotspot survives events until explicit replan", r'''
+record(201); record(301,100); Fixture.log={201}; ns.RouteOptions.Get().skipped[301]=true
+Fixture.locations.npc[501]={[17]={{10,0},{40,0}}}
+plan(); ns.RouteOptions.Get().skipped[301]=nil
+local changed=ns.ChangeQuestSpot({questID=201,objectiveKey='npc:501'})
+check(changed.ok and changed.selected.world.x==4000,'manual hotspot was committed')
+local result=ns.Planner.Rebuild('BAG_UPDATE_DELAYED')
+check(result.steps[1].questID==201 and result.steps[1].world.x==4000,'unrelated event preserves the selected hotspot')
+check(not result.decision.applied and result.decision.deferred=='manual_spot_retained','automatic association explains the retained manual target')
+check(ns.route.manualSpot and ns.route.manualSpot.expiresAt==changed.expiresAt,'selection shares the existing avoidance lifetime')
+result=ns.Replan({})
+check(not ns.route.manualSpot and result.steps[1].questID==301,'explicit replan releases the manual selection')
+'''),
+    ("Planner: completed manual goal releases its priority", r'''
+record(201); record(301,100); Fixture.log={201}; ns.RouteOptions.Get().skipped[301]=true
+Fixture.locations.npc[501]={[17]={{10,0},{40,0}}}
+plan(); ns.RouteOptions.Get().skipped[301]=nil
+check(ns.ChangeQuestSpot({questID=201,objectiveKey='npc:501'}).ok,'manual goal is selected')
+Fixture.status[201]='ready_for_turn_in'; Fixture.pois={[101]={NewPOI(101,.1,201)}}
+local result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(not ns.route.manualSpot,'official completion releases the stored manual goal')
+check(not result.decision.deferred or result.decision.deferred~='manual_spot_retained','completed work cannot block a new association')
+'''),
+    ("Planner: map-finished notice precedes a new item-source hint", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(201); record(202,100,{objectives={[1]={{502,nil,0}}}})
+Fixture.locations.npc[502]={[18]={{10,0}}}
+record(301,100,{startedBy={[3]={601}}})
+Fixture.items[601]={quest=301,npcDrops={503}}; place('npc',503,50)
+Fixture.log={201,202}; local loaded=false
+HaveQuestData=function(id) return id~=301 or loaded end
+local before=plan(); check(before.count==1,'initial route has local work')
+local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
+ns.RouteOptions.Get().switchNotice=true
+ns.route.lastNotice=nil; ns.route.associationNotice=nil
+loaded=true; Fixture.completed[201]=true; Fixture.log={202}; Fixture.time=50
+local result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(result.count==0 and result.nextMapHint and result.nextMapHint.mapID==102,'finishing the map yields the foreign map hint')
+check(action(result.discovery.opportunities,301,'possible_item_drop'),'newly loaded item source is a competing hint')
+check(#notices==1 and notices[1]:find('当前地图已无可做任务',1,true),'map-finished transition receives the one-line notification')
+Fixture.time=100; ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+local finished=0
+for _,text in ipairs(notices) do if text:find('当前地图已无可做任务',1,true) then finished=finished+1 end end
+check(finished==1,'later item hints do not duplicate the map-finished notification')
+'''),
+    ("Planner: throttled map-finished notice is delivered once by the normal driver", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(201); record(202,100,{objectives={[1]={{502,nil,0}}}})
+Fixture.locations.npc[502]={[18]={{10,0}}}; Fixture.log={201,202}
+plan(); Fixture.loggedIn=true; ns.StartRoute()
+ns.RouteOptions.Get().switchNotice=true
+local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
+ns.route.lastNotice={key='association:recent',at=49}
+Fixture.completed[201]=true; Fixture.log={202}; Fixture.time=50
+local result=ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(result.nextMapHint and #notices==0 and ns.route.nextMapNoticeAt==57,'throttled transition is kept until the existing interval ends')
+Fixture.time=56.99; ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+check(#notices==0,'pending map notice respects the eight-second interval')
+Fixture.time=57; ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+check(#notices==1 and notices[1]:find('当前地图已无可做任务',1,true),'normal driver delivers the deferred map notice')
+check(not ns.route.nextMapNoticeAt,'sent map notice clears its retry')
+Fixture.time=70; ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+check(#notices==1,'sent map notice is never repeated')
+'''),
+    ("Discovery: triggerEnd blocks inferred delivery while ordinary goals survive", r'''
+for id=301,306 do record(id,100) end
+place('npc',501,200)
+Fixture.quests[301].triggerEnd={'Scout the event',{[17]={{70,0}}}}
+Fixture.quests[302].triggerEnd={'Unknown event'}
+Fixture.quests[303].triggerEnd=true
+Fixture.quests[304].triggerEnd=0
+Fixture.quests[305].triggerEnd={}
+local data=collect({})
+for id=301,306 do
+    local quest=data.quests[id]
+    check(#quest.targets==1 and quest.targets[1].shareable,'ordinary goal survives event metadata '..id)
+    local ordinary=id>=305
+    check(quest.targetsComplete==ordinary,'only known empty triggerEnd certifies coverage '..id)
+    local result=ns.Decision.Evaluate({available=true,quests={[id]=quest},completed={[id]=false},
+        opportunities={{questID=id,action='pick_up'}}},{},point(1,0).world,nil)
+    check(action(result.predicted,id,'pick_up') and action(result.predicted,id,'quest_area'),
+        'known ordinary work remains predictable '..id)
+    if not ordinary then check(not action(result.predicted,id,'turn_in'),'event is never inferred complete '..id) end
+end
+check(data.completed[301]==false,'prediction never changes official completion history')
+'''),
+    ("Discovery: absent triggerEnd getter remains unknown", r'''
+record(301,100)
+local getter=FixtureDB.Quest.Get
+for _,field in ipairs({'name','questLevel','requiredLevel','requiredMaxLevel','requiredRaces','requiredClasses',
+    'requiredSkill','requiredMinRep','requiredMaxRep','requiredSpell','requiredRanks','requiredSpecialization',
+    'parentQuest','nextQuestInChain','availableStartingWith','availableUntilCompleted','disabledByQuest',
+    'breadcrumbForQuestId','preQuestGroup','preQuestSingle','exclusiveTo','childQuests','startedBy','finishedBy',
+    'objectives','extraObjectives'}) do
+    local key=field
+    FixtureDB.Quest[key]=function(id) return getter(id,key) end
+end
+FixtureDB.Quest.Get=nil
+local data=collect({})
+check(data.quests[301].eligibility=='eligible','unavailable event metadata does not erase known pickup eligibility')
+check(#data.quests[301].targets==1 and not data.quests[301].targetsComplete,
+    'unknown event metadata cannot certify all goals')
+'''),
+    ("Discovery: native coverage and ready delivery survive triggerEnd", r'''
+record(201,100,{triggerEnd={'Event recorded by the client'}}); Fixture.log={201}
+local data=collect()
+check(data.quests[201].targetsComplete and data.quests[201].targets[1].shareable,
+    'reliable native ordinary coverage is still authoritative')
+Fixture.official[201]={{text='npc501: 0/1',type='monster',finished=false,numFulfilled=0,numRequired=1},
+    {text='Unknown exploration',type='event',finished=false}}
+data=collect()
+check(not data.quests[201].targetsComplete,'unfinished unmapped native event stays unknown')
+Fixture.status[201]='ready_for_turn_in'; data=collect()
+check(data.quests[201].status=='ready_for_turn_in' and #data.quests[201].finishers>0,
+    'official ready state retains delivery despite static event metadata')
+'''),
+    ("Discovery: Gossip supplies the current official starter and preserves provenance", r'''
+record(201); Fixture.log={201}; place('npc',501,200)
+record(301,5000)
+record(302,100,{startedBy={}})
+record(303,100,{startedBy={},triggerEnd={'Unknown exploration'}})
+record(304,100,{startedBy={},requiredLevel='unknown'})
+record(305,0)
+Fixture.offered={{questID=301},{questID=302},{questID=303},{questID=304},{questID=305}}
+local data=collect()
+for _,id in ipairs({301,302,303,305}) do
+    local quest=data.quests[id]
+    local offer=action(data.opportunities,id,'pick_up')
+    check(offer and offer.certainty=='confirmed' and offer.point.world.x==0
+        and offer.point.source=='client' and offer.point.precision=='player_position','official current opportunity '..id)
+    check(#quest.starters==1 and quest.starters[1].world.x==0,'Decision receives the official point '..id)
+    check(quest.starters[1].source=='client' and quest.starters[1].precision=='player_position',
+        'official point is not relabeled static '..id)
+    check(#quest.targets==1 and quest.targets[1].source=='QuestieDB'
+        and quest.targets[1].precision=='static_spawn','ordinary static target provenance survives '..id)
+    local result=ns.Decision.Evaluate({available=true,quests={[id]=quest},completed={[id]=false},
+        opportunities={{questID=id,action='pick_up'}}},{},point(1,0).world,nil)
+    local pickup=action(result.predicted,id,'pick_up')
+    check(pickup and pickup.point.world.x==0 and pickup.point.source=='client'
+        and pickup.point.precision=='player_position','Decision uses the observed starter '..id)
+    if id==303 then check(not action(result.predicted,id,'turn_in'),'Gossip cannot complete an unknown event') end
+end
+check(data.quests[302].targetsComplete,'official starter supports ordinary work without a static starter')
+check(not data.quests[303].targetsComplete,'official availability does not certify unknown event conditions')
+check(data.quests[304].eligibility=='unknown' and not action(data.opportunities,304,'pick_up'),
+    'official availability does not erase unknown eligibility conditions')
+Fixture.offered={}; data=collect()
+check(data.quests[301].starters[1].world.x==5000 and data.quests[301].starters[1].source=='QuestieDB'
+    and data.quests[301].starters[1].precision=='static_spawn','static starter remains available after Gossip ends')
+'''),
+    ("Discovery: empty local coordinates retry without rescanning healthy or permanent records", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(301,100); place('npc',501,200)
+record(302,300,{objectives={[1]={{502,nil,0}}}}); place('npc',502,400)
+record(303,100,{finishedBy={},objectives={}}); Fixture.locations.npc[10303]={[18]={{10,0}}}
+record(304,100,{finishedBy={},objectives={}}); Fixture.locations.npc[10304]={[17]={{-1,-1}}}
+record(305,100,{finishedBy={},objectives={}}); Fixture.locations.npc[10305]={[17]={{101,0}}}
+record(306,100,{finishedBy={},objectives={}}); Fixture.locations.npc[10306]={[17]={{10,0,1}}}
+record(307,100,{finishedBy={},objectives={}}); Fixture.locations.npc[10307]={}
+record(308,350,{finishedBy={},objectives={}})
+local context=ns.GetPlayerContext({})
+local convert=C_Map.GetWorldPosFromMapPos
+local failing=true
+C_Map.GetWorldPosFromMapPos=function(map,position)
+    if failing and position.x~=.035 then return nil end
+    return convert(map,position)
+end
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get()); finishIndex()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(not data.quests[301] and #data.opportunities==1,'missing local world positions are not complete or offered')
+local reads,conversions={},0
+local getter=FixtureDB.Quest.Get
+FixtureDB.Quest.Get=function(id,field) reads[id]=(reads[id] or 0)+1; return getter(id,field) end
+local spawnReads=0
+local spawns=FixtureDB.Npc.spawns
+FixtureDB.Npc.spawns=function(id) spawnReads=spawnReads+1; return spawns(id) end
+local retryConvert=C_Map.GetWorldPosFromMapPos
+C_Map.GetWorldPosFromMapPos=function(...) conversions=conversions+1; return retryConvert(...) end
+Fixture.time=4.99
+check(not ns.Discovery.Pump() and conversions==0,'no retry before the five-second deadline')
+Fixture.time=5
+check(not ns.Discovery.Pump() and conversions>0,'unsuccessful bounded retry does not request a replan')
+check(reads[301] and reads[302],'only temporarily missing records are retried')
+for id=303,308 do check(not reads[id],'healthy or permanently empty record is not retried '..id) end
+local attempts=conversions
+for _=1,5 do check(not ns.Discovery.Pump(),'completed failed retry pass stays idle') end
+check(conversions==attempts,'no busy retry in the same five-second window')
+failing=false; Fixture.time=9.99
+check(not ns.Discovery.Pump() and conversions==attempts,'recovery waits for the next deadline')
+Fixture.time=10
+check(ns.Discovery.Pump(),'newly recovered points request the normal association replan')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(not data.building and data.scanned==data.total and #data.opportunities==3,'same-map recovery retains initial scan progress')
+check(data.quests[301].targetsComplete and data.quests[302].targetsComplete,'recovered ordinary goals certify coverage')
+check(spawnReads==0,'coordinate retries reuse known local spawn rows')
+attempts=conversions; Fixture.time=15
+check(not ns.Discovery.Pump() and conversions==attempts,'successful retry removes its pending records')
+'''),
+    ("Discovery: partial recovery retains good points without duplicate spatial entries", r'''
+record(301,100,{objectives={[1]={{501,nil,0},{502,nil,0}}}})
+record(302,100,{startedBy={[3]={601}},finishedBy={},objectives={}})
+Fixture.items[601]={npcDrops={501}}
+Fixture.locations.npc[501]={[17]={{2,0},{3,0}}}; place('npc',502,400)
+local context=ns.GetPlayerContext({})
+local convert=C_Map.GetWorldPosFromMapPos
+local stage=0
+C_Map.GetWorldPosFromMapPos=function(map,position)
+    if position.x==.03 and stage<1 or position.x==.04 and stage<2
+        or position.x==.1 and stage<3 then return nil end
+    return convert(map,position)
+end
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get()); finishIndex()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(#data.quests[301].targets==1 and not data.quests[301].targetsComplete,'one missing goal prevents partial coverage from claiming completion')
+check(#data.quests[301].finishers==0,'missing delivery coordinate remains absent')
+stage=1; Fixture.time=5
+check(ns.Discovery.Pump(),'first partial recovery is published')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(#data.quests[301].targets==2 and not data.quests[301].targetsComplete,'alternate spawn does not hide the still-missing goal')
+local calls={}
+C_Map.GetWorldPosFromMapPos=function(map,position)
+    calls[position.x]=(calls[position.x] or 0)+1
+    if position.x==.02 or position.x==.03 then error('healthy coordinate must never be retried') end
+    if position.x==.1 and stage<3 then return nil end
+    return convert(map,position)
+end
+stage=2; Fixture.time=10
+check(ns.Discovery.Pump(),'remaining target position recovers')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(#data.quests[301].targets==3 and data.quests[301].targetsComplete,'all ordinary goals become covered after recovery')
+check(#data.quests[301].finishers==0,'delivery position waits for its own recovery')
+stage=3; Fixture.time=15
+check(ns.Discovery.Pump(),'finisher-only recovery requests a replan')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(#data.quests[301].finishers==1,'finisher-only recovery is retained')
+check(not calls[.02] and not calls[.03],'healthy positions survive later transient failures')
+local state
+for i=1,20 do
+    local name,value=debug.getupvalue(ns.Discovery.Pump,i)
+    if name=='cache' then state=value; break end
+end
+check(state~=nil,'offline invariant check can inspect the existing local index')
+local function entries(grid)
+    local seen,count={},0
+    for _,continent in pairs(grid) do for _,column in pairs(continent) do for _,cell in pairs(column) do
+        for _,entry in ipairs(cell) do
+            local p=entry.point
+            local key=entry.questID..':'..(entry.action or 'target')..':'..(entry.itemID or 0)..':'
+                ..p.key..':'..p.entityKind..':'..p.entityID..':'..p.x..':'..p.y
+            check(not seen[key],'spatial entry is written once across retries: '..key)
+            seen[key],count=true,count+1
+        end
+    end end end
+    return count
+end
+check(entries(state.starts)==3,'one starter and two item-source positions are indexed exactly once')
+check(entries(state.targets)==3,'three distinct target positions are indexed exactly once')
+'''),
+    ("Discovery: shared cache recovery survives a retry read error", r'''
+record(301,100); record(302,200); place('npc',501,300)
+local context=ns.GetPlayerContext({})
+local getter=FixtureDB.Quest.Get
+local recovered=false
+FixtureDB.Quest.Get=function(id,field)
+    if id==302 and field=='name' then recovered=true; Fixture.time=5 end
+    return getter(id,field)
+end
+local convert=C_Map.GetWorldPosFromMapPos
+local conversions=0
+C_Map.GetWorldPosFromMapPos=function(map,position)
+    conversions=conversions+1
+    if position.x==.03 and not recovered then return nil end
+    return convert(map,position)
+end
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get()); finishIndex()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(not data.quests[301].targetsComplete and data.quests[302].targetsComplete,'later record can recover shared coordinates during initial build')
+local throw=true
+FixtureDB.Quest.Get=function(id,field)
+    if id==301 and field=='name' and throw then error('temporary retry read error') end
+    return getter(id,field)
+end
+Fixture.time=10
+check(not ns.Discovery.Pump(),'read-error retry makes no new recommendation')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(data.quests[301].eligibility=='eligible' and #data.quests[301].starters==1
+    and not data.quests[301].targetsComplete,'retry read error preserves the prior usable record')
+local before=conversions
+throw=false; Fixture.time=15
+check(ns.Discovery.Pump(),'older record reuses an already recovered cache and requests a replan')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(data.quests[301].targetsComplete and #data.quests[301].targets==1,'older dependent record eventually gets full coverage')
+check(conversions==before,'shared recovery avoids converting healthy coordinates again')
+'''),
+    ("Discovery: foreign item sources yield even when every source has zero local points", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(301,100,{objectives={[3]={{601,nil,0}}}})
+local npcs,objects={},{}
+for i=1,1759 do
+    npcs[i]=50000+i; objects[i]=60000+i
+    Fixture.locations.npc[npcs[i]]={[18]={{10,0}}}
+    Fixture.locations.object[objects[i]]={[18]={{10,0}}}
+end
+Fixture.items[601]={npcDrops=npcs,objectDrops=objects}
+local reads,clock=0,0
+for _,kind in ipairs({'Npc','Object'}) do
+    local getter=FixtureDB[kind].spawns
+    FixtureDB[kind].spawns=function(id) reads=reads+1; clock=clock+.01; return getter(id) end
+end
+debugprofilestop=function() return clock end
+local context=ns.GetPlayerContext({})
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+ns.Discovery.Pump()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(data.building and reads>0 and reads<=128,'empty source enumeration yields within the operation budget')
+check(clock<=3.01,'many short source reads cannot bypass the time budget')
+finishIndex(); data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(not data.building and #data.quests[301].targets==0 and not data.quests[301].targetsComplete,'resumed foreign enumeration never fabricates local coverage')
+local before=reads; Fixture.time=5
+check(not ns.Discovery.Pump() and reads==before,'permanently foreign sources do not create location retries')
+'''),
+    ("Discovery: a large pending spawn list reuses the yielding Pump worker", r'''
+record(301,100,{objectives={}})
+local points={}
+for i=1,10000 do points[i]={i/200,0} end
+Fixture.locations.npc[10301]={[17]=points}
+local context=ns.GetPlayerContext({})
+Fixture.conversionFail[101]=true
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get()); finishIndex()
+Fixture.conversionFail[101]=nil; Fixture.time=5
+local convert=C_Map.GetWorldPosFromMapPos
+local conversions=0
+C_Map.GetWorldPosFromMapPos=function(...) conversions=conversions+1; return convert(...) end
+ns.Discovery.Pump()
+check(conversions>0 and conversions<=128,'retry yields within a large pending coordinate list')
+finishIndex()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(not data.building and data.scanned==data.total and #data.quests[301].starters==10000,'resumed retry retains all recovered coordinates')
+'''),
+    ("Discovery: temporarily missing map information recovers on the same map", r'''
+record(301,100)
+local context=ns.GetPlayerContext({})
+local getter=C_Map.GetMapInfo
+C_Map.GetMapInfo=function(id) if id==101 then return nil end return getter(id) end
+ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get()); finishIndex()
+local data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(data.pendingLocationCount==1 and #data.opportunities==0,'unknown map information remains pending')
+C_Map.GetMapInfo=getter; Fixture.time=5
+check(ns.Discovery.Pump(),'map-information recovery requests a normal replan')
+data=ns.Discovery.Collect(context,{}, {},ns.RouteOptions.Get())
+check(action(data.opportunities,301,'pick_up') and data.pendingLocationCount==0,'same-map recovery clears pending state and restores the pickup')
+'''),
+    ("Planner: pending association locations cannot complete the map and recover automatically", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(202,100,{objectives={[1]={{502,nil,0}}}}); Fixture.locations.npc[502]={[18]={{10,0}}}
+record(301,100); Fixture.log={202}
+local convert=C_Map.GetWorldPosFromMapPos
+C_Map.GetWorldPosFromMapPos=function(map,position) if map==101 and position.x==.01 then return nil end return convert(map,position) end
+local result=plan()
+check(result.count==0 and not result.nextMapHint,'unresolved association locations cannot certify that the map is finished')
+check(result.discovery.pendingLocationCount>0 and result.navigation.phase=='unavailable','public snapshot reports pending association locations')
+Fixture.loggedIn=true; ns.StartRoute()
+local sequence=ns.GetPlan({}).sequence
+C_Map.GetWorldPosFromMapPos=convert; Fixture.time=5
+ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+result=ns.GetPlan({})
+check(result.sequence>sequence and result.pickupCount==1 and result.steps[1].questID==301,'normal driver automatically restores a local pickup after recovery')
+check(result.discovery.pendingLocationCount==0,'successful recovery stops reporting pending locations')
 '''),
     ("Planner: malformed database records preserve native route", r'''
 record(201); record(301,100); Fixture.log={201}; Fixture.pois={[101]={NewPOI(101,.1,201)}}

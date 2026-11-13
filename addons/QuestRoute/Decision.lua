@@ -56,7 +56,7 @@ local function Models(data, candidates, origin, baseline)
     end
     for id, quest in pairs(data.quests or {}) do
         if relevant[id] and (quest.active or quest.startItemID or #(quest.starters or {}) > 0)
-            and (quest.active or quest.eligibility == "eligible" or quest.conditionReason == "prerequisite") then
+            and (quest.eligibility == "eligible" or not quest.active and quest.conditionReason == "prerequisite") then
             local model = { questID = id, quest = quest, goals = {}, goalCount = 0, distance = math.huge }
             for _, target in ipairs(quest.targets or {}) do
                 local key = target.key or target.objectiveKey
@@ -319,14 +319,50 @@ local function Evaluate(data, candidates, origin, baseline)
     return result
 end
 
+local reasonLabels = { same_target = "可合做目标", on_way = "沿途少绕路", same_area = "目标在下一站附近",
+    nearby = "就在附近", gossip_available = "当前对话可接", item_in_bags = "物品已在背包", previous_notice = "先前提示的地点" }
+local function OpportunityReason(item)
+    local reasons = {}
+    for _, reason in ipairs(item.reasons or {}) do reasons[reason] = true end
+    for _, reason in ipairs({ "same_target", "on_way", "same_area", "nearby", "gossip_available", "item_in_bags", "previous_notice" }) do
+        if reasons[reason] then return reasonLabels[reason] end
+    end
+end
+
+local function DescribeOpportunity(item, applied)
+    local action = item.action or "bring_item"
+    local prefix = action == "bring_item" and "已取得：" or action == "start_item" and "背包物品可启动："
+        or action == "pick_up" and (applied and "建议先接：" or "顺路可接：")
+        or action == "possible_item_drop" and (item.questItem and "顺路取物：" or "物品任务来源：") or "关联路线，先做："
+    local title = type(item.itemName) == "string" and item.itemName ~= "" and item.itemName or item.title
+    local text = prefix .. title
+    if action == "pick_up" and item.certainty ~= "confirmed" then text = text .. "（预计可接）" end
+    local reason = OpportunityReason(item)
+    if action == "bring_item" then text = text .. " · 向NPC确认接取/交付"
+    elseif reason then text = text .. " · " .. reason end
+    if action ~= "start_item" then
+        local location = ns.Util.FormatLocation(item.point)
+        text = text .. (location and (" · " .. location) or " · 位置待确认")
+    end
+    return text
+end
+
 local function Notify(plan, previous, settings, now)
     if not settings.enabled or not settings.switchNotice or ns.route.pendingSpotChange then return false end
     if plan.reason == "manual" or plan.reason == "quest_skipped" or plan.reason == "options_changed" then return false end
-    local decision, opportunity = plan.decision, nil
-    if decision.applied then
+    local decision, opportunity, acquired = plan.decision, nil, false
+    local carried = {}
+    for _, item in ipairs(previous and previous.discovery and previous.discovery.carriedItems or {}) do carried[item.questID] = true end
+    for _, item in ipairs(plan.discovery.carriedItems or {}) do
+        if not carried[item.questID] then opportunity, acquired = item, true; break end
+    end
+    if not opportunity and decision.applied then
         local first = plan.steps[1]
-        opportunity = { questID = first.questID, title = first.title, action = first.action, certainty = first.certainty }
-    else
+        opportunity = { questID = first.questID, title = first.title, action = first.action, certainty = first.certainty, point = first }
+        for _, item in ipairs(plan.discovery.opportunities or {}) do
+            if item.questID == first.questID and item.action == first.action then opportunity = item; break end
+        end
+    elseif not opportunity then
         for _, item in ipairs(plan.discovery.opportunities or {}) do
             if item.action == "start_item" or item.action == "possible_item_drop" or item.certainty == "confirmed" then
                 opportunity = item
@@ -338,19 +374,23 @@ local function Notify(plan, previous, settings, now)
         end
     end
     if not opportunity then return false end
-    local key = opportunity.questID .. ":" .. opportunity.action
+    local action = opportunity.action or "bring_item"
+    local key = opportunity.questID .. ":" .. action .. ":" .. (opportunity.itemID or 0)
     local last = ns.route.associationNotice
-    if last and (last.key == key or now - last.at < 20) then return decision.applied == true end
-    if ns.route.lastNotice and now - ns.route.lastNotice.at < ns.Navigation.rules.noticeInterval then return true end
-    local prefix = opportunity.action == "start_item" and "背包物品可启动："
-        or opportunity.action == "pick_up" and (decision.applied and "建议先接：" or "附近/沿途可接：")
-        or opportunity.action == "possible_item_drop" and "物品任务来源：" or "关联路线，先做："
-    local text = "QuestRoute " .. prefix .. opportunity.title
-    if opportunity.action == "pick_up" and opportunity.certainty ~= "confirmed" then text = text .. "（预计可接）" end
+    if last and (last.key == key or not acquired and now - last.at < 20) then return decision.applied == true end
+    if not acquired and ns.route.lastNotice and now - ns.route.lastNotice.at < ns.Navigation.rules.noticeInterval then return true end
     ns.route.associationNotice, ns.route.lastNotice = { key = key, at = now }, { key = key, at = now }
-    ns.Util.Notify(text)
-    ns.WB:Emit("route.association", { questID = opportunity.questID, action = opportunity.action, applied = decision.applied == true })
+    ns.Util.Notify("QuestRoute " .. DescribeOpportunity(opportunity, decision.applied and not acquired))
+    if (action == "pick_up" or action == "possible_item_drop") and opportunity.point then
+        local announced = ns.route.announcedOpportunities
+        if not announced or announced.mapID ~= plan.mapID then
+            announced = { mapID = plan.mapID, items = {} }
+            ns.route.announcedOpportunities = announced
+        end
+        announced.items[key] = opportunity
+    end
+    ns.WB:Emit("route.association", { questID = opportunity.questID, action = action, applied = decision.applied == true and not acquired })
     return true
 end
 
-ns.Decision = { Evaluate = Evaluate, Notify = Notify, rules = rules }
+ns.Decision = { Evaluate = Evaluate, Notify = Notify, Reason = OpportunityReason, Describe = DescribeOpportunity, rules = rules }

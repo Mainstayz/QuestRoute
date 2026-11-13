@@ -126,7 +126,7 @@ local function NavigationForStep(step, origin, mapID, now, previous, reset)
         previous, same = ns.route.suspendedObjectiveSession, true
     end
     if not same and not reset and step and not step.objectiveKey and temporaryObjectiveReasons[step.targetReason] then
-        local saved = ns.route.suspendedObjectiveSession
+        local saved = ns.route.suspendedObjectiveSession or previous
         local shift = saved and DistanceSquared(saved.targetWorld, step.world)
         if saved and saved.questID == step.questID and saved.questStatus == step.status and saved.mapID == mapID
             and shift and shift <= routeRules.poiTolerance ^ 2 then previous, same = saved, true end
@@ -195,7 +195,8 @@ local function UpdateNavigation(plan, location, now, previous, reset)
     elseif saved and (not first or first.questID ~= saved.questID or first.status ~= saved.questStatus
         or location.coordinateMapID ~= saved.mapID) then ns.route.suspendedObjectiveSession = nil end
     local nav = NavigationForStep(first, location.world, location.coordinateMapID, now, previous, reset)
-    if not first and (plan.pendingLocationCount or 0) > 0 and nav.phase == "idle" then
+    if not first and ((plan.pendingLocationCount or 0) > 0
+        or plan.discovery and (plan.discovery.pendingLocationCount or 0) > 0) and nav.phase == "idle" then
         nav.phase, nav.reason, nav.label = "unavailable", "quest_location_unavailable", navigationLabels.unavailable
     end
     local suspended = ns.route.workSession

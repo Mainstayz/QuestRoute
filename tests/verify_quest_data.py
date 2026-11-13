@@ -97,7 +97,8 @@ function CreateFrame(kind,name,parent)
     return f
 end
 -- Native AddOnSetting keeps the supplied SavedVariables table; UI changes write before the callback.
-Settings = {categories={}, settings={}, checkboxCount=0, registeredCount=0}
+Settings = {categories={}, settings={}, checkboxCount=0, sliderCount=0, registeredCount=0}
+MinimalSliderWithSteppersMixin={Label={Right=2}}
 function Settings.RegisterVerticalLayoutCategory(name)
     local category={name=name,ID=#Settings.categories+1}
     function category:GetID() return self.ID end
@@ -105,14 +106,14 @@ function Settings.RegisterVerticalLayoutCategory(name)
     return category,{}
 end
 function Settings.RegisterAddOnSetting(category,variable,key,storage,valueType,name,defaultValue)
-    assert(valueType=='boolean' and type(defaultValue)=='boolean','native boolean setting signature')
+    assert((valueType=='boolean' or valueType=='number') and type(defaultValue)==valueType,'native setting value type matches its default')
     assert(not Settings.settings[variable],'native settings must not be registered twice')
     local setting={category=category,storage=storage,key=key,name=name,defaultValue=defaultValue,callbacks={}}
     function setting:GetValue() return self.storage[self.key] end
     -- Blizzard appends callbacks; a second registration must not silently replace the first.
     function setting:SetValueChangedCallback(callback) self.callbacks[#self.callbacks+1]=callback end
     function setting:SetValue(value)
-        assert(type(value)=='boolean','native checkbox values are boolean')
+        assert(type(value)==type(self.defaultValue),'native setting values preserve their declared type')
         if self:GetValue()==value then return end
         self.storage[self.key]=value
         for _,callback in ipairs(self.callbacks) do callback(self,value) end
@@ -123,6 +124,15 @@ end
 function Settings.CreateCheckbox(category,setting,tooltip)
     Settings.checkboxCount=Settings.checkboxCount+1
     setting.tooltip=tooltip
+end
+function Settings.CreateSliderOptions(minimum,maximum,step)
+    local options={minimum=minimum,maximum=maximum,step=step}
+    function options:SetLabelFormatter(label,formatter) self.label=label; self.formatter=formatter end
+    return options
+end
+function Settings.CreateSlider(category,setting,options,tooltip)
+    Settings.sliderCount=Settings.sliderCount+1
+    setting.options,setting.tooltip=options,tooltip
 end
 function Settings.RegisterAddOnCategory(category)
     assert(not category.registered,'native categories must not be registered twice')
@@ -339,7 +349,7 @@ Fixture.mapOrder={101,102,103}
 Fixture.pois={[101]={}}
 for id=101,107 do Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(101,(id-100)/10,id) end
 C_QuestLog.GetNumQuestLogEntries=function() return 7,7 end
-C_QuestLog.GetInfo=function(i) return {questID=100+i,title='Route '..(100+i),level=40,questLogIndex=i} end
+C_QuestLog.GetInfo=function(i) return {questID=100+i,title='Route '..(100+i),level=i==2 and 40 or 19,questLogIndex=i} end
 C_QuestLog.GetQuestTagInfo=function(id) if id==104 then return {tagID=81,tagName='Dungeon'} end end
 C_QuestLog.GetQuestType=function(id) return id==104 and 81 or 0 end
 C_QuestLog.IsEliteQuest=function(id) return id==105 end
@@ -350,7 +360,7 @@ FixtureDB.Quest.requiredSkill=function(id) if id==106 then return {356,1} end en
 local plan=api.Replan({})
 check(plan.count==3,'instance elite profession and failed excluded')
 check(plan.steps[1].questID==101 and plan.steps[2].questID==102 and plan.steps[3].questID==103,'nearest neighbor order')
-check(plan.steps[1].level==40,'no unsolicited quest level filter')
+check(plan.steps[1].level==19 and plan.steps[2].level==40,'eligible work and already-completed high-level delivery preserve their levels')
 check(plan.steps[2].action=='turn_in','turn-in action preserved')
 local why={};for _,q in ipairs(plan.excluded) do why[q.questID]=q.reason end
 check(why[104]=='instance' and why[105]=='elite' and why[106]=='profession','filter reasons')
@@ -417,7 +427,22 @@ do
     api.loginFrame:GetScript('OnEvent')(api.loginFrame,'ADDON_LOADED','Blizzard_Settings')
     local ui=api.settingsUI
     check(ui and ui.category.registered and ui.category.name=='QuestRoute','late native Settings load registers QuestRoute addon page')
-    check(#Settings.categories==1 and Settings.checkboxCount==3 and Settings.registeredCount==1,'settings page contains three native checkboxes')
+    check(#Settings.categories==1 and Settings.checkboxCount==3 and Settings.sliderCount==2 and Settings.registeredCount==1,
+        'settings page contains three checkboxes and two numeric level sliders')
+    check(ui.pickupLevelSetting:GetValue()==15 and ui.pickupLevelSetting.options.minimum==0
+        and ui.pickupLevelSetting.options.maximum==60 and ui.pickupLevelSetting.options.step==1,'pickup slider exposes the validated 0..60 range and default15')
+    check(ui.pickupLevelSetting.options.formatter(0)=='不限制' and ui.pickupLevelSetting.options.formatter(15)=='15级',
+        'pickup slider explains its off state and exact threshold')
+    check(ui.monsterLevelSetting:GetValue()==2 and ui.monsterLevelSetting.options.minimum==0
+        and ui.monsterLevelSetting.options.maximum==5 and ui.monsterLevelSetting.options.step==1,'monster slider exposes the validated 0..5 integer range and default2')
+    check(ui.monsterLevelSetting.options.formatter(0)=='同级及以下' and ui.monsterLevelSetting.options.formatter(1)=='+1级',
+        'monster slider labels describe the allowed creature gap')
+    local beforeLevelChange=api.GetPlan({}).sequence
+    ui.monsterLevelSetting:SetValue(1)
+    check(api.GetPlan({}).maxMonsterLevelOffset==1 and api.GetPlan({}).sequence==beforeLevelChange+1
+        and QuestRouteDB.routes['FixtureRealm:FixturePlayer'].maxMonsterLevelOffset==1,'monster slider writes character preference with one immediate rebuild')
+    ui.monsterLevelSetting:SetValue(ui.monsterLevelSetting.defaultValue)
+    check(api.GetPlan({}).maxMonsterLevelOffset==2,'native default reset restores the monster limit')
     check(ui.noticeSetting:GetValue()==true and ui.noticeSetting.defaultValue==true,'native notice checkbox starts checked')
     check(ui.nameplateSetting:GetValue()==true and ui.nameplateSetting.defaultValue==true,'native nameplate checkbox starts checked')
     ui.noticeSetting:SetValue(false)
@@ -482,7 +507,7 @@ C_QuestLog.GetNumQuestLogEntries=function() return 10,10 end
 Fixture.questLevels={}
 C_QuestLog.GetInfo=function(i)
     local id=100+i
-    return {questID=id,title='Route '..id,level=Fixture.questLevels[id] or 40,questLogIndex=i}
+    return {questID=id,title='Route '..id,level=Fixture.questLevels[id] or 19,questLogIndex=i}
 end
 Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(102,.00001,108)
 Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(103,.00002,109)
@@ -523,7 +548,7 @@ for _,q in ipairs(plan.steps) do if q.questID==103 then check(q.priorityWeight==
 Fixture.questLevels[103]=-1
 plan=api.Replan({})
 for _,q in ipairs(plan.steps) do if q.questID==103 then check(q.priorityWeight==1,'dynamic level sentinel relies on native difficulty') end end
-Fixture.questLevels[103]=40;Fixture.questLevels[102]=14;Fixture.pois[101][2].x=.5
+Fixture.questLevels[103]=21;Fixture.questLevels[102]=14;Fixture.pois[101][2].x=.5
 plan=api.Replan({})
 check(plan.steps[1].questID==101,'far low-level does not override much closer task')
 Fixture.questLevels[101]=40
@@ -531,7 +556,7 @@ local unitLevel=UnitLevel;UnitLevel=function() return nil end
 plan=api.Replan({})
 check(plan.levelPriority.referenceLevel==nil,'unknown player level supported')
 for _,q in ipairs(plan.steps) do check(q.priorityWeight==1,'fair native difficulty works without player level') end
-UnitLevel=unitLevel;api.Replan({})
+UnitLevel=unitLevel;Fixture.questLevels[101]=19;api.Replan({})
 -- Cross a map boundary with zero world displacement: immediately replace local route.
 Fixture.playerMapID=102;Fixture.time=201
 local activeTick=driver:GetScript('OnUpdate')
@@ -876,7 +901,7 @@ check(plan.levelingPriority.reference.sampleCount==3 and plan.levelingPriority.r
 check(plan.levelPriority.perLevelBonus==0,'obsolete level-gap bonus explicitly disabled')
 rows={routeRow(201,600,{difficulty=1,level=60}),routeRow(202,620,{difficulty=3,level=1})}
 plan=scenario(rows)
-check(plan.steps[1].questID==201,'native difficulty takes precedence over misleading quest-level labels')
+check(plan.steps[1].questID==201,'task-level labels do not replace native difficulty weighting or monster-level checks')
 rows={routeRow(201,600),routeRow(202,650,{difficulty=4,xp=100000})}
 plan=scenario(rows)
 check(plan.steps[1].questID==201,'large raw XP never cancels extreme combat difficulty')
@@ -2152,7 +2177,7 @@ end
 check(api.Util.FormatDistance(0)=='0' and api.Util.FormatDistance(47)=='45' and api.Util.FormatDistance(99)=='100'
     and api.Util.FormatDistance(123)=='120' and api.Util.FormatDistance(125)=='130','distances round to 5 under 100 and 10 above')
 check(api.Util.FormatDistance(nil)==nil and api.Util.FormatDistance(-1)==nil and api.Util.FormatDistance('x')==nil and api.Util.FormatDistance(0/0)==nil,'unreadable distances are omitted')
--- Notices are one screen line, throttled, de-duplicated, opt-out, and never fire for startup/manual changes.
+-- Notices share one screen/chat line, throttling, de-duplication and the existing opt-out.
 local oldFrame,oldPrint=UIErrorsFrame,print
 UIErrorsFrame={messages={},AddMessage=function(self,text) self.messages[#self.messages+1]=text end}
 local printed={}
@@ -2160,22 +2185,24 @@ print=function(...) local parts={};for i=1,select('#',...) do parts[#parts+1]=to
 local function noticeCount() return #UIErrorsFrame.messages end
 api.route.lastNotice=nil
 scenario({routeRow(201,450),routeRow(202,900),routeRow(203,100)})
-check(noticeCount()==0,'manual replan and startup never emit a switch notice')
+check(noticeCount()==0 and #printed==0,'manual replan and startup never emit a screen or chat notice')
 Fixture.playerX=.76;plan=autoPlan()
 check(plan.steps[1].questID==202 and plan.stability.reason=='clearly_better_candidate','notice scenario switches automatically')
 check(noticeCount()==1 and UIErrorsFrame.messages[1]:find('已改为',1,true) and UIErrorsFrame.messages[1]:find('Stable 202',1,true)
-    and UIErrorsFrame.messages[1]:find('约140码',1,true),'automatic switch emits one line with the target and a rounded distance')
-autoPlan();check(noticeCount()==1,'unchanged target is not announced again')
+    and UIErrorsFrame.messages[1]:find('约140码',1,true) and #printed==1 and printed[1]==UIErrorsFrame.messages[1],
+    'automatic switch emits the same target and rounded distance once on screen and in chat')
+autoPlan();check(noticeCount()==1 and #printed==1,'unchanged target is not announced again on either surface')
 table.remove(Fixture.routeRows,2);plan=autoPlan()
-check(plan.steps[1].questID==201 and noticeCount()==1,'a second change inside the interval is throttled')
+check(plan.steps[1].questID==201 and noticeCount()==1 and #printed==1,'a second change inside the interval is throttled on screen and in chat')
 Fixture.time=Fixture.time+9;table.remove(Fixture.routeRows,1);plan=autoPlan()
 check(plan.steps[1].questID==203 and plan.stability.reason=='previous_target_changed' and noticeCount()==2
     and UIErrorsFrame.messages[2]:find('下一站',1,true),'finishing the target after the interval announces the next stop')
 api.route.lastNotice=nil;Fixture.time=Fixture.time+9
 SlashCmdList['QUESTROUTE']('notice off')
 check(not api.GetPlan({}).switchNotice and not QuestRouteDB.routes['FixtureRealm:FixturePlayer'].switchNotice,'notice option saves per character and appears in the plan')
+local printedBeforeDisable=#printed
 scenario({routeRow(201,500),routeRow(202,900)});Fixture.playerX=.76;plan=autoPlan()
-check(plan.steps[1].questID==202 and noticeCount()==2,'disabled notices stay silent')
+check(plan.steps[1].questID==202 and noticeCount()==2 and #printed==printedBeforeDisable,'disabled notices stay silent on screen and in chat')
 SlashCmdList['QUESTROUTE']('notice on')
 check(api.GetPlan({}).switchNotice,'notice option can be restored')
 check(not api.SetRouteOptions({switchNotice='yes'}).ok,'invalid notice option rejected')
@@ -2248,11 +2275,14 @@ do
     C_Map.GetPlayerMapPosition=oldPosition;autoPlan()
 end
 UIErrorsFrame,print=oldFrame,oldPrint
--- UIErrorsFrame missing: notice falls back to chat instead of failing.
+-- Chat is written once whether the toast works, is missing or throws.
 printed={};print=function(text) printed[#printed+1]=text end
-api.Util.Notify('fallback line');check(printed[1]=='fallback line','notice falls back to print without the error frame')
+UIErrorsFrame={messages={},AddMessage=function(self,text) self.messages[#self.messages+1]=text end}
+api.Util.Notify('both surfaces');check(#printed==1 and printed[1]=='both surfaces' and UIErrorsFrame.messages[1]==printed[1],'working toast also leaves exactly one chat message')
+UIErrorsFrame=nil
+api.Util.Notify('fallback line');check(#printed==2 and printed[2]=='fallback line','missing error frame keeps exactly one chat message')
 UIErrorsFrame={AddMessage=function() error('frame rejected message') end}
-api.Util.Notify('fallback after error');check(printed[2]=='fallback after error','a failing error frame falls back to print')
+api.Util.Notify('fallback after error');check(#printed==3 and printed[3]=='fallback after error','failing error frame keeps exactly one chat message')
 UIErrorsFrame,print=oldFrame,oldPrint
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
@@ -2387,7 +2417,9 @@ end
 assert(active==(api.route.running and 1 or 0),'exactly one running route driver')
 if api.settingsUI then
     assert(#Settings.categories==1 and Settings.registeredCount==1
-        and #api.settingsUI.eliteSetting.callbacks==1,'exactly one native settings category and callback')
+        and #api.settingsUI.eliteSetting.callbacks==1 and #api.settingsUI.monsterLevelSetting.callbacks==1
+        and #api.settingsUI.pickupLevelSetting.callbacks==1
+        and Settings.sliderCount==2,'exactly one native settings category and callback per control after reload')
 end
 return 4
 '''

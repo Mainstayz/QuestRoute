@@ -21,6 +21,7 @@ local function RouteTick(_, elapsed)
     if ns.route.nextObjectiveCheck and now >= ns.route.nextObjectiveCheck then RebuildRoute("objective_data_refresh") end
     if ns.route.nextAssociationCheck and now >= ns.route.nextAssociationCheck then RebuildRoute("association_data_refresh") end
     if ns.route.nextSpotCheck and now >= ns.route.nextSpotCheck then RebuildRoute("spot_avoidance_expired") end
+    if ns.route.nextMapNoticeAt and now >= ns.route.nextMapNoticeAt then RebuildRoute("map_notice_retry") end
     if now >= (ns.route.nextNameplateCheck or 0) then
         ns.route.nextNameplateCheck = now + 0.5
         RenderTaskNameplates()
@@ -68,10 +69,12 @@ function ns.StartRoute()
     for _, view in ipairs(ns.route.views) do
         for _, pin in pairs(view.pins) do ConfigureRoutePin(pin) end
         for _, pin in pairs(view.alternatives or {}) do ConfigureRoutePin(pin) end
+        for _, pin in pairs(view.opportunities or {}) do ConfigureRoutePin(pin) end
     end
     if ns.route.minimapView then
         for _, pin in pairs(ns.route.minimapView.pins) do ConfigureRoutePin(pin) end
         for _, pin in pairs(ns.route.minimapView.alternatives or {}) do ConfigureRoutePin(pin) end
+        for _, pin in pairs(ns.route.minimapView.opportunities or {}) do ConfigureRoutePin(pin) end
     end
     local driver = ns.route.driver or CreateFrame("Frame")
     ns.route.driver = driver
@@ -152,11 +155,11 @@ local function PrintWhy()
     local discovery = plan.discovery
     if discovery then
         if discovery.building then print("任务关联索引建立中：" .. (discovery.scanned or 0) .. "/" .. (discovery.total or 0)) end
-        local labels = { pick_up = "可去接取", start_item = "背包物品启动", possible_item_drop = "可能掉落启动物品" }
-        for index, item in ipairs(discovery.opportunities or {}) do
-            if index > 5 then break end
-            print("关联 [" .. item.questID .. "] " .. item.title .. " — " .. (labels[item.action] or item.action)
-                .. (item.certainty == "confirmed" and "（客户端已确认）" or "（数据库关联）"))
+        for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems" }) do
+            for index, item in ipairs(discovery[field] or {}) do
+                if index > 5 then break end
+                print("关联 [" .. item.questID .. "] " .. ns.Decision.Describe(item, false))
+            end
         end
     end
     local decision = plan.decision
@@ -179,6 +182,8 @@ SlashCmdList["QUESTROUTE"] = function(text)
     elseif command == "unskip" then
         result = value == "all" and ns.ResetQuestSkips({}) or ns.SetQuestSkip({ questID = tonumber(value), skipped = false })
     elseif command == "distance" then result = ns.SetRouteOptions({ moveThreshold = tonumber(value) or false })
+    elseif command == "monsterlevel" then result = ns.SetRouteOptions({ maxMonsterLevelOffset = tonumber(value) or false })
+    elseif command == "minlevel" then result = ns.SetRouteOptions({ minPickupLevel = tonumber(value) or false })
     elseif command == "on" or command == "off" then result = ns.SetRouteOptions({ enabled = command == "on" })
     elseif command == "replan" then result = ns.Replan({})
     elseif command == "nextspot" then
@@ -196,7 +201,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
         local plan = ns.GetPlan({})
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
-        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · why")
+        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why")
         return
     end
     if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
@@ -226,14 +231,17 @@ WB:Expose("get_plan", ns.GetPlan, "获取当前地图任务关联、接取、升
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")
-WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false）、switchNotice控制1号自动变化/本图做完时的屏幕提示（默认true），后四项为boolean。按角色保存，立即重排；精英开关不影响已完成任务交付及其他过滤。")
+WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）、maxMonsterLevelOffset=0..5整数（默认2，仅限制任务怪物高出角色的等级）；minPickupLevel=0..60整数（默认15，0关闭，仅过滤低于阈值的未接任务）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false）、switchNotice控制1号自动变化/本图做完时的屏幕与聊天提示（默认true），后四项为boolean。按角色保存，立即重排；已完成交付不受怪物等级限制。")
 WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args:questID可选默认1号；objectiveKey可选需questID。hotspotID可选需同时带questID/objectiveKey，取get_plan.steps[].hotspots[].id以指定备选；省略选其他最近热点。旧点150码内避开600秒，无备选保留路线/跳过。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")
 
 function ns.OnUnload()
     HideTaskMarkers()
-    if ns.settingsUI and ns.settingsUI.owner == ns then ns.settingsUI.applyElite = nil end
+    if ns.settingsUI and ns.settingsUI.owner == ns then
+        ns.settingsUI.applyElite, ns.settingsUI.applySwitchNotice, ns.settingsUI.applyNameplates, ns.settingsUI.applyMonsterLevel = nil, nil, nil, nil
+        ns.settingsUI.applyPickupLevel = nil
+    end
     if ns.route.hoveredPin then ns.route.hoveredPin = nil; GameTooltip:Hide() end
     ns.route.running = false
     if ns.route.driver then ns.route.driver:UnregisterAllEvents(); ns.route.driver:SetScript("OnUpdate", nil); ns.route.driver:SetScript("OnEvent", nil) end
@@ -243,6 +251,7 @@ function ns.OnUnload()
         view.sequence = nil
         for _, pin in pairs(view.pins) do pin:Hide(); pin.step = nil end
         for _, pin in pairs(view.alternatives or {}) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
+        for _, pin in pairs(view.opportunities or {}) do pin:Hide(); pin.step = nil end
         for _, line in pairs(view.lines) do line:Hide() end
         for _, leader in pairs(view.leaders or {}) do leader:Hide() end
     end
@@ -251,6 +260,7 @@ function ns.OnUnload()
         view.overlay:Hide()
         for _, pin in pairs(view.pins) do pin:Hide(); pin.step = nil end
         for _, pin in pairs(view.alternatives or {}) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
+        for _, pin in pairs(view.opportunities or {}) do pin:Hide(); pin.step = nil end
         for _, line in pairs(view.lines) do line:Hide() end
         for _, leader in pairs(view.leaders or {}) do leader:Hide() end
     end

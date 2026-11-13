@@ -59,7 +59,7 @@ function ns.ChangeQuestSpot(args)
     quest.objectivesLoaded = objectivesOK and type(objectives) == "table"
     quest.objectives = quest.objectivesLoaded and objectives or {}
     if RouteExclusion(quest, db, RouteSettings()) then return Failed("task_excluded", "此任务已被过滤或跳过。") end
-    local resolved = ReadObjectiveLocations(db, info, quest)
+    local resolved = ReadObjectiveLocations(db, info, quest, nil, nil, context.character.level)
     if resolved.mode ~= "objective_locations" then return Failed("target_unavailable", "目标位置暂不可用，原路线保留。") end
     local now = GetTime()
     local avoid = { questID = step.questID, objectiveKey = step.objectiveKey, mapID = plan.mapID,
@@ -86,7 +86,7 @@ function ns.ChangeQuestSpot(args)
     ns.route = draft
     if #ns.route.spotAvoidances >= spotRules.maximum then table.remove(ns.route.spotAvoidances, 1) end
     ns.route.spotAvoidances[#ns.route.spotAvoidances + 1] = avoid
-    ns.route.pendingSpotChange = { questID = step.questID, objectiveKey = step.objectiveKey, world = best.world }
+    ns.route.pendingSpotChange = { questID = step.questID, objectiveKey = step.objectiveKey, world = best.world, expiresAt = avoid.expiresAt }
     local called, updated = pcall(RebuildRoute, "spot_changed")
     ns.route = original
     if not called or not updated.ok then
@@ -126,7 +126,17 @@ function ns.SetRouteOptions(args)
     if args.moveThreshold ~= nil and (not IsFinite(args.moveThreshold) or args.moveThreshold < 10 or args.moveThreshold > 5000) then
         return InvalidArguments("moveThreshold must be from 10 to 5000")
     end
+    if args.maxMonsterLevelOffset ~= nil and (not IsFinite(args.maxMonsterLevelOffset)
+        or args.maxMonsterLevelOffset % 1 ~= 0 or args.maxMonsterLevelOffset < 0 or args.maxMonsterLevelOffset > 5) then
+        return InvalidArguments("maxMonsterLevelOffset must be an integer from 0 to 5")
+    end
+    if args.minPickupLevel ~= nil and (not IsFinite(args.minPickupLevel)
+        or args.minPickupLevel % 1 ~= 0 or args.minPickupLevel < 0 or args.minPickupLevel > 60) then
+        return InvalidArguments("minPickupLevel must be an integer from 0 to 60")
+    end
     local settings = RouteSettings()
+    if args.minPickupLevel ~= nil then settings.minPickupLevel = args.minPickupLevel end
+    if args.maxMonsterLevelOffset ~= nil then settings.maxMonsterLevelOffset = args.maxMonsterLevelOffset end
     if args.enabled ~= nil then settings.enabled = args.enabled end
     if args.nameplatesEnabled ~= nil then settings.nameplatesEnabled = args.nameplatesEnabled end
     if args.includeEliteQuests ~= nil then settings.includeEliteQuests = args.includeEliteQuests end

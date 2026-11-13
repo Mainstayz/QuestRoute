@@ -14,6 +14,16 @@ function ns.RegisterSettings()
     ui.applyElite = function(value) ns.SetRouteOptions({ includeEliteQuests = value }) end
     ui.applySwitchNotice = function(value) ns.SetRouteOptions({ switchNotice = value }) end
     ui.applyNameplates = function(value) ns.SetRouteOptions({ nameplatesEnabled = value }) end
+    ui.applyMonsterLevel = function(value)
+        if not ns.route.plan or ns.route.plan.maxMonsterLevelOffset ~= value then
+            ns.SetRouteOptions({ maxMonsterLevelOffset = value })
+        end
+    end
+    ui.applyPickupLevel = function(value)
+        if not ns.route.plan or ns.route.plan.minPickupLevel ~= value then
+            ns.SetRouteOptions({ minPickupLevel = value })
+        end
+    end
     -- 每个设置项单独判断：热加载时 category 会被保留，整体判断会让后来新增的项永远注册不上。
     if not ui.category then ui.category = Settings.RegisterVerticalLayoutCategory("QuestRoute") end
     local function AddCheckbox(key, variable, name, defaultValue, help, apply)
@@ -37,6 +47,38 @@ function ns.RegisterSettings()
         "开启后，你自行打开的敌方姓名板上会标出相关任务怪（当前目标为橙色）。\n"
         .. "关闭不影响地图路线，也不会自动打开姓名板。\n此设置仅对当前角色生效。",
         "applyNameplates")
+    if not ui.monsterLevelSetting and type(Settings.CreateSliderOptions) == "function" and type(Settings.CreateSlider) == "function" then
+        ui.monsterLevelSetting = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_maxMonsterLevelOffset",
+            "maxMonsterLevelOffset", RouteSettings(), "number", "怪物最多高出角色几级", 2)
+        ui.monsterLevelSetting:SetValueChangedCallback(function(_, value)
+            if ui.applyMonsterLevel then ui.applyMonsterLevel(value) end
+        end)
+        local options = Settings.CreateSliderOptions(0, 5, 1)
+        if MinimalSliderWithSteppersMixin and MinimalSliderWithSteppersMixin.Label then
+            options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value)
+                return value == 0 and "同级及以下" or ("+" .. value .. "级")
+            end)
+        end
+        Settings.CreateSlider(ui.category, ui.monsterLevelSetting, options,
+            "只比较任务目标怪物的等级，不按任务等级过滤。\n0：不高于自身；1：允许高1级；默认2。\n"
+            .. "同时影响路线、材料怪来源、关联前瞻和换热点；已完成交付不受限制。\n此设置仅对当前角色生效，修改后立即重排。")
+    end
+    if not ui.pickupLevelSetting and type(Settings.CreateSliderOptions) == "function" and type(Settings.CreateSlider) == "function" then
+        ui.pickupLevelSetting = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_minPickupLevel",
+            "minPickupLevel", RouteSettings(), "number", "接取建议最低任务等级", 15)
+        ui.pickupLevelSetting:SetValueChangedCallback(function(_, value)
+            if ui.applyPickupLevel then ui.applyPickupLevel(value) end
+        end)
+        local options = Settings.CreateSliderOptions(0, 60, 1)
+        if MinimalSliderWithSteppersMixin and MinimalSliderWithSteppersMixin.Label then
+            options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(value)
+                return value == 0 and "不限制" or (value .. "级")
+            end)
+        end
+        Settings.CreateSlider(ui.category, ui.pickupLevelSetting, options,
+            "低于此任务等级的未接任务不显示接取标记、建议或前瞻；默认15级，0表示关闭等级过滤。\n"
+            .. "已接任务的导航和交付不受影响，任务等级未知时保留。\n此设置仅对当前角色生效，修改后立即重排。")
+    end
     if not ui.registered then
         Settings.RegisterAddOnCategory(ui.category)
         ui.registered = true

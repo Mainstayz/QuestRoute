@@ -86,18 +86,30 @@ local function FormatDistance(distance)
     return string.format("%d", math.floor(distance / step + 0.5) * step)
 end
 
--- 屏幕上方的一行轻提示；不创建面板，客户端没有该框体时退回聊天窗口。
+local function FormatLocation(point)
+    if not point or not IsID(point.coordinateMapID) or not IsFinite(point.x) or not IsFinite(point.y)
+        or point.x < 0 or point.x > 1 or point.y < 0 or point.y > 1 then return nil end
+    local ok, info = pcall(C_Map.GetMapInfo, point.coordinateMapID)
+    local name = ok and info and Accessible(info.name)
+    local kind = point.entityKind == "object" and "物件" or point.entityKind == "npc" and "NPC"
+    local entityName = Accessible(point.entityName)
+    local entity = kind and (" · " .. kind .. (type(entityName) == "string" and ("：" .. entityName) or "")) or ""
+    return (type(name) == "string" and name or ("地图" .. point.coordinateMapID))
+        .. string.format(" %.1f, %.1f", point.x * 100, point.y * 100) .. entity
+end
+
+-- 一行轻提示同时留在玩家聊天框，消失后仍可回看。
 local function Notify(text)
+    print(text)
     local frame = UIErrorsFrame
     if frame and type(frame.AddMessage) == "function" then
-        if pcall(frame.AddMessage, frame, text, 0.19, 0.81, 0.91, 1, 4) then return end
+        pcall(frame.AddMessage, frame, text, 0.19, 0.81, 0.91, 1, 4)
     end
-    print(text)
 end
 
 ns.Util = {
     InvalidArguments = InvalidArguments, IsFinite = IsFinite, IsID = IsID, Accessible = Accessible,
     ParsePage = ParsePage, AddPage = AddPage, ToWorld = ToWorld,
     DistanceSquared = DistanceSquared, RouteStepKey = RouteStepKey, FormatDistance = FormatDistance,
-    Notify = Notify,
+    Notify = Notify, FormatLocation = FormatLocation,
 }

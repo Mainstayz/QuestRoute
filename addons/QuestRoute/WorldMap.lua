@@ -86,6 +86,7 @@ local function RenderMap(view, plan, player)
     for i, pin in pairs(view.pins) do if i > #plan.steps then pin:Hide() end end
     for i, line in pairs(view.lines) do if i > #plan.steps then line:Hide() end end
     RenderAlternativePins(view, plan, placed, width, height, scale, mapID)
+    Pins.RenderOpportunities(view, plan, placed, width, height, scale, mapID)
 end
 
 local function RenderRouteMaps()

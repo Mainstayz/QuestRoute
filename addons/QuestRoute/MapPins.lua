@@ -16,6 +16,7 @@ local function ConfigureRoutePin(pin)
     pin:SetScript("OnClick", function(self)
         if self.step then
             local shift = Accessible(IsShiftKeyDown())
+            if shift and self.opportunity then return end
             if shift then
                 local result = ns.ChangeQuestSpot({ questID = self.step.questID, objectiveKey = self.step.objectiveKey,
                     hotspotID = self.hotspot and self.hotspot.id })
@@ -30,12 +31,26 @@ local function ConfigureRoutePin(pin)
         if not step then return end
         ns.route.hoveredPin = self
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        if self.opportunity then
+            GameTooltip:SetText((step.action == "possible_item_drop" and "~! " or "! ") .. step.title)
+            local location = ns.Util.FormatLocation(step.point)
+            if location then GameTooltip:AddLine(location, 0.7, 1, 0.8) end
+            local status = self.carried and "已持有物品 · 向NPC确认接取/交付"
+                or step.action == "possible_item_drop" and (step.questItem and "拾取任务物品 · 静态来源" or "可能掉落启动物品 · 静态来源")
+                or step.certainty == "confirmed" and "可接任务 · 当前接取位置"
+                or step.point and step.point.source == "client" and "预计可接任务 · 曾交互位置" or "预计可接任务 · 静态接取位置"
+            local reason = not self.carried and ns.Decision.Reason(step)
+            GameTooltip:AddLine(status .. (reason and (" · " .. reason) or ""), 1, 0.85, 0.3)
+            GameTooltip:AddLine("右键跳过任务", 0.6, 0.9, 1)
+            GameTooltip:Show()
+            return
+        end
         GameTooltip:SetText((self.hotspot and (step.index .. self.hotspotLabel .. " 备选热点：") or (step.index .. ". "))
             .. step.title)
         if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8) end
 
         -- 状态与位置性质合并一行；静态区域、任务参考位置不表示实时实体坐标。
-        local location = step.action == "pick_up" and "静态接取位置"
+        local location = step.action == "pick_up" and (step.source == "QuestieDB" and "静态接取位置" or "当前接取位置")
             or step.action == "start_item" and "背包启动物品"
             or step.objective and "静态刷新区域" or "任务参考位置"
         local status
@@ -188,7 +203,51 @@ local function RenderAlternativePins(view, plan, placed, width, height, scale, m
     end
 end
 
+local function RenderOpportunityPins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
+    view.opportunities = view.opportunities or {}
+    for _, pin in pairs(view.opportunities) do pin:Hide(); pin.step = nil end
+    local routed, circular, serial = {}, origin ~= nil, 0
+    for _, step in ipairs(plan.steps) do routed[step.questID] = true end
+    for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems" }) do
+        local carried = field == "carriedItems"
+        for _, item in ipairs(plan.discovery and plan.discovery[field] or {}) do
+            if not routed[item.questID] and (carried or item.action == "pick_up" or item.action == "possible_item_drop") then
+                local point, position = item.point
+                if point and point.coordinateMapID == mapID then
+                    if circular then position = MinimapPosition(point.world, origin, radius, cosine, sine)
+                    else position = ProjectWorld(point.world, mapID) end
+                end
+                local onEdge = false
+                if position and circular then
+                    local length = math.sqrt(position.x ^ 2 + position.y ^ 2)
+                    onEdge = length > 0.84
+                    if onEdge then position = { x = position.x * 0.84 / length, y = position.y * 0.84 / length } end
+                end
+                if position and (circular or position.x >= 0 and position.x <= 1 and position.y >= 0 and position.y <= 1) then
+                    serial = serial + 1
+                    local pin = view.opportunities[serial]
+                    if not pin then pin = NewRoutePin(view); pin:SetSize(20, 20); view.opportunities[serial] = pin end
+                    pin.step, pin.opportunity, pin.onEdge, pin.carried = item, true, onEdge, carried
+                    pin:SetScale(1 / scale)
+                    local x, y = position.x * width * scale, position.y * height * scale
+                    if circular then x, y = position.x * width / 2, position.y * height / 2 end
+                    local px, py, shifted = SeparatePin(placed, x, y, width * scale, height * scale, circular)
+                    pin.shifted = shifted
+                    pin:ClearAllPoints()
+                    pin:SetPoint("CENTER", view.overlay, circular and "CENTER" or "TOPLEFT", px, circular and py or -py)
+                    PinLeader(view, #plan.steps + #(view.alternatives or {}) + serial, circular and "CENTER" or "TOPLEFT",
+                        x / scale, (circular and y or -y) / scale, px / scale, (circular and py or -py) / scale, scale)
+                    pin.color:SetColorTexture(0.95, 0.75, 0.05, 0.95)
+                    pin.text:SetText(item.action == "possible_item_drop" and "~!" or "!")
+                    pin:Show()
+                end
+            end
+        end
+    end
+end
+
 ns.MapPins = {
     ProjectWorld = ProjectWorld, Configure = ConfigureRoutePin, New = NewRoutePin, Appearance = SetRoutePinAppearance,
     Separate = SeparatePin, Leader = PinLeader, MinimapPosition = MinimapPosition, RenderAlternatives = RenderAlternativePins,
+    RenderOpportunities = RenderOpportunityPins,
 }
