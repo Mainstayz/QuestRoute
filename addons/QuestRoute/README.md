@@ -2,15 +2,15 @@
 
 《魔兽世界：无限》当前任务路线与数据插件，在原生 M 地图、小地图绘制导航，并提供任务怪姓名板提示。安装、旧配置迁移和快速上手见根 [README](../../README.md)。
 
-当前 `apiRevision=15`、`schemaVersion=1`，16 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。
+当前 `apiRevision=16`、`schemaVersion=1`，18 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。
 
 [开发进度](../../开发进度.md)记录最近验证与部署状态，[待办事项](../../待办事项.md)记录尚未完成的实机验收。[技术说明](../../docs/技术说明.md)解释数据、坐标与规划边界，[MODULES.md](MODULES.md)说明源码职责。
 
 ## 地图与设置
 
-路线只安排当前已接、有效且位于玩家当前地图的任务。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框：精英任务、屏幕提示、任务怪姓名板。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。整项官方完成后，上述类型均可顺路交付，手动跳过和失败仍优先。
+路线只安排玩家当前地图的有效任务；QuestieDB 补充附近接取、目的地漏接、直接前置和物品启动关系，有限前瞻有明确收益时可先安排接取或前置。未接任务的工作目标只进入预测，实际接取后才加入正式路线。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框：精英任务、屏幕提示、任务怪姓名板。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。整项官方完成后，上述类型均可顺路交付，手动跳过和失败仍优先。
 
-- 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`。
+- 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`，接取或背包物品启动用 `N!`。
 - 每个可靠未完目标各一步，一个主热点和最多两个紫色 `Nb/Nc` 备选。备选不增加路线步数或里程。
 - 普通右键跳过整项任务；Shift + 右键备选切到所点热点，Shift + 右键主点选择该目标其他地点。
 - 小地图显示附近线路，视野外仅当前 1 号在边缘指方向；大地图关闭后仍工作。浏览其他地图不改变规划范围。
@@ -48,7 +48,7 @@
 | `/questroute resetspots [ID/all]` | 清全部或指定任务的临时地点避让，省略等同 all |
 | `/questroute nameplates on`、`/questroute nameplates off` | 单独控制任务姓名板提示 |
 | `/questroute notice on`、`/questroute notice off` | 开关屏幕上方的一行切换提示（默认开） |
-| `/questroute why` | 前三步给出距离与有效权重，再列出未上路线的任务及原因；本图做完时给出下一张地图 |
+| `/questroute why` | 前三步距离与权重、排除原因、附近/目的地相关任务与启动物品机会；索引构建进度和本图做完后的下一图提示 |
 | `/questrouteapi` | 只读显示当前任务列表 |
 
 换地点后旧点 150 码内避开 600 秒；无备选或状态失效时保留原路线、计时与任务跳过。清地点避让不会恢复手动跳过的任务。
@@ -155,11 +155,13 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 
 | 字段 | 含义 |
 | --- | --- |
-| policy / scope | `stable_grouped_leveling_straight_line` / `current_player_map_active_quests` |
+| policy / scope | `stable_grouped_precedence_lookahead` / `current_player_map_active_and_available_quests` |
 | sequence / origin / mapID / mapName | 规划序号、原点和玩家地区 |
 | totalStraightDistance / reason / plannedAt | 路线直线总长、重建原因与本 UI 内的规划时间 |
-| count / questCount | 目标/交付步骤数、去重任务数 |
-| objectiveStepCount / nativeStepCount | 细目标与原生步骤数；stepUnit 为 `unfinished_objective_or_quest` |
+| count / questCount | 目标/交付/接取步骤数、全部步骤的去重任务数 |
+| activeQuestCount / pickupCount | 日志内有效任务数、接取/物品启动步骤数 |
+| objectiveStepCount / nativeStepCount | 细目标与原生步骤数；含接取时 stepUnit 为 `unfinished_objective_quest_or_pickup`，否则为 `unfinished_objective_or_quest` |
+| discovery / decision | 关联机会与索引状态、有限前瞻预测和是否采用；预测不表示实际已接或已完成 |
 | turnInCount / completionPendingCount | 可交与完成待确认步骤数 |
 | steps / excluded | 有序步骤与被排除任务及原因 |
 | groups / groupRadius | 固定中心分组，半径 200 码 |
@@ -171,7 +173,7 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 | enabled / moveThreshold / includeEliteQuests / switchNotice / nameplates | 当前选项和姓名板解析摘要 |
 | nextMapHint | 仅当前地图无步骤、有外图任务、玩家世界坐标可用且无等待恢复的位置/目标数据时存在：`questID/title/mapID/mapName`，只是提示，不跨图规划 |
 
-steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance（含自由选点时的有界任务群加成）、workFactor/remainingWork（剩余数量对权重的 0.9~1.1 修正，缺数据为 1）、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending，表示步骤类型；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
+steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance（含自由选点时的有界任务群加成）、workFactor/remainingWork（剩余数量对权重的 0.9~1.1 修正，缺数据为 1）、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending/pick_up/start_item，表示步骤类型；接取另有 certainty（estimated/confirmed）、可选 itemID 和 opportunityReason；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
 
 excluded 每项含 questID/title/reason/source；reason 为 `outside_current_map` 时另有 otherMapID/otherMapName/otherDistance（离玩家最近的外图位置）。
 
@@ -179,9 +181,19 @@ groups 的 count 为步骤数、questCount 为任务数，questIDs 去重。stab
 
 steps[].hotspots 第一项为 selected=true 的主点，其余最多两个备选，含 id/selected/pointCount/radius/sparseFallback/x/y/world/coordinateMapID/targetMapID/source/precision=static_hotspot。hotspotRules 为 radius150/separation300/maxDisplayed3/deduplicateRadius3，algorithm 为 fixed_radius_density_real_spawn，alternativesJoinRoute=false。pointCount 不是实时怪数。
 
-navigation.phase 为 travel/working/turn_in/completion_pending/idle/unavailable，后续步骤为 queued。当前状态含 phase/label/reason、questID/questStatus/objectiveKey/objective、mapID/targetWorld、distance/atReference、observedAt/since；工作时还可有 workStartedAt/lastProgressAt/idleFor/stale/protected/objectivesAvailable/objectiveRevision。不可读字段省略。
+navigation.phase 为 travel/working/turn_in/completion_pending/pick_up/start_item/idle/unavailable，后续步骤为 queued。当前状态含 phase/label/reason、questID/questStatus/objectiveKey/objective、mapID/targetWorld、distance/atReference、observedAt/since；工作时还可有 workStartedAt/lastProgressAt/idleFor/stale/protected/objectivesAvailable/objectiveRevision。不可读字段省略。
 
 navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时180秒。状态每0.5秒更新；超时释放强保护，自动切换仍需改善30%且减少50加权码。turn_in 只证实日志可交，deliveryLocationConfirmed=false，locationPrecision=quest_poi。完整规则见[技术说明](../../docs/技术说明.md)。
+
+### 任务关联与前瞻
+
+关联知识全部来自 QuestieDB，按其数据有效设计；客户端只读校验角色等级、种族/职业、任务历史、当前进度、背包与实际交互可接列表。`preQuestGroup` 按 AND、`preQuestSingle` 按 OR，完成目标仍需交付才满足前置。缺字段/不可读条件保留未知；特殊目标关系不当成击杀任务。
+
+索引按当前地图分批构建，每批最多 64 任务，坐标、来源展开与索引写入内每 128 次操作或约 3 ms 让出，保留内部游标续跑，不在每次移动时全扫数据库。机会包括 400 码内接取点、现有第一目的地 200 码内或同目标关系、直线途中额外绕路不超过 150 码的接取点、实际背包启动物品及附近可能掉落/拾取启动物品的来源。静态来源不表示实体在场或必掉。
+
+`discovery.opportunities[]` 提供 questID/title/action/point、certainty、reasons、relatedQuestIDs、distance/extraDistance 及可选 itemID；action 为 pick_up/start_item/possible_item_drop。blocked 列出条件未满足或未知的相关候选。两类摘要各限 25 项（已采用机会额外保留），opportunityTotal/blockedTotal 给完整数量，summaryLimit 给上限；搜索内部仍用完整候选。`decision.predicted[]` 是局部预测行动，不写回任务日志；正式步骤只采用当前可执行的下一动作。搜索深度 6、束宽 4，最多 18 项任务、6 个首动作与每层 4 个动作，复用本轮距离计算；没有可接或可解锁的收益时不展开。保留强制从原 1 号开始的独立基线。评分用任务目标/交付收益与直线行程、粗略工作成本，不是经验/小时预测，也不保证全局最优。
+
+同区域不自动算共同完成；可靠同目标共享一次工作成本，不同目标但同 NPC 掉落来源只计部分协同，不据此认定材料已齐。当前工作保护和手动热点优先；仍有效的已选接取点也作为独立稳定基线，微小移动不来回切换。屏幕一行提示与原有屏幕提示开关共用，`why` 可查看关联理由，无新增面板或操作绑定。
 
 ### 路线操作
 
@@ -204,10 +216,11 @@ get_unit_tasks 返回 state/needed、可读 npcID、tasks、neededCount/knownGoa
 WoWBridge 事件由工坊 `events` 读取，addon 为 QuestRoute：
 
 - `api.ready`：API 已就绪，含 schemaVersion/apiRevision。
-- `route.updated`：路线重建，含 sequence/mapID/count/questCount/reason。
+- `route.updated`：路线重建，含 sequence/mapID/count/questCount/pickupCount/reason。
 - `route.navigation_changed`：当前目标、阶段或保护语义变化，含 questID/objectiveKey、phase/reason/protected/stale/distance/mapID；不逐帧发送位置。
 - `route.spot_changed`：成功手动换点的任务、目标、地图与到期信息。
+- `route.association`：一行关联建议已显示，含 questID/action/applied。
 
 修改 Lua 后热加载整个插件，模块会捕获其他模块的函数引用，不能仅加载单文件。新增目录、文件或 `.toc` 变更须完整重启。原生设置回调只注册一次，热加载只更新分发函数，避免追加监听；新增设置项时按项判断是否已注册（不能只看 category），并在 `ui.registered` 上防止重复注册分类。详细开发约定见 [AGENTS.md](AGENTS.md)。
 
-仓库根目录执行 `python tests/verify_quest_data.py`，使用 `lupa.lua51` 隔离验证，不连接游戏。`--addon` 接受插件目录、`.toc` 或旧入口 `.lua` 路径，有同目录清单时均加载完整插件。最近代码验证与实机边界统一见[开发进度](../../开发进度.md)，避免把历史样本或离线模拟当成当前部署验收。
+仓库根目录执行 `python tests/verify_quest_data.py` 和 `python tests/verify_associations.py`，使用 `lupa.lua51` 隔离验证，不连接游戏。`--addon` 接受插件目录、`.toc` 或旧入口 `.lua` 路径，有同目录清单时均加载完整插件。最近代码验证与实机边界统一见[开发进度](../../开发进度.md)，避免把历史样本或离线模拟当成当前部署验收。

@@ -489,7 +489,7 @@ Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(103,.00002,109)
 Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(102,.00003,110)
 Fixture.pois[101][#Fixture.pois[101]+1]=NewPOI(101,.9,110)
 plan=api.Replan({})
-check(plan.count==4 and plan.mapID==101 and plan.scope=='current_player_map_active_quests','current player map only')
+check(plan.count==4 and plan.mapID==101 and plan.scope=='current_player_map_active_and_available_quests','current player map only')
 why={};for _,q in ipairs(plan.excluded) do why[q.questID]=q.reason end
 check(why[108]=='outside_current_map' and why[109]=='outside_current_map','near foreign projections excluded')
 local multi
@@ -2327,7 +2327,7 @@ return passed
 
 LEGACY_RELOAD_CHECKS = r'''
 local api=WoWBridgeNS.QuestRoute
-assert(api.apiRevision==15 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
+assert(api.apiRevision==16 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
 assert(api.route.driver==FixtureHotload.driver,'legacy upgrade still reuses driver')
@@ -2354,7 +2354,7 @@ return 10
 
 LOAD_CHECKS = r'''
 local api=...
-assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==15,'manifest publishes the shared r15 namespace')
+assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==16,'manifest publishes the shared r16 namespace')
 local endpoints={
     get_quests='GetQuests',get_player_context='GetPlayerContext',get_quest_pois='GetQuestPOIs',
     get_quest_details='GetQuestDetails',get_database_entity='GetDatabaseEntity',get_quest_targets='GetQuestTargets',

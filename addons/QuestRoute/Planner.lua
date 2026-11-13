@@ -15,6 +15,7 @@ local BuildHotspots, VisibleHotspots, SpotBlocked = Hotspots.Build, Hotspots.Vis
 local QuestHasAvoidance, RetireFinishedAvoidances, PruneSpotAvoidances = Hotspots.HasAvoidance, Hotspots.RetireFinished, Hotspots.Prune
 local AddNPCGoals, WB = ns.Nameplates.AddGoals, ns.WB
 local WorkFactor, FormatDistance, Accessible = ns.Priority.WorkFactor, Util.FormatDistance, Util.Accessible
+local Discovery, Decision = ns.Discovery, ns.Decision
 
 local exclusionLabels = {
     skipped = "已手动跳过", failed = "任务已失败", instance = "副本任务", elite = "精英任务（设置中可放开）",
@@ -233,6 +234,16 @@ local function NotifyChange(previousPlan, plan, reason, stability, settings, now
     Util.Notify(text)
 end
 
+local function AssociationSummary(items, selected)
+    local summary = {}
+    for index, item in ipairs(items or {}) do
+        if index <= 25 or selected and selected.questID == item.questID and selected.action == item.action then
+            summary[#summary + 1] = item
+        end
+    end
+    return summary
+end
+
 local function RebuildRoute(reason)
     local settings = RouteSettings()
     local context = ns.GetPlayerContext({})
@@ -389,6 +400,81 @@ local function RebuildRoute(reason)
     local grid = GroupGrid(remaining)
     local firstIndex, firstPoint, firstDistance, firstScore, stability, firstAnchor =
         StableFirst(remaining, origin.world, mapID, reason, now, grid)
+    local discovery = Discovery.Collect(context, active, remaining, settings)
+    ns.route.associationQuestIDs = discovery.pendingQuestIDs
+    ns.route.nextAssociationCheck = (discovery.pendingCount or 0) > 0 and now + 5 or nil
+    local baseline = firstIndex and { questID = remaining[firstIndex].quest.questID,
+        objectiveKey = firstPoint.objectiveKey, point = firstPoint,
+        action = remaining[firstIndex].quest.readyForTurnIn and "turn_in"
+            or remaining[firstIndex].quest.isComplete and "completion_pending" or "quest_area" }
+    local previousFirst = previousPlan and previousPlan.steps[1]
+    local retainedPickup
+    if previousFirst and previousPlan.mapID == mapID and reason ~= "manual"
+        and (previousFirst.action == "pick_up" or previousFirst.action == "start_item") then
+        local quest = discovery.quests[previousFirst.questID]
+        if quest and quest.eligibility == "eligible" and not quest.active then
+            local point, shift
+            if previousFirst.action == "start_item" and quest.startItemID == previousFirst.itemID then point = origin
+            elseif previousFirst.action == "pick_up" then
+                for _, candidate in ipairs(quest.starters) do
+                    local squared = DistanceSquared(previousFirst.world, candidate.world)
+                    if squared and squared <= routeRules.poiTolerance ^ 2 and (not shift or squared < shift) then point, shift = candidate, squared end
+                end
+            end
+            if point then
+                retainedPickup = { questID = quest.questID, action = previousFirst.action, point = point,
+                    itemID = quest.startItemID, certainty = quest.certainty }
+                baseline = retainedPickup
+            end
+        end
+    end
+    local decision = Decision.Evaluate(discovery, remaining, origin.world, baseline)
+    local recommendation = decision.recommendation
+    if not recommendation and retainedPickup and decision.reason ~= "baseline_target_unresolved" then
+        recommendation, decision.retainedPickup = retainedPickup, true
+    end
+    local protected = reason ~= "manual" and firstIndex and previousFirst and previousFirst.action == "quest_area"
+        and previousFirst.questID == baseline.questID and previousFirst.objectiveKey == baseline.objectiveKey
+        and NavigationForStep({ questID = baseline.questID,
+        status = remaining[firstIndex].quest.status, objectiveKey = baseline.objectiveKey, world = firstPoint.world,
+        objectiveRevision = (TargetProgress(baseline.questID, baseline.objectiveKey) or {}).revision or 0 },
+        origin.world, mapID, now, previousNavigation).protected
+    if recommendation and not ns.route.pendingSpotChange and not protected then
+        local index, point
+        if recommendation.action == "pick_up" or recommendation.action == "start_item" then
+            local quest = discovery.quests[recommendation.questID]
+            point = recommendation.point
+            if quest and quest.eligibility == "eligible" and point and point.world then
+                local target = {}
+                for key, value in pairs(point) do target[key] = value end
+                target.coordinateMapID, target.reportedMapID = mapID, mapID
+                target.source, target.precision = "QuestieDB", recommendation.action == "start_item" and "inventory_item" or "static_starter"
+                target.x, target.y = target.x or origin.x, target.y or origin.y
+                point = target
+                remaining[#remaining + 1] = { quest = { questID = quest.questID, title = quest.title, level = quest.level,
+                    status = "available", objectives = {}, objectivesLoaded = false },
+                    action = recommendation.action, points = { point }, priorityWeight = 1, workFactor = 1,
+                    stepKey = quest.questID .. ":" .. recommendation.action, certainty = recommendation.certainty,
+                    itemID = recommendation.itemID, opportunityReason = decision.reason }
+                index = #remaining
+            end
+        else
+            for i, candidate in ipairs(remaining) do
+                if candidate.quest.questID == recommendation.questID
+                    and (not recommendation.goalKey or candidate.objectiveKey == recommendation.goalKey) then
+                    index, point = i, recommendation.point
+                    break
+                end
+            end
+        end
+        if index and point then
+            firstIndex, firstPoint, firstAnchor = index, point, nil
+            firstDistance = DistanceSquared(origin.world, point.world)
+            firstScore = firstDistance / remaining[index].priorityWeight ^ 2
+            stability = { retained = false, reason = "related_quest_plan" }
+            decision.applied = true
+        end
+    elseif recommendation then decision.deferred = protected and "working_target_protected" or "manual_spot_change" end
     local requested = ns.route.pendingSpotChange
     local requestedFound
     if requested then
@@ -442,10 +528,13 @@ local function RebuildRoute(reason)
         if not listed then group.questIDs[#group.questIDs + 1] = quest.questID; group.questCount = group.questCount + 1 end
         steps[#steps + 1] = {
             index = #steps + 1, stepKey = selected.stepKey, questID = quest.questID, title = quest.title, level = quest.level,
-            displayTitle = quest.readyForTurnIn and (quest.title .. "（交任务）")
+            displayTitle = selected.action == "pick_up" and (quest.title .. "（接任务）")
+                or selected.action == "start_item" and (quest.title .. "（使用物品接任务）")
+                or quest.readyForTurnIn and (quest.title .. "（交任务）")
                 or quest.isComplete and (quest.title .. "（等待确认交付）")
                 or bestPoint.objective and (quest.title .. " — " .. bestPoint.objective.name) or quest.title,
-            status = quest.status, action = quest.readyForTurnIn and "turn_in" or quest.isComplete and "completion_pending" or "quest_area",
+            status = quest.status, action = selected.action or (quest.readyForTurnIn and "turn_in" or quest.isComplete and "completion_pending" or "quest_area"),
+            certainty = selected.certainty, itemID = selected.itemID, opportunityReason = selected.opportunityReason,
             groupIndex = group.index, targetMapID = bestPoint.reportedMapID,
             coordinateMapID = bestPoint.coordinateMapID, x = bestPoint.x, y = bestPoint.y,
             world = bestPoint.world, source = bestPoint.source, precision = bestPoint.precision,
@@ -463,12 +552,14 @@ local function RebuildRoute(reason)
         }
         cursor = bestPoint.world
     end
-    local taskStepCounts, turnInCount, completionPendingCount = {}, 0, 0
+    local taskStepCounts, turnInCount, completionPendingCount, pickupCount, routeQuestCount = {}, 0, 0, 0, 0
     for _, step in ipairs(steps) do
         taskStepCounts[step.questID] = (taskStepCounts[step.questID] or 0) + 1
-        if step.action == "turn_in" then turnInCount = turnInCount + 1
+        if step.action == "pick_up" or step.action == "start_item" then pickupCount = pickupCount + 1
+        elseif step.action == "turn_in" then turnInCount = turnInCount + 1
         elseif step.action == "completion_pending" then completionPendingCount = completionPendingCount + 1 end
     end
+    for _ in pairs(taskStepCounts) do routeQuestCount = routeQuestCount + 1 end
     for _, step in ipairs(steps) do
         step.groupSize, step.groupQuestCount = groups[step.groupIndex].count, groups[step.groupIndex].questCount
         step.questStepCount = taskStepCounts[step.questID]
@@ -476,7 +567,8 @@ local function RebuildRoute(reason)
     stability.questID, stability.objectiveKey = steps[1] and steps[1].questID, steps[1] and steps[1].objectiveKey
     -- 暂缺位置或目标数据不能证明本图已做完，等待恢复后再给外图建议。
     local nextMapHint
-    if #steps == 0 and origin.world and pendingLocations == 0 and pendingObjectives == 0 then
+    if #steps == 0 and origin.world and pendingLocations == 0 and pendingObjectives == 0
+        and not discovery.building and (discovery.pendingCount or 0) == 0 then
         local bestDistance
         for _, item in ipairs(excluded) do
             if item.reason == "outside_current_map" and IsID(item.otherMapID)
@@ -489,7 +581,11 @@ local function RebuildRoute(reason)
     ns.route.sequence = ns.route.sequence + 1
     ns.route.plan = {
         ok = true, schemaVersion = 1, apiRevision = ns.apiRevision, sequence = ns.route.sequence,
-        policy = "stable_grouped_leveling_straight_line", scope = "current_player_map_active_quests",
+        policy = "stable_grouped_precedence_lookahead", scope = "current_player_map_active_and_available_quests",
+        discovery = { available = discovery.available, source = "QuestieDB", reason = discovery.reason,
+            building = discovery.building, scanned = discovery.scanned, total = discovery.total, pendingCount = discovery.pendingCount,
+            opportunityTotal = #(discovery.opportunities or {}), blockedTotal = #(discovery.blocked or {}), summaryLimit = 25,
+            opportunities = AssociationSummary(discovery.opportunities, steps[1]), blocked = AssociationSummary(discovery.blocked) }, decision = decision,
         groups = groups, groupRadius = routeRules.groupRadius, stability = stability,
         spotRules = { radius = spotRules.radius, duration = spotRules.duration }, avoidedSpots = ns.route.spotAvoidances,
         hotspotRules = { radius = hotspotRules.radius, separation = hotspotRules.separation, maxDisplayed = hotspotRules.maxDisplayed,
@@ -509,20 +605,23 @@ local function RebuildRoute(reason)
             turnInMinimumExperienceWeight = 0.85,
             workFactorBands = ns.Priority.workBands, groupBonus = routeRules.groupBonus, groupBonusCap = routeRules.groupBonusCap },
         nextMapHint = nextMapHint, switchNotice = settings.switchNotice,
-        origin = origin, count = #steps, questCount = eligibleQuestCount,
+        origin = origin, count = #steps, questCount = routeQuestCount, activeQuestCount = eligibleQuestCount, pickupCount = pickupCount,
         objectiveStepCount = objectiveStepCount, nativeStepCount = nativeStepCount,
         turnInCount = turnInCount, completionPendingCount = completionPendingCount,
-        stepUnit = "unfinished_objective_or_quest", steps = steps, excluded = excluded,
+        stepUnit = pickupCount > 0 and "unfinished_objective_quest_or_pickup" or "unfinished_objective_or_quest", steps = steps, excluded = excluded,
         pendingLocationCount = pendingLocations, locationRetrySeconds = 5,
         moveThreshold = settings.moveThreshold, enabled = settings.enabled, includeEliteQuests = settings.includeEliteQuests,
         totalStraightDistance = pathLength, reason = reason, plannedAt = now,
     }
     UpdateNavigation(ns.route.plan, origin, now, previousNavigation, reason == "manual" or requested ~= nil)
-    NotifyChange(previousPlan, ns.route.plan, reason, stability, settings, now)
+    if not Decision.Notify(ns.route.plan, previousPlan, settings, now) then
+        NotifyChange(previousPlan, ns.route.plan, reason, stability, settings, now)
+    end
     ns.route.pendingSpotChange = nil
     ns.route.playerLocation, ns.route.lastOrigin = origin, origin.world
     ns.route.dirty, ns.route.pendingReason = false, nil
-    WB:Emit("route.updated", { sequence = ns.route.sequence, mapID = mapID, count = #steps, questCount = eligibleQuestCount, reason = reason })
+    WB:Emit("route.updated", { sequence = ns.route.sequence, mapID = mapID, count = #steps, questCount = routeQuestCount,
+        pickupCount = pickupCount, reason = reason })
     return ns.route.plan
 end
 

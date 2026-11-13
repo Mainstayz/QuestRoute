@@ -35,11 +35,15 @@ local function ConfigureRoutePin(pin)
         if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8) end
 
         -- 状态与位置性质合并一行；静态区域、任务参考位置不表示实时实体坐标。
-        local location = step.objective and "静态刷新区域" or "任务参考位置"
+        local location = step.action == "pick_up" and "静态接取位置"
+            or step.action == "start_item" and "背包启动物品"
+            or step.objective and "静态刷新区域" or "任务参考位置"
         local status
         if not self.hotspot then
             local navigation = step.navigation
-            if step.action == "turn_in" then status = "可交任务"
+            if step.action == "pick_up" then status = step.certainty == "confirmed" and "可接任务" or "预计可接任务"
+            elseif step.action == "start_item" then status = "使用物品接取"
+            elseif step.action == "turn_in" then status = "可交任务"
             elseif step.action == "completion_pending" then status = "已完成，等待确认交付"
             elseif navigation then status = tooltipPhases[navigation.phase] end
             -- 距离并入状态行，不增加行数：1 号显示距玩家，其后显示距上一站。
@@ -89,7 +93,8 @@ local function SetRoutePinAppearance(pin, step, index)
     if index == 1 then pin.color:SetColorTexture(0.95, 0.55, 0.05, 0.95)
     elseif delivery then pin.color:SetColorTexture(0.85, 0.65, 0.05, 0.95)
     else pin.color:SetColorTexture(0.05, 0.6, 0.75, 0.95) end
-    pin.text:SetText(index .. (delivery and "?" or step.action == "completion_pending" and "~" or ""))
+    pin.text:SetText(index .. (delivery and "?" or step.action == "completion_pending" and "~"
+        or (step.action == "pick_up" or step.action == "start_item") and "!" or ""))
 end
 
 -- 多个未完目标可能共用同一刷新点，只错开编号，路线坐标和选点保持原值。

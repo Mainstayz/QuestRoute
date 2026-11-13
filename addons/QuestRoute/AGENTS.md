@@ -1,6 +1,6 @@
 # QuestRoute · Agent 开发约定
 
-《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 按依赖顺序加载 16 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=15`、`schemaVersion=1`。
+《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 按依赖顺序加载 18 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=16`、`schemaVersion=1`。
 
 统一标识：Title/目录 `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。命令 `/questroute`（`SlashCmdList.QUESTROUTE`）和 `/questrouteapi`（`SlashCmdList.QUESTROUTEAPI`），无旧名运行时别名。
 
@@ -18,6 +18,7 @@
 
 - 官方任务状态和进度优先，QuestieDB 只补缺失实体关系与静态地点；来源、精度和坐标系分开表达。
 - 简单直线规划，只安排当前地图。默认过滤未完成副本、精英和专业任务，原生精英开关可单独放开精英；整项完成后的交付不受活动类型限制，跳过/失败仍优先。
+- 任务联想全部由 QuestieDB 补充，按其数据有效设计，不加过期检测。Discovery 分批索引，Decision 只用局部分支预测；正式路线只采用当前可执行的接取/启动/工作/交付，未接工作和模拟解锁只留在预测中。工作强保护和手动热点优先，不把未知掉落或条件当完成。
 - 不增加常驻任务面板。用户使用掌机/手柄，地图增强可能干扰焦点；后续配置用原生设置页，不额外增加地图交互。
 - `MapPins.lua` 两图共用悬停最多四行（含标题）：任务名、所指目标进度、简短状态/位置性质、操作。距离只并入状态行（`赶路中 · 约 N 码 · …`），不加行；不要重新加入经验、算法统计、同组清单、偏移解释或长命令。
 - 手柄用户应尽量少操作插件：新增交互优先用命令或原生设置页；提示只用屏幕上方一行轻提示（`ns.Util.Notify`），不增加面板、地图交互或按键绑定。路线优化的取舍见[路线优化计划](../../路线优化计划.md)。
@@ -41,12 +42,13 @@
      cmd /c mklink /J "C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns\QuestRoute" "C:\Users\Pillar\Desktop\WowFac\addons\QuestRoute"
      ```
      每次游戏启动都会沿联接读取；改完 Lua 后仍按下方第 3 步走 `load`，新增文件或改 `.toc` 仍须重启游戏。
-   - **推荐工作流：直接改仓库并依赖 `watch`**。`watch {action:"start", target:"QuestRoute"}` 监控 16 个文件，每次保存就热加载该文件并自动保留旧版（`history`），无需手工 `load`、无需重启、无需复制。会话开始（或重载界面后）先用 `watch {action:"list"}` 确认仍在监控；已断则重新 start。看结果用 `logs` 的 WATCH/RUN 条目（`ok @...<文件名>` 才算加载成功）。
+   - **推荐工作流：直接改仓库并依赖 `watch`**。`watch {action:"start", target:"QuestRoute"}` 监控 18 个文件，每次保存就热加载该文件并自动保留旧版（`history`），无需手工 `load`、无需重启、无需复制。会话开始（或重载界面后）先用 `watch {action:"list"}` 确认仍在监控；已断则重新 start。看结果用 `logs` 的 WATCH/RUN 条目（`ok @...<文件名>` 才算加载成功）。
    - 注意：`watch` 只在**文件保存到磁盘**时触发。用 `write_file`/`edit_file` 写入即可；只跑测试不写文件不会触发。热加载后 `PLAYER_LOGIN/ADDON_LOADED` 不重发，初始化依赖 `OnReload`。
 2. 文档修改检查链接、引用和事实；代码修改运行相应离线验证：
 
    ```powershell
    python tests/verify_quest_data.py
+   python tests/verify_associations.py
    ```
 
    依赖 `lupa.lua51`。`--addon` 可为目录、`.toc` 或入口 `.lua`，按同目录清单加载整插件。

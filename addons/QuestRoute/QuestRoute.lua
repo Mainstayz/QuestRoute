@@ -12,10 +12,14 @@ local function RouteTick(_, elapsed)
     if ns.route.elapsed < 0.1 then return end
     ns.route.elapsed = 0
     local now = GetTime()
+    if ns.Discovery.Pump() then
+        ns.route.dirty, ns.route.due, ns.route.pendingReason = true, now, "association_index_ready"
+    end
     if ns.route.dirty and now >= (ns.route.due or 0) then RebuildRoute(ns.route.pendingReason or "quest_update") end
     if ns.route.nextRewardCheck and now >= ns.route.nextRewardCheck then RebuildRoute("reward_cache_refresh") end
     if ns.route.nextLocationCheck and now >= ns.route.nextLocationCheck then RebuildRoute("location_data_refresh") end
     if ns.route.nextObjectiveCheck and now >= ns.route.nextObjectiveCheck then RebuildRoute("objective_data_refresh") end
+    if ns.route.nextAssociationCheck and now >= ns.route.nextAssociationCheck then RebuildRoute("association_data_refresh") end
     if ns.route.nextSpotCheck and now >= ns.route.nextSpotCheck then RebuildRoute("spot_avoidance_expired") end
     if now >= (ns.route.nextNameplateCheck or 0) then
         ns.route.nextNameplateCheck = now + 0.5
@@ -76,13 +80,21 @@ function ns.StartRoute()
     driver:RegisterEvent("PLAYER_ENTERING_WORLD")
     driver:RegisterEvent("ZONE_CHANGED_NEW_AREA")
     driver:RegisterEvent("QUEST_DATA_LOAD_RESULT")
+    driver:RegisterEvent("QUEST_TURNED_IN")
+    driver:RegisterEvent("BAG_UPDATE_DELAYED")
+    driver:RegisterEvent("GOSSIP_SHOW")
+    driver:RegisterEvent("GOSSIP_CLOSED")
+    driver:RegisterEvent("UPDATE_FACTION")
+    driver:RegisterEvent("SKILL_LINES_CHANGED")
+    driver:RegisterEvent("SPELLS_CHANGED")
     driver:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     driver:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     driver:SetScript("OnEvent", function(_, event, questID)
         if event == "NAME_PLATE_UNIT_ADDED" then RenderTaskNameplates(); return end
         if event == "NAME_PLATE_UNIT_REMOVED" then HideTaskMarkers(questID); return end
         HideTaskMarkers()
-        if event == "QUEST_DATA_LOAD_RESULT" and not (ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID]) then return end
+        if event == "QUEST_DATA_LOAD_RESULT" and not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
+            or (ns.route.associationQuestIDs and ns.route.associationQuestIDs[questID])) then return end
         if not ns.route.dirty then ns.route.due = GetTime() + 0.5 end
         ns.route.dirty, ns.route.pendingReason = true, event
     end)
@@ -137,6 +149,18 @@ local function PrintWhy()
         if item.reason == "outside_current_map" and item.otherMapName then why = why .. "：" .. item.otherMapName end
         print("[" .. item.questID .. "] " .. (item.title or "?") .. " — " .. why)
     end
+    local discovery = plan.discovery
+    if discovery then
+        if discovery.building then print("任务关联索引建立中：" .. (discovery.scanned or 0) .. "/" .. (discovery.total or 0)) end
+        local labels = { pick_up = "可去接取", start_item = "背包物品启动", possible_item_drop = "可能掉落启动物品" }
+        for index, item in ipairs(discovery.opportunities or {}) do
+            if index > 5 then break end
+            print("关联 [" .. item.questID .. "] " .. item.title .. " — " .. (labels[item.action] or item.action)
+                .. (item.certainty == "confirmed" and "（客户端已确认）" or "（数据库关联）"))
+        end
+    end
+    local decision = plan.decision
+    if decision and decision.applied then print("已采用关联前瞻：先接/先交，再合并同区目标；预测步骤将在实际接取后重算。") end
     local hint = plan.nextMapHint
     if hint then
         print("当前地图已无可做任务，可前往：" .. (hint.mapName or ("地图" .. hint.mapID)) .. (hint.title and ("（" .. hint.title .. "）") or ""))
@@ -198,7 +222,7 @@ WB:Expose("get_database_entity", ns.GetDatabaseEntity,
 WB:Expose("get_quest_targets", ns.GetQuestTargets,
     "只读解析未完成目标位置：官方进度为准，任务内按客户端格式与数据库完整名称精确唯一匹配后补QuestieDB静态点；未知回原生POI。"
     .. "args:questID必填，mapID可选，allowDatabase默认true，offset/limit默认0/50最大100；targets分页，objectives含完成状态与映射依据。")
-WB:Expose("get_plan", ns.GetPlan, "获取当前地图升级与交付路线。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定；自由选点时同组其他步骤计入加成，steps[].workFactor/remainingWork给剩余工作量修正；当前地图无步骤时nextMapHint给最近外图任务提示，excluded[].otherMapID/otherMapName给外图任务所在地图。args:{}。")
+WB:Expose("get_plan", ns.GetPlan, "获取当前地图任务关联、接取、升级与交付路线。discovery含附近/目的地相关任务和启动物品机会；decision含有限前瞻预测及采用原因；未接目标只在预测中，实际接取后重排。steps.action新增pick_up/start_item，pickupCount给接取步数，activeQuestCount仅统计日志任务。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定；自由选点时同组其他步骤计入加成，steps[].workFactor/remainingWork给剩余工作量修正；当前地图无步骤时nextMapHint给最近外图任务提示，excluded[].otherMapID/otherMapName给外图任务所在地图。args:{}。")
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")

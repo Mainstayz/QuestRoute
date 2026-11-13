@@ -12,7 +12,7 @@ ns.WB = WoWBridge and WoWBridge.Bind and WoWBridge.Bind(addonName) or {
         callback(nil, "unavailable")
     end,
 }
-ns.apiRevision = 15
+ns.apiRevision = 16
 -- 状态只保存在这里；各模块动态读取 ns.route，使换热点的草稿可跨模块生效。
 ns.route = ns.route or { views = {}, sequence = 0 }
 

@@ -2,7 +2,7 @@
 
 插件按 `QuestRoute.toc` 顺序执行全部 Lua 文件；不使用 `require`、`loadfile` 或额外加载框架。每个文件通过 `local _, ns = ...` 取得同一份插件命名空间。业务模块只定义功能，最后的 `QuestRoute.lua` 注册命令、桥接 API 和事件，并启动路线。
 
-当前 `apiRevision=15`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 14 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
+当前 `apiRevision=16`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 14 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
 
 ## 职责与加载顺序
 
@@ -17,7 +17,9 @@
 | `Navigation.lua` | 逐目标进度历史、工作会话、状态转换及保护规则 | `ns.Navigation` |
 | `Hotspots.lua` | 密度热点、几何缓存、主备摘要、临时避让与清理 | `ns.Hotspots` |
 | `Nameplates.lua` | NPC 用途索引、单位任务查询、姓名板图元与清理 | `ns.Nameplates` |
-| `Planner.lua` | 候选选择（含任务群加成）、当前目标保持、归组、切换提示、下一张地图提示和路线快照 | `ns.Planner` |
+| `Discovery.lua` | QuestieDB 分批索引、角色接取资格、附近/沿途/目的地关联和启动物品发现 | `ns.Discovery` |
+| `Decision.lua` | 局部依赖图宏动作束搜索、共享工作收益、独立基线比较和关联轻提示 | `ns.Decision` |
+| `Planner.lua` | 候选选择（含任务群加成和前瞻）、当前目标保持、归组、接取插入、提示及路线快照 | `ns.Planner` |
 | `RouteActions.lua` | 跳过/恢复、换热点草稿提交、清避让、更新选项 | 既有 `ns.SetQuestSkip` 等公开 API |
 | `Settings.lua` | 原生设置页和单次原生回调分发 | `ns.RegisterSettings` |
 | `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠和备选图元 | `ns.MapPins` |
@@ -48,6 +50,7 @@
 
 ```powershell
 python tests/verify_quest_data.py
+python tests/verify_associations.py
 ```
 
 `--addon` 接受插件目录、`.toc` 或旧入口 `.lua` 路径；入口存在同目录清单时会加载全部文件。测试在隔离 Lua 5.1 中运行，覆盖业务行为与清单加载，并真正重执行整个插件验证同命名空间重载、旧状态补全和新命名空间启动。

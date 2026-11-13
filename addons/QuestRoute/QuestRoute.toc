@@ -1,6 +1,6 @@
 ## Interface: 16001
 ## Title: QuestRoute
-## Notes: 根据当前任务规划大地图与小地图路线，显示未完成目标热点和任务怪提示，并提供只读任务数据 API。
+## Notes: 根据任务关联与短期前瞻规划接取、目标和交付路线，显示两图热点与任务怪提示，并提供只读任务数据 API。
 ## Author:
 ## Version: 0.1.0
 ## SavedVariables: QuestRouteDB
@@ -16,6 +16,8 @@ Priority.lua
 Navigation.lua
 Hotspots.lua
 Nameplates.lua
+Discovery.lua
+Decision.lua
 Planner.lua
 RouteActions.lua
 Settings.lua

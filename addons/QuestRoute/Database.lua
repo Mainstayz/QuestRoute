@@ -47,11 +47,13 @@ local function AreaMapping(db)
     return mapping
 end
 
-local function ReadLocations(db, entity, id)
+local function ReadLocations(db, entity, id, onlyMapID, checkpoint)
     local mapping, locations = AreaMapping(db), {}
     local spawns = entity.spawns(id) or {}
     local areas = {}
-    for area in pairs(spawns) do if IsFinite(area) then areas[#areas + 1] = area end end
+    for area in pairs(spawns) do
+        if IsFinite(area) and (not onlyMapID or mapping[area] == onlyMapID) then areas[#areas + 1] = area end
+    end
     table.sort(areas)
     local usable = 0
     for _, area in ipairs(areas) do
@@ -82,6 +84,7 @@ local function ReadLocations(db, entity, id)
                 usable = usable + 1
             end
             locations[#locations + 1] = location
+            if checkpoint then checkpoint() end
         end
     end
     return locations, usable

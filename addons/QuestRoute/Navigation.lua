@@ -92,6 +92,7 @@ end
 local navigationLabels = {
     travel = "赶路中：前往任务区域", working = "在这一带完成任务目标",
     turn_in = "前往交付任务", completion_pending = "任务已完成，等待确认交付信息",
+    pick_up = "前往接取任务", start_item = "使用背包物品接取任务",
     queued = "后续任务", idle = "当前地图暂无可规划任务", unavailable = "等待任务或玩家位置更新",
 }
 local temporaryLocationReasons = { no_native_poi = true, player_position_unavailable = true,
@@ -103,6 +104,7 @@ local function SameWorkTarget(previous, step, mapID)
     local shift = previous and step and DistanceSquared(previous.targetWorld, step.world)
     return previous and step and previous.questID == step.questID and previous.questStatus == step.status
         and previous.mapID == mapID and previous.objectiveKey == step.objectiveKey
+        and (previous.action or "quest_area") == (step.action or "quest_area")
         and previous.objectiveRevision == (step.objectiveRevision or 0)
         and shift and shift <= routeRules.poiTolerance ^ 2
 end
@@ -110,7 +112,7 @@ end
 local function NavigationForStep(step, origin, mapID, now, previous, reset)
     local nav = { phase = "idle", reason = "no_eligible_tasks", observedAt = now, protected = false, mapID = mapID }
     if step then
-        nav.questID, nav.questStatus, nav.targetWorld = step.questID, step.status, step.world
+        nav.questID, nav.questStatus, nav.targetWorld, nav.action = step.questID, step.status, step.world, step.action
         nav.objectiveKey, nav.objective = step.objectiveKey, step.objective
         nav.objectiveRevision = step.objectiveRevision or 0
         nav.objectivesAvailable = step.objectivesAvailable
@@ -132,6 +134,9 @@ local function NavigationForStep(step, origin, mapID, now, previous, reset)
     if not IsID(mapID) or not origin or (step and not squared) then
         nav.phase, nav.reason = "unavailable", "player_position_unavailable"
         if same then nav.workStartedAt, nav.lastProgressAt = previous.workStartedAt, previous.lastProgressAt end
+    elseif step and (step.action == "pick_up" or step.action == "start_item") then
+        nav.phase, nav.reason = step.action, "await_actual_quest_acceptance"
+        nav.locationPrecision = step.precision
     elseif step and step.status == "ready_for_turn_in" then
         nav.phase, nav.reason = "turn_in", "official_ready_for_turn_in"
         nav.locationPrecision, nav.deliveryLocationConfirmed = "quest_poi", false
