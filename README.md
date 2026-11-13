@@ -4,48 +4,65 @@
 
 ## 安装
 
-1. 完整退出游戏，先禁用或移走旧 `Interface/AddOns/YYQQuestAPI` 目录，避免两版同时运行。
-2. 将仓库中的整个 `addons/QuestRoute` 文件夹复制到游戏的 `Interface/AddOns/` 目录，最终为 `Interface/AddOns/QuestRoute/`。保留 `QuestRoute.toc` 及其列出的全部 16 个 Lua 文件，插件 Title 为 `QuestRoute`。
-3. 需要沿用旧配置时，先按下方步骤迁移，再启动游戏；在插件列表中确认仅启用 QuestRoute。
+1. 完整退出游戏。若安装过旧版，先禁用或移走 `Interface/AddOns/YYQQuestAPI`，避免两版同时运行。
+2. 将仓库中的整个 `addons/QuestRoute` 文件夹复制到游戏的 `Interface/AddOns/`，最终为 `Interface/AddOns/QuestRoute/`。保留 `QuestRoute.toc` 及其列出的全部 Lua 文件。
+3. 需要沿用旧配置时，先按下方步骤迁移，再启动游戏；在插件列表中确认启用 QuestRoute。
 
-插件目录改名、增加新文件或修改 `.toc` 后，必须完整退出并重新启动游戏，`/reload` 不够。本次模块拆分尚未同步到游戏安装，新名称及多文件启动仍待实机验证。
+插件目录改名、增加文件或修改 `.toc` 后，必须完整退出并重新启动游戏，`/reload` 不够。
 
 原生客户端数据决定任务状态与进度；可选安装 QuestieDB 补充目标实体和静态刷新点。插件可以独立运行，无限工坊用于开发调试与 API 调用。
 
 ## 旧配置迁移
 
-新 SavedVariables 为 `QuestRouteDB`。存档文件名已改变，游戏不会自动跨文件读取旧存档；需要手动迁移，否则会从新配置开始。
+新 SavedVariables 为 `QuestRouteDB`。游戏不会自动跨文件读取旧存档；需要手动迁移，否则会从新配置开始。
 
 1. 完整退出游戏，在 `WTF/Account/<账号>/SavedVariables/` 中备份旧 `YYQQuestAPI.lua`。
-2. 将旧文件复制为 `QuestRoute.lua`。如果已有 `QuestRoute.lua`，先单独备份并确认要沿用哪份配置，再迁移，避免直接覆盖已有配置。
-3. 只把新副本中顶层赋值的变量名 `YYQQuestAPIDB` 改为 `QuestRouteDB`，其余内容保持原样。完整保留 `routes`，包括各服务器/角色的 `skipped`、`moveThreshold`、`enabled`、`nameplatesEnabled`。
-4. 保存后启动游戏。旧文件及备份保留，便于需要时恢复。
+2. 将旧文件复制为 `QuestRoute.lua`。如果已有新文件，先单独备份并确认要沿用哪份配置，避免覆盖已有设置。
+3. 只把新副本中顶层赋值的变量名 `YYQQuestAPIDB` 改为 `QuestRouteDB`，其余内容保持原样。完整保留 `routes` 中各服务器/角色的跳过记录和选项。
+4. 保存后启动游戏，保留旧文件及备份供恢复。
 
 ## 使用
 
-- 大地图和小地图显示编号路线，橙色 1 号表示下一步。
-- 标点提示只显示任务名、目标进度、简短状态与位置性质、操作说明，最多四行（含标题）。
-- 地图标记右键跳过整项任务，Shift + 右键切换目标地点。
-- `/questroute on`、`/questroute off`：开启或关闭路线。
-- `/questroute replan`：立即重新规划。
-- `/questroute unskip all`：恢复所有已跳过任务。
-- `/questrouteapi`：只读显示当前任务列表。
+- 大地图显示本图路线，小地图显示附近路线；橙色 1 号表示下一步，`N?` 表示可交任务，`N~` 表示已完成但交付状态待确认。
+- 每个可靠识别的未完目标有一个主热点和最多两个紫色 `Nb/Nc` 备选；备选不计入路线步数或里程。
+- 地图标记右键跳过整项任务，Shift + 右键切换该目标地点。
+- 悬停最多四行（含标题），显示任务名、目标进度、简短状态与位置性质、操作说明。
+- 玩家自行开启敌方姓名板（默认 `V`）后，相关任务怪显示黄色击杀/材料提示，当前路线目标为橙色。
 
-路线命令注册为 `SlashCmdList.QUESTROUTE`，Lua API 命名空间为 `WoWBridgeNS.QuestRoute`，无限工坊 `call` 使用 `addon="QuestRoute"`。重命名后不提供旧名称的运行时别名。
+常用命令：
 
-完整地图规划与任务数据 API 说明见 [插件 README](addons/QuestRoute/README.md)，开发状态见 [开发进度](开发进度.md)。
+| 命令 | 作用 |
+| --- | --- |
+| `/questroute on`、`/questroute off` | 开启或关闭路线与任务标识 |
+| `/questroute replan` | 立即重新选择下一步 |
+| `/questroute unskip all` | 恢复所有手动跳过的任务 |
+| `/questroute nextspot` | 为当前目标换地点 |
+| `/questroute resetspots` | 清除临时地点避让 |
+| `/questroute nameplates on`、`/questroute nameplates off` | 单独控制姓名板提示 |
+| `/questrouteapi` | 只读显示当前任务列表 |
+
+完整命令与公开 API 见[插件 README](addons/QuestRoute/README.md)。
 
 ## 设置
 
-安装后，在游戏中打开 **选项 → 插件 → QuestRoute**，勾选或取消“将精英任务加入路线规划”。设置页使用游戏原生勾选框，本次没有新增地图按钮或地图焦点操作。
+在游戏中打开 **选项 → 插件 → QuestRoute**，勾选“将精英任务加入路线规划”。默认关闭；开启后，未完成精英任务可参与当前地图规划。副本、专业、失败、手动跳过、外图及无可靠位置的过滤继续生效；已完成任务仍可顺路交付。
 
-- 默认关闭，旧配置也沿用关闭状态；开启后，未完成的精英任务可参与当前地图规划。
-- 切换后立即重排，按服务器与角色保存，正常退出或重载界面时由游戏写盘。
-- 副本、专业、失败、手动跳过、外图及无可靠位置的过滤继续生效；已完成的精英任务不受此开关影响，仍可顺路交付。
+选项按服务器与角色保存，切换后立即重排，正常退出或重载界面时由游戏写盘。设置页使用原生勾选框。
 
-当前仓库 apiRevision=14，已按功能拆为 16 个 Lua 文件；`QuestRoute.lua` 从 2594 行缩至 204 行，负责命令、API 注册和运行生命周期。685 项离线检查（原有 659 项业务检查＋26 项加载检查）及插件静态检查通过。游戏离线，安装同步、多文件启动、设置页实际显示与手柄焦点尚待实机验证。
+## 开发与文档
 
-模块职责、加载顺序与修改约定见 [模块说明](addons/QuestRoute/MODULES.md)。
+当前 `apiRevision=14`、`schemaVersion=1`，源码按职责拆为 16 个 Lua 文件。仓库版本的验证与安装状态统一见[开发进度](开发进度.md)，尚未完成的实机验收见[待办事项](待办事项.md)。
+
+| 文档 | 用途 |
+| --- | --- |
+| [插件 README](addons/QuestRoute/README.md) | 完整命令、参数及返回字段 |
+| [方案](任务升级助手方案.md) | 产品范围与当前行为 |
+| [技术说明](docs/技术说明.md) | 数据来源、坐标、目标映射、权重与导航规则 |
+| [模块说明](addons/QuestRoute/MODULES.md) | 源码职责、加载顺序与维护约定 |
+| [开发进度](开发进度.md) | 当前版本、验证证据与恢复入口 |
+| [待办事项](待办事项.md) | 未完成工作和实机验收 |
+
+阶段调研与旧实现记录已合并到当前文档，原文可通过 Git 历史查看。`backups/` 为本地备份目录，由 `.gitignore` 排除，不随仓库分发。
 
 ## 离线验证
 
@@ -57,10 +74,3 @@ python tests/verify_quest_data.py
 ```
 
 验证在隔离的 Lua 5.1 环境按 `.toc` 顺序加载整个插件，不连接或修改游戏。`--addon` 可指定插件目录或 `.toc`；旧的 `--addon addons/QuestRoute/QuestRoute.lua` 写法也会加载同目录的完整清单。
-
-## 目录
-
-- `addons/QuestRoute/`：插件源码、加载清单和 API 文档。
-- `tests/`：离线验证脚本。
-- 根目录中文文档：方案、调研、开发进度和待办。
-- `backups/`：既有阶段备份及校验记录；历史 `YYQQuestAPI-r*.zip` 保留真实文件名。
