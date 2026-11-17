@@ -16,7 +16,7 @@ Fixture.worldScale=10000
 Fixture.mapOrder={101}
 Fixture.quests={}; Fixture.log={}; Fixture.status={}; Fixture.official={}
 Fixture.completed={}; Fixture.historyUnknown={}; Fixture.bags={}; Fixture.items={}
-Fixture.locations={npc={},object={}}; Fixture.offered={}
+Fixture.locations={npc={},object={}}; Fixture.offered={}; Fixture.units={}
 QUEST_MONSTERS_KILLED='%s: %d/%d'
 QUEST_OBJECTS_FOUND='%s: %d/%d'
 QUEST_ITEMS_NEEDED='%s: %d/%d'
@@ -56,7 +56,8 @@ C_QuestLog.GetQuestObjectives=function(id)
     end
     return out
 end
-C_GossipInfo={GetAvailableQuests=function() return Fixture.offered end}
+C_GossipInfo={GetAvailableQuests=function() return Fixture.offered end,
+    GetNumAvailableQuests=function() return #Fixture.offered end}
 C_Container={
     GetContainerNumSlots=function(bag) return bag==0 and #Fixture.bags or 0 end,
     GetContainerItemID=function(bag,slot) return bag==0 and Fixture.bags[slot] or nil end,
@@ -159,6 +160,10 @@ local function candidates()
         out[#out+1]={quest=quest,points=resolution.points,resolution=resolution,priorityWeight=1}
     end
     return out
+end
+local function gossip(npcID, quests)
+    Fixture.units.npc={id=npcID}; Fixture.offered=quests or {}
+    ns.Discovery.ObserveInteraction('GOSSIP_SHOW')
 end
 local function finishIndex()
     for _=1,10000 do if ns.Discovery.Pump() then return end end
@@ -798,7 +803,7 @@ local result=plan()
 local pin=ns.MapPins.New({overlay=CreateFrame('Frame')})
 pin.step=result.steps[1]
 ns.MapPins.Appearance(pin,pin.step,1)
-check(pin.text.text=='1!','pickup has an explicit map exclamation label')
+check(pin.text.text=='1~!','unconfirmed pickup has a provisional exclamation label')
 GameTooltip={lines={}}
 function GameTooltip:SetOwner() end
 function GameTooltip:SetText(text) self.lines={text} end
@@ -806,15 +811,17 @@ function GameTooltip:AddLine(text) self.lines[#self.lines+1]=text end
 function GameTooltip:Show() end
 function GameTooltip:Hide() end
 pin:GetScript('OnEnter')(pin)
-check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('预计可接任务',1,true),
-    'pickup hover preserves the compact estimated-availability status')
-check(GameTooltip.lines[2]:find('静态接取位置',1,true),'pickup does not claim a monster work area')
-Fixture.offered={{questID=301}}
+check(#GameTooltip.lines<=4 and GameTooltip.lines[3]:find('接取待确认',1,true),
+    'pickup hover preserves the compact unconfirmed status')
+check(GameTooltip.lines[2]:find('NPC：npc10301',1,true) and GameTooltip.lines[2]:find('1.0, 0.0',1,true),
+    'formal pickup identifies the giver and coordinates')
+check(GameTooltip.lines[3]:find('静态接取位置',1,true),'pickup does not claim a monster work area')
+gossip(10301,{{questID=301}})
 result=ns.Replan({}); pin.step=result.steps[1]
 check(pin.step.questID==301 and pin.step.world.x==0 and pin.step.source=='client'
-    and pin.step.precision=='player_position','formal pickup preserves the official current point and provenance')
+    and pin.step.precision=='interaction_position','formal pickup preserves the observed interaction point and provenance')
 pin:GetScript('OnEnter')(pin)
-check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('当前接取位置',1,true),
+check(#GameTooltip.lines<=4 and GameTooltip.lines[3]:find('当前接取位置',1,true),
     'official starter hover does not claim a static location')
 '''),
     ("Map pins: unselected pickup remains locatable without an active route", r'''
@@ -824,13 +831,13 @@ check(result.count==0 and action(result.discovery.opportunities,301,'pick_up'),'
 ns.WorldMap.Render(); ns.Minimap.Render()
 local mapView,miniView=ns.route.views[1],ns.route.minimapView
 local worldPin,miniPin=mapView.opportunities[1],miniView.opportunities[1]
-check(worldPin:IsVisible() and miniPin:IsVisible() and worldPin.text.text=='!' and miniPin.text.text=='!',
-    'unselected pickup has persistent yellow markers on both maps with zero steps')
+check(worldPin:IsVisible() and miniPin:IsVisible() and worldPin.text.text=='~!' and miniPin.text.text=='~!',
+    'unselected static pickup has provisional markers on both maps with zero steps')
 check(miniPin.onEdge,'pickup outside the minimap radius keeps a direction marker')
 worldPin:GetScript('OnEnter')(worldPin)
 check(#GameTooltip.lines<=4 and GameTooltip.lines[2]:find('Map 101 3.0, 0.0',1,true)
     and GameTooltip.lines[2]:find('NPC',1,true),'hover gives map coordinates and giver type within four lines')
-check(GameTooltip.lines[3]:find('就在附近',1,true) and GameTooltip.lines[3]:find('预计可接',1,true),
+check(GameTooltip.lines[3]:find('就在附近',1,true) and GameTooltip.lines[3]:find('接取待确认',1,true),
     'advisory hover explains discovery without claiming confirmed acceptance')
 local notices={}; ns.Util.Notify=function(text) notices[#notices+1]=text end
 ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
@@ -954,7 +961,9 @@ check(text:find('顺路取物',1,true) and text:find('就在附近',1,true) and 
 check(not text:find('启动',1,true) and not text:find('可接',1,true),'objective book cannot be advertised as a quest starter')
 item.action='pick_up'; item.itemName=nil; item.questItem=nil; item.reasons={'same_target','nearby'}
 text=ns.Decision.Describe(item,true)
-check(text:find('建议先接',1,true) and text:find('可合做目标',1,true),'adopted pickup gives the actual shared-work reason')
+check(text:find('建议先确认接取',1,true) and text:find('可合做目标',1,true),'unconfirmed pickup gives its shared-work reason without claiming availability')
+item.certainty='confirmed'
+check(ns.Decision.Describe(item,true):find('建议先接',1,true),'observed offer can recommend acceptance')
 item.action=nil; item.point=point(702,7340,3300); item.point.coordinateMapID=102
 item.point.entityName='Librarian'; item.reasons={'item_in_bags'}
 text=ns.Decision.Describe(item,false)
@@ -1400,15 +1409,15 @@ record(302,100,{startedBy={}})
 record(303,100,{startedBy={},triggerEnd={'Unknown exploration'}})
 record(304,100,{startedBy={},requiredLevel='unknown'})
 record(305,0)
-Fixture.offered={{questID=301},{questID=302},{questID=303},{questID=304},{questID=305}}
+gossip(10301,{{questID=301},{questID=302},{questID=303},{questID=304},{questID=305}})
 local data=collect()
 for _,id in ipairs({301,302,303,305}) do
     local quest=data.quests[id]
     local offer=action(data.opportunities,id,'pick_up')
     check(offer and offer.certainty=='confirmed' and offer.point.world.x==0
-        and offer.point.source=='client' and offer.point.precision=='player_position','official current opportunity '..id)
+        and offer.point.source=='client' and offer.point.precision=='interaction_position','official current opportunity '..id)
     check(#quest.starters==1 and quest.starters[1].world.x==0,'Decision receives the official point '..id)
-    check(quest.starters[1].source=='client' and quest.starters[1].precision=='player_position',
+    check(quest.starters[1].source=='client' and quest.starters[1].precision=='interaction_position',
         'official point is not relabeled static '..id)
     check(#quest.targets==1 and quest.targets[1].source=='QuestieDB'
         and quest.targets[1].precision=='static_spawn','ordinary static target provenance survives '..id)
@@ -1416,16 +1425,158 @@ for _,id in ipairs({301,302,303,305}) do
         opportunities={{questID=id,action='pick_up'}}},{},point(1,0).world,nil)
     local pickup=action(result.predicted,id,'pick_up')
     check(pickup and pickup.point.world.x==0 and pickup.point.source=='client'
-        and pickup.point.precision=='player_position','Decision uses the observed starter '..id)
+        and pickup.point.precision=='interaction_position','Decision uses the observed starter '..id)
     if id==303 then check(not action(result.predicted,id,'turn_in'),'Gossip cannot complete an unknown event') end
 end
 check(data.quests[302].targetsComplete,'official starter supports ordinary work without a static starter')
 check(not data.quests[303].targetsComplete,'official availability does not certify unknown event conditions')
 check(data.quests[304].eligibility=='unknown' and not action(data.opportunities,304,'pick_up'),
     'official availability does not erase unknown eligibility conditions')
-Fixture.offered={}; data=collect()
+ns.Discovery.ObserveInteraction('GOSSIP_CLOSED'); data=collect()
 check(data.quests[301].starters[1].world.x==5000 and data.quests[301].starters[1].source=='QuestieDB'
     and data.quests[301].starters[1].precision=='static_spawn','static starter remains available after Gossip ends')
+'''),
+    ("Discovery: NPC dialogue corrects static pickup predictions without permanent skips", r'''
+record(201,100); Fixture.log={201}
+for id=1000,1040 do record(id,100,{requiredLevel=60}) end
+record(97287,100,{name='精明的谈判',startedBy={[1]={2410}}}); place('npc',2410,100)
+record(98094,200,{name='支援斥候',startedBy={[1]={2215}}}); place('npc',2215,200)
+local result=plan()
+check(action(result.discovery.opportunities,97287,'pick_up'),'static estimate initially remains discoverable')
+Fixture.loggedIn=true; ns.StartRoute()
+Fixture.units.npc={id=2410}; Fixture.offered={}
+local driver=ns.route.driver
+check(driver.events.GOSSIP_OPTIONS_REFRESHED and driver.events.QUEST_ACCEPTED and driver.events.PLAYER_LEVEL_UP,
+    'interaction updates and eligibility changes are registered')
+driver:GetScript('OnEvent')(driver,'GOSSIP_SHOW')
+Fixture.time=1; driver:GetScript('OnUpdate')(driver,.2)
+local data=collect()
+check(data.quests[97287].eligibility=='unknown' and data.quests[97287].conditionReason=='npc_not_offering',
+    'actual empty dialogue overrides the static eligibility guess')
+check(not action(data.opportunities,97287,'pick_up') and not action(ns.GetPlan({}).steps,97287,'pick_up'),
+    'rejected starter leaves both suggestions and formal route')
+check(action(data.opportunities,98094,'pick_up'),'different NPC is not rejected by another dialogue')
+check(not ns.RouteOptions.Get().skipped[97287] and not ns.RouteOptions.Get().skipped[98094],
+    'observations never write player skip preferences')
+setupMaps(); ns.WorldMap.Render(); ns.Minimap.Render()
+local rejectedPin
+for _,pin in pairs(ns.route.views[1].opportunities) do
+    if pin.step and pin.step.questID==97287 then rejectedPin=pin end
+end
+check(rejectedPin and rejectedPin:IsVisible() and rejectedPin.text.text=='×',
+    'failed availability check remains a visible map reference rather than disappearing')
+rejectedPin:GetScript('OnEnter')(rejectedPin)
+check(#GameTooltip.lines<=4 and GameTooltip.lines[3]:find('NPC当前未提供',1,true),
+    'map reference explains the observed refusal without inventing a prerequisite')
+local printed={}; local realPrint=print; print=function(text) printed[#printed+1]=text end
+SlashCmdList.QUESTROUTE('why'); print=realPrint
+check(table.concat(printed,'\n'):find('接取核验 [97287]',1,true),'why reports the failed NPC check')
+ns.Discovery.ObserveInteraction('GOSSIP_CLOSED'); Fixture.playerX=.01
+check(collect().quests[97287].conditionReason=='npc_not_offering','closing or moving does not immediately forget rejection')
+ns.Discovery.ObserveInteraction('PLAYER_LEVEL_UP')
+check(action(collect().opportunities,97287,'pick_up'),'changed player conditions permit a fresh estimate')
+gossip(2410,{{questID=97287}})
+check(action(collect().opportunities,97287,'pick_up').certainty=='confirmed','later actual offer restores availability')
+'''),
+    ("Discovery: rejections are per starter and future prerequisites can change offers", r'''
+record(301,100,{startedBy={[1]={10301,11301}}}); place('npc',11301,200)
+record(302,100,{preQuestSingle={201}})
+gossip(10301,{})
+local data=collect()
+check(data.quests[301].eligibility=='eligible' and #data.quests[301].starters==1
+    and data.quests[301].starters[1].entityID==11301,'another untested starter remains usable')
+check(action(data.opportunities,301,'pick_up').point.entityID==11301,'proposals do not retain the nearer rejected starter')
+gossip(11301,{})
+data=collect()
+check(data.quests[301].conditionReason=='npc_not_offering' and not action(data.opportunities,301,'pick_up'),
+    'all known starters must reject before the quest becomes unavailable')
+ns.Discovery.ObserveInteraction('QUEST_TURNED_IN')
+check(#collect().quests[301].starters==2,'quest completion invalidates earlier dialogue checks')
+gossip(10302,{})
+data=collect()
+check(data.quests[302].conditionReason=='prerequisite' and #data.quests[302].starters>0,
+    'current refusal does not rule out the post-prerequisite pickup prediction')
+'''),
+    ("Discovery: stale or unreadable dialogue is never treated as a remote offer or refusal", r'''
+record(301,100)
+Fixture.offered={{questID=301}}
+local data=collect()
+check(action(data.opportunities,301,'pick_up').certainty=='estimated','a stale API list without an observed dialogue cannot confirm availability')
+Fixture.units.npc={id=10301,readError=true}
+ns.Discovery.ObserveInteraction('GOSSIP_SHOW')
+check(action(collect().opportunities,301,'pick_up').certainty=='estimated','unreadable NPC identity cannot confirm an offer')
+Fixture.units.npc={id=10301}; C_GossipInfo.GetNumAvailableQuests=function() return 1 end
+Fixture.offered={}; ns.Discovery.ObserveInteraction('GOSSIP_SHOW')
+check(action(collect().opportunities,301,'pick_up'),'incomplete list cannot reject a starter')
+C_GossipInfo.GetNumAvailableQuests=function() return #Fixture.offered end
+gossip(10301,{{questID=301}})
+Fixture.playerX=.2; data=collect()
+local offer=action(data.opportunities,301,'pick_up')
+check(offer and offer.point.world.x==0 and offer.point.entityID==10301,
+    'observed offer retains its NPC and interaction location after movement')
+ns.Discovery.ObserveInteraction('GOSSIP_CLOSED'); data=collect()
+check(not action(data.opportunities,301,'pick_up'),'closed dialogue does not create a confirmed offer at the later player position')
+'''),
+    ("Discovery: live NPC interactability overrides a static starter only with reliable nearby evidence", r'''
+record(97287,100,{name='精明的谈判',startedBy={[1]={2410}}}); place('npc',2410,100)
+FixtureDB.Npc.questStarts=function(id) if id==2410 then return {97287} end end
+Fixture.units.target={id=2410}
+local inRange,interactable,dead=false,false,false
+UnitIsInInteractRange=function() return inRange end
+UnitIsInteractable=function() return interactable end
+UnitIsDeadOrGhost=function() return dead end
+check(not ns.Discovery.ObserveUnits(),'out-of-range NPC cannot prove an interaction restriction')
+inRange=true; dead=true
+check(not ns.Discovery.ObserveUnits(),'dead NPC cannot prove a persistent interaction restriction')
+dead=false; interactable=nil
+check(not ns.Discovery.ObserveUnits(),'unknown interaction state stays unknown')
+interactable=false
+check(ns.Discovery.ObserveUnits(),'live nearby NPC records actual interaction restriction')
+check(not ns.Discovery.ObserveUnits(),'unchanged observation does not cause repeated replans')
+local data=collect()
+check(data.quests[97287].conditionReason=='npc_not_interactable' and not action(data.opportunities,97287,'pick_up'),
+    'unusable live starter cannot be advertised as a pickup')
+local result=plan(); setupMaps(); ns.Minimap.Render()
+local pin
+for _,p in pairs(ns.route.minimapView.opportunities) do if p.step and p.step.questID==97287 then pin=p end end
+check(pin and pin:IsVisible() and pin.text.text=='×','non-interactable starter keeps the grey reference')
+pin:GetScript('OnEnter')(pin)
+check(GameTooltip.lines[3]:find('NPC当前不可交互',1,true),'hover distinguishes inability to interact from an empty offer list')
+check(not ns.RouteOptions.Get().skipped[97287],'interaction restriction never writes a manual skip')
+Fixture.loggedIn=true; ns.StartRoute(); local sequence=ns.GetPlan({}).sequence
+interactable=true; Fixture.time=1; ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+check(ns.GetPlan({}).sequence>sequence and ns.GetPlan({}).reason=='pickup_unit_changed',
+    'existing position tick detects an interaction state change without moving')
+check(action(collect().opportunities,97287,'pick_up'),'observed recovery releases the stale restriction')
+gossip(2410,{}); interactable=true
+check(not ns.Discovery.ObserveUnits() and collect().quests[97287].conditionReason=='npc_not_offering',
+    'generic interaction permission does not override an actual empty quest list')
+interactable=false
+check(not ns.Discovery.ObserveUnits(),'an open actual dialogue is stronger evidence than the general interaction flag')
+'''),
+    ("Discovery: quest greeting and direct detail preserve complete versus partial evidence", r'''
+record(301,100); record(302,100,{startedBy={[1]={10301}}})
+Fixture.units.npc={id=10301}
+GetNumAvailableQuests=function() return 0 end
+ns.Discovery.ObserveInteraction('QUEST_GREETING')
+check(collect().quests[301].conditionReason=='npc_not_offering','empty legacy greeting is an actual refusal')
+GetQuestID=function() return 301 end
+ns.Discovery.ObserveInteraction('QUEST_DETAIL')
+local data=collect()
+check(action(data.opportunities,301,'pick_up').certainty=='confirmed','direct quest detail confirms that quest')
+check(action(data.opportunities,302,'pick_up'),'one detail page does not reject other NPC quests')
+ns.Discovery.ObserveInteraction('QUEST_FINISHED')
+check(action(collect().opportunities,301,'pick_up').certainty=='estimated','closing the quest frame clears live confirmation')
+FixtureDB.Npc.questStarts=function() return {301,302} end
+GetNumAvailableQuests=function() return 1 end
+GetAvailableQuestInfo=function() return '任务 301' end
+ns.Discovery.ObserveInteraction('QUEST_GREETING'); data=collect()
+check(action(data.opportunities,301,'pick_up').certainty=='confirmed'
+    and data.quests[302].conditionReason=='npc_not_offering','unique NPC-local legacy names identify offered and missing quests')
+ns.Discovery.ObserveInteraction('QUEST_TURNED_IN')
+GetAvailableQuestInfo=function() return 'not in the database' end
+ns.Discovery.ObserveInteraction('QUEST_GREETING')
+check(action(collect().opportunities,302,'pick_up'),'unmapped greeting cannot prove absence')
 '''),
     ("Discovery: empty local coordinates retry without rescanning healthy or permanent records", r'''
 FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end

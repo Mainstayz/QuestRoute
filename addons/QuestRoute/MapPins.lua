@@ -32,13 +32,16 @@ local function ConfigureRoutePin(pin)
         ns.route.hoveredPin = self
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         if self.opportunity then
-            GameTooltip:SetText((step.action == "possible_item_drop" and "~! " or "! ") .. step.title)
+            local rejection = ns.Discovery.rejectionLabels[step.reason]
+            GameTooltip:SetText((rejection and "× "
+                or (step.action == "possible_item_drop" or step.action == "pick_up" and step.certainty ~= "confirmed") and "~! " or "! ") .. step.title)
             local location = ns.Util.FormatLocation(step.point)
             if location then GameTooltip:AddLine(location, 0.7, 1, 0.8) end
-            local status = self.carried and "已持有物品 · 向NPC确认接取/交付"
+            local status = rejection and (rejection .. " · 接取条件待确认")
+                or self.carried and "已持有物品 · 向NPC确认接取/交付"
                 or step.action == "possible_item_drop" and (step.questItem and "拾取任务物品 · 静态来源" or "可能掉落启动物品 · 静态来源")
                 or step.certainty == "confirmed" and "可接任务 · 当前接取位置"
-                or step.point and step.point.source == "client" and "预计可接任务 · 曾交互位置" or "预计可接任务 · 静态接取位置"
+                or step.point and step.point.source == "client" and "接取待确认 · 曾交互位置" or "接取待确认 · 静态接取位置"
             local reason = not self.carried and ns.Decision.Reason(step)
             GameTooltip:AddLine(status .. (reason and (" · " .. reason) or ""), 1, 0.85, 0.3)
             GameTooltip:AddLine("右键跳过任务", 0.6, 0.9, 1)
@@ -47,7 +50,11 @@ local function ConfigureRoutePin(pin)
         end
         GameTooltip:SetText((self.hotspot and (step.index .. self.hotspotLabel .. " 备选热点：") or (step.index .. ". "))
             .. step.title)
-        if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8) end
+        if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8)
+        elseif step.action == "pick_up" then
+            local pickupLocation = ns.Util.FormatLocation(self.hotspot or step)
+            if pickupLocation then GameTooltip:AddLine(pickupLocation, 0.7, 1, 0.8) end
+        end
 
         -- 状态与位置性质合并一行；静态区域、任务参考位置不表示实时实体坐标。
         local location = step.action == "pick_up" and (step.source == "QuestieDB" and "静态接取位置" or "当前接取位置")
@@ -56,7 +63,7 @@ local function ConfigureRoutePin(pin)
         local status
         if not self.hotspot then
             local navigation = step.navigation
-            if step.action == "pick_up" then status = step.certainty == "confirmed" and "可接任务" or "预计可接任务"
+            if step.action == "pick_up" then status = step.certainty == "confirmed" and "可接任务" or "接取待确认"
             elseif step.action == "start_item" then status = "使用物品接取"
             elseif step.action == "turn_in" then status = "可交任务"
             elseif step.action == "completion_pending" then status = "已完成，等待确认交付"
@@ -109,6 +116,7 @@ local function SetRoutePinAppearance(pin, step, index)
     elseif delivery then pin.color:SetColorTexture(0.85, 0.65, 0.05, 0.95)
     else pin.color:SetColorTexture(0.05, 0.6, 0.75, 0.95) end
     pin.text:SetText(index .. (delivery and "?" or step.action == "completion_pending" and "~"
+        or step.action == "pick_up" and step.certainty ~= "confirmed" and "~!"
         or (step.action == "pick_up" or step.action == "start_item") and "!" or ""))
 end
 
@@ -208,10 +216,12 @@ local function RenderOpportunityPins(view, plan, placed, width, height, scale, m
     for _, pin in pairs(view.opportunities) do pin:Hide(); pin.step = nil end
     local routed, circular, serial = {}, origin ~= nil, 0
     for _, step in ipairs(plan.steps) do routed[step.questID] = true end
-    for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems" }) do
+    for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems", "blocked" }) do
         local carried = field == "carriedItems"
         for _, item in ipairs(plan.discovery and plan.discovery[field] or {}) do
-            if not routed[item.questID] and (carried or item.action == "pick_up" or item.action == "possible_item_drop") then
+            local rejection = ns.Discovery.rejectionLabels[item.reason]
+            if not routed[item.questID] and (field ~= "blocked" or rejection)
+                and (carried or item.action == "pick_up" or item.action == "possible_item_drop") then
                 local point, position = item.point
                 if point and point.coordinateMapID == mapID then
                     if circular then position = MinimapPosition(point.world, origin, radius, cosine, sine)
@@ -237,8 +247,10 @@ local function RenderOpportunityPins(view, plan, placed, width, height, scale, m
                     pin:SetPoint("CENTER", view.overlay, circular and "CENTER" or "TOPLEFT", px, circular and py or -py)
                     PinLeader(view, #plan.steps + #(view.alternatives or {}) + serial, circular and "CENTER" or "TOPLEFT",
                         x / scale, (circular and y or -y) / scale, px / scale, (circular and py or -py) / scale, scale)
-                    pin.color:SetColorTexture(0.95, 0.75, 0.05, 0.95)
-                    pin.text:SetText(item.action == "possible_item_drop" and "~!" or "!")
+                    if rejection then pin.color:SetColorTexture(0.5, 0.5, 0.5, 0.95)
+                    else pin.color:SetColorTexture(0.95, 0.75, 0.05, 0.95) end
+                    pin.text:SetText(rejection and "×"
+                        or (item.action == "possible_item_drop" or item.action == "pick_up" and item.certainty ~= "confirmed") and "~!" or "!")
                     pin:Show()
                 end
             end

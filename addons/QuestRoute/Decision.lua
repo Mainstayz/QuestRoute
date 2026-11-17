@@ -332,11 +332,11 @@ end
 local function DescribeOpportunity(item, applied)
     local action = item.action or "bring_item"
     local prefix = action == "bring_item" and "已取得：" or action == "start_item" and "背包物品可启动："
-        or action == "pick_up" and (applied and "建议先接：" or "顺路可接：")
+        or action == "pick_up" and (item.certainty == "confirmed" and (applied and "建议先接：" or "顺路可接：")
+            or (applied and "建议先确认接取：" or "顺路确认接取："))
         or action == "possible_item_drop" and (item.questItem and "顺路取物：" or "物品任务来源：") or "关联路线，先做："
     local title = type(item.itemName) == "string" and item.itemName ~= "" and item.itemName or item.title
     local text = prefix .. title
-    if action == "pick_up" and item.certainty ~= "confirmed" then text = text .. "（预计可接）" end
     local reason = OpportunityReason(item)
     if action == "bring_item" then text = text .. " · 向NPC确认接取/交付"
     elseif reason then text = text .. " · " .. reason end
