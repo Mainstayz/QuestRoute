@@ -14,6 +14,8 @@ end
 
 local function ConfigureRoutePin(pin)
     pin:SetScript("OnClick", function(self)
+        -- 合并方块代表一组任务：右键不跳过，避免一次或误点跳过整组。
+        if self.opportunity and self.group and #self.group.items > 1 then return end
         if self.step then
             local shift = Accessible(IsShiftKeyDown())
             if shift and self.opportunity then return end
@@ -32,22 +34,37 @@ local function ConfigureRoutePin(pin)
         ns.route.hoveredPin = self
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         if self.opportunity then
-            GameTooltip:SetText((step.action == "possible_item_drop" and "~! " or "! ") .. step.title)
-            local location = ns.Util.FormatLocation(step.point)
-            if location then GameTooltip:AddLine(location, 0.7, 1, 0.8) end
-            local status = self.carried and "已持有物品 · 向NPC确认接取/交付"
+            local rejection = ns.Discovery.rejectionLabels[step.reason]
+            local count = self.group and #self.group.items or 1
+            local prefix = rejection and "× "
+                or (step.action == "possible_item_drop" or step.action == "pick_up" and step.certainty ~= "confirmed") and "~! " or "! "
+            if count > 1 then
+                -- 合并方块：第一行数量，第二行首个任务，总共仍不超过四行。
+                GameTooltip:SetText(prefix .. count .. " 个任务")
+                GameTooltip:AddLine("首个：" .. step.title, 0.7, 1, 0.8)
+            else
+                GameTooltip:SetText(prefix .. step.title)
+                local location = ns.Util.FormatLocation(step.point)
+                if location then GameTooltip:AddLine(location, 0.7, 1, 0.8) end
+            end
+            local status = rejection and (rejection .. " · 接取条件待确认")
+                or self.carried and "已持有物品 · 向NPC确认接取/交付"
                 or step.action == "possible_item_drop" and (step.questItem and "拾取任务物品 · 静态来源" or "可能掉落启动物品 · 静态来源")
                 or step.certainty == "confirmed" and "可接任务 · 当前接取位置"
-                or step.point and step.point.source == "client" and "预计可接任务 · 曾交互位置" or "预计可接任务 · 静态接取位置"
+                or step.point and step.point.source == "client" and "接取待确认 · 曾交互位置" or "接取待确认 · 静态接取位置"
             local reason = not self.carried and ns.Decision.Reason(step)
             GameTooltip:AddLine(status .. (reason and (" · " .. reason) or ""), 1, 0.85, 0.3)
-            GameTooltip:AddLine("右键跳过任务", 0.6, 0.9, 1)
+            GameTooltip:AddLine(count > 1 and "合并显示 · 右键不跳过，逐个处理" or "右键跳过任务", 0.6, 0.9, 1)
             GameTooltip:Show()
             return
         end
         GameTooltip:SetText((self.hotspot and (step.index .. self.hotspotLabel .. " 备选热点：") or (step.index .. ". "))
             .. step.title)
-        if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8) end
+        if step.objective then GameTooltip:AddLine(step.objective.text, 0.7, 1, 0.8)
+        elseif step.action == "pick_up" then
+            local pickupLocation = ns.Util.FormatLocation(self.hotspot or step)
+            if pickupLocation then GameTooltip:AddLine(pickupLocation, 0.7, 1, 0.8) end
+        end
 
         -- 状态与位置性质合并一行；静态区域、任务参考位置不表示实时实体坐标。
         local location = step.action == "pick_up" and (step.source == "QuestieDB" and "静态接取位置" or "当前接取位置")
@@ -56,7 +73,7 @@ local function ConfigureRoutePin(pin)
         local status
         if not self.hotspot then
             local navigation = step.navigation
-            if step.action == "pick_up" then status = step.certainty == "confirmed" and "可接任务" or "预计可接任务"
+            if step.action == "pick_up" then status = step.certainty == "confirmed" and "可接任务" or "接取待确认"
             elseif step.action == "start_item" then status = "使用物品接取"
             elseif step.action == "turn_in" then status = "可交任务"
             elseif step.action == "completion_pending" then status = "已完成，等待确认交付"
@@ -109,6 +126,7 @@ local function SetRoutePinAppearance(pin, step, index)
     elseif delivery then pin.color:SetColorTexture(0.85, 0.65, 0.05, 0.95)
     else pin.color:SetColorTexture(0.05, 0.6, 0.75, 0.95) end
     pin.text:SetText(index .. (delivery and "?" or step.action == "completion_pending" and "~"
+        or step.action == "pick_up" and step.certainty ~= "confirmed" and "~!"
         or (step.action == "pick_up" or step.action == "start_item") and "!" or ""))
 end
 
@@ -203,45 +221,103 @@ local function RenderAlternativePins(view, plan, placed, width, height, scale, m
     end
 end
 
-local function RenderOpportunityPins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
-    view.opportunities = view.opportunities or {}
-    for _, pin in pairs(view.opportunities) do pin:Hide(); pin.step = nil end
-    local routed, circular, serial = {}, origin ~= nil, 0
-    for _, step in ipairs(plan.steps) do routed[step.questID] = true end
-    for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems" }) do
+-- 同一地点（同实体同坐标、或世界距离±8码内的重叠NPC）的同类接取建议合并为一个方块。
+local function SameSpot(a, b)
+    if a.coordinateMapID == b.coordinateMapID and IsFinite(a.x) and IsFinite(a.y)
+        and math.abs(a.x - b.x) < 0.0005 and math.abs(a.y - b.y) < 0.0005 then return true end
+    local squared = a.world and b.world and ns.Util.DistanceSquared(a.world, b.world)
+    return squared ~= nil and squared <= 64
+end
+
+-- 把规划快照里的接取建议、已提示地点、带书提示和核验受阻点按地点分组；不创建任何界面元素。
+-- 同一任务在 opportunities 与 carriedItems 之间只保留带书提示；每组首项为悬停和点击的代表。
+local function GroupOpportunities(plan, mapID, labels)
+    local discovery, groups = plan and plan.discovery, {}
+    local routed, carriedIDs, seen = {}, {}, {}
+    labels = labels or {}
+    for _, step in ipairs(plan and plan.steps or {}) do routed[step.questID] = true end
+    for _, item in ipairs(discovery and discovery.carriedItems or {}) do carriedIDs[item.questID] = true end
+    for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems", "blocked" }) do
         local carried = field == "carriedItems"
-        for _, item in ipairs(plan.discovery and plan.discovery[field] or {}) do
-            if not routed[item.questID] and (carried or item.action == "pick_up" or item.action == "possible_item_drop") then
-                local point, position = item.point
-                if point and point.coordinateMapID == mapID then
-                    if circular then position = MinimapPosition(point.world, origin, radius, cosine, sine)
-                    else position = ProjectWorld(point.world, mapID) end
-                end
-                local onEdge = false
-                if position and circular then
-                    local length = math.sqrt(position.x ^ 2 + position.y ^ 2)
-                    onEdge = length > 0.84
-                    if onEdge then position = { x = position.x * 0.84 / length, y = position.y * 0.84 / length } end
-                end
-                if position and (circular or position.x >= 0 and position.x <= 1 and position.y >= 0 and position.y <= 1) then
-                    serial = serial + 1
-                    local pin = view.opportunities[serial]
-                    if not pin then pin = NewRoutePin(view); pin:SetSize(20, 20); view.opportunities[serial] = pin end
-                    pin.step, pin.opportunity, pin.onEdge, pin.carried = item, true, onEdge, carried
-                    pin:SetScale(1 / scale)
-                    local x, y = position.x * width * scale, position.y * height * scale
-                    if circular then x, y = position.x * width / 2, position.y * height / 2 end
-                    local px, py, shifted = SeparatePin(placed, x, y, width * scale, height * scale, circular)
-                    pin.shifted = shifted
-                    pin:ClearAllPoints()
-                    pin:SetPoint("CENTER", view.overlay, circular and "CENTER" or "TOPLEFT", px, circular and py or -py)
-                    PinLeader(view, #plan.steps + #(view.alternatives or {}) + serial, circular and "CENTER" or "TOPLEFT",
-                        x / scale, (circular and y or -y) / scale, px / scale, (circular and py or -py) / scale, scale)
-                    pin.color:SetColorTexture(0.95, 0.75, 0.05, 0.95)
-                    pin.text:SetText(item.action == "possible_item_drop" and "~!" or "!")
-                    pin:Show()
+        for _, item in ipairs(discovery and discovery[field] or {}) do
+            local rejection = labels[item.reason]
+            local drop = item.action == "possible_item_drop"
+            local point = item.point
+            if not routed[item.questID] and (field ~= "blocked" or rejection)
+                and (carried or item.action == "pick_up" or drop)
+                and not (carriedIDs[item.questID] and not carried and not drop)
+                and point and point.coordinateMapID == mapID then
+                local key = item.questID .. ":" .. (drop and ("drop:" .. (item.itemID or 0)) or "npc")
+                if not seen[key] then
+                    seen[key] = true
+                    local glyph = rejection and "×"
+                        or (drop or item.action == "pick_up" and item.certainty ~= "confirmed") and "~!" or "!"
+                    local target
+                    for _, group in ipairs(groups) do
+                        if group.field == field and group.glyph == glyph and SameSpot(group.point, point) then target = group; break end
+                    end
+                    if target then target.items[#target.items + 1] = item
+                    else
+                        groups[#groups + 1] = { field = field, glyph = glyph, carried = carried, rejection = rejection ~= nil,
+                            point = point, items = { item } }
+                    end
                 end
             end
+        end
+    end
+    return groups
+end
+
+-- 合并方块在 20×20 内用小号字体显示数量：1-9 带符号，10-99 只显示数字，更多显示 99+。
+local function GroupLabel(group)
+    local count = #group.items
+    if count == 1 then return group.glyph end
+    if count <= 9 then return count .. group.glyph end
+    return count <= 99 and tostring(count) or "99+"
+end
+
+local function RenderOpportunityPins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
+    view.opportunities = view.opportunities or {}
+    for _, pin in pairs(view.opportunities) do pin:Hide(); pin.step, pin.group = nil, nil end
+    local circular, serial = origin ~= nil, 0
+    for _, group in ipairs(GroupOpportunities(plan, mapID, ns.Discovery.rejectionLabels)) do
+        local point, position = group.point
+        if circular then position = MinimapPosition(point.world, origin, radius, cosine, sine)
+        else position = ProjectWorld(point.world, mapID) end
+        local onEdge = false
+        if position and circular then
+            local length = math.sqrt(position.x ^ 2 + position.y ^ 2)
+            onEdge = length > 0.84
+            if onEdge then position = { x = position.x * 0.84 / length, y = position.y * 0.84 / length } end
+        end
+        if position and (circular or position.x >= 0 and position.x <= 1 and position.y >= 0 and position.y <= 1) then
+            serial = serial + 1
+            local pin = view.opportunities[serial]
+            if not pin then pin = NewRoutePin(view); pin:SetSize(20, 20); view.opportunities[serial] = pin end
+            pin.step, pin.group, pin.opportunity, pin.onEdge, pin.carried = group.items[1], group, true, onEdge, group.carried
+            local merged = #group.items > 1
+            pin:SetSize(merged and 24 or 20, merged and 24 or 20)
+            pin.text:SetFontObject(merged and "GameFontNormalSmall" or "GameFontNormal")
+            pin.text:ClearAllPoints()
+            if merged then
+                -- 数量文字用小字体对象、不限字串宽度，避免被截成“…”（客户端字号下限约 14，不再缩小）。
+                pin.text:SetPoint("CENTER", pin, "CENTER", 0, 0)
+                pin.text:SetWidth(40)
+            else pin.text:SetWidth(0); pin.text:SetAllPoints(pin) end
+            pin.text:SetTextColor(1, 1, 1)
+            pin:SetScale(1 / scale)
+            local x, y = position.x * width * scale, position.y * height * scale
+            if circular then x, y = position.x * width / 2, position.y * height / 2 end
+            local px, py, shifted = SeparatePin(placed, x, y, width * scale, height * scale, circular)
+            pin.shifted = shifted
+            pin:ClearAllPoints()
+            pin:SetPoint("CENTER", view.overlay, circular and "CENTER" or "TOPLEFT", px, circular and py or -py)
+            PinLeader(view, #plan.steps + #(view.alternatives or {}) + serial, circular and "CENTER" or "TOPLEFT",
+                x / scale, (circular and y or -y) / scale, px / scale, (circular and py or -py) / scale, scale)
+            if group.rejection then pin.color:SetColorTexture(0.5, 0.5, 0.5, 0.95)
+            else pin.color:SetColorTexture(0.95, 0.75, 0.05, 0.95) end
+            pin.text:SetText(GroupLabel(group))
+            pin:Show()
         end
     end
 end
@@ -249,5 +325,5 @@ end
 ns.MapPins = {
     ProjectWorld = ProjectWorld, Configure = ConfigureRoutePin, New = NewRoutePin, Appearance = SetRoutePinAppearance,
     Separate = SeparatePin, Leader = PinLeader, MinimapPosition = MinimapPosition, RenderAlternatives = RenderAlternativePins,
-    RenderOpportunities = RenderOpportunityPins,
+    RenderOpportunities = RenderOpportunityPins, GroupOpportunities = GroupOpportunities, GroupLabel = GroupLabel,
 }

@@ -33,7 +33,9 @@ local function RouteTick(_, elapsed)
         local current = ns.route.playerLocation.world
         local distance = DistanceSquared(current, ns.route.lastOrigin)
         local threshold = RouteSettings().moveThreshold
-        if ns.route.playerLocation.coordinateMapID ~= ns.route.plan.mapID then
+        if ns.Discovery.ObserveUnits() then
+            RebuildRoute("pickup_unit_changed")
+        elseif ns.route.playerLocation.coordinateMapID ~= ns.route.plan.mapID then
             RebuildRoute("player_map_changed")
         elseif context.character.level ~= ns.route.plan.levelPriority.referenceLevel then
             RebuildRoute("player_level_changed")
@@ -64,6 +66,7 @@ function ns.StartRoute()
     -- 工作时间只属于当前UI；热加载也不沿用旧版本未完成的导航计时。
     if ns.route.plan then ns.route.plan.navigation = nil end
     ns.route.lastNavigationEvent, ns.route.workSession, ns.route.suspendedObjectiveSession = nil, nil, nil
+    ns.Discovery.ObserveUnits()
     RebuildRoute("startup")
     -- 复用图元时也更新回调，保证热加载后悬停说明使用本轮逻辑。
     for _, view in ipairs(ns.route.views) do
@@ -84,9 +87,16 @@ function ns.StartRoute()
     driver:RegisterEvent("ZONE_CHANGED_NEW_AREA")
     driver:RegisterEvent("QUEST_DATA_LOAD_RESULT")
     driver:RegisterEvent("QUEST_TURNED_IN")
+    driver:RegisterEvent("QUEST_ACCEPTED")
+    driver:RegisterEvent("QUEST_REMOVED")
+    driver:RegisterEvent("PLAYER_LEVEL_UP")
     driver:RegisterEvent("BAG_UPDATE_DELAYED")
     driver:RegisterEvent("GOSSIP_SHOW")
     driver:RegisterEvent("GOSSIP_CLOSED")
+    driver:RegisterEvent("GOSSIP_OPTIONS_REFRESHED")
+    driver:RegisterEvent("QUEST_GREETING")
+    driver:RegisterEvent("QUEST_DETAIL")
+    driver:RegisterEvent("QUEST_FINISHED")
     driver:RegisterEvent("UPDATE_FACTION")
     driver:RegisterEvent("SKILL_LINES_CHANGED")
     driver:RegisterEvent("SPELLS_CHANGED")
@@ -95,6 +105,7 @@ function ns.StartRoute()
     driver:SetScript("OnEvent", function(_, event, questID)
         if event == "NAME_PLATE_UNIT_ADDED" then RenderTaskNameplates(); return end
         if event == "NAME_PLATE_UNIT_REMOVED" then HideTaskMarkers(questID); return end
+        ns.Discovery.ObserveInteraction(event)
         HideTaskMarkers()
         if event == "QUEST_DATA_LOAD_RESULT" and not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
             or (ns.route.associationQuestIDs and ns.route.associationQuestIDs[questID])) then return end
@@ -160,6 +171,13 @@ local function PrintWhy()
                 if index > 5 then break end
                 print("关联 [" .. item.questID .. "] " .. ns.Decision.Describe(item, false))
             end
+        end
+    end
+    for _, item in ipairs(discovery and discovery.blocked or {}) do
+        local status = ns.Discovery.rejectionLabels[item.reason]
+        if status then
+            local location = ns.Util.FormatLocation(item.point)
+            print("接取核验 [" .. item.questID .. "] " .. item.title .. " — " .. status .. "，接取条件待确认" .. (location and (" · " .. location) or ""))
         end
     end
     local decision = plan.decision

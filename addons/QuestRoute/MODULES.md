@@ -22,7 +22,7 @@
 | `Planner.lua` | 候选选择（含任务群加成和前瞻）、当前目标保持、归组、接取插入、提示及路线快照 | `ns.Planner` |
 | `RouteActions.lua` | 跳过/恢复、换热点草稿提交、清避让、更新选项 | 既有 `ns.SetQuestSkip` 等公开 API |
 | `Settings.lua` | 原生设置页和单次原生回调分发 | `ns.RegisterSettings` |
-| `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠和备选图元 | `ns.MapPins` |
+| `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠、同地点接取建议合并和备选图元 | `ns.MapPins` |
 | `WorldMap.lua` | 大地图/战场地图图层、矩形裁剪 | `ns.WorldMap` |
 | `Minimap.lua` | 小地图朝向、圆形裁剪和视野外下一步指示 | `ns.Minimap` |
 | `QuestRoute.lua` | 事件/计时驱动、命令、桥接入口、登录/热加载生命周期 | `ns.StartRoute`、`ns.OnUnload`、`ns.OnReload` |

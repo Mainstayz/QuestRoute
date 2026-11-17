@@ -555,7 +555,7 @@ local function RebuildRoute(reason)
         if not listed then group.questIDs[#group.questIDs + 1] = quest.questID; group.questCount = group.questCount + 1 end
         steps[#steps + 1] = {
             index = #steps + 1, stepKey = selected.stepKey, questID = quest.questID, title = quest.title, level = quest.level,
-            displayTitle = selected.action == "pick_up" and (quest.title .. "（接任务）")
+            displayTitle = selected.action == "pick_up" and (quest.title .. (selected.certainty == "confirmed" and "（接任务）" or "（确认接取）"))
                 or selected.action == "start_item" and (quest.title .. "（使用物品接任务）")
                 or quest.readyForTurnIn and (quest.title .. "（交任务）")
                 or quest.isComplete and (quest.title .. "（等待确认交付）")
@@ -614,7 +614,7 @@ local function RebuildRoute(reason)
             pendingLocationCount = discovery.pendingLocationCount,
             opportunityTotal = #(discovery.opportunities or {}), blockedTotal = #(discovery.blocked or {}), summaryLimit = 25,
             opportunities = AssociationSummary(discovery.opportunities, steps[1]), blocked = AssociationSummary(discovery.blocked),
-            carriedItems = AssociationSummary(discovery.carriedItems),
+            carriedItems = AssociationSummary(discovery.carriedItems), itemGate = discovery.itemGate,
             announcedOpportunities = discovery.announcedOpportunities }, decision = decision,
         groups = groups, groupRadius = routeRules.groupRadius, stability = stability,
         spotRules = { radius = spotRules.radius, duration = spotRules.duration }, avoidedSpots = ns.route.spotAvoidances,
