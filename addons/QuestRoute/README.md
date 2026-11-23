@@ -25,6 +25,8 @@
 右键跳过任务 · Shift+右键换地点
 ```
 
+接取建议、已提示地点、带书提示和核验受阻（×）的方块，同一地点（同实体同坐标，或世界距离 8 码内重叠的 NPC）的同类合并为一个方块，大地图与小地图相同；同一任务在 opportunities 与 carriedItems 同时出现时只画带书提示。合并方块（略大为 24×24）显示数量，1–9 个带符号（如 `3~!`），10–99 只显示数字，更多显示 `99+`；悬停仍为四行：`~! N 个任务`、`首个：任务名`、状态、`合并显示 · 右键不跳过，逐个处理`。合并方块右键不跳过任何任务（避免一次或误触跳过整组），要处理单个任务用 `/questroute skip <questID>`。
+
 备选明确标注，交付与待确认状态分开；保留“静态刷新区域”或“任务参考位置”的精度说明，不展开奖励、同组清单或算法统计。接取步骤补接取 NPC 名称和坐标；未交互时只称“接取待确认”。实际对话记录绑定 NPC 身份及当时的位置，不能当成玩家走到别处后的可接清单；完整列表没有提供任务时，标记说明“NPC当前未提供 · 接取条件待确认”；当前选中/悬停/手柄交互目标为存活、在距离内的已知接取 NPC，但客户端明确不可交互时，说明“NPC当前不可交互 · 接取条件待确认”，`why` 也可查看。未知、太远或死亡不能推断此限制；同一 NPC 恢复可交互后自动释放旧限制。升级、接交/移除任务、背包、声望、技能/法术、进入世界或切换地区后重新核验，不写入手动跳过或存档。
 
 姓名板功能默认启用，玩家自行开启敌方姓名板（默认 `V`）。黄色“! 击杀 2/6 · 材料 1/5”表示仍有已确认用途，关联当前路线目标时为橙色。覆盖所有有效未跳过任务，击杀够数但材料仍缺时继续提示；未知、身份受限或无可靠用途时隐藏，不将其判成确定无关。
@@ -192,6 +194,8 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 关联知识全部来自 QuestieDB，按其数据有效设计；客户端只读校验角色等级、种族/职业、任务历史、当前进度、背包与实际交互可接列表。未接的重复、战场/PvP、节日/安其拉筹备活动、捐献类、纯ASCII英文标题和低于minPickupLevel的任务不进入接取建议、两图标记或前瞻，旧提示同步清除；已接任务仍正常导航和交付。对应 `discovery.blocked[].reason` 为repeatable、battleground、holiday、donation、unlocalized、quest_below_minimum。重复性采用原生 `IsRepeatableQuest=true` 或 QuestieDB `specialFlags` 的 REPEATABLE 位，补齐本客户端原生 false 的漏报；战场结合原生PvP类型41与数据库战场分类/AreaID，节日按数据库明确分类，捐献按中文标题“捐献/贡献”前缀。英文只过滤纯ASCII标题，中文夹英文缩写保留；标题或等级未知不当成英文/低级。捐献毛料原生等级为60且非重复，因此单独按捐献类排除。对话确认可接时绑定具体 NPC 和交互时的位置（source=client、precision=interaction_position）；其他接取点仍标注静态位置。完整对话列表未提供任务或近距离存活接取 NPC 明确不可交互时，该 NPC 接取点停止参与可执行候选，discovery.blocked 给出 unknown 和 npc_not_offering/npc_not_interactable 及 point/action；地图保留灰色 × 和原因。未知/不完整列表及单项详情不用于否定其他任务。`preQuestGroup` 按 AND、`preQuestSingle` 按 OR，完成目标仍需交付才满足前置。缺字段/不可读条件保留未知；未覆盖的 `triggerEnd` 探索/事件条件不能据普通目标预测完整交付，跳过/失败等被过滤的已接任务也不参与预测。
 
 索引按当前地图分批构建，每批最多 64 任务，坐标、来源展开与索引写入内每 128 次操作或约 3 ms 让出，零本图地点的来源也计入预算。地图信息或世界坐标暂缺时，每 5 秒仅重试受影响记录，保留成功点并对新增索引去重；`discovery.pendingLocationCount` 给出待恢复数量，恢复前不提示本图已完成。机会包括 400 码内接取点、现有第一目的地 200 码内或同目标关系、直线途中额外绕路不超过 150 码的接取点、实际背包启动物品及附近可能掉落/拾取启动物品的来源。静态来源不表示实体在场或必掉。
+
+任务需要带物品才由 NPC 给出（`record.questItems`，如幽暗城图书馆“40 本书”系列：先拾取书再交给图书管理员接取）时，背包没有该物品就不提议到该 NPC 接取，也不进 `blocked`、不画灰色×，路线与前瞻不会为它前往 NPC；背包有书时只提示带书（`carriedItems`），NPC 当面已提供则以 NPC 为准。背包读取不完整（接口缺失、出错或物品 ID 为机密值）时按未知处理，同样不提议也不判为没有。`get_plan` 的 `discovery.itemGate` 给出 `required`（确认背包没有）和 `unknown`（无法确认）的任务数，仅供调试；书籍所在物件的拾取建议（possible_item_drop）不受影响。
 
 `discovery.opportunities[]` 提供 questID/title/action/point、certainty、reasons、relatedQuestIDs、distance/extraDistance 及可选 itemID；action 为 pick_up/start_item/possible_item_drop。`questItem=true` 的来源表示拾取任务所需物品，不是使用后接任务；point.entityName 给人物/物件名称（有数据时）。`discovery.carriedItems[]` 提供已持有但任务尚未接取的 questID/title/itemID/itemName/point/reasons，point 为 NPC 接交参考位置，可在外图；只提示，不跨图排正式步骤或认定任务可交。`discovery.announcedOpportunities[]` 给已提示、当前已离开候选范围且资格仍有效的地图参考点，字段沿用机会格式，reasons 为 previous_notice；不重入决策、不重复提示，重新进入候选范围时使用最新机会而不重复画点。blocked 列出条件未满足或未知的相关候选，实际 npc_not_offering/npc_not_interactable 核验优先保留在摘要中。两类即时摘要各限 25 项（已采用机会额外保留），opportunityTotal/blockedTotal 给完整数量，summaryLimit 给上限；搜索内部仍用完整候选。`decision.predicted[]` 是局部预测行动，不写回任务日志；正式步骤只采用当前可执行的下一动作。搜索深度 6、束宽 4，最多 18 项任务、6 个首动作与每层 4 个动作，复用本轮距离计算；没有可接或可解锁的收益时不展开。保留强制从原 1 号开始的独立基线。评分用任务目标/交付收益与直线行程、粗略工作成本，不是经验/小时预测，也不保证全局最优。
 

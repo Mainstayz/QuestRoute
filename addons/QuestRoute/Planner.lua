@@ -614,7 +614,7 @@ local function RebuildRoute(reason)
             pendingLocationCount = discovery.pendingLocationCount,
             opportunityTotal = #(discovery.opportunities or {}), blockedTotal = #(discovery.blocked or {}), summaryLimit = 25,
             opportunities = AssociationSummary(discovery.opportunities, steps[1]), blocked = AssociationSummary(discovery.blocked),
-            carriedItems = AssociationSummary(discovery.carriedItems),
+            carriedItems = AssociationSummary(discovery.carriedItems), itemGate = discovery.itemGate,
             announcedOpportunities = discovery.announcedOpportunities }, decision = decision,
         groups = groups, groupRadius = routeRules.groupRadius, stability = stability,
         spotRules = { radius = spotRules.radius, duration = spotRules.duration }, avoidedSpots = ns.route.spotAvoidances,

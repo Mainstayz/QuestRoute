@@ -78,6 +78,8 @@ function CreateFrame(kind,name,parent)
     function f:SetColorTexture(...) self.color={...} end
     function f:SetTextColor(...) self.textColor={...} end
     function f:SetText(text) self.text=text end
+    function f:SetFontObject(font) self.fontObject=font end
+    function f:SetWidth(width) self.width=width end
     function f:SetThickness(value) self.thickness=value end
     function f:SetStartPoint(...) self.startPoint={...} end
     function f:SetEndPoint(...) self.endPoint={...} end

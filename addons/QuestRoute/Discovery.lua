@@ -505,14 +505,21 @@ local function Around(grid, world, radius, visit)
     end)
 end
 
+-- 第三个返回值：背包是否被完整读取；接口缺失、调用出错或物品ID为机密值时为 false，此时"没有物品"只是未知。
 local function Inventory(db)
-    local held, quests = {}, {}
-    local api = Table(C_Container) or {}
+    local held, quests, complete = {}, {}, true
+    local api = Table(C_Container)
+    if not api or type(api.GetContainerNumSlots) ~= "function" or type(api.GetContainerItemID) ~= "function" then
+        complete, api = false, api or {}
+    end
     for bag = 0, 4 do
         local slots = Call(api.GetContainerNumSlots, bag)
+        if not (IsFinite(slots) and slots >= 0 and slots % 1 == 0) then complete = false end
         if IsFinite(slots) and slots >= 0 and slots % 1 == 0 then
             for slot = 1, slots do
-                local itemID = Call(api.GetContainerItemID, bag, slot)
+                local ok, raw = pcall(api.GetContainerItemID, bag, slot)
+                if not ok or raw ~= nil and not canaccessvalue(raw) then complete = false end
+                local itemID = ok and Accessible(raw) or nil
                 if IsID(itemID) then
                     held[itemID] = true
                     local item = Table(db.Item)
@@ -524,7 +531,7 @@ local function Inventory(db)
             end
         end
     end
-    return held, quests
+    return held, quests, complete
 end
 
 local function Character(context, db)
@@ -691,7 +698,8 @@ end
 
 local function Collect(context, active, candidates, settings)
     local result = { available = false, building = false, scanned = 0, total = 0,
-        quests = {}, opportunities = {}, announcedOpportunities = {}, carriedItems = {}, blocked = {}, completed = {} }
+        quests = {}, opportunities = {}, announcedOpportunities = {}, carriedItems = {}, blocked = {}, completed = {},
+        itemGate = { required = 0, unknown = 0 } }
     context, active, candidates = Table(context) or {}, Table(active) or {}, Table(candidates) or {}
     local location = Table(context.location) or {}
     local mapID = Accessible(location.coordinateMapID)
@@ -785,8 +793,22 @@ local function Collect(context, active, candidates, settings)
         hints[id].reasons[why] = true
         if IsID(related) and related ~= id then hints[id].related[related] = true end
     end
+    -- 需带物品才由NPC给任务（record.questItems）：确认背包没有该物品时不提议接取，也不当成NPC拒绝；
+    -- 背包不可完整读取时按未知处理，同样不提议。NPC已实际提供（offered）则以NPC为准。
+    local held, bagQuests, inventoryComplete = Inventory(db)
+    local gossip = ns.route.gossip
+    local gossipPoint = gossip and Point(gossip.point, false)
+    local offered = gossipPoint and gossipPoint.coordinateMapID == mapID and gossip.offered or {}
+    local function ItemGate(id)
+        local record = state.records[id]
+        if offered[id] or not record or not next(record.questItems or {}) then return end
+        for itemID in pairs(record.questItems) do
+            if held[itemID] then return end
+        end
+        return inventoryComplete and "quest_item_required" or "quest_item_unknown"
+    end
     local function Propose(id, point, action, itemID)
-        if action == "pick_up" and StarterRejected(id, point) then return end
+        if action == "pick_up" and (StarterRejected(id, point) or ItemGate(id)) then return end
         if action == "possible_item_drop" and TargetAboveLevel(point) then return end
         local distance = Distance(origin, point.world)
         if not distance then return end
@@ -829,7 +851,6 @@ local function Collect(context, active, candidates, settings)
             for _, drop in ipairs(record and record.drops or {}) do Propose(id, drop.point, "possible_item_drop", drop.itemID) end
         end
     end
-    local held, bagQuests = Inventory(db)
     local carriedQuests = {}
     for itemID in pairs(held) do
         for id in pairs(state.byItem[itemID] or {}) do
@@ -840,9 +861,6 @@ local function Collect(context, active, candidates, settings)
             else bagQuests[id] = itemID end
         end
     end
-    local gossip = ns.route.gossip
-    local gossipPoint = gossip and Point(gossip.point, false)
-    local offered = gossipPoint and gossipPoint.coordinateMapID == mapID and gossip.offered or {}
     for id in pairs(offered) do Hint(id, "gossip_available") end
     local originPoint = origin and Point({ world = origin, coordinateMapID = mapID, reportedMapID = mapID,
         x = Accessible(location.x), y = Accessible(location.y), source = "client", precision = "player_position" }, false)
@@ -882,6 +900,7 @@ local function Collect(context, active, candidates, settings)
     table.sort(ordered)
     for _, id in ipairs(ordered) do
         local record, entry = state.records[id], active[id]
+        local gate = not entry and ItemGate(id) or nil
         if entry or (record and (record.localData or bagQuests[id] or carriedQuests[id] or offered[id])) then
             local quest = native[id]
             if not quest and entry then quest = ActiveData(id, entry) end
@@ -915,7 +934,7 @@ local function Collect(context, active, candidates, settings)
             if type(title) ~= "string" or title == "" then title = "任务" .. id end
             local out = { questID = id, title = title, level = Accessible(quest.level), active = entry ~= nil,
                 status = Accessible(quest.status) or "unknown", eligibility = eligibility, conditionReason = why,
-                startItemID = bagQuests[id], certainty = offered[id] and "confirmed" or "estimated",
+                startItemID = bagQuests[id], certainty = offered[id] and "confirmed" or "estimated", itemGate = gate,
                 missingPrerequisites = missing, preAll = CopyList(record and record.preAll), preAny = CopyList(record and record.preAny),
                 exclusiveTo = CopyList(record and record.exclusiveTo), targets = {}, starters = {}, finishers = {}, childQuests = {},
                 rewardWeight = weights[id] or 1, targetsComplete = not entry and record and record.targetsComplete == true }
@@ -930,14 +949,14 @@ local function Collect(context, active, candidates, settings)
             end
             for _, field in ipairs({ "starters", "finishers" }) do
                 for _, point in ipairs(record and record[field] or {}) do
-                    if field ~= "starters" or why == "prerequisite" or not StarterRejected(id, point) then
+                    if field ~= "starters" or not gate and (why == "prerequisite" or not StarterRejected(id, point)) then
                         out[field][#out[field] + 1] = Point(point, false)
                     end
                 end
             end
             if offered[id] then out.starters = { Point(gossipPoint, false) } end
             if not entry and eligibility == "eligible" and #out.starters == 0 and record and #record.starters > 0
-                and not bagQuests[id] then
+                and not bagQuests[id] and not gate then
                 eligibility, why = "unknown", StarterRejected(id, record.starters[1]) or "npc_not_offering"
                 out.eligibility, out.conditionReason = eligibility, why
             end
@@ -969,6 +988,12 @@ local function Collect(context, active, candidates, settings)
                 for key in pairs(coverage[id].required) do if not present[key] then full = false end end
                 out.targetsComplete = full
             end
+            if gate and eligibility == "eligible" then
+                -- 仅供 get_plan/调试；资格仍为可接，书籍来源（possible_item_drop）建议照常保留。
+                out.conditionReason = gate
+                local gated = result.itemGate
+                if gate == "quest_item_required" then gated.required = gated.required + 1 else gated.unknown = gated.unknown + 1 end
+            end
             result.quests[id] = out
             if not state.building and not entry and eligibility == "eligible" and carriedQuests[id] and record.carriedPoint then
                 for itemID in pairs(record.questItems) do
@@ -979,7 +1004,7 @@ local function Collect(context, active, candidates, settings)
                     end
                 end
             end
-            if eligibility ~= "eligible" then
+            if eligibility ~= "eligible" and not (gate and eligibility == "unknown") then
                 local point
                 if rejectionLabels[why] then point = record.starters[1] end
                 result.blocked[#result.blocked + 1] = { questID = id, title = out.title, eligibility = eligibility, reason = why,
@@ -1019,7 +1044,7 @@ local function Collect(context, active, candidates, settings)
     for key, item in pairs(announced and announced.items or {}) do
         local quest = result.quests[item.questID]
         if active[item.questID] or item.itemID and held[item.itemID]
-            or item.action == "pick_up" and StarterRejected(item.questID, item.point)
+            or item.action == "pick_up" and (StarterRejected(item.questID, item.point) or ItemGate(item.questID))
             or item.action == "possible_item_drop" and TargetAboveLevel(item.point)
             or quest and (quest.active or quest.eligibility == "blocked") then
             announced.items[key] = nil
