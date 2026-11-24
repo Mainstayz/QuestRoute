@@ -137,6 +137,9 @@ local ACTIVE_QUESTS = {
     { questID = 8006, title = "奥达曼宝物", category = "荆棘谷", level = 42, tag = { id = 81, name = "地下城" },
       diff = 2, trivial = false, xp = 7000, money = 0, mapID = 1434,
       objectives = { { text = "0/1 宝物", type = "item", finished = false, numFulfilled = 0, numRequired = 1 } } },
+    -- 15. 非装备类高价值对比项：已完成可交的纯经验任务 -> keep_priority，但权重应严格低于优秀装备任务/任务链
+    { questID = 8007, title = "顺路汇报", category = "希尔斯布莱德丘陵", level = 38, readyForTurnIn = true, isComplete = true,
+      diff = 2, trivial = false, xp = 3200, money = 0, mapID = 1424, objectives = {} },
 }
 
 local BY_ID = {}
@@ -258,6 +261,7 @@ local DB_QUESTS = {
     [8004] = { name = "失落的日记", level = 36, nextQ = 0, startedBy = { {}, {}, { 9901 } } },
     [8005] = { name = "法系布袍", level = 38, nextQ = 0, startedBy = { { 101 }, {}, {} } },
     [8006] = { name = "奥达曼宝物", level = 42, nextQ = 0, startedBy = { { 101 }, {}, {} } },
+    [8007] = { name = "顺路汇报", level = 38, nextQ = 0, startedBy = { { 101 }, {}, {} } },
 }
 local DB_ITEMS = {
     [3388] = { name = "次级巨魔之血药剂", npcDrops = {}, objectDrops = {} }, -- 制造/购买品
@@ -404,7 +408,7 @@ local res = ns.AnalyzeQuests({})
 check(res.ok == true, "analyze_quests returns ok=true")
 check(res.policy == "advisory_only_never_auto_abandon", "policy states advisory only")
 check(res.groupQuestPolicy == "neutral_tag_only", "groupQuestPolicy is neutral_tag_only")
-check(res.log.count == 14 and res.log.maxCanAccept == 40, "reads log count and cap")
+check(res.log.count == 15 and res.log.maxCanAccept == 40, "reads log count and cap")
 check(res.gearEvaluation.enabled and res.gearEvaluation.scored, "gear evaluation enabled and scored for prot warrior")
 
 local byID = {}
@@ -471,45 +475,131 @@ check(byID[1107].reaccept.cost == "easy", "npc-started quest marked easy reaccep
 check(byID[8005].reward.hasNotableGear == false and byID[8005].verdict == "recommend_drop", "cloth green ignored for lvl40 warrior")
 check(byID[8006].verdict == "hold_or_drop", "high single-quest XP (7.7%) far standalone is hold_or_drop not recommend_drop")
 
--- 13. 排序：recommend_drop 排在最前，keep_priority 排在最后
+-- 13. 排序：recommend_drop 排在最前，keep_priority 排在最后；且优秀装备（本步或任务链终点）权重最高
 check(res.quests[1].verdict == "recommend_drop", "recommend_drop sorted first")
 check(res.quests[#res.quests].verdict == "keep_priority", "keep_priority sorted last")
+check(q503.hasExcellentGear == true and q503.bestGearSource == "chain_terminal" and q503.chain.bestFutureGear.isTerminal == true,
+    "503 marked as chain_terminal excellent gear")
+check(byID[6521].hasExcellentGear == true and byID[6521].bestGearSource == "direct",
+    "6521 marked as direct excellent gear")
+check(q1791.hasExcellentGear == true and q1791.bestGearSource == "chain_terminal" and q1791.chain.bestFutureGear.isTerminal == true,
+    "1791 marked as chain_terminal excellent gear")
+check(byID[8003].hasExcellentGear == false and byID[8007].hasExcellentGear == false,
+    "non-gear keep_priority quests have hasExcellentGear=false")
+check(q503.valueWeight > byID[6521].valueWeight and byID[6521].valueWeight > byID[8007].valueWeight
+    and q1791.valueWeight > byID[8007].valueWeight and byID[8007].valueWeight > byID[8003].valueWeight,
+    "excellent gear (proven upgrade / blue, direct or chain-end) strictly outweighs non-gear protections")
+check(res.quests[#res.quests].questID == 503,
+    "highest-weight proven-upgrade chain-end gear quest sits dead last in cleanup-first sort")
+check(table.concat(q503.tags, "/"):find("链提升", 1, true) ~= nil
+    and table.concat(byID[6521].tags, "/"):find("蓝装", 1, true) ~= nil
+    and table.concat(q1791.tags, "/"):find("链蓝装", 1, true) ~= nil,
+    "excellent gear highlight tags included on direct and chain-end gear quests")
 
--- 14. 过滤与参数验证
+-- 14. 过滤与参数验证（含单任务查询参照系一致性回归测试）
 local onlyDrop = ns.AnalyzeQuests({ verdict = "recommend_drop" })
 check(onlyDrop.ok and #onlyDrop.quests == res.summary.recommendDrop, "verdict filter works")
 local single = ns.AnalyzeQuests({ questID = 503 })
 check(single.ok and #single.quests == 1 and single.quests[1].questID == 503, "questID filter works")
+local single556 = ns.AnalyzeQuests({ questID = 556 })
+check(single556.ok and #single556.quests == 1, "single query for 556 succeeds")
+check(single556.quests[1].clusterCount == byID[556].clusterCount and single556.quests[1].clusterCount > 2,
+    "single questID query preserves full-log clusterCount instead of marking isolated")
+check(single556.reference.medianXP == res.reference.medianXP and single556.quests[1].verdict == byID[556].verdict,
+    "single questID query preserves full-log medianXP and verdict")
+check(ns.route.valuePendingQuestIDs and ns.route.valuePendingQuestIDs[8011] == true,
+    "single questID query does not clobber full-log pending tracker")
 local bad = ns.AnalyzeQuests({ verdict = "invalid_verdict" })
 check(bad.ok == false and bad.error.code == "invalid_arguments", "invalid verdict rejected")
 
+-- 14b. 36级战士评估40级未来任务链板甲终点奖励：不被当前等级过滤截断
+local oldLevel = UnitLevel
+UnitLevel = function() return 36 end
+local res36 = ns.AnalyzeQuests({ questID = 503 })
+UnitLevel = oldLevel
+check(res36.ok and res36.quests[1].chain.bestFutureGear and res36.quests[1].chain.bestFutureGear.item.provenUpgrade == true,
+    "level 36 warrior still scores level 40 future chain plate reward as provenUpgrade")
+
+-- 14c. 后台分帧索引预热接口可用
+check(type(ns.QuestValue.PumpIndex) == "function", "QuestValue.PumpIndex is exposed")
+ns.QuestValue.PumpIndex(8)
+
+-- 14d. 分支任务链不重复叠加互斥分支经验 & 非战士目录外现装装等对比
+local oldGetAll = LibQuestieDB.Quest.GetAllIds
+local oldExists = LibQuestieDB.Quest.Exists
+local oldNext = LibQuestieDB.Quest.nextQuestInChain
+local oldPreS = LibQuestieDB.Quest.preQuestSingle
+local oldName = LibQuestieDB.Quest.name
+local oldLevelQ = LibQuestieDB.Quest.questLevel
+local oldHave = HaveQuestData
+local oldHaveR = HaveQuestRewardData
+local oldXP = GetQuestLogRewardXP
+local branchDB = {
+    [518]  = { nextQ = 0 },
+    [9101] = { name = "分支甲", level = 40, preSingle = { 518 }, xp = 3000 },
+    [9102] = { name = "分支乙", level = 40, preSingle = { 518 }, xp = 3200 },
+}
+LibQuestieDB.Quest.Exists = function(id) return branchDB[id] ~= nil or oldExists(id) end
+LibQuestieDB.Quest.GetAllIds = function()
+    local ids = oldGetAll()
+    ids[#ids + 1] = 9101; ids[#ids + 1] = 9102
+    return ids
+end
+LibQuestieDB.Quest.preQuestSingle = function(id) return branchDB[id] and branchDB[id].preSingle or oldPreS(id) end
+LibQuestieDB.Quest.name = function(id) return branchDB[id] and branchDB[id].name or oldName(id) end
+LibQuestieDB.Quest.questLevel = function(id) return branchDB[id] and branchDB[id].level or oldLevelQ(id) end
+HaveQuestData = function(id) return branchDB[id] ~= nil or oldHave(id) end
+HaveQuestRewardData = HaveQuestData
+GetQuestLogRewardXP = function(id) return (branchDB[id] and branchDB[id].xp) or oldXP(id) end
+-- 使用新 db 引用触发重新建索引（验证分支取最大路径 3200，而非两分支相加 6200）
+local oldDB = LibQuestieDB
+LibQuestieDB = setmetatable({}, { __index = oldDB })
+local branchRes = ns.AnalyzeQuests({ questID = 518 })
+LibQuestieDB = oldDB
+LibQuestieDB.Quest.GetAllIds, LibQuestieDB.Quest.Exists = oldGetAll, oldExists
+LibQuestieDB.Quest.nextQuestInChain, LibQuestieDB.Quest.preQuestSingle = oldNext, oldPreS
+LibQuestieDB.Quest.name, LibQuestieDB.Quest.questLevel = oldName, oldLevelQ
+HaveQuestData, HaveQuestRewardData, GetQuestLogRewardXP = oldHave, oldHaveR, oldXP
+check(branchRes.ok and branchRes.quests[1].chain.totalFutureXP == 3200,
+    "branching chain aggregates max single path XP (3200) instead of summing parallel branches (6200)")
+
 -- 15. 格式化输出
 local auditLines = ns.QuestValue.FormatAuditLines(res, false)
-check(#auditLines >= 2 and auditLines[1]:find("14/40", 1, true) ~= nil, "FormatAuditLines includes capacity summary")
+check(#auditLines >= 2 and auditLines[1]:find("15/40", 1, true) ~= nil, "FormatAuditLines includes capacity summary")
 local detailLines = ns.QuestValue.FormatQuestDetailLines(q503)
 check(table.concat(detailLines, "\n"):find("塔蕾莎的礼物", 1, true) ~= nil, "FormatQuestDetailLines shows future chain step")
 
 -- 16. QuestValueSheet 侧边栏行为
+local openedDetailID
+QuestMapFrame_OpenToQuestDetails = function(id) openedDetailID = id end
 ns.QuestValueSheet.Attach()
 check(ns.QuestValueSheet.panel == nil or not ns.QuestValueSheet.panel:IsShown(), "panel hidden while WorldMapFrame hidden")
 WorldMapFrame:Show()
 check(ns.QuestValueSheet.panel ~= nil and ns.QuestValueSheet.panel:IsShown(), "panel shows when QuestMapFrame becomes visible")
 check(ns.QuestValueSheet.panel.rows[1].item ~= nil, "first card populated")
--- 模拟点击第一张卡片：只打印详情，绝不放弃任务
+-- 模拟点击第一张卡片：打印详情并联动定位原生任务详情，绝不放弃任务
 local beforePrint = #env.printed
+local firstID = ns.QuestValueSheet.panel.rows[1].item.questID
 ns.QuestValueSheet.panel.rows[1].scripts.OnClick(ns.QuestValueSheet.panel.rows[1])
 check(#env.printed > beforePrint, "clicking card prints quest detail to chat")
+check(openedDetailID == firstID, "clicking card opens native quest details for inspection")
 check(env.wasAbandonCalled() == false, "never calls AbandonQuest")
 -- 模拟悬停
 ns.QuestValueSheet.panel.rows[1].scripts.OnEnter(ns.QuestValueSheet.panel.rows[1])
 check(GameTooltip.shown == true and #GameTooltip.lines >= 4, "hovering card populates tooltip")
--- 切换模式到高价值优先
+-- 切换模式到高价值优先：优秀装备（直接或任务链终点）严格排在非装备保护项之前
 ns.QuestValueSheet.panel.modeBtn.scripts.OnClick()
 ns.QuestValueSheet.panel.modeBtn.scripts.OnClick()
-check(ns.QuestValueSheet.items[1].verdict == "keep_priority", "value_first mode puts keep_priority first")
--- 翻页
+check(ns.QuestValueSheet.items[1].verdict == "keep_priority" and ns.QuestValueSheet.items[1].questID == 503,
+    "value_first mode puts proven-upgrade chain-end gear quest #1")
+check(ns.QuestValueSheet.items[2].hasExcellentGear == true and ns.QuestValueSheet.items[3].hasExcellentGear == true
+    and ns.QuestValueSheet.items[4].hasExcellentGear == false,
+    "value_first mode ranks all excellent-gear quests ahead of non-gear keep_priority quests")
+-- 翻页（验证公开 RenderPage 支持热重载）
+check(type(ns.QuestValueSheet.RenderPage) == "function", "RenderPage exposed on QuestValueSheet for hot-reload")
 ns.QuestValueSheet.panel.nextBtn.scripts.OnClick()
 check(ns.QuestValueSheet.page == 2, "next page advances page")
+QuestMapFrame_OpenToQuestDetails = nil
 -- 关闭大地图时侧边栏同步隐藏
 WorldMapFrame:Hide()
 check(not ns.QuestValueSheet.panel:IsShown(), "panel hides when WorldMapFrame hides")

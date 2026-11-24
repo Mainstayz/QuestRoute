@@ -14,6 +14,8 @@ local function RouteTick(_, elapsed)
     local now = GetTime()
     if ns.Discovery.Pump() then
         ns.route.dirty, ns.route.due, ns.route.pendingReason = true, now, "association_index_ready"
+    elseif ns.QuestValue and type(ns.QuestValue.PumpIndex) == "function" then
+        ns.QuestValue.PumpIndex(96)
     end
     if ns.route.dirty and now >= (ns.route.due or 0) then
         RebuildRoute(ns.route.pendingReason or "quest_update")

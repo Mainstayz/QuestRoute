@@ -1,11 +1,19 @@
 -- 角色窗口右侧的单槽前三名。只在玩家打开角色页时出现，数据仍用本地 GearCatalog。
 local _, ns = ...
 
-local INV = {
+local INV = (ns.Gear and ns.Gear.INV_SLOTS) or {
     [1] = "head", [2] = "neck", [3] = "shoulder", [5] = "chest", [6] = "waist",
     [7] = "legs", [8] = "feet", [9] = "wrist", [10] = "hands", [11] = "finger1",
     [12] = "finger2", [13] = "trinket1", [14] = "trinket2", [15] = "back",
     [16] = "mainhand", [17] = "offhand", [18] = "ranged",
+}
+local STANDARD_SLOT_FRAMES = {
+    head = "CharacterHeadSlot", neck = "CharacterNeckSlot", shoulder = "CharacterShoulderSlot",
+    back = "CharacterBackSlot", chest = "CharacterChestSlot", wrist = "CharacterWristSlot",
+    hands = "CharacterHandsSlot", waist = "CharacterWaistSlot", legs = "CharacterLegsSlot",
+    feet = "CharacterFeetSlot", finger1 = "CharacterFinger0Slot", finger2 = "CharacterFinger1Slot",
+    trinket1 = "CharacterTrinket0Slot", trinket2 = "CharacterTrinket1Slot",
+    mainhand = "CharacterMainHandSlot", offhand = "CharacterSecondaryHandSlot", ranged = "CharacterRangedSlot",
 }
 local ORDER = {
     { id = "head", label = "头" }, { id = "neck", label = "颈" }, { id = "shoulder", label = "肩" },
@@ -23,8 +31,30 @@ ns.GearSheet = Sheet
 
 local cachedCatalog, cachedById
 
+local function CurrentSheet()
+    local root = WoWBridgeNS and WoWBridgeNS.QuestRoute
+    return (root and root.GearSheet) or ns.GearSheet
+end
+
+local function GetManualSpec()
+    if ns.Gear and type(ns.Gear.GetManualSpec) == "function" then
+        return ns.Gear.GetManualSpec() or Sheet.manualSpec
+    end
+    return Sheet.manualSpec
+end
+
+local function SetManualSpec(spec)
+    Sheet.manualSpec = spec
+    if ns.Gear and type(ns.Gear.SetManualSpec) == "function" then
+        ns.Gear.SetManualSpec(spec)
+    end
+end
+
 local function Playstyle(classFile, specName, role)
     if classFile ~= "WARRIOR" then return nil end
+    if ns.Gear and type(ns.Gear.DetectWarriorSpec) == "function" then
+        return ns.Gear.DetectWarriorSpec(specName, role)
+    end
     local name = type(specName) == "string" and specName or ""
     if role == "TANK" or name:find("防护") or name:find("Protection") then return "防护" end
     if name:find("狂") or name:find("Fury") then return "狂暴" end
@@ -54,11 +84,19 @@ local function Character()
     end
     if faction == "Horde" then faction = "部落" elseif faction == "Alliance" then faction = "联盟" end
     if faction ~= "联盟" and faction ~= "部落" then return nil, "阵营还没读到。" end
-    local talentName, role = ReadTalent()
-    local spec = Sheet.manualSpec or Playstyle(classFile, talentName, role)
-    local specNote
-    if classFile == "WARRIOR" and not spec then
-        spec, specNote = "防护", "没有从天赋判断玩法，先按防护。"
+    local spec, talentName, specNote
+    if classFile == "WARRIOR" then
+        if ns.Gear and type(ns.Gear.ReadWarriorSpec) == "function" then
+            spec, talentName, specNote = ns.Gear.ReadWarriorSpec()
+            if Sheet.manualSpec then spec = Sheet.manualSpec end
+        else
+            local role
+            talentName, role = ReadTalent()
+            spec = GetManualSpec() or Playstyle(classFile, talentName, role)
+            if not spec then
+                spec, specNote = "防护", "没有从天赋判断玩法，先按防护。"
+            end
+        end
     end
     return {
         level = level,
@@ -82,11 +120,28 @@ local function Worn(inv)
 end
 
 local function ReadAllWorn()
+    if ns.Gear and type(ns.Gear.ReadWorn) == "function" then
+        return ns.Gear.ReadWorn(true)
+    end
     local gear = {}
     for inv, id in pairs(INV) do
         gear[id] = Worn(inv)
     end
-    return gear
+    return gear, nil
+end
+
+local function WornSignature(gear)
+    local parts = {}
+    for _, slot in ipairs(ORDER) do
+        parts[#parts + 1] = tostring(gear[slot.id] or 0)
+    end
+    return table.concat(parts, ",")
+end
+
+function Sheet.InvalidateCache()
+    Sheet.cachedKey = nil
+    Sheet.cachedResult = nil
+    Sheet.cachedGear = nil
 end
 
 local function QuestProgress(questId)
@@ -147,6 +202,38 @@ function Sheet.StatText(item)
     return table.concat(parts, "  ")
 end
 
+local function SourcePickup(source)
+    if type(source) ~= "table" or source.kind ~= "quest" then return nil end
+    if type(source.pickup) == "table" then return source.pickup end
+    if ns.Gear and type(ns.Gear.ResolveQuestPickup) == "function" then
+        return ns.Gear.ResolveQuestPickup(source)
+    end
+    return nil
+end
+
+local function FormatPickupPlace(pickup, fallbackZone)
+    local coords
+    if type(pickup.x) == "number" and type(pickup.y) == "number" then
+        coords = string.format("(%d,%d)", math.floor(pickup.x + 0.5), math.floor(pickup.y + 0.5))
+    end
+    if pickup.mapName then
+        return coords and (pickup.mapName .. coords) or pickup.mapName
+    end
+    if pickup.instanceOnly then return "副本内" end
+    return fallbackZone or "地图未知"
+end
+
+local function FormatPickupGiver(pickup)
+    if pickup.giverKind == "npc" and pickup.giverName then
+        return "找" .. pickup.giverName
+    elseif pickup.giverKind == "object" and pickup.giverName then
+        return "调查「" .. pickup.giverName .. "」"
+    elseif pickup.giverKind == "item" and pickup.giverName then
+        return "物品「" .. pickup.giverName .. "」"
+    end
+    return nil
+end
+
 local function FormatSingleSource(source)
     if source.kind == "quest" then
         local place = source.zone or "接取地图未知"
@@ -165,6 +252,10 @@ local function FormatSingleSource(source)
             end
         end
         local gate = source.minLevel and ("可接 " .. source.minLevel) or "可接等级未知"
+        local pickup = SourcePickup(source)
+        if pickup and pickup.text and (pickup.status == "available" or pickup.status == "prereq_needed" or pickup.status == "prereq_in_progress") then
+            return string.format("%s · %s · %s · %s", source.name or "任务", pickup.text, chain, gate)
+        end
         local progress = QuestProgress(source.questId)
         local tail = progress and (" · " .. progress) or ""
         return string.format("%s · %s接 · %s · %s%s", source.name or "任务", place, chain, gate, tail)
@@ -205,6 +296,21 @@ function Sheet.GateLines(candidate)
             end
         end
         local level = source.minLevel and ("可接" .. source.minLevel) or "可接未知"
+        local pickup = SourcePickup(source)
+        if pickup and (pickup.status == "available" or pickup.status == "prereq_needed") then
+            local giver = FormatPickupGiver(pickup)
+            if giver then
+                local place = FormatPickupPlace(pickup, source.zone)
+                if pickup.isPrerequisite then
+                    local preName = pickup.questName or "前置任务"
+                    return "先去 " .. place .. " " .. giver, "接前置「" .. preName .. "」· " .. chain .. more
+                end
+                return "去 " .. place .. " " .. giver, (source.name or "任务") .. " · " .. level .. more
+            end
+        elseif pickup and pickup.status == "prereq_in_progress" then
+            local preName = pickup.questName or "前置任务"
+            return (source.name or "任务") .. " · 前置进行中", "先做「" .. preName .. "」· " .. chain .. more
+        end
         local progress = QuestProgress(source.questId)
         local tag = progress and (" · " .. progress) or ""
         return (source.name or "任务") .. " · " .. (source.zone or "地图未知"), chain .. " · " .. level .. tag .. more
@@ -216,7 +322,33 @@ function Sheet.GateLines(candidate)
     return (source.instanceName or "副本") .. " · " .. (source.npc or "首领未记录"), base
 end
 
+local function AllSourcesCompletedQuest(candidate)
+    local sources = candidate and candidate.sources
+    if type(sources) ~= "table" or #sources == 0 then return false end
+    for _, source in ipairs(sources) do
+        if source.kind ~= "quest" or QuestProgress(source.questId) ~= "已完成" then
+            return false
+        end
+    end
+    return true
+end
+
+function Sheet.PickTopCandidates(candidates, wornId, maxCount)
+    maxCount = maxCount or 3
+    local shown = {}
+    for _, candidate in ipairs(candidates or {}) do
+        if not candidate.blocked and not AllSourcesCompletedQuest(candidate) then
+            shown[#shown + 1] = candidate
+            if #shown == maxCount then return shown end
+        end
+    end
+    return shown
+end
+
 local function CatalogItem(id)
+    if ns.Gear and type(ns.Gear.CatalogItem) == "function" then
+        return ns.Gear.CatalogItem(id)
+    end
     local catalog = ns.GearCatalog
     if type(catalog) ~= "table" then return nil end
     if cachedCatalog ~= catalog then
@@ -245,25 +377,33 @@ local function SlotMeta(id)
 end
 
 local function StepSlot(delta)
+    local current = CurrentSheet()
+    if not current then return end
     local index = 1
     for cursor, slot in ipairs(ORDER) do
-        if slot.id == Sheet.slot then index = cursor end
+        if slot.id == current.slot then index = cursor end
     end
     local nextIndex = ((index - 1 + delta) % #ORDER) + 1
-    Sheet.slot = ORDER[nextIndex].id
-    Sheet.Refresh()
+    current.slot = ORDER[nextIndex].id
+    current.Refresh()
 end
 
 local function CyclePlaystyle()
+    local current = CurrentSheet()
+    if not current then return end
     local character = Character()
     if not character or character.classFile ~= "WARRIOR" then return end
-    local current = Sheet.manualSpec or character.spec or "防护"
+    local currentSpec = GetManualSpec() or character.spec or "防护"
     local nextIndex = 1
     for index, name in ipairs(PLAYSTYLES) do
-        if name == current then nextIndex = index % #PLAYSTYLES + 1 end
+        if name == currentSpec then nextIndex = index % #PLAYSTYLES + 1 end
     end
-    Sheet.manualSpec = PLAYSTYLES[nextIndex]
-    Sheet.Refresh()
+    SetManualSpec(PLAYSTYLES[nextIndex])
+    current.InvalidateCache()
+    current.Refresh()
+    if ns.QuestValueSheet and type(ns.QuestValueSheet.RefreshIfShown) == "function" then
+        ns.QuestValueSheet.RefreshIfShown()
+    end
 end
 
 local function Line(parent, template, width)
@@ -274,14 +414,38 @@ local function Line(parent, template, width)
     return text
 end
 
+local function ShowRowTooltip(row)
+    if not row.itemID or not _G.GameTooltip then return end
+    GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
+    GameTooltip:ClearLines()
+    GameTooltip:AddLine(row.titleText or row.itemName or "装备", 1, 0.85, 0.25, true)
+    if row.statsText and row.statsText ~= "" then
+        GameTooltip:AddLine(row.statsText, 0.9, 0.9, 0.9, true)
+    end
+    if row.detail and row.detail ~= "" then
+        GameTooltip:AddLine(" ", 1, 1, 1)
+        GameTooltip:AddLine("获取方式：", 0.4, 0.85, 1)
+        for part in row.detail:gmatch("[^；]+") do
+            GameTooltip:AddLine("· " .. part, 0.95, 0.95, 0.95, true)
+        end
+    end
+    GameTooltip:AddLine(" ", 1, 1, 1)
+    GameTooltip:AddLine("点击输出物品链接与获取方式到聊天框", 0.6, 0.6, 0.6)
+    GameTooltip:Show()
+end
+
 local function BindPanelHandlers(panel)
     panel.headerBtn:SetScript("OnClick", function() CyclePlaystyle() end)
     panel.prevSlot:SetScript("OnClick", function() StepSlot(-1) end)
     panel.nextSlot:SetScript("OnClick", function() StepSlot(1) end)
     for _, row in ipairs(panel.rows) do
-        row:SetScript("OnClick", function()
-            if not row.itemID then return end
-            print(string.format("|cff31cee8QuestRoute|r %s %s", ItemLink(row.itemID, row.itemName), row.detail or ""))
+        row:SetScript("OnEnter", function(self) ShowRowTooltip(self) end)
+        row:SetScript("OnLeave", function()
+            if _G.GameTooltip then GameTooltip:Hide() end
+        end)
+        row:SetScript("OnClick", function(self)
+            if not self.itemID then return end
+            print(string.format("|cff31cee8QuestRoute|r %s %s", ItemLink(self.itemID, self.itemName), self.detail or ""))
         end)
     end
 end
@@ -379,19 +543,36 @@ local function CanHook(frame, script)
     return ok and yes
 end
 
+local function HookSingleSlot(button, slot)
+    if not button or not CanHook(button, "OnEnter") then return false end
+    button.questRouteGearSlot = function()
+        local current = CurrentSheet()
+        if current then current.Select(slot) end
+    end
+    if not button.questRouteGearEnterHooked then
+        local hooked = pcall(button.HookScript, button, "OnEnter", function(self)
+            if self.questRouteGearSlot then self.questRouteGearSlot() end
+        end)
+        button.questRouteGearEnterHooked = hooked
+    end
+    return button.questRouteGearEnterHooked == true
+end
+
+local function HookStandardSlots()
+    local count = 0
+    for slot, frameName in pairs(STANDARD_SLOT_FRAMES) do
+        if HookSingleSlot(_G[frameName], slot) then
+            count = count + 1
+        end
+    end
+    return count
+end
+
 local function HookSlots(host, depth)
     if not host or depth > 4 or type(host.GetChildren) ~= "function" then return end
     for _, child in ipairs({ host:GetChildren() }) do
         local slot = child.GetID and INV[child:GetID()]
-        if slot and CanHook(child, "OnEnter") then
-            child.questRouteGearSlot = function() Sheet.Select(slot) end
-            if not child.questRouteGearEnterHooked then
-                local hooked = pcall(child.HookScript, child, "OnEnter", function(button)
-                    if button.questRouteGearSlot then button.questRouteGearSlot() end
-                end)
-                child.questRouteGearEnterHooked = hooked
-            end
-        end
+        if slot then HookSingleSlot(child, slot) end
         HookSlots(child, depth + 1)
     end
 end
@@ -425,14 +606,27 @@ function Sheet.Refresh()
         panel:Show()
         return
     end
-    local shownSpec = Sheet.manualSpec or character.spec or character.className
+    local shownSpec = GetManualSpec() or character.spec or character.className
     panel.title:SetText(slot.label .. "  " .. character.level .. "  " .. shownSpec)
     if character.classFile == "WARRIOR" then panel.specHint:Show() else panel.specHint:Hide() end
-    local gear = ReadAllWorn()
-    local result = ns.GetGearCandidates({
-        level = character.level, class = character.className, spec = character.spec or "防护",
-        faction = character.faction, gear = gear, limit = 6,
-    })
+    local gear, gearStats = ReadAllWorn()
+    local cacheKey = table.concat({
+        tostring(character.level), tostring(character.className), tostring(character.spec or "防护"),
+        tostring(character.faction), WornSignature(gear), tostring(ns.GearCatalog),
+    }, "|")
+    local result
+    if Sheet.cachedKey == cacheKey and Sheet.cachedResult then
+        result = Sheet.cachedResult
+    else
+        result = ns.GetGearCandidates({
+            level = character.level, class = character.className, spec = character.spec or "防护",
+            faction = character.faction, gear = gear, gearStats = gearStats,
+            excludeCompletedQuests = true, includePickupInfo = true, limit = 12,
+        })
+        Sheet.cachedKey = cacheKey
+        Sheet.cachedResult = result
+        Sheet.cachedGear = gear
+    end
     for _, row in ipairs(panel.rows) do row:Hide(); row.itemID = nil end
     if not result.ok then
         panel.note:SetText(result.error and result.error.message or "没有候选。")
@@ -444,11 +638,7 @@ function Sheet.Refresh()
     for _, entry in ipairs(result.slots) do
         if entry.slot == slot.id then found = entry end
     end
-    local shown = {}
-    for _, candidate in ipairs(found and found.candidates or {}) do
-        if not candidate.blocked then shown[#shown + 1] = candidate end
-        if #shown == 3 then break end
-    end
+    local shown = Sheet.PickTopCandidates(found and found.candidates or {}, gear[slot.id], 3)
     if #shown == 0 then
         panel.note:SetText(found and found.emptyMessage or "这个部位没有候选。")
         panel.note:Show()
@@ -462,10 +652,14 @@ function Sheet.Refresh()
             end
             local worn = gear[slot.id] == candidate.id and "  |cff31cee8当前|r" or DiffBadge(candidate)
             local where, gate = Sheet.GateLines(candidate)
+            local statsText = Sheet.StatText(CatalogItem(candidate.id) or {})
+            local titleText = "|cffffd100" .. index .. "|r  " .. (candidate.name or "?") .. score .. worn
             row.itemName = candidate.name
+            row.titleText = titleText
+            row.statsText = statsText
             row.detail = Sheet.GateText(candidate)
-            row.title:SetText("|cffffd100" .. index .. "|r  " .. (candidate.name or "?") .. score .. worn)
-            row.stats:SetText(Sheet.StatText(CatalogItem(candidate.id) or {}))
+            row.title:SetText(titleText)
+            row.stats:SetText(statsText)
             row.where:SetText(where)
             row.gate:SetText(gate)
             row.itemID = candidate.id
@@ -486,25 +680,31 @@ function Sheet.Attach()
     if not host.questRouteGearHostHooked then
         host.questRouteGearHostHooked = true
         host:HookScript("OnShow", function()
-            if ns.GearSheet then ns.GearSheet.Refresh() end
+            local current = CurrentSheet()
+            if current then current.Refresh() end
         end)
         host:HookScript("OnHide", function()
-            if ns.GearSheet and ns.GearSheet.panel then ns.GearSheet.panel:Hide() end
+            local current = CurrentSheet()
+            if current and current.panel then current.panel:Hide() end
         end)
         if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.HookScript) == "function" then
             _G.CharacterFrame:HookScript("OnHide", function()
-                if ns.GearSheet and ns.GearSheet.panel then ns.GearSheet.panel:Hide() end
+                local current = CurrentSheet()
+                if current and current.panel then current.panel:Hide() end
             end)
         end
     end
-    HookSlots(host, 0)
-    if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.GetChildren) == "function" then
-        HookSlots(_G.CharacterFrame, 0)
+    if HookStandardSlots() == 0 then
+        HookSlots(host, 0)
+        if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.GetChildren) == "function" then
+            HookSlots(_G.CharacterFrame, 0)
+        end
     end
     if HostShown() then Sheet.Refresh() end
 end
 
 function Sheet.Shutdown()
+    Sheet.InvalidateCache()
     if Sheet.panel then Sheet.panel:Hide() end
     if Sheet.watcher then
         Sheet.watcher:UnregisterAllEvents()
@@ -520,10 +720,13 @@ Sheet.watcher:RegisterEvent("PLAYER_LEVEL_UP")
 Sheet.watcher:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 Sheet.watcher:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED")
 Sheet.watcher:RegisterEvent("QUEST_TURNED_IN")
+Sheet.watcher:RegisterEvent("QUEST_ACCEPTED")
+Sheet.watcher:RegisterEvent("QUEST_REMOVED")
 Sheet.watcher:SetScript("OnEvent", function(_, event)
     if event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD" then
         Sheet.Attach()
-    elseif HostShown() then
-        Sheet.Refresh()
+    else
+        Sheet.InvalidateCache()
+        if HostShown() then Sheet.Refresh() end
     end
 end)

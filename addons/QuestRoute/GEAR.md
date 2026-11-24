@@ -68,7 +68,7 @@ local result = WoWBridgeNS.QuestRoute.GetGearCandidates({
 | `wearable` | `known`、`estimated` 或 `unknown` |
 | `sources` | 任务或副本掉落，以及下面的获取条件 |
 | `conditions.obtainable` | 恒为 `not_confirmed`。能穿不等于现在拿得到 |
-| `conditions.questState` | 恒为 `not_checked`。没有角色的完成或领奖状态 |
+| `conditions.questState` | 游戏内可读 `C_QuestLog` 且开启过滤时为 `checked`（已完成任务来源已排除）；离线或关闭检查时为 `not_checked` |
 | `conditions.weaponSkill` / `race` | 恒为 `not_in_dataset` |
 | `conditions.accessComplete` | 恒为 false。没写的进入条件不等于没有 |
 
@@ -78,7 +78,7 @@ local result = WoWBridgeNS.QuestRoute.GetGearCandidates({
 
 ### 来源字段
 
-任务来源有 `questId`、`name`、`url`、`questLevel`、`minLevel`、`side`、`reward`、`prerequisites`、`questState`、`profession`、`questClass`、`zone`、`zoneGroup`、`chainKind`。等级或阵营缺失时状态是 `unknown`，不会当成 0 级或双方可接。`prerequisites.status=none_recorded` 只表示记录里没写前置。`zone` 是任务记录里的区域，没有时 `zoneStatus=unknown`；当任务 `zoneGroup="职业"` 且 `zone` 为职业名时记入 `questClass`，跨职业任务会被过滤。`chainKind` 为 `standalone`（记录里没有前置）、`chain`（有任务链或前置）或 `unknown`。有步数时带 `chainPosition`、`chainLength` 和 `previousName`。`sideStatus=temporary` 或 `minLevelStatus=temporary` 时，`confidence=temporary`。
+任务来源有 `questId`、`name`、`url`、`questLevel`、`minLevel`、`side`、`reward`、`prerequisites`、`questState`、`profession`、`questClass`、`zone`、`zoneGroup`、`chainKind`。游戏内已加载 `QuestieDB` 且 `includePickupInfo` 未关闭时，还会附加 `pickup`（含 `status`、当前需接取的 `questId`/`questName`、`isPrerequisite`、`giverKind`/`giverName`、`mapID`/`mapName`、`x`/`y` 及可读摘要 `text`）：可直领时指明去哪个地图(坐标)找谁接任务，有未完前置时自动回溯到链上首个待接前置并给出其地图与接取人。等级或阵营缺失时状态是 `unknown`，不会当成 0 级或双方可接。`prerequisites.status=none_recorded` 只表示记录里没写前置。`zone` 是任务记录里的区域，没有时 `zoneStatus=unknown`；当任务 `zoneGroup="职业"` 且 `zone` 为职业名时记入 `questClass`，跨职业任务会被过滤。`chainKind` 为 `standalone`（记录里没有前置）、`chain`（有任务链或前置）或 `unknown`。有步数时带 `chainPosition`、`chainLength` 和 `previousName`。`sideStatus=temporary` 或 `minLevelStatus=temporary` 时，`confidence=temporary`。
 
 掉落来源有 `npc`、`instanceId`、`instanceName`、`instanceUrl`、`dropChancePercent`、`enterLevel`、`suggestedGroup`、`keys`。掉率缺失是 `unknown`，不是 0。`enterLevel` 是副本准入，高于角色才排除。`suggestedGroup` 是集合石建议，不排除。钥匙单独列出，不排除。`temporary=true`，并带 `disclaimer`。
 
@@ -171,6 +171,6 @@ python tests/verify_associations.py
 
 ## 角色面板
 
-打开角色装备页时，名单贴在角色窗口右侧（读取全身 17 个战斗槽现装传入计算）。每一名四行：名字/分数/相对现装分差（或「当前」）、属性（无白字属性时展示特效）、地点、补充。掉落写副本和首领，临时来源再标「临时」，不写副本准入。没有首领时写「首领未记录」。任务写名称和区域，再写独立或任务链第几步、可接等级，并在游戏内标注「已完成」或「进行中」；多来源时补充行加 `+N来源`。点某一名，聊天框出现可点击的物品链接和完整来源（最多列前 3 条）。悬停装备槽或点底部「上一部位 / 下一部位」换槽，避免点击脱下装备；穿脱装备、升级、切天赋或交任务时面板自动刷新。
+打开角色装备页时，名单贴在角色窗口右侧（读取全身 17 个战斗槽现装及客户端可读属性传入计算，并自动过滤已完成任务来源）。每一名四行：名字/分数/相对现装分差（或「当前」）、属性（无白字属性时展示特效）、获取地点/接取指引、补充。掉落写副本和首领，临时来源再标「临时」，不写副本准入；没有首领时写「首领未记录」。任务在加载 `QuestieDB` 时直接显示「去 地图(x,y) 找 NPC名」（有未完前置时显示「先去 地图(x,y) 找 NPC名」及对应前置名，前置或本任务已在日志中则标进行中）；无 `QuestieDB` 时回退显示任务名与区域。多来源时补充行加 `+N来源`。悬停某一名显示完整属性与获取指引提示，点击则在聊天框输出可点击的物品链接和完整来源（最多列前 3 条）。悬停装备槽或点底部「上一部位 / 下一部位」换槽，避免点击脱下装备；穿脱装备、升级、切天赋或接交/移除任务时面板自动刷新。
 
 战士会读当前专精。读不到时先按防护，点顶部标题栏（带「[换玩法]」提示）可以改成武器或狂暴。防护按上面的练级属性排前三名。武器和狂暴没有这套分数，只按装等列候选（含双手武器）。其他职业没有这套权重，面板只说明原因。衬衣和战袍没有排行。

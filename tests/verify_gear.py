@@ -229,6 +229,124 @@ local tiny = run({ gear = { mainhand = 16 } }, {
     },
 })
 check(tiny.pair.provenUpgrade and slot(tiny, "mainhand").highlight.provenUpgrade == false, "a better pair is marked on the pair, not on the weapon alone")
+-- 目录外现装通过客户端属性快照参与对比；空快照仍按未知处理，不把缺失属性当零
+local snapped = run({
+    gear = { offhand = 999 },
+    gearStats = { offhand = { id = 999, name = "拍卖行绿盾", stats = { armor = 50, stamina = 2 } } },
+})
+check(slot(snapped, "offhand").current.known == true and has(slot(snapped, "offhand"), 2).provenUpgrade == true and has(slot(snapped, "offhand"), 2).diff.score > 0,
+    "off-catalog worn item with readable client stats snapshot enables upgrade diff")
+local emptySnap = run({
+    gear = { offhand = 999 },
+    gearStats = { offhand = { id = 999, name = "未缓存绿盾", stats = {} } },
+})
+check(slot(emptySnap, "offhand").current.known == false and slot(emptySnap, "offhand").highlight.diff == nil,
+    "empty client stats snapshot stays unknown and is not scored as zero")
+-- 单手+盾场景：副手已毕业、主手有提升时，pair 仍正确标出整体提升
+local partialPair = run({ gear = { mainhand = 17, offhand = 2 } })
+check(slot(partialPair, "offhand").emptyReason == "no_upgrade" and slot(partialPair, "mainhand").highlight.provenUpgrade == true,
+    "mainhand upgrades while equipped shield is already best")
+check(partialPair.pair.provenUpgrade == true and partialPair.pair.offhand == 2 and partialPair.pair.scoreDelta > 0,
+    "1h+shield pair reports upgrade when mainhand improves and shield stays best")
+-- 未来任务链穿戴窗口：36级默认看不到40级板甲，放宽 wearLevelWindow 后可见
+local level36 = run({ level = 36 })
+check(not has(slot(level36, "chest"), 10), "level 36 warrior hides plate chest by default")
+local level36Future = run({ level = 36, wearLevelWindow = 5 })
+check(has(slot(level36Future, "chest"), 10) ~= nil, "wearLevelWindow exposes future chain plate for evaluation")
+
+-- 已完成任务不再推荐；但若装备另有未完成/副本来源则保留剩余来源
+C_QuestLog = {
+    IsQuestFlaggedCompleted = function(id) return id == 10 end,
+    IsOnQuest = function(id) return false end,
+}
+local afterDone = run()
+check(not has(slot(afterDone, "mainhand"), 9), "completed quest reward (quest 10) is excluded from recommendations")
+check(slot(afterDone, "mainhand").filtered.sourceReasons.quest_completed == 1, "filtered counts record quest_completed")
+local onlyDoneCat = { meta = { learnAt = {}, complete = false }, items = { catalog.items[9] } }
+local allDone = run(nil, onlyDoneCat)
+check(slot(allDone, "mainhand").emptyReason == "quests_completed", "slot reports quests_completed when all quest rewards are already done")
+-- 可接任务通过 QuestieDB 解析出地图、坐标与接取 NPC（含自动回溯未完成前置链）
+local mockDB = {
+    Quest = {
+        Exists = function(id) return id == 10 or id == 50 or id == 51 or id == 52 end,
+        name = function(id)
+            local names = { [10] = "联盟剑任务", [50] = "链首任务", [51] = "链中任务", [52] = "链尾任务" }
+            return names[id]
+        end,
+        startedBy = function(id)
+            if id == 10 then return { { 201 }, {}, {} } end
+            if id == 50 then return { { 202 }, {}, {} } end
+            if id == 52 then return { { 203 }, {}, {} } end
+            return { {}, {}, {} }
+        end,
+        preQuestSingle = function(id)
+            if id == 52 then return { 51 } end
+            if id == 51 then return { 50 } end
+            return {}
+        end,
+        preQuestGroup = function() return {} end,
+    },
+    Npc = {
+        Exists = function(id) return id == 201 or id == 202 or id == 203 end,
+        name = function(id)
+            local names = { [201] = "马迪亚斯·肖尔", [202] = "格里安·斯托曼", [203] = "终点指挥官" }
+            return names[id]
+        end,
+    },
+    Object = { Exists = function() return false end },
+    Item = { Exists = function() return false end },
+}
+ns.Database = {
+    Get = function() return mockDB end,
+    ReadLocations = function(_, _, npcId)
+        if npcId == 201 then return { { available = true, coordinateMapID = 1453, mapName = "暴风城", originalX = 75.4, originalY = 59.2 } }, 1 end
+        if npcId == 202 then return { { available = true, coordinateMapID = 1436, mapName = "西部荒野", originalX = 56.3, originalY = 47.4 } }, 1 end
+        if npcId == 203 then return { { available = true, coordinateMapID = 1431, mapName = "暮色森林", originalX = 73.8, originalY = 44.1 } }, 1 end
+        return {}, 0
+    end,
+}
+C_QuestLog = {
+    IsQuestFlaggedCompleted = function() return false end,
+    IsOnQuest = function() return false end,
+}
+local pickupCat = {
+    meta = { learnAt = {}, complete = false },
+    items = {
+        item({ id = 9, name = "联盟剑", slot = "mainhand", hands = 1, subtype = "单手剑", ilvl = 40,
+            reqLevel = 40, reqLevelStatus = "known", weapon = { dps = 15 }, sources = { quest(10, "联盟", 39, 42) } }),
+        item({ id = 30, name = "链尾盾", slot = "offhand", hands = 0, armorType = "盾牌", ilvl = 40,
+            reqLevel = 40, reqLevelStatus = "known", stats = { stamina = 15 },
+            sources = { quest(52, "联盟", 35, 40) } }),
+    },
+}
+local withPickup = run(nil, pickupCat)
+local directPickup = has(slot(withPickup, "mainhand"), 9).sources[1].pickup
+check(directPickup and directPickup.status == "available" and directPickup.mapName == "暴风城" and directPickup.giverName == "马迪亚斯·肖尔",
+    "direct quest pickup resolves map and NPC name from QuestieDB")
+check(directPickup.text:find("暴风城(75,59)", 1, true) and directPickup.text:find("马迪亚斯·肖尔", 1, true),
+    "direct quest pickup text names map, coordinates and NPC")
+local chainPickup = has(slot(withPickup, "offhand"), 30).sources[1].pickup
+check(chainPickup and chainPickup.status == "prereq_needed" and chainPickup.questId == 50
+    and chainPickup.mapName == "西部荒野" and chainPickup.giverName == "格里安·斯托曼",
+    "unfinished chain traces back to first uncompleted prerequisite starter")
+check(chainPickup.text:find("先去西部荒野(56,47)找格里安·斯托曼接前置「链首任务」", 1, true) ~= nil,
+    "chain pickup text guides player to first prerequisite map and NPC")
+-- 前置 50/51 都已完成时，直接指引去接 52 本身
+C_QuestLog.IsQuestFlaggedCompleted = function(id) return id == 50 or id == 51 end
+local readyChain = run(nil, pickupCat)
+local readyPickup = has(slot(readyChain, "offhand"), 30).sources[1].pickup
+check(readyPickup and readyPickup.status == "available" and readyPickup.questId == 52
+    and readyPickup.mapName == "暮色森林" and readyPickup.giverName == "终点指挥官",
+    "once prerequisites are completed, pickup points directly to reward quest starter")
+-- 前置正在进行中时，提示前置进行中而非重复叫去接起点
+C_QuestLog.IsQuestFlaggedCompleted = function(id) return id == 50 end
+C_QuestLog.IsOnQuest = function(id) return id == 51 end
+local inProgChain = run(nil, pickupCat)
+local inProgPickup = has(slot(inProgChain, "offhand"), 30).sources[1].pickup
+check(inProgPickup and inProgPickup.status == "prereq_in_progress" and inProgPickup.questId == 51,
+    "active prerequisite reports prereq_in_progress")
+C_QuestLog = nil
+ns.Database = nil
 return checks
 '''
 
@@ -392,6 +510,43 @@ check(multiGate:find("+1来源", 1, true), "panel line indicates extra sources")
 C_QuestLog = { IsQuestFlaggedCompleted = function(id) return id == 53 end }
 local _, doneGate = ns.GearSheet.GateLines({ sources = {{ kind = "quest", questId = 53, name = "琥珀酒", zone = "西部荒野", chainKind = "standalone", minLevel = 40 }}})
 check(doneGate:find("已完成", 1, true), "completed quest is marked on panel")
+local picked = ns.GearSheet.PickTopCandidates({
+    { id = 100, sources = {{ kind = "quest", questId = 53 }} },
+    { id = 101, sources = {{ kind = "quest", questId = 54 }} },
+    { id = 102, sources = {{ kind = "drop", instanceId = 189 }} },
+}, nil, 3)
+check(#picked == 2 and picked[1].id == 101 and picked[2].id == 102,
+    "completed-only quest items are excluded from recommendations instead of padded back")
+local pickedWorn = ns.GearSheet.PickTopCandidates({
+    { id = 100, sources = {{ kind = "quest", questId = 53 }} },
+    { id = 101, sources = {{ kind = "quest", questId = 54 }} },
+}, 100, 2)
+check(#pickedWorn == 1 and pickedWorn[1].id == 101, "completed quest item is not recommended even if worn")
+-- 面板与聊天文本优先展示接取地图、坐标和 NPC
+local directWhere, directGate = ns.GearSheet.GateLines({ sources = {{
+    kind = "quest", questId = 10, name = "联盟剑任务", zone = "暴风城", chainKind = "standalone", minLevel = 39,
+    pickup = { status = "available", questId = 10, questName = "联盟剑任务", isPrerequisite = false,
+        giverKind = "npc", giverName = "马迪亚斯·肖尔", mapName = "暴风城", x = 75.4, y = 59.2,
+        text = "去暴风城(75,59)找马迪亚斯·肖尔接任务" },
+}}})
+check(directWhere == "去 暴风城(75,59) 找马迪亚斯·肖尔" and directGate:find("联盟剑任务", 1, true),
+    "panel lines show map, coordinates and NPC giver when available")
+local directChat = ns.GearSheet.GateText({ sources = {{
+    kind = "quest", questId = 10, name = "联盟剑任务", zone = "暴风城", chainKind = "standalone", minLevel = 39,
+    pickup = { status = "available", questId = 10, questName = "联盟剑任务", isPrerequisite = false,
+        giverKind = "npc", giverName = "马迪亚斯·肖尔", mapName = "暴风城", x = 75.4, y = 59.2,
+        text = "去暴风城(75,59)找马迪亚斯·肖尔接任务" },
+}}})
+check(directChat:find("去暴风城(75,59)找马迪亚斯·肖尔接任务", 1, true) ~= nil,
+    "chat detail text includes exact map, coordinates and NPC giver")
+local prereqWhere, prereqGate = ns.GearSheet.GateLines({ sources = {{
+    kind = "quest", questId = 52, name = "链尾任务", zone = "暮色森林", chainKind = "chain", chainPosition = 3, chainLength = 3, minLevel = 35,
+    pickup = { status = "prereq_needed", questId = 50, questName = "链首任务", isPrerequisite = true,
+        giverKind = "npc", giverName = "格里安·斯托曼", mapName = "西部荒野", x = 56.3, y = 47.4,
+        text = "先去西部荒野(56,47)找格里安·斯托曼接前置「链首任务」" },
+}}})
+check(prereqWhere == "先去 西部荒野(56,47) 找格里安·斯托曼" and prereqGate:find("接前置「链首任务」", 1, true),
+    "panel lines guide player to prerequisite starter map and NPC")
 C_QuestLog = nil
 return checks
 '''

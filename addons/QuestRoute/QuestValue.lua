@@ -106,6 +106,9 @@ local function FormatMoney(copper)
 end
 
 local function ReadWornGear()
+    if ns.Gear and type(ns.Gear.ReadWorn) == "function" then
+        return ns.Gear.ReadWorn(true)
+    end
     local gear = {}
     for inv, slotId in pairs(INV_SLOTS) do
         local id = SafeCall(GetInventoryItemID, "player", inv)
@@ -115,7 +118,7 @@ local function ReadWornGear()
         end
         if IsID(id) then gear[slotId] = id end
     end
-    return gear
+    return gear, nil, nil
 end
 
 local function ReadCharacterProfile(overrideGear)
@@ -126,8 +129,8 @@ local function ReadCharacterProfile(overrideGear)
     local factionCN = faction == "Horde" and "部落" or (faction == "Alliance" and "联盟" or nil)
     local spec
     if classFile == "WARRIOR" then
-        if ns.GearSheet and ns.GearSheet.manualSpec then
-            spec = ns.GearSheet.manualSpec
+        if ns.Gear and type(ns.Gear.ReadWarriorSpec) == "function" then
+            spec = ns.Gear.ReadWarriorSpec()
         elseif C_SpecializationInfo and type(C_SpecializationInfo.GetSpecialization) == "function"
             and type(C_SpecializationInfo.GetSpecializationInfo) == "function" then
             local idx = SafeCall(C_SpecializationInfo.GetSpecialization, false, false)
@@ -147,7 +150,12 @@ local function ReadCharacterProfile(overrideGear)
     local level = IsID(char.level) and char.level or nil
     local maxXP = context and context.experience and IsFinite(context.experience.maximum) and context.experience.maximum > 0
         and context.experience.maximum or nil
-    local worn = type(overrideGear) == "table" and overrideGear or ReadWornGear()
+    local worn, wornStats, wornIlvls
+    if type(overrideGear) == "table" then
+        worn = overrideGear
+    else
+        worn, wornStats, wornIlvls = ReadWornGear()
+    end
     return {
         name = char.name,
         realm = char.realm,
@@ -160,46 +168,79 @@ local function ReadCharacterProfile(overrideGear)
         maxXP = maxXP,
         location = context and context.location or nil,
         worn = worn,
+        wornStats = wornStats,
+        wornIlvls = wornIlvls,
     }
 end
 
--- 缓存 QuestieDB 反向后续边（preQuestSingle / preQuestGroup / nextQuestInChain），按 db 实例只建一次。
-local cachedReverseDB, cachedReverseNext
-local function GetReverseNextIndex(db)
-    if not db or type(db.Quest) ~= "table" then return nil end
-    if cachedReverseDB == db and cachedReverseNext then return cachedReverseNext end
-    local reverse = {}
-    local function AddEdge(fromID, toID)
-        if not IsID(fromID) or not IsID(toID) or fromID == toID then return end
-        local list = reverse[fromID]
-        if not list then
-            reverse[fromID] = { toID }
-            return
-        end
-        for _, existing in ipairs(list) do
-            if existing == toID then return end
-        end
-        list[#list + 1] = toID
+-- 分帧/按需构建 QuestieDB 反向后续边（preQuestSingle / preQuestGroup / nextQuestInChain），按 db 实例缓存。
+local reverseIndexState
+
+local function AddReverseEdge(reverse, fromID, toID)
+    if not IsID(fromID) or not IsID(toID) or fromID == toID then return end
+    local list = reverse[fromID]
+    if not list then
+        reverse[fromID] = { toID }
+        return
     end
+    for _, existing in ipairs(list) do
+        if existing == toID then return end
+    end
+    list[#list + 1] = toID
+end
+
+local function EnsureReverseState(db)
+    if not db or type(db.Quest) ~= "table" then return nil end
+    if reverseIndexState and reverseIndexState.db == db then return reverseIndexState end
     local ids = SafeCall(db.Quest.GetAllIds)
-    if type(ids) == "table" then
-        for _, qid in ipairs(ids) do
-            if IsID(qid) then
-                local nxt = SafeCall(db.Quest.nextQuestInChain, qid)
-                if IsID(nxt) then AddEdge(qid, nxt) end
-                local preSingle = SafeCall(db.Quest.preQuestSingle, qid)
-                if type(preSingle) == "table" then
-                    for _, pre in ipairs(preSingle) do AddEdge(pre, qid) end
-                end
-                local preGroup = SafeCall(db.Quest.preQuestGroup, qid)
-                if type(preGroup) == "table" then
-                    for _, pre in ipairs(preGroup) do AddEdge(pre, qid) end
-                end
+    reverseIndexState = {
+        db = db,
+        ids = type(ids) == "table" and ids or {},
+        cursor = 1,
+        done = false,
+        map = {},
+    }
+    if #reverseIndexState.ids == 0 then reverseIndexState.done = true end
+    return reverseIndexState
+end
+
+local function StepReverseIndex(state, maxQuests)
+    if not state or state.done then return true end
+    local db, ids, reverse = state.db, state.ids, state.map
+    local limit = maxQuests and math.min(#ids, state.cursor + maxQuests - 1) or #ids
+    for i = state.cursor, limit do
+        local qid = ids[i]
+        if IsID(qid) then
+            local nxt = SafeCall(db.Quest.nextQuestInChain, qid)
+            if IsID(nxt) then AddReverseEdge(reverse, qid, nxt) end
+            local preSingle = SafeCall(db.Quest.preQuestSingle, qid)
+            if type(preSingle) == "table" then
+                for _, pre in ipairs(preSingle) do AddReverseEdge(reverse, pre, qid) end
+            end
+            local preGroup = SafeCall(db.Quest.preQuestGroup, qid)
+            if type(preGroup) == "table" then
+                for _, pre in ipairs(preGroup) do AddReverseEdge(reverse, pre, qid) end
             end
         end
     end
-    cachedReverseDB, cachedReverseNext = db, reverse
-    return reverse
+    state.cursor = limit + 1
+    if state.cursor > #ids then state.done = true end
+    return state.done
+end
+
+local function PumpReverseIndex(maxQuests)
+    local db = GetDatabase()
+    if not db then return false end
+    local state = EnsureReverseState(db)
+    if not state or state.done then return false end
+    return StepReverseIndex(state, maxQuests or 128)
+end
+
+local function GetReverseNextIndex(db)
+    local state = EnsureReverseState(db)
+    if not state then return nil end
+    if not state.done then StepReverseIndex(state, nil) end
+    return state.map
 end
 
 -- 缓存本地 GearCatalog 的 questId -> 物品列表索引，即使客户端未缓存后续奖励也能提前识别已知装备。
@@ -247,7 +288,7 @@ local function BuildGearEvaluation(profile, allowGear)
     if profile.classFile ~= "WARRIOR" and profile.className ~= "战士" then
         return eval
     end
-    -- 放宽 questLevelWindow 与等级上限视角，以便对整条任务链的未来奖励也给出评分对比。
+    -- 放宽 questLevelWindow 与穿戴等级窗口，以便对整条任务链的未来奖励也能给出评分与提升对比。
     local queryLevel = math.min(60, math.max(profile.level, 1))
     local res = ns.GetGearCandidates({
         level = queryLevel,
@@ -255,7 +296,10 @@ local function BuildGearEvaluation(profile, allowGear)
         spec = profile.spec or "防护",
         faction = profile.factionCN,
         gear = profile.worn,
+        gearStats = profile.wornStats,
         questLevelWindow = 20,
+        wearLevelWindow = 15,
+        includePickupInfo = false,
         limit = 100,
     })
     if not res or not res.ok then return eval end
@@ -277,7 +321,7 @@ local function BuildGearEvaluation(profile, allowGear)
                     relation = cand.relation,
                     score = cand.score,
                     scoreDelta = delta,
-                    blocked = cand.blocked == true,
+                    blocked = cand.blocked ~= nil and cand.blocked ~= false,
                     quality = cand.quality,
                     ilvl = cand.ilvl,
                 }
@@ -320,6 +364,22 @@ local function ArmorMatchesClass(itemID, profile)
     return true
 end
 
+local function WornIlvlForItem(itemID, profile)
+    if not IsID(itemID) or type(profile.wornIlvls) ~= "table" then return nil end
+    if not C_Item or type(C_Item.GetItemInfoInstant) ~= "function" then return nil end
+    local _, _, _, equipLoc = SafeCall(C_Item.GetItemInfoInstant, itemID)
+    local map = ns.Gear and ns.Gear.EQUIP_LOC_SLOT
+    local pool = equipLoc and map and map[equipLoc] or nil
+    if not pool then return nil end
+    if pool == "twohand" then pool = "mainhand" end
+    if pool == "finger" or pool == "trinket" then
+        local a, b = profile.wornIlvls[pool .. "1"], profile.wornIlvls[pool .. "2"]
+        if IsFinite(a) and IsFinite(b) then return math.min(a, b) end
+        return a or b
+    end
+    return profile.wornIlvls[pool]
+end
+
 local function EvaluateRewardItem(item, profile, gearEval)
     local id = item.itemID
     local quality = IsFinite(item.quality) and item.quality or 0
@@ -330,6 +390,8 @@ local function EvaluateRewardItem(item, profile, gearEval)
     if not ilvl and catalogRaw and IsFinite(catalogRaw.ilvl) then ilvl = catalogRaw.ilvl end
     if quality == 0 and catalogRaw and IsFinite(catalogRaw.quality) then quality = catalogRaw.quality end
     local armorFits = ArmorMatchesClass(id, profile)
+    local wornIlvl = WornIlvlForItem(id, profile)
+    local ilvlDelta = (IsFinite(ilvl) and IsFinite(wornIlvl)) and (ilvl - wornIlvl) or nil
 
     local tier = "none"
     local upgrade, scoreDelta, slotLabel = false, nil, nil
@@ -354,8 +416,11 @@ local function EvaluateRewardItem(item, profile, gearEval)
             tier = "epic_usable"
         elseif quality == 3 and isWearableCandidate then
             tier = "rare_usable"
-        elseif quality == 2 and usable == true and armorFits and profile.level and ilvl and ilvl >= profile.level - 3 then
-            tier = "uncommon_current"
+        elseif quality == 2 and usable == true and armorFits and ilvl then
+            local meetsIlvl = (ilvlDelta ~= nil and ilvlDelta >= 3)
+                or (ilvlDelta == nil and profile.level and ilvl >= profile.level - 3)
+                or (ilvlDelta ~= nil and ilvlDelta >= -3 and profile.level and ilvl >= profile.level - 3)
+            tier = meetsIlvl and "uncommon_current" or "gear_low"
         elseif quality >= 2 then
             tier = "gear_low"
         end
@@ -367,6 +432,7 @@ local function EvaluateRewardItem(item, profile, gearEval)
         quality = quality,
         qualityLabel = QUALITY_LABELS[quality] or "物品",
         itemLevel = ilvl,
+        ilvlDelta = ilvlDelta,
         isUsable = usable,
         armorFits = armorFits,
         tier = tier,
@@ -471,7 +537,8 @@ local function ReadQuestReward(questID, db, profile, gearEval, preloadState)
     local hasNotableGear = bestGear ~= nil and bestGear.tierRank >= GEAR_TIER_RANK.uncommon_current
     local hasStrongGear = bestGear ~= nil and bestGear.tierRank >= GEAR_TIER_RANK.rare_usable
     local hasSpells = #spells > 0
-    local isPureXP = ready and not hasNotableGear and not hasSpells and (not money or money < 50000)
+    local notableMoney = math.max(10000, (profile.level or 40) * 1000)
+    local isPureXP = ready and not hasNotableGear and not hasSpells and (not money or money < notableMoney)
 
     return {
         ready = ready,
@@ -491,7 +558,7 @@ local function ReadQuestReward(questID, db, profile, gearEval, preloadState)
     }
 end
 
-local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadState)
+local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadState, activeByID)
     if not db or type(db.Quest) ~= "table" or not SafeCall(db.Quest.Exists, questID) then
         return {
             status = "unknown",
@@ -538,8 +605,9 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
     local queue = { { id = questID, depth = 0 } }
     local head = 1
     local futureQuests, terminalQuests = {}, {}
+    local edges, nodeByID = {}, {}
     local pendingQuestIDs, pendingSeen = {}, {}
-    local totalFutureXP, totalFutureMoney, maxDepth, highestLevel = 0, 0, 0, nil
+    local totalFutureMoney, maxDepth, highestLevel = 0, 0, nil
     local bestFutureGear, bestFutureGearStep
     local hasFutureSpell = false
 
@@ -550,7 +618,7 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
         if current.depth < MAX_CHAIN_DEPTH then
             for _, nxt in ipairs(NextCandidates(current.id)) do
                 if #futureQuests >= MAX_CHAIN_NODES then break end
-                if not visited[nxt] and SafeCall(db.Quest.Exists, nxt) then
+                if not visited[nxt] and not (activeByID and activeByID[nxt]) and SafeCall(db.Quest.Exists, nxt) then
                     local reqClasses = SafeCall(db.Quest.requiredClasses, nxt)
                     local reqRaces = SafeCall(db.Quest.requiredRaces, nxt)
                     local completed = C_QuestLog and SafeCall(C_QuestLog.IsQuestFlaggedCompleted, nxt) == true
@@ -576,8 +644,10 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
                             itemCount = #reward.items,
                         }
                         futureQuests[#futureQuests + 1] = node
+                        nodeByID[nxt] = node
+                        edges[current.id] = edges[current.id] or {}
+                        edges[current.id][#edges[current.id] + 1] = nxt
                         if reward.ready then
-                            if reward.xp then totalFutureXP = totalFutureXP + reward.xp end
                             if reward.money then totalFutureMoney = totalFutureMoney + reward.money end
                         elseif not pendingSeen[nxt] then
                             pendingSeen[nxt] = true
@@ -606,6 +676,55 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
             terminalQuests[#terminalQuests + 1] = current.node
         end
     end
+
+    local terminalByID = {}
+    local bestTerminalGear, bestTerminalGearStep
+    for _, node in ipairs(terminalQuests) do
+        terminalByID[node.questID] = true
+        if node.bestGear then
+            local better = BetterGear(bestTerminalGear, node.bestGear)
+            if better == node.bestGear and better ~= bestTerminalGear then
+                bestTerminalGear = node.bestGear
+                bestTerminalGearStep = {
+                    questID = node.questID,
+                    title = node.title,
+                    depth = node.depth,
+                    level = node.level,
+                    item = node.bestGear,
+                    isTerminal = true,
+                }
+            end
+        end
+    end
+    if bestFutureGearStep then
+        bestFutureGearStep.isTerminal = terminalByID[bestFutureGearStep.questID] == true
+        -- 若终点装备与中间步同档且不弱于中间步，优先展示终点奖励
+        if not bestFutureGearStep.isTerminal and bestTerminalGearStep
+            and bestTerminalGearStep.item.tierRank >= bestFutureGearStep.item.tierRank
+            and BetterGear(bestTerminalGearStep.item, bestFutureGearStep.item) == bestTerminalGearStep.item then
+            bestFutureGear = bestTerminalGearStep.item
+            bestFutureGearStep = bestTerminalGearStep
+        end
+    end
+
+    -- 对分叉任务链按最长单路径汇总后续经验，避免互斥分支被重复叠加虚高。
+    local xpMemo, inStack = {}, {}
+    local function MaxPathXP(id)
+        if xpMemo[id] ~= nil then return xpMemo[id] end
+        if inStack[id] then return 0 end
+        inStack[id] = true
+        local bestChild = 0
+        for _, childID in ipairs(edges[id] or {}) do
+            local childNode = nodeByID[childID]
+            local childOwn = (childNode and childNode.rewardReady and childNode.xp) or 0
+            local sub = childOwn + MaxPathXP(childID)
+            if sub > bestChild then bestChild = sub end
+        end
+        inStack[id] = nil
+        xpMemo[id] = bestChild
+        return bestChild
+    end
+    local totalFutureXP = MaxPathXP(questID)
 
     local totalFutureXPFraction = (profile.maxXP and profile.maxXP > 0) and (totalFutureXP / profile.maxXP) or nil
     local futureGearRank = bestFutureGear and bestFutureGear.tierRank or 0
@@ -639,6 +758,7 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
         totalFutureMoney = totalFutureMoney,
         totalFutureMoneyText = FormatMoney(totalFutureMoney),
         bestFutureGear = bestFutureGearStep,
+        bestTerminalGear = bestTerminalGearStep,
         hasFutureSpell = hasFutureSpell,
         hasFutureRichReward = richReason ~= nil,
         richRewardReason = richReason,
@@ -941,24 +1061,129 @@ local function DescribeGear(gear)
     return (gear.qualityLabel or "装备") .. "「" .. gear.name .. "」"
 end
 
-local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
-    local q = entry.quest
-    local reward = entry.reward
-    local chain = entry.chain
-    local progress = entry.progress
-    local geo = entry.geography
-    local flags = entry.flags
-    local reaccept = entry.reaccept
-    local diff = entry.difficulty
+local function IsExcellentGear(gear)
+    return gear ~= nil and (gear.tierRank or 0) >= GEAR_TIER_RANK.rare_usable
+end
 
-    local protections, reasons, tags = {}, {}, {}
-    local isTrivial = diff.code == 0 or diff.isTrivial == true
-    local isImpossible = diff.code == 4
+local function GearItemWeight(gear, isChain, stepDepth, isTerminal)
+    if not gear or (gear.tierRank or 0) <= GEAR_TIER_RANK.gear_low then
+        return 0
+    end
+    local rank = gear.tierRank
+    local base = 0
+    if rank >= GEAR_TIER_RANK.proven_upgrade then
+        -- 实测确认提升装：最高权重（直接 136..160，任务链 127..156）
+        base = isChain and 130 or 136
+        local deltaBonus = IsFinite(gear.scoreDelta) and math.min(18, math.max(0, gear.scoreDelta * 0.4)) or 0
+        local qualityBonus = (gear.quality or 0) >= 4 and 6 or ((gear.quality or 0) >= 3 and 3 or 0)
+        base = base + deltaBonus + qualityBonus
+    elseif rank >= GEAR_TIER_RANK.epic_usable then
+        -- 可穿戴紫装（直接 122，任务链 115..120）
+        base = isChain and 118 or 122
+    elseif rank >= GEAR_TIER_RANK.rare_usable then
+        -- 可穿戴蓝装（直接 108..112，任务链 101..110）
+        base = isChain and 104 or 108
+        if IsFinite(gear.ilvlDelta) and gear.ilvlDelta > 0 then
+            base = base + math.min(4, gear.ilvlDelta * 0.4)
+        end
+    elseif rank >= GEAR_TIER_RANK.uncommon_current then
+        -- 适级可穿戴绿装（常规保留档内高于纯经验）
+        base = isChain and 40 or 44
+        if IsFinite(gear.ilvlDelta) and gear.ilvlDelta > 0 then
+            base = base + math.min(6, gear.ilvlDelta * 0.6)
+        end
+    end
+    if isChain and base > 0 then
+        if isTerminal then base = base + 2 end
+        local depthPenalty = math.min(3, math.max(0, ((stepDepth or 1) - 1) * 0.5))
+        base = base - depthPenalty
+    end
+    return base
+end
 
+local function ResolveBestGearHighlight(reward, chain)
+    local direct = reward and reward.bestGear or nil
+    local futureStep = chain and chain.bestFutureGear or nil
+    local future = futureStep and futureStep.item or nil
+    local directW = GearItemWeight(direct, false, 0, false)
+    local futureW = futureStep and GearItemWeight(future, true, futureStep.depth, futureStep.isTerminal) or 0
+    if directW <= 0 and futureW <= 0 then
+        return nil, nil, 0, nil
+    end
+    if directW >= futureW then
+        return direct, "direct", directW, nil
+    end
+    local scope = futureStep.isTerminal and "chain_terminal" or "chain_step"
+    return future, scope, futureW, futureStep
+end
+
+local function GearTagLabel(gear, sourceScope)
+    if not IsExcellentGear(gear) then return nil end
+    local isChain = sourceScope == "chain_terminal" or sourceScope == "chain_step"
+    if gear.provenUpgrade then
+        return isChain and "链提升" or "装提升"
+    elseif (gear.tierRank or 0) >= GEAR_TIER_RANK.epic_usable then
+        return isChain and "链紫装" or "紫装"
+    else
+        return isChain and "链蓝装" or "蓝装"
+    end
+end
+
+local function ComputeValueWeight(q, reward, chain, progress, geo, flags, verdict, dropPriority, ctx, bestGear, gearSource, gearWeight)
+    local hasExcellent = IsExcellentGear(bestGear)
+    local weight
+    if hasExcellent then
+        -- 优秀装备（本步或任务链终点/后续）权重最高，严格高于一切非装备保护项（>= 101）
+        weight = gearWeight
+        local extra = 0
+        if q.readyForTurnIn or q.isComplete then extra = extra + 1 end
+        if flags.isClassQuest then extra = extra + 0.5 end
+        if reward.hasSpells or chain.hasFutureSpell then extra = extra + 0.5 end
+        weight = weight + math.min(2, extra)
+    elseif verdict == "keep_priority" then
+        -- 非装备类保护项严格低于优秀装备（上限 88）
+        local candidates = {}
+        if reward.hasSpells then candidates[#candidates + 1] = 76 end
+        if chain.hasFutureSpell then candidates[#candidates + 1] = 72 end
+        if flags.isClassQuest then candidates[#candidates + 1] = 68 end
+        if q.readyForTurnIn or q.isComplete then candidates[#candidates + 1] = 64 end
+        if chain.hasFutureRichReward then candidates[#candidates + 1] = 60 end
+        if not flags.canAbandon then candidates[#candidates + 1] = 55 end
+        table.sort(candidates, function(a, b) return a > b end)
+        weight = candidates[1] or 55
+        if #candidates > 1 then
+            weight = math.min(88, weight + (#candidates - 1) * 2)
+        end
+    elseif verdict == "keep" then
+        if gearWeight > 0 then
+            weight = math.min(52, gearWeight)
+        else
+            weight = 26
+            if ctx.highXP then weight = weight + 5 end
+            if chain.hasFuture then weight = weight + 3 end
+            if geo.scope == "current_map" then weight = weight + 2 end
+            if progress.highSunkCost then weight = weight + 2 end
+            weight = math.min(37, weight)
+        end
+    elseif verdict == "uncertain" then
+        weight = gearWeight > 0 and math.min(24, 20 + math.floor(gearWeight * 0.08)) or 20
+    elseif verdict == "hold_or_drop" then
+        weight = math.max(8, math.min(19, 18 - (dropPriority or 0) * 0.1))
+        if gearWeight > 0 then weight = math.min(22, weight + 3) end
+    else
+        weight = q.isFailed and 0 or math.max(1, math.min(7, 8 - (dropPriority or 0) * 0.08))
+    end
+    return math.floor(weight * 10 + 0.5) / 10
+end
+
+local function BuildQuestTags(q, flags, chain, bestGear, gearSource)
+    local tags = {}
     -- 中性标签（副本/精英只作标签提示，绝不因此压低价值）
     if q.readyForTurnIn then tags[#tags + 1] = "可交"
     elseif q.isComplete then tags[#tags + 1] = "已完成"
     elseif q.isFailed then tags[#tags + 1] = "已失败" end
+    local gearTag = GearTagLabel(bestGear, gearSource)
+    if gearTag then tags[#tags + 1] = gearTag end
     if flags.isClassQuest then tags[#tags + 1] = "职业" end
     if flags.isInstance then tags[#tags + 1] = "副本" end
     if flags.isElite then tags[#tags + 1] = "精英" end
@@ -972,24 +1197,12 @@ local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
             tags[#tags + 1] = "链尾"
         end
     end
+    return tags
+end
 
-    -- 一票保护红线检查
-    if q.readyForTurnIn or q.isComplete then
-        protections[#protections + 1] = "completed"
-        reasons[#reasons + 1] = q.readyForTurnIn and "已完成可交，顺路交掉即可腾格子" or "已完成，等待确认交付"
-    end
-    if not flags.canAbandon then
-        protections[#protections + 1] = "cannot_abandon"
-        reasons[#reasons + 1] = "系统限制不可放弃"
-    end
-    if flags.isClassQuest then
-        protections[#protections + 1] = "class_quest"
-        reasons[#reasons + 1] = "职业专属任务"
-    end
-    if reward.hasSpells then
-        protections[#protections + 1] = "spell_reward"
-        reasons[#reasons + 1] = "奖励法术/技能"
-    end
+local function CollectProtections(q, reward, chain, flags, reasons)
+    local protections = {}
+    -- 一票保护红线检查：本步或任务链终点/后续奖励优秀装备排在最前（最高权重）
     if reward.bestGear and reward.bestGear.provenUpgrade then
         protections[#protections + 1] = "gear_upgrade"
         reasons[#reasons + 1] = "本步" .. DescribeGear(reward.bestGear)
@@ -997,18 +1210,170 @@ local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
         protections[#protections + 1] = "strong_gear"
         reasons[#reasons + 1] = "本步奖励" .. DescribeGear(reward.bestGear)
     end
-    if chain.hasFutureRichReward then
+    local futureExcellentGear = chain.hasFutureRichReward and chain.bestFutureGear and IsExcellentGear(chain.bestFutureGear.item)
+    if futureExcellentGear then
         protections[#protections + 1] = "rich_chain_reward"
-        if chain.bestFutureGear then
-            local step = chain.bestFutureGear
-            reasons[#reasons + 1] = string.format("后续第%d步「%s」出%s", step.depth, step.title, DescribeGear(step.item))
-        elseif chain.hasFutureSpell then
+        local step = chain.bestFutureGear
+        local prefix = step.isTerminal and "任务链终点" or ("后续第" .. step.depth .. "步")
+        reasons[#reasons + 1] = string.format("%s「%s」出%s", prefix, step.title, DescribeGear(step.item))
+    end
+    if reward.hasSpells then
+        protections[#protections + 1] = "spell_reward"
+        reasons[#reasons + 1] = "奖励法术/技能"
+    end
+    if flags.isClassQuest then
+        protections[#protections + 1] = "class_quest"
+        reasons[#reasons + 1] = "职业专属任务"
+    end
+    if q.readyForTurnIn or q.isComplete then
+        protections[#protections + 1] = "completed"
+        reasons[#reasons + 1] = q.readyForTurnIn and "已完成可交，顺路交掉即可腾格子" or "已完成，等待确认交付"
+    end
+    if chain.hasFutureRichReward and not futureExcellentGear then
+        protections[#protections + 1] = "rich_chain_reward"
+        if chain.hasFutureSpell then
             reasons[#reasons + 1] = string.format("任务链后续(%d步)含法术奖励", chain.remainingSteps)
         elseif chain.totalFutureXP > 0 then
             local pct = chain.totalFutureXPFraction and string.format("（约%.0f%%本级）", chain.totalFutureXPFraction * 100) or ""
             reasons[#reasons + 1] = string.format("任务链后续%d步总经验%d%s", chain.remainingSteps, chain.totalFutureXP, pct)
         end
     end
+    if not flags.canAbandon then
+        protections[#protections + 1] = "cannot_abandon"
+        reasons[#reasons + 1] = "系统限制不可放弃"
+    end
+    return protections
+end
+
+local function ClassifyVerdict(q, reward, chain, progress, geo, flags, reaccept, protections, reasons, ctx)
+    -- 结论判定（遵守：副本/精英中性处理，不因副本/精英身份自动判放弃）
+    if #protections > 0 then
+        return "keep_priority", 5
+    end
+    if q.isFailed then
+        reasons[#reasons + 1] = "任务已失败，需放弃重接"
+        return "recommend_drop", 98
+    end
+    if (not reward.ready) or (chain.pendingRewardCount > 0) then
+        -- 未知不当低价值：只要本任务或后续链奖励尚未加载完，且没确定是无后续灰任务，就保留待确认
+        if ctx.isTrivial and chain.status == "known" and not chain.hasFuture and not progress.hasProgress and reward.ready then
+            return "recommend_drop", 85
+        end
+        if chain.pendingRewardCount > 0 then
+            reasons[#reasons + 1] = "后续" .. chain.pendingRewardCount .. "步奖励加载中，暂不判放弃"
+        end
+        return "uncertain", 45
+    end
+
+    local isNoFuture = chain.status == "known" and not chain.hasFuture
+    local isStandalone = chain.status == "known" and chain.kind == "standalone"
+    local isIsolated = ctx.clusterCount <= 2
+    local lowProgress = progress.fraction < 0.3
+    local zeroProgress = not progress.hasProgress
+    local hasFutureNotableGear = chain.bestFutureGear ~= nil and (chain.bestFutureGear.item.tierRank or 0) >= GEAR_TIER_RANK.uncommon_current
+    local dropPriority = 0
+
+    -- 计算“清理优先度”（仅用于同类排序，不覆盖红线）
+    if isStandalone then dropPriority = dropPriority + 22
+    elseif isNoFuture then dropPriority = dropPriority + 12
+    elseif chain.hasFuture then dropPriority = dropPriority - 12 end
+    if reward.hasNotableGear then dropPriority = dropPriority - 16
+    elseif hasFutureNotableGear then dropPriority = dropPriority - 12
+    elseif reward.isPureXP then dropPriority = dropPriority + 18 end
+    if ctx.isTrivial then dropPriority = dropPriority + 24 end
+    if ctx.lowXP then dropPriority = dropPriority + 14 elseif ctx.modestXP then dropPriority = dropPriority + 6 end
+    if geo.scope == "other_continent" then dropPriority = dropPriority + 20
+    elseif geo.scope == "same_continent_far" then dropPriority = dropPriority + 14
+    elseif geo.scope == "current_map" then dropPriority = dropPriority - 10 end
+    if isIsolated then dropPriority = dropPriority + 10 end
+    if zeroProgress then dropPriority = dropPriority + 8
+    elseif progress.highSunkCost then dropPriority = dropPriority - 22
+    else dropPriority = dropPriority - 8 end
+    if reaccept.cost == "easy" then dropPriority = dropPriority + 6
+    elseif reaccept.cost == "hard" then dropPriority = dropPriority - 12 end
+    if ctx.isImpossible or flags.targetAboveLevel then dropPriority = dropPriority + 8 end
+    if ctx.logRatio and ctx.logRatio >= 0.85 then dropPriority = dropPriority + 4 end
+
+    -- 核心分档：突出“无后续/独立 + 远距离 + 纯经验”与“已灰无后续”，高额单次经验或适级可用装备降档保护
+    local verdict
+    if ctx.isTrivial and isNoFuture and not reward.hasNotableGear and not progress.highSunkCost and (zeroProgress or isStandalone or geo.isFar) then
+        verdict = "recommend_drop"
+    elseif isStandalone and reward.isPureXP and geo.isFar and lowProgress and not ctx.highXP and (isIsolated or ctx.modestXP or ctx.isImpossible) then
+        verdict = "recommend_drop"
+    elseif isNoFuture and reward.isPureXP and geo.isFar and lowProgress and not ctx.highXP and (isIsolated or ctx.lowXP) then
+        verdict = "recommend_drop"
+    elseif isNoFuture and reward.isPureXP and zeroProgress and ctx.lowXP and (geo.isFar or isIsolated) then
+        verdict = "recommend_drop"
+    elseif (ctx.isTrivial and (progress.highSunkCost or not isNoFuture or reward.hasNotableGear))
+        or (isNoFuture and reward.isPureXP and geo.isFar and lowProgress)
+        or (isStandalone and reward.isPureXP and (geo.isFar or ctx.lowXP))
+        or (isNoFuture and reward.isPureXP and zeroProgress and (isIsolated or ctx.lowXP))
+        or ((ctx.isImpossible or flags.targetAboveLevel) and zeroProgress and reaccept.cost == "easy") then
+        verdict = "hold_or_drop"
+    else
+        verdict = "keep"
+    end
+    return verdict, dropPriority
+end
+
+local function BuildSummaryLines(q, reward, chain, progress, geo, reaccept, clusterCount, verdict, bestGear, gearSource, bestStep)
+    local rewardLine
+    if IsExcellentGear(bestGear) then
+        if gearSource == "direct" then
+            local chainSuffix = chain.hasFuture and (" · 链+" .. chain.remainingSteps .. "步") or ""
+            rewardLine = "本步出" .. DescribeGear(bestGear) .. chainSuffix
+        elseif bestStep then
+            local where = bestStep.isTerminal and "终点" or ("第" .. bestStep.depth .. "步")
+            rewardLine = string.format("链+%d步 · %s「%s」出%s", chain.remainingSteps, where, bestStep.title, DescribeGear(bestStep.item))
+        end
+    elseif chain.bestFutureGear and (chain.bestFutureGear.item.tierRank or 0) >= GEAR_TIER_RANK.uncommon_current then
+        local step = chain.bestFutureGear
+        local where = step.isTerminal and "终点" or ("第" .. step.depth .. "步")
+        rewardLine = string.format("链+%d步 · %s「%s」出%s", chain.remainingSteps, where, step.title, DescribeGear(step.item))
+    elseif chain.hasFuture then
+        local xpPart = chain.totalFutureXP > 0 and ("后续总经验" .. chain.totalFutureXP) or "后续待加载"
+        local tail = chain.terminalQuests[1] and (" · 终点「" .. chain.terminalQuests[1].title .. "」") or ""
+        rewardLine = string.format("链+%d步 · %s%s", chain.remainingSteps, xpPart, tail)
+    elseif not reward.ready then
+        rewardLine = "奖励加载中…"
+    elseif reward.isPureXP then
+        local pct = reward.xpFraction and string.format("(%.1f%%)", reward.xpFraction * 100) or ""
+        local prefix = chain.kind == "standalone" and "独立纯经验" or "链尾纯经验"
+        rewardLine = string.format("%s %s%s · 无后续", prefix, tostring(reward.xp or 0), pct)
+    elseif reward.bestGear then
+        rewardLine = "无后续 · " .. DescribeGear(reward.bestGear)
+    else
+        rewardLine = "无后续" .. (reward.xp and (" · 经验" .. reward.xp) or "") .. (reward.moneyText and (" · " .. reward.moneyText) or "")
+    end
+
+    local contextParts = {}
+    if geo.label then contextParts[#contextParts + 1] = geo.label end
+    if clusterCount <= 2 and geo.scope ~= "current_map" and geo.scope ~= "unknown" then
+        contextParts[#contextParts + 1] = "孤立"
+    end
+    if not (q.readyForTurnIn or q.isComplete) then
+        contextParts[#contextParts + 1] = "进度" .. progress.summary
+    else
+        contextParts[#contextParts + 1] = q.readyForTurnIn and "可交付" or "待确认交付"
+    end
+    if reaccept.cost == "easy" and (verdict == "recommend_drop" or verdict == "hold_or_drop") then
+        contextParts[#contextParts + 1] = "易重接"
+    elseif reaccept.cost == "hard" then
+        contextParts[#contextParts + 1] = "难重接"
+    end
+    return rewardLine, table.concat(contextParts, " · ")
+end
+
+local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
+    local q, reward, chain, progress = entry.quest, entry.reward, entry.chain, entry.progress
+    local geo, flags, reaccept, diff = entry.geography, entry.flags, entry.reaccept, entry.difficulty
+    local isTrivial = diff.code == 0 or diff.isTrivial == true
+    local isImpossible = diff.code == 4
+    local reasons = {}
+    local bestGear, gearSource, gearWeight, bestStep = ResolveBestGearHighlight(reward, chain)
+    local hasExcellentGear = IsExcellentGear(bestGear)
+    local tags = BuildQuestTags(q, flags, chain, bestGear, gearSource)
+    local protections = CollectProtections(q, reward, chain, flags, reasons)
 
     -- 补充客观信息理由
     local xpRelMedian = (reward.xp and medianXP and medianXP > 0) and (reward.xp / medianXP) or nil
@@ -1075,116 +1440,19 @@ local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
         reasons[#reasons + 1] = reaccept.label
     end
 
-    -- 结论判定（遵守：副本/精英中性处理，不因副本/精英身份自动判放弃）
-    local verdict
-    local dropPriority = 0
-
-    if #protections > 0 then
-        verdict = "keep_priority"
-        dropPriority = 5
-    elseif q.isFailed then
-        verdict = "recommend_drop"
-        dropPriority = 98
-        reasons[#reasons + 1] = "任务已失败，需放弃重接"
-    elseif (not reward.ready) or (chain.pendingRewardCount > 0) then
-        -- 未知不当低价值：只要本任务或后续链奖励尚未加载完，且没确定是无后续灰任务，就保留待确认
-        if isTrivial and chain.status == "known" and not chain.hasFuture and not progress.hasProgress and reward.ready then
-            verdict = "recommend_drop"
-            dropPriority = 85
-        else
-            verdict = "uncertain"
-            dropPriority = 45
-            if chain.pendingRewardCount > 0 then
-                reasons[#reasons + 1] = "后续" .. chain.pendingRewardCount .. "步奖励加载中，暂不判放弃"
-            end
-        end
-    else
-        local isNoFuture = chain.status == "known" and not chain.hasFuture
-        local isStandalone = chain.status == "known" and chain.kind == "standalone"
-        local isIsolated = clusterCount <= 2
-        local lowProgress = progress.fraction < 0.3
-        local zeroProgress = not progress.hasProgress
-
-        -- 计算“清理优先度”（仅用于同类排序，不覆盖红线）
-        if isStandalone then dropPriority = dropPriority + 22
-        elseif isNoFuture then dropPriority = dropPriority + 12
-        elseif chain.hasFuture then dropPriority = dropPriority - 12 end
-        if reward.isPureXP then dropPriority = dropPriority + 18 end
-        if isTrivial then dropPriority = dropPriority + 24 end
-        if lowXP then dropPriority = dropPriority + 14 elseif modestXP then dropPriority = dropPriority + 6 end
-        if geo.scope == "other_continent" then dropPriority = dropPriority + 20
-        elseif geo.scope == "same_continent_far" then dropPriority = dropPriority + 14
-        elseif geo.scope == "current_map" then dropPriority = dropPriority - 10 end
-        if isIsolated then dropPriority = dropPriority + 10 end
-        if zeroProgress then dropPriority = dropPriority + 8
-        elseif progress.highSunkCost then dropPriority = dropPriority - 22
-        else dropPriority = dropPriority - 8 end
-        if reaccept.cost == "easy" then dropPriority = dropPriority + 6
-        elseif reaccept.cost == "hard" then dropPriority = dropPriority - 12 end
-        if isImpossible or flags.targetAboveLevel then dropPriority = dropPriority + 8 end
-        if logRatio and logRatio >= 0.85 then dropPriority = dropPriority + 4 end
-
-        -- 核心分档：突出“无后续/独立 + 远距离 + 纯经验”与“已灰无后续”，高额单次经验降档为可考虑
-        if isTrivial and isNoFuture and not progress.highSunkCost and (zeroProgress or isStandalone or geo.isFar) then
-            verdict = "recommend_drop"
-        elseif isStandalone and reward.isPureXP and geo.isFar and lowProgress and not highXP and (isIsolated or modestXP or isImpossible) then
-            verdict = "recommend_drop"
-        elseif isNoFuture and reward.isPureXP and geo.isFar and lowProgress and not highXP and (isIsolated or lowXP) then
-            verdict = "recommend_drop"
-        elseif isNoFuture and reward.isPureXP and zeroProgress and lowXP and (geo.isFar or isIsolated) then
-            verdict = "recommend_drop"
-        elseif (isTrivial and (progress.highSunkCost or not isNoFuture))
-            or (isNoFuture and reward.isPureXP and geo.isFar and lowProgress)
-            or (isStandalone and reward.isPureXP and (geo.isFar or lowXP))
-            or (isNoFuture and reward.isPureXP and zeroProgress and (isIsolated or lowXP))
-            or ((isImpossible or flags.targetAboveLevel) and zeroProgress and reaccept.cost == "easy") then
-            verdict = "hold_or_drop"
-        else
-            verdict = "keep"
-        end
+    local verdictCtx = {
+        isTrivial = isTrivial, isImpossible = isImpossible,
+        highXP = highXP, lowXP = lowXP, modestXP = modestXP,
+        clusterCount = clusterCount, logRatio = logRatio,
+    }
+    local verdict, dropPriority = ClassifyVerdict(q, reward, chain, progress, geo, flags, reaccept, protections, reasons, verdictCtx)
+    local valueWeight = ComputeValueWeight(q, reward, chain, progress, geo, flags, verdict, dropPriority, verdictCtx, bestGear, gearSource, gearWeight)
+    if verdict == "keep_priority" then
+        -- 优先保留档内按 valueWeight 反向映射清理优先度：优秀装备（直接或任务链终点）数值最小，最不被清理
+        dropPriority = math.max(0, math.floor((165 - valueWeight) * 10 + 0.5) / 100)
     end
-
     local meta = VERDICT_META[verdict] or VERDICT_META.keep
-
-    -- 生成面向侧边栏和命令的精炼 2 行摘要
-    local rewardLine
-    if chain.hasFutureRichReward and chain.bestFutureGear then
-        local step = chain.bestFutureGear
-        rewardLine = string.format("链+%d步 · 终点「%s」出%s", chain.remainingSteps, step.title, DescribeGear(step.item))
-    elseif reward.bestGear and (reward.bestGear.provenUpgrade or reward.hasStrongGear) then
-        rewardLine = "本步出" .. DescribeGear(reward.bestGear)
-    elseif chain.hasFuture then
-        local xpPart = chain.totalFutureXP > 0 and ("后续总经验" .. chain.totalFutureXP) or "后续待加载"
-        local tail = chain.terminalQuests[1] and (" · 终点「" .. chain.terminalQuests[1].title .. "」") or ""
-        rewardLine = string.format("链+%d步 · %s%s", chain.remainingSteps, xpPart, tail)
-    elseif not reward.ready then
-        rewardLine = "奖励加载中…"
-    elseif reward.isPureXP then
-        local pct = reward.xpFraction and string.format("(%.1f%%)", reward.xpFraction * 100) or ""
-        local prefix = chain.kind == "standalone" and "独立纯经验" or "链尾纯经验"
-        rewardLine = string.format("%s %s%s · 无后续", prefix, tostring(reward.xp or 0), pct)
-    elseif reward.bestGear then
-        rewardLine = "无后续 · " .. DescribeGear(reward.bestGear)
-    else
-        rewardLine = "无后续" .. (reward.xp and (" · 经验" .. reward.xp) or "") .. (reward.moneyText and (" · " .. reward.moneyText) or "")
-    end
-
-    local contextParts = {}
-    if geo.label then contextParts[#contextParts + 1] = geo.label end
-    if clusterCount <= 2 and geo.scope ~= "current_map" and geo.scope ~= "unknown" then
-        contextParts[#contextParts + 1] = "孤立"
-    end
-    if not (q.readyForTurnIn or q.isComplete) then
-        contextParts[#contextParts + 1] = "进度" .. progress.summary
-    else
-        contextParts[#contextParts + 1] = q.readyForTurnIn and "可交付" or "待确认交付"
-    end
-    if reaccept.cost == "easy" and (verdict == "recommend_drop" or verdict == "hold_or_drop") then
-        contextParts[#contextParts + 1] = "易重接"
-    elseif reaccept.cost == "hard" then
-        contextParts[#contextParts + 1] = "难重接"
-    end
-    local contextLine = table.concat(contextParts, " · ")
+    local rewardLine, contextLine = BuildSummaryLines(q, reward, chain, progress, geo, reaccept, clusterCount, verdict, bestGear, gearSource, bestStep)
 
     return {
         questID = q.questID,
@@ -1198,6 +1466,9 @@ local function EvaluateSingleQuest(entry, medianXP, clusterCount, logRatio)
         verdictRank = meta.rank,
         verdictColor = meta.color,
         dropPriority = dropPriority,
+        valueWeight = valueWeight,
+        hasExcellentGear = hasExcellentGear,
+        bestGearSource = gearSource,
         protections = protections,
         reasons = reasons,
         tags = tags,
@@ -1262,31 +1533,34 @@ local function Analyze(args)
     end
 
     local preloadState = { enabled = requestLoad, requested = {}, count = 0 }
+    local noPreload = { enabled = false, requested = {}, count = 0 }
     local npcLevelCache = {}
     local rawEntries = {}
     local clusterCounts = {}
     local xpSamples = {}
 
+    -- 先对全日志统计经验中位数与区域聚集度，避免单任务查询（args.questID）破坏参照系。
     for _, q in ipairs(questList.quests or {}) do
-        if not args.questID or q.questID == args.questID then
-            local pData = ns.Priority.Read(q)
-            local diff = pData and pData.difficulty or { available = false, name = "unknown" }
-            local reward = ReadQuestReward(q.questID, db, profile, gearEval, preloadState)
-            if reward.ready and reward.xp and reward.xp > 0 and (diff.code == 1 or diff.code == 2) then
-                xpSamples[#xpSamples + 1] = reward.xp
-            end
-            local chain = includeChain and TraceChain(q.questID, db, reverseNext, profile, gearEval, preloadState) or {
+        local isTarget = (not args.questID) or (q.questID == args.questID)
+        local pData = ns.Priority.Read(q)
+        local diff = pData and pData.difficulty or { available = false, name = "unknown" }
+        local reward = ReadQuestReward(q.questID, db, profile, gearEval, isTarget and preloadState or noPreload)
+        if reward.ready and reward.xp and reward.xp > 0 and (diff.code == 1 or diff.code == 2) then
+            xpSamples[#xpSamples + 1] = reward.xp
+        end
+        local geo = QuestGeography(q, poisByQuest, db, profile.location)
+        local clusterKey = geo.mapID and ("map:" .. geo.mapID) or ("cat:" .. tostring(q.category or "?"))
+        clusterCounts[clusterKey] = (clusterCounts[clusterKey] or 0) + 1
+        if isTarget then
+            local chain = includeChain and TraceChain(q.questID, db, reverseNext, profile, gearEval, preloadState, activeByID) or {
                 status = "disabled", kind = "unknown", hasPrevious = false, hasFuture = false,
                 remainingSteps = 0, maxDepth = 0, futureQuests = {}, terminalQuests = {},
                 totalFutureXP = 0, totalFutureMoney = 0, pendingRewardCount = 0, pendingQuestIDs = {},
                 hasFutureSpell = false, hasFutureRichReward = false,
             }
             local progress = ComputeProgress(q, db)
-            local geo = QuestGeography(q, poisByQuest, db, profile.location)
             local flags = BuildQuestFlags(q, db, profile, settings, npcLevelCache)
             local reaccept = ReadReacceptInfo(q.questID, db, chain.hasPrevious)
-            local clusterKey = geo.mapID and ("map:" .. geo.mapID) or ("cat:" .. tostring(q.category or "?"))
-            clusterCounts[clusterKey] = (clusterCounts[clusterKey] or 0) + 1
             rawEntries[#rawEntries + 1] = {
                 quest = q, difficulty = diff, reward = reward, chain = chain,
                 progress = progress, geography = geo, flags = flags, reaccept = reaccept,
@@ -1340,12 +1614,16 @@ local function Analyze(args)
     end
     summary.pendingRewardCount = #pendingList
 
-    -- 记录正在等待缓存的任务 ID，便于 QUEST_DATA_LOAD_RESULT 到达时及时刷新界面
-    ns.route.valuePendingQuestIDs = #pendingList > 0 and pendingMap or nil
+    -- 仅在全量日志分析时更新待缓存追踪集合，避免单任务查询覆盖全日志状态。
+    if not args.questID then
+        ns.route.valuePendingQuestIDs = #pendingList > 0 and pendingMap or nil
+    end
 
     table.sort(evaluated, function(a, b)
         if a.verdictRank ~= b.verdictRank then return a.verdictRank < b.verdictRank end
         if a.dropPriority ~= b.dropPriority then return a.dropPriority > b.dropPriority end
+        local aw, bw = a.valueWeight or 0, b.valueWeight or 0
+        if aw ~= bw then return aw < bw end
         return a.questID < b.questID
     end)
 
@@ -1440,6 +1718,7 @@ end
 
 ns.QuestValue = {
     Analyze = Analyze,
+    PumpIndex = PumpReverseIndex,
     FormatAuditLines = FormatAuditLines,
     FormatQuestDetailLines = FormatQuestDetailLines,
     ReadWornGear = ReadWornGear,

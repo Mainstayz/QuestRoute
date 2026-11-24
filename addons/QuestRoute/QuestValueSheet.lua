@@ -19,7 +19,7 @@ ns.QuestValueSheet = Sheet
 
 local function CurrentSheet()
     local root = WoWBridgeNS and WoWBridgeNS.QuestRoute
-    return root and root.QuestValueSheet or nil
+    return (root and root.QuestValueSheet) or ns.QuestValueSheet
 end
 
 local function Line(parent, font, width)
@@ -57,6 +57,8 @@ function Sheet.FilterAndOrder(quests, modeId)
     if modeId == "value_first" then
         table.sort(out, function(a, b)
             if a.verdictRank ~= b.verdictRank then return a.verdictRank > b.verdictRank end
+            local aw, bw = a.valueWeight or 0, b.valueWeight or 0
+            if aw ~= bw then return aw > bw end
             if a.dropPriority ~= b.dropPriority then return a.dropPriority < b.dropPriority end
             return a.questID < b.questID
         end)
@@ -64,6 +66,8 @@ function Sheet.FilterAndOrder(quests, modeId)
         table.sort(out, function(a, b)
             if a.verdictRank ~= b.verdictRank then return a.verdictRank < b.verdictRank end
             if a.dropPriority ~= b.dropPriority then return a.dropPriority > b.dropPriority end
+            local aw, bw = a.valueWeight or 0, b.valueWeight or 0
+            if aw ~= bw then return aw < bw end
             return a.questID < b.questID
         end)
     end
@@ -75,7 +79,8 @@ function Sheet.CardLines(item)
     local levelStr = item.level and ("|cffaaaaaa" .. item.level .. "|r ") or ""
     local titleLine = string.format("|c%s[%s]|r %s%s%s",
         item.verdictColor or "ffffffff", item.verdictShort or "?", levelStr, item.title or "?", tagStr)
-    local rewardLine = "|cffe0e0e0" .. (item.rewardLine or "") .. "|r"
+    local rewardColor = item.hasExcellentGear and "|cffffe082" or "|cffe0e0e0"
+    local rewardLine = rewardColor .. (item.rewardLine or "") .. "|r"
     local contextLine = "|cffb0b0b0" .. (item.contextLine or "") .. "|r"
     return titleLine, rewardLine, contextLine
 end
@@ -88,6 +93,11 @@ local function ShowTooltip(row)
     GameTooltip:AddLine(string.format("|c%s[%s]|r %s（%s级 · #%d）",
         item.verdictColor or "ffffffff", item.verdictLabel or "?", item.title or "?",
         tostring(item.level or "?"), item.questID or 0), 1, 1, 1, true)
+    if item.hasExcellentGear then
+        local scopeLabel = item.bestGearSource == "direct" and "本步奖励优秀装备"
+            or (item.bestGearSource == "chain_terminal" and "任务链终点奖励优秀装备" or "任务链后续奖励优秀装备")
+        GameTooltip:AddLine("优先权重：" .. scopeLabel .. "（最高权重）", 1, 0.85, 0.35, true)
+    end
     if item.tags and #item.tags > 0 then
         GameTooltip:AddLine("标签：" .. table.concat(item.tags, " / "), 0.6, 0.8, 1, true)
     end
@@ -157,6 +167,18 @@ local function RenderPage()
     if Sheet.page <= 1 then panel.prevBtn:Disable() else panel.prevBtn:Enable() end
     if Sheet.page >= totalPages then panel.nextBtn:Disable() else panel.nextBtn:Enable() end
 end
+Sheet.RenderPage = RenderPage
+
+local function OpenNativeQuestDetail(questID)
+    if type(questID) ~= "number" or questID <= 0 then return end
+    if type(InCombatLockdown) == "function" then
+        local ok, locked = pcall(InCombatLockdown)
+        if ok and locked then return end
+    end
+    if type(_G.QuestMapFrame_OpenToQuestDetails) == "function" then
+        pcall(_G.QuestMapFrame_OpenToQuestDetails, questID)
+    end
+end
 
 local function BindHandlers(panel)
     panel.modeBtn:SetScript("OnClick", function()
@@ -174,7 +196,7 @@ local function BindHandlers(panel)
         local current = CurrentSheet()
         if not current or current.page <= 1 then return end
         current.page = current.page - 1
-        RenderPage()
+        if type(current.RenderPage) == "function" then current.RenderPage() end
     end)
     panel.nextBtn:SetScript("OnClick", function()
         local current = CurrentSheet()
@@ -182,7 +204,7 @@ local function BindHandlers(panel)
         local maxPage = math.max(1, math.ceil(#(current.items or {}) / PAGE_SIZE))
         if current.page >= maxPage then return end
         current.page = current.page + 1
-        RenderPage()
+        if type(current.RenderPage) == "function" then current.RenderPage() end
     end)
     for _, row in ipairs(panel.rows) do
         row:SetScript("OnEnter", function(self) ShowTooltip(self) end)
@@ -191,8 +213,12 @@ local function BindHandlers(panel)
         end)
         row:SetScript("OnClick", function(self)
             local current = CurrentSheet()
-            if not current or not self.item or not ns.QuestValue then return end
-            for _, line in ipairs(ns.QuestValue.FormatQuestDetailLines(self.item)) do
+            if not current or not self.item then return end
+            OpenNativeQuestDetail(self.item.questID)
+            local root = WoWBridgeNS and WoWBridgeNS.QuestRoute
+            local qv = (root and root.QuestValue) or ns.QuestValue
+            if not qv then return end
+            for _, line in ipairs(qv.FormatQuestDetailLines(self.item)) do
                 print(line)
             end
         end)
