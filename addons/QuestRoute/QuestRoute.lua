@@ -15,7 +15,14 @@ local function RouteTick(_, elapsed)
     if ns.Discovery.Pump() then
         ns.route.dirty, ns.route.due, ns.route.pendingReason = true, now, "association_index_ready"
     end
-    if ns.route.dirty and now >= (ns.route.due or 0) then RebuildRoute(ns.route.pendingReason or "quest_update") end
+    if ns.route.dirty and now >= (ns.route.due or 0) then
+        RebuildRoute(ns.route.pendingReason or "quest_update")
+        if ns.QuestValueSheet then ns.QuestValueSheet.RefreshIfShown() end
+    end
+    if ns.route.valueSheetDirty and now >= (ns.route.valueSheetDue or 0) then
+        ns.route.valueSheetDirty = false
+        if ns.QuestValueSheet then ns.QuestValueSheet.RefreshIfShown() end
+    end
     if ns.route.nextRewardCheck and now >= ns.route.nextRewardCheck then RebuildRoute("reward_cache_refresh") end
     if ns.route.nextLocationCheck and now >= ns.route.nextLocationCheck then RebuildRoute("location_data_refresh") end
     if ns.route.nextObjectiveCheck and now >= ns.route.nextObjectiveCheck then RebuildRoute("objective_data_refresh") end
@@ -105,6 +112,10 @@ function ns.StartRoute()
     driver:SetScript("OnEvent", function(_, event, questID)
         if event == "NAME_PLATE_UNIT_ADDED" then RenderTaskNameplates(); return end
         if event == "NAME_PLATE_UNIT_REMOVED" then HideTaskMarkers(questID); return end
+        if event == "QUEST_DATA_LOAD_RESULT" and ns.route.valuePendingQuestIDs and ns.route.valuePendingQuestIDs[questID] then
+            if not ns.route.valueSheetDirty then ns.route.valueSheetDue = GetTime() + 0.4 end
+            ns.route.valueSheetDirty = true
+        end
         ns.Discovery.ObserveInteraction(event)
         HideTaskMarkers()
         if event == "QUEST_DATA_LOAD_RESULT" and not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
@@ -118,6 +129,7 @@ function ns.StartRoute()
     RenderRouteMaps()
     RenderMinimapRoute()
     if ns.GearSheet then ns.GearSheet.Attach() end
+    if ns.QuestValueSheet then ns.QuestValueSheet.Attach() end
 end
 
 SLASH_QUESTROUTEAPI1 = "/questrouteapi"
@@ -189,11 +201,34 @@ local function PrintWhy()
     end
 end
 
+local function PrintAudit(arg)
+    if not ns.AnalyzeQuests or not ns.QuestValue then
+        print("|cff31cee8QuestRoute|r 任务价值分析模块未加载。")
+        return
+    end
+    local qid = tonumber(arg)
+    if qid then
+        local result = ns.AnalyzeQuests({ questID = qid })
+        if not result.ok then print(result.error and result.error.message or "查询失败"); return end
+        local item = result.quests and result.quests[1]
+        if not item then
+            print("|cff31cee8QuestRoute|r 当前任务日志中未找到任务 [" .. qid .. "]。")
+            return
+        end
+        for _, line in ipairs(ns.QuestValue.FormatQuestDetailLines(item)) do print(line) end
+        return
+    end
+    local showAll = arg == "all"
+    local result = ns.AnalyzeQuests({})
+    for _, line in ipairs(ns.QuestValue.FormatAuditLines(result, showAll)) do print(line) end
+end
+
 SLASH_QUESTROUTE1 = "/questroute"
 SlashCmdList["QUESTROUTE"] = function(text)
     local command, value = (text or ""):match("^(%S*)%s*(.-)%s*$")
     local result
     if command == "why" then PrintWhy(); return
+    elseif command == "audit" then PrintAudit(value); return
     elseif command == "notice" then
         result = (value == "on" or value == "off") and ns.SetRouteOptions({ switchNotice = value == "on" })
             or InvalidArguments("用法：/questroute notice on/off")
@@ -220,7 +255,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
         local plan = ns.GetPlan({})
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
-        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why")
+        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID]")
         return
     end
     if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
@@ -258,9 +293,17 @@ WB:Expose("get_gear_candidates", ns.GetGearCandidates,
     "只读查询升级路线里的战斗装备候选。args:level=1..60，class，spec，faction=联盟/部落，可选gear、weights、questLevelWindow、limit=1..100、race。"
     .. "只对战士防护打生存/仇恨启发式分数，其他战士玩法只给未评分候选，其他职业直接拒绝。不使用60级模拟，不把特效和套装算进分数。"
     .. "没有现装时只称候选；现装不在数据集里不比较。衬衣和战袍不参与。数据覆盖和来源限制见 GEAR.md。")
+WB:Expose("analyze_quests", ns.AnalyzeQuests,
+    "只读分析角色当前任务日志价值，判断哪些任务值得保留或可考虑放弃；绝不自动放弃任务。"
+    .. "结合任务链后续与终点奖励、装备与现装对比、经验占比、跨图距离、区域聚集度、完成进度与重接成本给出五档建议"
+    .. "（keep_priority/keep/hold_or_drop/recommend_drop/uncertain）。副本与精英仅作中性标签不自动判弃；奖励缓存未就绪时标待确认并触发异步加载。"
+    .. "args:可选questID、verdict、includeChain(默认true)、includeGear(默认true)、requestLoad(默认true)、gear、offset、limit。")
 
 function ns.OnUnload()
     if ns.GearSheet then ns.GearSheet.Shutdown() end
+    if ns.QuestValueSheet then ns.QuestValueSheet.Shutdown() end
+    ns.route.valuePendingQuestIDs = nil
+    ns.route.valueSheetDirty = nil
     HideTaskMarkers()
     if ns.settingsUI and ns.settingsUI.owner == ns then
         ns.settingsUI.applyElite, ns.settingsUI.applySwitchNotice, ns.settingsUI.applyNameplates, ns.settingsUI.applyMonsterLevel = nil, nil, nil, nil

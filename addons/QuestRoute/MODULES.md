@@ -2,7 +2,7 @@
 
 插件按 `QuestRoute.toc` 顺序执行全部 Lua 文件；不使用 `require`、`loadfile` 或额外加载框架。每个文件通过 `local _, ns = ...` 取得同一份插件命名空间。业务模块只定义功能，最后的 `QuestRoute.lua` 注册命令、桥接 API 和事件，并启动路线。
 
-当前 `apiRevision=17`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 15 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，装备候选见 [GEAR.md](GEAR.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
+当前 `apiRevision=17`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 16 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，装备候选见 [GEAR.md](GEAR.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
 
 ## 职责与加载顺序
 
@@ -28,6 +28,8 @@
 | `GearData.lua` | 生成的战士候选目录，只含任务奖励和已关联副本的掉落 | `ns.GearCatalog` |
 | `Gear.lua` | 等级、职业、来源和槽位约束；战士防护按练级属性计分 | `ns.Gear`、`ns.GetGearCandidates` |
 | `GearSheet.lua` | 角色页打开时，在面板旁显示当前槽位的前三名 | `ns.GearSheet` |
+| `QuestValue.lua` | 角色现有任务价值分析（只读）：任务链后续/终点奖励、装备提升、距离聚集度与五档清理建议 | `ns.QuestValue`、`ns.AnalyzeQuests` |
+| `QuestValueSheet.lua` | 任务日志（`QuestMapFrame`）可见时，在右侧显示任务价值卡片、筛选与翻页 | `ns.QuestValueSheet` |
 | `QuestRoute.lua` | 事件/计时驱动、命令、桥接入口、登录/热加载生命周期 | `ns.StartRoute`、`ns.OnUnload`、`ns.OnReload` |
 
 规划依赖任务数据、目标解析、权重、导航、热点和 NPC 用途索引；绘图消费同一份路线快照。地图共用图元不依赖具体地图模块，大地图与小地图各自负责几何裁剪。所有初始化依赖都排在使用者之前。

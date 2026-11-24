@@ -2,7 +2,7 @@
 
 《魔兽世界：无限》当前任务路线与数据插件，在原生 M 地图、小地图绘制导航，并提供任务怪姓名板提示。安装、旧配置迁移和快速上手见根 [README](../../README.md)。
 
-当前 `apiRevision=17`、`schemaVersion=1`，21 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。装备候选不参与地图路线，调用和限制见 [GEAR.md](GEAR.md)。
+当前 `apiRevision=17`、`schemaVersion=1`，23 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。装备候选与任务价值分析均不改变地图路线，装备规则见 [GEAR.md](GEAR.md)。
 
 [开发进度](../../开发进度.md)记录最近验证与部署状态，[待办事项](../../待办事项.md)记录尚未完成的实机验收。[技术说明](../../docs/技术说明.md)解释数据、坐标与规划边界，[MODULES.md](MODULES.md)说明源码职责。
 
@@ -53,6 +53,7 @@
 | `/questroute monsterlevel 0..5` | 设置怪物最多高出角色几级（默认2），0为同级及以下；只查怪物等级，立即重排 |
 | `/questroute minlevel 0..60` | 接取建议最低任务等级（默认15），0关闭；只影响未接任务，立即重排 |
 | `/questroute why` | 前三步距离与权重、排除原因、附近/目的地相关任务与启动物品机会；索引构建进度和本图做完后的下一图提示 |
+| `/questroute audit [all\|ID]` | 只读分析当前任务日志价值（任务链后续/终点奖励、装备提升、独立远图纯经验过滤与清理建议）；省略列建议/可考虑项，`all` 列全部，传任务 ID 显示完整链条与依据 |
 | `/questrouteapi` | 只读显示当前任务列表 |
 
 换地点后旧点 150 码内避开 600 秒，期间保留仍有效的手动热点，普通背包/任务更新不会用关联推荐覆盖；目标完成、跳过、切图、到期或主动 `replan` 后解除保持。无备选或状态失效时保留原路线、计时与任务跳过。清地点避让不会恢复手动跳过的任务。
@@ -213,6 +214,7 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 | `clear_spot_avoidances` / `ClearSpotAvoidances` | `{questID?}`；省略清全部，返回重排计划，不改任务跳过 |
 | `get_unit_tasks` / `GetUnitTasks` | `{unit?}`；默认 target，仅接受 target/mouseover/nameplateN，只读当前单位任务用途 |
 | `get_gear_candidates` / `GetGearCandidates` | `{level,class,spec,faction,gear?,weights?,questLevelWindow?,limit?,race?}`；战士防护候选、与现装差异和来源。字段、评分与覆盖见 [GEAR.md](GEAR.md) |
+| `analyze_quests` / `AnalyzeQuests` | `{questID?,verdict?,includeChain?,includeGear?,requestLoad?,gear?,offset?,limit?}`；只读分析角色现有任务日志价值，追踪任务链后续/终点奖励并结合现装对比，输出 `recommend_drop/hold_or_drop/uncertain/keep/keep_priority` 建议与理由；副本/精英中性打标，绝不自动放弃任务。打开原生任务日志（`QuestMapFrame`）时在右侧附着只读价值侧边栏 |
 
 change_quest_spot 成功返回 questID/objectiveKey/selected/expiresAt/avoidedRadius/duration；无备选、交付/原生点、失效 key、过期热点、目标或地图变化时返回错误，保留原路线和计时。省略 hotspotID 选择该目标其他最近区域。
 

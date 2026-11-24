@@ -2393,7 +2393,7 @@ local endpoints={
     get_plan='GetPlan',replan='Replan',set_quest_skip='SetQuestSkip',reset_quest_skips='ResetQuestSkips',
     set_route_options='SetRouteOptions',change_quest_spot='ChangeQuestSpot',
     clear_spot_avoidances='ClearSpotAvoidances',get_unit_tasks='GetUnitTasks',
-    get_gear_candidates='GetGearCandidates',
+    get_gear_candidates='GetGearCandidates',analyze_quests='AnalyzeQuests',
 }
 local public={RegisterSettings=true,StartRoute=true,OnUnload=true,OnReload=true}
 for _,member in pairs(endpoints) do public[member]=true end

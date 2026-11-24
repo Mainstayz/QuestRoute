@@ -27,4 +27,6 @@ Minimap.lua
 GearData.lua
 Gear.lua
 GearSheet.lua
+QuestValue.lua
+QuestValueSheet.lua
 QuestRoute.lua

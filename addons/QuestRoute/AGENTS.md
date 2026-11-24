@@ -1,6 +1,6 @@
 # QuestRoute · Agent 开发约定
 
-《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 顺序加载 21 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=17`、`schemaVersion=1`。
+《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 顺序加载 23 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=17`、`schemaVersion=1`。
 
 统一标识：Title/目录 `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。命令 `/questroute`（`SlashCmdList.QUESTROUTE`）和 `/questrouteapi`（`SlashCmdList.QUESTROUTEAPI`），无旧名运行时别名。
 
@@ -9,7 +9,7 @@
 先看工作区差异，再按 [MODULES.md](MODULES.md) 定位职责文件，搜索调用方及相关测试、配置和接口。只读取这次改动需要的文档；不要每轮通读历史记录、枚举客户端 API 或复查未触及的功能。
 
 - [根 README](../../README.md)：安装、使用与旧配置迁移。
-- [插件 README](README.md)：现行命令和 15 个公开 API。装备候选的字段、评分和数据限制见 [GEAR.md](GEAR.md)。
+- [插件 README](README.md)：现行命令和 16 个公开 API。装备候选的字段、评分和数据限制见 [GEAR.md](GEAR.md)。
 - [技术说明](../../docs/技术说明.md)：数据、坐标、目标匹配、权重和生命周期。
 - [开发进度](../../开发进度.md)：当前验证、部署与恢复入口。
 - [待办事项](../../待办事项.md)：未完成工作和现场验收。
