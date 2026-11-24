@@ -1,0 +1,996 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 90
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "quests",
+        "kind": "temporary",
+        "text": "30 个任务里 2 个不在服务器任务缓存里：其中 2 个 EG Link 见过（服务器下发的数据经第三方转来，confirmed eglink），其余来自 QuestieDB 等，名称、等级、类型等写在 temporary 里的是第三方临时数据"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "other_boss_positions",
+        "kind": "temporary",
+        "text": "首领列表以外的首领战（同一张副本地图上别的难度）的开打位置；临时数据，来源见各行的 temporary_position.source"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "14 行的 side 是第三方临时（来自 QuestieDB）"
+      },
+      {
+        "on": "level",
+        "kind": "temporary",
+        "text": "2 行的 level 是第三方临时（来自 EG Link）"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "1 行的 side 是第三方临时（来自 EG Link）"
+      }
+    ],
+    "id": 90,
+    "fetch_id": "instance:90",
+    "title": "诺莫瑞根",
+    "url": "https://wuxianwow.com/instance/90",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        29,
+        49
+      ],
+      "max": null,
+      "min": 19,
+      "target": 25
+    },
+    "level_text": "准入 19 级 · 集合石 29–49 级",
+    "zone": "丹莫罗",
+    "entrance": {
+      "zone": "丹莫罗",
+      "area": null,
+      "continent": "东部王国",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 90.Corpse (-5162.7, 931.6) on Map 0",
+      "world_xy": [
+        -5162.7,
+        931.6
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 1426,
+      "atlas": [
+        {
+          "name": "丹莫罗",
+          "ui_map": 1426,
+          "x": 0.1767,
+          "y": 0.3915,
+          "url": "https://wuxianwow.com/atlas/1426?i=90",
+          "fetch_id": "map:1426"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.4281,
+          "y": 0.5382,
+          "url": "https://wuxianwow.com/atlas/1415?i=90",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.7087,
+          "y": 0.5054,
+          "url": "https://wuxianwow.com/atlas/947?i=90",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1463,
+          "x": 0.4122,
+          "y": 0.5037,
+          "url": "https://wuxianwow.com/atlas/1463?i=90",
+          "fetch_id": "map:1463"
+        }
+      ]
+    },
+    "boss_count": 6,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/90.webp",
+    "picture": "https://wuxianwow.com/data/loading/90.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=90",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "lore": {
+      "entities": [
+        {
+          "id": 765,
+          "name": "诺莫瑞根",
+          "kind": "地点",
+          "summary": "矮人帮侏儒建造的城市",
+          "url": "https://wuxianwow.com/lore/n/765"
+        }
+      ],
+      "events_here": [
+        {
+          "id": 670,
+          "title": "矮人侏儒结盟",
+          "year": "约前 2500 年",
+          "where": "诺莫瑞根",
+          "cite": "《魔兽编年史 卷一》第四章 新世界",
+          "url": "https://wuxianwow.com/lore/e/670"
+        },
+        {
+          "id": 1184,
+          "title": "诺莫瑞根守住",
+          "year": "第 5 年",
+          "where": "诺莫瑞根",
+          "cite": "《魔兽编年史 卷二》第五章 第二次大战",
+          "url": "https://wuxianwow.com/lore/e/1184"
+        },
+        {
+          "id": 1874,
+          "title": "穴居人围攻诺莫瑞根",
+          "year": "第 18 年至第 21 年",
+          "where": "诺莫瑞根",
+          "cite": "《魔兽编年史 卷三》第二章 第三次大战",
+          "url": "https://wuxianwow.com/lore/e/1874"
+        },
+        {
+          "id": 2328,
+          "title": "诺莫瑞根陷落",
+          "year": "第 25 年",
+          "where": "诺莫瑞根",
+          "cite": "《魔兽编年史 卷三》第四章",
+          "url": "https://wuxianwow.com/lore/e/2328"
+        }
+      ],
+      "events_total": 4,
+      "note": "无限世界书（魔兽小说与编年史设定集）里的同一个人物、地点或势力，逐条人工核对；书中内容只到《无限》当下（第 25 年）。详情用 lore_entity / lore_event。"
+    },
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少19级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 198,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 3,
+        "reset_text": "重置周期代码 3（客户端没有写明对应多久）"
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 198,
+      "name": "普通"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "格鲁比斯",
+        "encounter_id": 2925,
+        "npc_id": 902925,
+        "url": "https://wuxianwow.com/npc/902925",
+        "fetch_id": "npc:902925",
+        "portrait": "https://wuxianwow.com/data/bosses/2925.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2925_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.939,
+          "y": 0.42,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16567.0,16975.0,-150.6",
+          "pulls": 2,
+          "from_npc_id": 902768,
+          "note": "from_npc_id：同一张副本地图上另一难度的同名首领战的开打位置"
+        }
+      },
+      {
+        "order": 2,
+        "name": "粘性辐射尘",
+        "encounter_id": 2928,
+        "npc_id": 902928,
+        "url": "https://wuxianwow.com/npc/902928",
+        "fetch_id": "npc:902928",
+        "portrait": "https://wuxianwow.com/data/bosses/2928.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2928_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "中层",
+          "x": 0.785,
+          "y": 0.381,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16595.3,17115.2,-208.0"
+        }
+      },
+      {
+        "order": 3,
+        "name": "群体打击者9-60",
+        "encounter_id": 2899,
+        "npc_id": 902899,
+        "url": "https://wuxianwow.com/npc/902899",
+        "fetch_id": "npc:902899",
+        "portrait": "https://wuxianwow.com/data/bosses/2899.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2899_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.442,
+          "y": 0.957,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16177.6,17427.4,-272.6"
+        }
+      },
+      {
+        "order": 4,
+        "name": "电刑器6000型",
+        "encounter_id": 2927,
+        "npc_id": 902927,
+        "url": "https://wuxianwow.com/npc/902927",
+        "fetch_id": "npc:902927",
+        "portrait": "https://wuxianwow.com/data/bosses/2927.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2927_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "中层",
+          "x": 0.287,
+          "y": 0.489,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16517.3,17567.6,-216.8"
+        }
+      },
+      {
+        "order": 5,
+        "name": "机械博览馆",
+        "encounter_id": 2935,
+        "npc_id": 902935,
+        "url": "https://wuxianwow.com/npc/902935",
+        "fetch_id": "npc:902935",
+        "portrait": null,
+        "model_image": null,
+        "fallback_icon": "https://wuxianwow.com/data/icons/132247.webp",
+        "new_in_160": false,
+        "untranslated": false
+      },
+      {
+        "order": 6,
+        "name": "机械师瑟玛普拉格",
+        "encounter_id": 2940,
+        "npc_id": 902940,
+        "url": "https://wuxianwow.com/npc/902940",
+        "fetch_id": "npc:902940",
+        "portrait": "https://wuxianwow.com/data/bosses/2940.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2940_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.101,
+          "y": 0.464,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16535.4,17736.9,-325.3"
+        }
+      }
+    ],
+    "other_boss_positions": [
+      {
+        "name": "粘性辐射尘",
+        "npc_id": 902769,
+        "encounter_id": 2769,
+        "url": "https://wuxianwow.com/npc/902769",
+        "fetch_id": "npc:902769",
+        "difficulty_id": 0,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "中层"
+          ],
+          "x": 0.698,
+          "y": 0.245,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16694.2,17193.9,-154.7",
+          "pulls": 2
+        }
+      },
+      {
+        "name": "电刑器6000型",
+        "npc_id": 902770,
+        "encounter_id": 2770,
+        "url": "https://wuxianwow.com/npc/902770",
+        "fetch_id": "npc:902770",
+        "difficulty_id": 0,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "中层",
+            "下层"
+          ],
+          "x": 0.274,
+          "y": 0.493,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16514.1,17579.8,-216.8",
+          "pulls": 2
+        }
+      },
+      {
+        "name": "群体打击者9-60",
+        "npc_id": 902771,
+        "encounter_id": 2771,
+        "url": "https://wuxianwow.com/npc/902771",
+        "fetch_id": "npc:902771",
+        "difficulty_id": 0,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.442,
+          "y": 0.957,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16177.6,17427.4,-272.6",
+          "pulls": 1
+        }
+      },
+      {
+        "name": "机械师瑟玛普拉格",
+        "npc_id": 902772,
+        "encounter_id": 2772,
+        "url": "https://wuxianwow.com/npc/902772",
+        "fetch_id": "npc:902772",
+        "difficulty_id": 0,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.101,
+          "y": 0.464,
+          "map_url": "https://wuxianwow.com/instance/90",
+          "trip_url": "https://wuxianwow.com/trip?at=90,16535.1,17736.7,-325.3",
+          "pulls": 2
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 9485,
+              "name": "电流剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9485",
+              "fetch_id": "item:9485"
+            },
+            {
+              "item_id": 9486,
+              "name": "增压战斧",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9486",
+              "fetch_id": "item:9486"
+            },
+            {
+              "item_id": 9487,
+              "name": "高科技爆破枪",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9487",
+              "fetch_id": "item:9487"
+            },
+            {
+              "item_id": 9488,
+              "name": "震荡动力战锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9488",
+              "fetch_id": "item:9488"
+            },
+            {
+              "item_id": 9489,
+              "name": "侏儒制冰器",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9489",
+              "fetch_id": "item:9489"
+            },
+            {
+              "item_id": 9490,
+              "name": "高能机械切割器",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9490",
+              "fetch_id": "item:9490"
+            },
+            {
+              "item_id": 9491,
+              "name": "驾驶员手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9491",
+              "fetch_id": "item:9491"
+            },
+            {
+              "item_id": 9508,
+              "name": "机械师罩衫",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9508",
+              "fetch_id": "item:9508"
+            },
+            {
+              "item_id": 9509,
+              "name": "浸油护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9509",
+              "fetch_id": "item:9509"
+            },
+            {
+              "item_id": 9510,
+              "name": "洞窟跋涉者",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9510",
+              "fetch_id": "item:9510"
+            }
+          ]
+        },
+        {
+          "npc_id": 6228,
+          "name": "黑铁大师",
+          "on_site": false,
+          "fetch_id": "npc:6228",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 9455,
+              "name": "使者腕轮",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9455",
+              "fetch_id": "item:9455"
+            },
+            {
+              "item_id": 9456,
+              "name": "玻璃枪",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9456",
+              "fetch_id": "item:9456"
+            },
+            {
+              "item_id": 9457,
+              "name": "皇家外交官节杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9457",
+              "fetch_id": "item:9457"
+            },
+            {
+              "item_id": 251350,
+              "name": "设计图：老兵的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251350",
+              "fetch_id": "item:251350"
+            },
+            {
+              "item_id": 251351,
+              "name": "设计图：卫兵的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251351",
+              "fetch_id": "item:251351"
+            },
+            {
+              "item_id": 251352,
+              "name": "设计图：保护者的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251352",
+              "fetch_id": "item:251352"
+            },
+            {
+              "item_id": 251353,
+              "name": "设计图：助祭的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251353",
+              "fetch_id": "item:251353"
+            },
+            {
+              "item_id": 252814,
+              "name": "图样：争斗者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252814",
+              "fetch_id": "item:252814"
+            },
+            {
+              "item_id": 252816,
+              "name": "图样：防御者的皮头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252816",
+              "fetch_id": "item:252816"
+            },
+            {
+              "item_id": 253976,
+              "name": "图样：金丝无瑕头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253976",
+              "fetch_id": "item:253976"
+            },
+            {
+              "item_id": 253978,
+              "name": "图样：金丝柔滑头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253978",
+              "fetch_id": "item:253978"
+            },
+            {
+              "item_id": 253980,
+              "name": "图样：金丝烈焰头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253980",
+              "fetch_id": "item:253980"
+            },
+            {
+              "item_id": 253984,
+              "name": "图样：金丝珍珠头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253984",
+              "fetch_id": "item:253984"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 84,
+      "p25_minutes": 31,
+      "p90_minutes": 37,
+      "text": "四分之一的人 31 分钟内、九成 37 分钟内（84 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [
+      {
+        "bosses": [
+          "格鲁比斯",
+          "粘性辐射尘",
+          "电刑器6000型",
+          "群体打击者9-60",
+          "机械师瑟玛普拉格"
+        ],
+        "difficulty": 1,
+        "name": "普通",
+        "players": 5
+      }
+    ],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 90.Corpse (-5162.7, 931.6) on Map 0",
+      "group_finder": "GroupFinderActivity 803、1605",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5242"
+      ],
+      "lfg": "LFGDungeons 13 诺莫瑞根",
+      "loading": "LoadingScreens 193 (fdid 131841)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=90",
+      "map_url": "https://wuxianwow.com/trip?instance=90&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=0,-5162.7,931.6",
+      "map_levels": 3,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 2922,
+        "name": "拯救尖端机器人！",
+        "url": "https://wuxianwow.com/quest/2922",
+        "fetch_id": "quest:2922",
+        "level": 26,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2923,
+        "name": "工匠大师欧沃斯巴克",
+        "url": "https://wuxianwow.com/quest/2923",
+        "fetch_id": "quest:2923",
+        "level": 26,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2926,
+        "name": "诺恩",
+        "url": "https://wuxianwow.com/quest/2926",
+        "fetch_id": "quest:2926",
+        "level": 27,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2927,
+        "name": "灾难之后",
+        "url": "https://wuxianwow.com/quest/2927",
+        "fetch_id": "quest:2927",
+        "level": 27,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2931,
+        "name": "卡斯派普的任务",
+        "url": "https://wuxianwow.com/quest/2931",
+        "fetch_id": "quest:2931",
+        "level": 28,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2904,
+        "name": "一团混乱",
+        "url": "https://wuxianwow.com/quest/2904",
+        "fetch_id": "quest:2904",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2924,
+        "name": "基础模组",
+        "url": "https://wuxianwow.com/quest/2924",
+        "fetch_id": "quest:2924",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2925,
+        "name": "帮助科劳莫特",
+        "url": "https://wuxianwow.com/quest/2925",
+        "fetch_id": "quest:2925",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2928,
+        "name": "陀螺式挖掘机",
+        "url": "https://wuxianwow.com/quest/2928",
+        "fetch_id": "quest:2928",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2930,
+        "name": "抢救数据",
+        "url": "https://wuxianwow.com/quest/2930",
+        "fetch_id": "quest:2930",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2951,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/2951",
+        "fetch_id": "quest:2951",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2952,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/2952",
+        "fetch_id": "quest:2952",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2953,
+        "name": "再次使用超级清洁器",
+        "url": "https://wuxianwow.com/quest/2953",
+        "fetch_id": "quest:2953",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2962,
+        "name": "更多的辐射尘！",
+        "url": "https://wuxianwow.com/quest/2962",
+        "fetch_id": "quest:2962",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 4601,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/4601",
+        "fetch_id": "quest:4601",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 4602,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/4602",
+        "fetch_id": "quest:4602",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 4603,
+        "name": "再次使用超级清洁器",
+        "url": "https://wuxianwow.com/quest/4603",
+        "fetch_id": "quest:4603",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 4604,
+        "name": "再次使用超级清洁器",
+        "url": "https://wuxianwow.com/quest/4604",
+        "fetch_id": "quest:4604",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 4605,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/4605",
+        "fetch_id": "quest:4605",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 4606,
+        "name": "超级清洁器5200型！",
+        "url": "https://wuxianwow.com/quest/4606",
+        "fetch_id": "quest:4606",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2971,
+        "name": "任务 #2971",
+        "url": "https://wuxianwow.com/quest/2971",
+        "fetch_id": "quest:2971",
+        "level": 32,
+        "type": "精英",
+        "side": null,
+        "confirmed": "eglink",
+        "temporary": {
+          "level": "EG Link",
+          "type": "EG Link"
+        }
+      },
+      {
+        "quest_id": 2945,
+        "name": "脏兮兮的戒指",
+        "url": "https://wuxianwow.com/quest/2945",
+        "fetch_id": "quest:2945",
+        "level": 34,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2947,
+        "name": "戒指归来",
+        "url": "https://wuxianwow.com/quest/2947",
+        "fetch_id": "quest:2947",
+        "level": 34,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2949,
+        "name": "戒指归来",
+        "url": "https://wuxianwow.com/quest/2949",
+        "fetch_id": "quest:2949",
+        "level": 34,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2841,
+        "name": "设备之战",
+        "url": "https://wuxianwow.com/quest/2841",
+        "fetch_id": "quest:2841",
+        "level": 35,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2842,
+        "name": "主工程师斯库提",
+        "url": "https://wuxianwow.com/quest/2842",
+        "fetch_id": "quest:2842",
+        "level": 35,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2843,
+        "name": "出发！诺莫瑞根！",
+        "url": "https://wuxianwow.com/quest/2843",
+        "fetch_id": "quest:2843",
+        "level": 35,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2929,
+        "name": "大叛徒",
+        "url": "https://wuxianwow.com/quest/2929",
+        "fetch_id": "quest:2929",
+        "level": 35,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 80324,
+        "name": "任务 #80324",
+        "url": "https://wuxianwow.com/quest/80324",
+        "fetch_id": "quest:80324",
+        "level": 40,
+        "type": "团队",
+        "side": "联盟",
+        "confirmed": "eglink",
+        "temporary": {
+          "level": "EG Link",
+          "type": "EG Link",
+          "side": "EG Link"
+        }
+      },
+      {
+        "quest_id": 80325,
+        "name": "疯王",
+        "url": "https://wuxianwow.com/quest/80325",
+        "fetch_id": "quest:80325",
+        "level": 40,
+        "type": "团队",
+        "side": "部落",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 30,
+    "quests_confirmed": 28,
+    "quests_seen_eglink": 2,
+    "access": [],
+    "text": "诺莫瑞根（地下城 · 5 / 10 人 · 准入 19 级 · 集合石 29–49 级 · 丹莫罗）\n入口：丹莫罗（-5162.7, 931.6，Map.Corpse）\n首领：格鲁比斯、粘性辐射尘、群体打击者9-60、电刑器6000型、机械博览馆、机械师瑟玛普拉格\n首领位置（临时 · EG Link / cMaNGOS）：5/6 个首领有开打位置，另有同一张地图上其他难度的首领战 4 场（副本地图上的比例 0–1，0 在西、北）：格鲁比斯 上层 0.939, 0.42（EG Link）；粘性辐射尘 中层 0.785, 0.381（cMaNGOS）；群体打击者9-60 下层 0.442, 0.957（cMaNGOS）；电刑器6000型 中层 0.287, 0.489（cMaNGOS）；机械师瑟玛普拉格 下层 0.101, 0.464（cMaNGOS）；粘性辐射尘 楼层未定（上层 / 中层） 0.698, 0.245（EG Link）；电刑器6000型 楼层未定（中层 / 下层） 0.274, 0.493（EG Link）；群体打击者9-60 下层 0.442, 0.957（EG Link）；机械师瑟玛普拉格 下层 0.101, 0.464（EG Link）\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 31 分钟内、九成 37 分钟内（84 人）\n副本任务（30 个，服务器确认 28，EG Link 见过 2）：拯救尖端机器人！、工匠大师欧沃斯巴克、诺恩、灾难之后、卡斯派普的任务、一团混乱、基础模组、帮助科劳莫特、陀螺式挖掘机、抢救数据、超级清洁器5200型！、超级清洁器5200型！ …\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

@@ -1,0 +1,391 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 902912
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:902912",
+    "npc_id": 902912,
+    "name": "瑟拉吉斯",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/902912",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      26,
+      26
+    ],
+    "dungeon": "黑暗深渊",
+    "instance": {
+      "id": 48,
+      "fetch_id": "instance:48",
+      "name": "黑暗深渊",
+      "level_text": "准入 15 级 · 集合石 24–32 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          24,
+          32
+        ],
+        "max": null,
+        "min": 15,
+        "target": 22
+      },
+      "url": "https://wuxianwow.com/instance/48"
+    },
+    "difficulty": "普通",
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/2912.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/2912_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 2912,
+      "dungeon": "黑暗深渊",
+      "instance": {
+        "instance_id": 48,
+        "url": "https://wuxianwow.com/instance/48",
+        "fetch_id": "instance:48"
+      },
+      "difficulty_id": 1,
+      "difficulty": "普通",
+      "position": 5,
+      "of": 7,
+      "bosses": [
+        {
+          "npc_id": 902916,
+          "name": "加摩拉",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902916",
+          "fetch_id": "npc:902916",
+          "portrait": "https://wuxianwow.com/data/bosses/2916.webp"
+        },
+        {
+          "npc_id": 902915,
+          "name": "萨利维丝",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902915",
+          "fetch_id": "npc:902915",
+          "portrait": "https://wuxianwow.com/data/bosses/2915.webp"
+        },
+        {
+          "npc_id": 902914,
+          "name": "格里哈斯特",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902914",
+          "fetch_id": "npc:902914",
+          "portrait": "https://wuxianwow.com/data/bosses/2914.webp"
+        },
+        {
+          "npc_id": 902913,
+          "name": "洛古斯·杰特",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902913",
+          "fetch_id": "npc:902913",
+          "portrait": "https://wuxianwow.com/data/bosses/2913.webp"
+        },
+        {
+          "npc_id": 902912,
+          "name": "瑟拉吉斯",
+          "difficulty": "普通",
+          "url": "https://wuxianwow.com/npc/902912",
+          "fetch_id": "npc:902912",
+          "portrait": "https://wuxianwow.com/data/bosses/2912.webp"
+        },
+        {
+          "npc_id": 902911,
+          "name": "暮光领主克尔里斯",
+          "difficulty": "普通",
+          "url": "https://wuxianwow.com/npc/902911",
+          "fetch_id": "npc:902911",
+          "portrait": "https://wuxianwow.com/data/bosses/2911.webp"
+        },
+        {
+          "npc_id": 902910,
+          "name": "阿库麦尔",
+          "difficulty": "普通",
+          "url": "https://wuxianwow.com/npc/902910",
+          "fetch_id": "npc:902910",
+          "portrait": "https://wuxianwow.com/data/bosses/2910.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 6901,
+          "name": "发光的蛇颈龙斗篷",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/6901",
+          "fetch_id": "item:6901"
+        },
+        {
+          "item_id": 6902,
+          "name": "瑟拉吉斯指环",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/6902",
+          "fetch_id": "item:6902"
+        },
+        {
+          "item_id": 6904,
+          "name": "瑟拉吉斯之刺",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/6904",
+          "fetch_id": "item:6904"
+        },
+        {
+          "item_id": 251350,
+          "name": "设计图：老兵的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251350",
+          "fetch_id": "item:251350"
+        },
+        {
+          "item_id": 251351,
+          "name": "设计图：卫兵的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251351",
+          "fetch_id": "item:251351"
+        },
+        {
+          "item_id": 251352,
+          "name": "设计图：保护者的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251352",
+          "fetch_id": "item:251352"
+        },
+        {
+          "item_id": 251353,
+          "name": "设计图：助祭的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251353",
+          "fetch_id": "item:251353"
+        },
+        {
+          "item_id": 251354,
+          "name": "设计图：十字军的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251354",
+          "fetch_id": "item:251354"
+        },
+        {
+          "item_id": 251375,
+          "name": "设计图：老兵的镀银链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251375",
+          "fetch_id": "item:251375"
+        },
+        {
+          "item_id": 251376,
+          "name": "设计图：卫兵的镀银链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251376",
+          "fetch_id": "item:251376"
+        },
+        {
+          "item_id": 251377,
+          "name": "设计图：保护者的镀银链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251377",
+          "fetch_id": "item:251377"
+        },
+        {
+          "item_id": 251378,
+          "name": "设计图：助祭的镀银链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251378",
+          "fetch_id": "item:251378"
+        },
+        {
+          "item_id": 251379,
+          "name": "设计图：十字军的镀银链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251379",
+          "fetch_id": "item:251379"
+        },
+        {
+          "item_id": 252455,
+          "name": "防御者的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252455",
+          "fetch_id": "item:252455"
+        },
+        {
+          "item_id": 252456,
+          "name": "图腾师的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252456",
+          "fetch_id": "item:252456"
+        },
+        {
+          "item_id": 252814,
+          "name": "图样：争斗者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252814",
+          "fetch_id": "item:252814"
+        },
+        {
+          "item_id": 252815,
+          "name": "图样：捕兽者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252815",
+          "fetch_id": "item:252815"
+        },
+        {
+          "item_id": 252816,
+          "name": "图样：防御者的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252816",
+          "fetch_id": "item:252816"
+        },
+        {
+          "item_id": 252817,
+          "name": "图样：图腾师的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252817",
+          "fetch_id": "item:252817"
+        },
+        {
+          "item_id": 252818,
+          "name": "图样：风暴行者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252818",
+          "fetch_id": "item:252818"
+        },
+        {
+          "item_id": 252819,
+          "name": "图样：智慧皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252819",
+          "fetch_id": "item:252819"
+        },
+        {
+          "item_id": 252820,
+          "name": "图样：争斗者的皮质腿甲",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252820",
+          "fetch_id": "item:252820"
+        },
+        {
+          "item_id": 252821,
+          "name": "图样：捕兽者的皮质腿甲",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252821",
+          "fetch_id": "item:252821"
+        },
+        {
+          "item_id": 252822,
+          "name": "图样：防御者的皮短裙",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252822",
+          "fetch_id": "item:252822"
+        },
+        {
+          "item_id": 252823,
+          "name": "图样：图腾师的皮护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252823",
+          "fetch_id": "item:252823"
+        },
+        {
+          "item_id": 252824,
+          "name": "图样：风暴行者的皮短裙",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252824",
+          "fetch_id": "item:252824"
+        },
+        {
+          "item_id": 252825,
+          "name": "图样：智慧皮护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252825",
+          "fetch_id": "item:252825"
+        },
+        {
+          "item_id": 253976,
+          "name": "图样：金丝无瑕头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253976",
+          "fetch_id": "item:253976"
+        },
+        {
+          "item_id": 253978,
+          "name": "图样：金丝柔滑头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253978",
+          "fetch_id": "item:253978"
+        },
+        {
+          "item_id": 253980,
+          "name": "图样：金丝烈焰头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253980",
+          "fetch_id": "item:253980"
+        },
+        {
+          "item_id": 253982,
+          "name": "图样：金丝暗影头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253982",
+          "fetch_id": "item:253982"
+        },
+        {
+          "item_id": 253984,
+          "name": "图样：金丝珍珠头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253984",
+          "fetch_id": "item:253984"
+        },
+        {
+          "item_id": 253986,
+          "name": "图样：金丝闪光头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253986",
+          "fetch_id": "item:253986"
+        }
+      ]
+    },
+    "text": "瑟拉吉斯（首领 · 26 级（临时 · QuestieDB） · 黑暗深渊）\n黑暗深渊（普通） 第 5/7 个首领\n副本：instance:48（地下城 · 准入 15 级 · 集合石 24–32 级）\n掉落（临时 · Spyglass）：发光的蛇颈龙斗篷、瑟拉吉斯指环、瑟拉吉斯之刺、设计图：老兵的链甲头盔、设计图：卫兵的链甲头盔、设计图：保护者的链甲头盔、设计图：助祭的链甲头盔、设计图：十字军的链甲头盔、设计图：老兵的镀银链甲护腿、设计图：卫兵的镀银链甲护腿、设计图：保护者的镀银链甲护腿、设计图：助祭的镀银链甲护腿、设计图：十字军的镀银链甲护腿、防御者的皮头盔、图腾师的皮头盔、图样：争斗者的皮盔、图样：捕兽者的皮盔、图样：防御者的皮头盔、图样：图腾师的皮头盔、图样：风暴行者的皮盔、图样：智慧皮盔、图样：争斗者的皮质腿甲、图样：捕兽者的皮质腿甲、图样：防御者的皮短裙、图样：图腾师的皮护腿、图样：风暴行者的皮短裙、图样：智慧皮护腿、图样：金丝无瑕头饰、图样：金丝柔滑头饰、图样：金丝烈焰头饰、图样：金丝暗影头饰、图样：金丝珍珠头饰、图样：金丝闪光头饰\n位置（临时 · EG Link）：黑暗深渊副本地图 楼层未定（上层 / 下层） 0.638, 0.869（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "floor_unsure": true,
+      "floors": [
+        "上层",
+        "下层"
+      ],
+      "x": 0.638,
+      "y": 0.869,
+      "map_url": "https://wuxianwow.com/instance/48",
+      "trip_url": "https://wuxianwow.com/trip?at=48,16282.3,16903.5,-25.9",
+      "pulls": 4,
+      "spread_yards": 33
+    }
+  }
+}

@@ -1,0 +1,814 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 48
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "other_boss_positions",
+        "kind": "temporary",
+        "text": "首领列表以外的首领战（同一张副本地图上别的难度）的开打位置；临时数据，来源见各行的 temporary_position.source"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "7 行的 side 是第三方临时（来自 QuestieDB）"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "1 行的 side 是第三方临时（来自 Polestar 更正）"
+      }
+    ],
+    "id": 48,
+    "fetch_id": "instance:48",
+    "title": "黑暗深渊",
+    "url": "https://wuxianwow.com/instance/48",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        24,
+        32
+      ],
+      "max": null,
+      "min": 15,
+      "target": 22
+    },
+    "level_text": "准入 15 级 · 集合石 24–32 级",
+    "zone": "灰谷",
+    "entrance": {
+      "zone": "灰谷",
+      "area": null,
+      "continent": "卡利姆多",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 48.Corpse (4249.1, 748.4) on Map 1",
+      "world_xy": [
+        4249.1,
+        748.4
+      ],
+      "continent_map_id": 1,
+      "zone_ui_map": 1440,
+      "atlas": [
+        {
+          "name": "灰谷",
+          "ui_map": 1440,
+          "x": 0.165,
+          "y": 0.1103,
+          "url": "https://wuxianwow.com/atlas/1440?i=48",
+          "fetch_id": "map:1440"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1414,
+          "x": 0.4434,
+          "y": 0.3485,
+          "url": "https://wuxianwow.com/atlas/1414?i=48",
+          "fetch_id": "map:1414"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.1777,
+          "y": 0.3535,
+          "url": "https://wuxianwow.com/atlas/947?i=48",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1464,
+          "x": 0.42,
+          "y": 0.3378,
+          "url": "https://wuxianwow.com/atlas/1464?i=48",
+          "fetch_id": "map:1464"
+        }
+      ]
+    },
+    "boss_count": 7,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/48.webp",
+    "picture": "https://wuxianwow.com/data/loading/48.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=48",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少15级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 198,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 3,
+        "reset_text": "重置周期代码 3（客户端没有写明对应多久）"
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 1,
+      "name": "普通"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "加摩拉",
+        "encounter_id": 2916,
+        "npc_id": 902916,
+        "url": "https://wuxianwow.com/npc/902916",
+        "fetch_id": "npc:902916",
+        "portrait": "https://wuxianwow.com/data/bosses/2916.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2916_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.237,
+          "y": 0.454,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16622.7,17276.1,-52.7",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 2,
+        "name": "萨利维丝",
+        "encounter_id": 2915,
+        "npc_id": 902915,
+        "url": "https://wuxianwow.com/npc/902915",
+        "fetch_id": "npc:902915",
+        "portrait": "https://wuxianwow.com/data/bosses/2915.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2915_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.036,
+          "y": 0.311,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16739.6,17463.4,-54.4",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 3,
+        "name": "格里哈斯特",
+        "encounter_id": 2914,
+        "npc_id": 902914,
+        "url": "https://wuxianwow.com/npc/902914",
+        "fetch_id": "npc:902914",
+        "portrait": "https://wuxianwow.com/data/bosses/2914.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2914_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.418,
+          "y": 0.416,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16654.1,17107.6,-48.2",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 4,
+        "name": "洛古斯·杰特",
+        "encounter_id": 2913,
+        "npc_id": 902913,
+        "url": "https://wuxianwow.com/npc/902913",
+        "fetch_id": "npc:902913",
+        "portrait": "https://wuxianwow.com/data/bosses/2913.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2913_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false
+      },
+      {
+        "order": 5,
+        "name": "瑟拉吉斯",
+        "encounter_id": 2912,
+        "npc_id": 902912,
+        "url": "https://wuxianwow.com/npc/902912",
+        "fetch_id": "npc:902912",
+        "portrait": "https://wuxianwow.com/data/bosses/2912.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2912_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.638,
+          "y": 0.869,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16282.3,16903.5,-25.9",
+          "pulls": 4,
+          "spread_yards": 33
+        }
+      },
+      {
+        "order": 6,
+        "name": "暮光领主克尔里斯",
+        "encounter_id": 2911,
+        "npc_id": 902911,
+        "url": "https://wuxianwow.com/npc/902911",
+        "fetch_id": "npc:902911",
+        "portrait": "https://wuxianwow.com/data/bosses/2911.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2911_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.63,
+          "y": 0.911,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16247.9,16911.1,-25.9",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 7,
+        "name": "阿库麦尔",
+        "encounter_id": 2910,
+        "npc_id": 902910,
+        "url": "https://wuxianwow.com/npc/902910",
+        "fetch_id": "npc:902910",
+        "portrait": "https://wuxianwow.com/data/bosses/2910.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2910_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.884,
+          "y": 0.93,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16232.3,16674.7,-33.9",
+          "pulls": 1
+        }
+      }
+    ],
+    "other_boss_positions": [
+      {
+        "name": "加摩拉",
+        "npc_id": 902697,
+        "encounter_id": 2697,
+        "url": "https://wuxianwow.com/npc/902697",
+        "fetch_id": "npc:902697",
+        "difficulty_id": 198,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.235,
+          "y": 0.452,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16624.3,17278.5,-52.7"
+        }
+      },
+      {
+        "name": "萨利维丝",
+        "npc_id": 902699,
+        "encounter_id": 2699,
+        "url": "https://wuxianwow.com/npc/902699",
+        "fetch_id": "npc:902699",
+        "difficulty_id": 198,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.017,
+          "y": 0.278,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16766.8,17480.5,-57.1"
+        }
+      },
+      {
+        "name": "格里哈斯特",
+        "npc_id": 902704,
+        "encounter_id": 2704,
+        "url": "https://wuxianwow.com/npc/902704",
+        "fetch_id": "npc:902704",
+        "difficulty_id": 198,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.418,
+          "y": 0.416,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16654.0,17107.6,-48.2"
+        }
+      },
+      {
+        "name": "加摩拉",
+        "npc_id": 902761,
+        "encounter_id": 2761,
+        "url": "https://wuxianwow.com/npc/902761",
+        "fetch_id": "npc:902761",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.235,
+          "y": 0.452,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16624.3,17278.5,-52.7"
+        }
+      },
+      {
+        "name": "萨利维丝",
+        "npc_id": 902762,
+        "encounter_id": 2762,
+        "url": "https://wuxianwow.com/npc/902762",
+        "fetch_id": "npc:902762",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.017,
+          "y": 0.278,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16766.8,17480.5,-57.1"
+        }
+      },
+      {
+        "name": "格里哈斯特",
+        "npc_id": 902763,
+        "encounter_id": 2763,
+        "url": "https://wuxianwow.com/npc/902763",
+        "fetch_id": "npc:902763",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.418,
+          "y": 0.416,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16654.0,17107.6,-48.2"
+        }
+      },
+      {
+        "name": "瑟拉吉斯",
+        "npc_id": 902765,
+        "encounter_id": 2765,
+        "url": "https://wuxianwow.com/npc/902765",
+        "fetch_id": "npc:902765",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "下层",
+          "x": 0.645,
+          "y": 0.823,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16320.0,16897.3,-57.4"
+        }
+      },
+      {
+        "name": "暮光领主克尔里斯",
+        "npc_id": 902766,
+        "encounter_id": 2766,
+        "url": "https://wuxianwow.com/npc/902766",
+        "fetch_id": "npc:902766",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "上层",
+          "x": 0.63,
+          "y": 0.911,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16247.9,16911.1,-25.9"
+        }
+      },
+      {
+        "name": "阿库麦尔",
+        "npc_id": 902767,
+        "encounter_id": 2767,
+        "url": "https://wuxianwow.com/npc/902767",
+        "fetch_id": "npc:902767",
+        "difficulty_id": 201,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "上层",
+          "x": 0.95,
+          "y": 0.947,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16218.3,16612.8,-34.0"
+        }
+      },
+      {
+        "name": "暮光领主克尔里斯",
+        "npc_id": 902825,
+        "encounter_id": 2825,
+        "url": "https://wuxianwow.com/npc/902825",
+        "fetch_id": "npc:902825",
+        "difficulty_id": 198,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "上层",
+          "x": 0.63,
+          "y": 0.911,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16247.9,16911.1,-25.9"
+        }
+      },
+      {
+        "name": "阿库麦尔",
+        "npc_id": 902891,
+        "encounter_id": 2891,
+        "url": "https://wuxianwow.com/npc/902891",
+        "fetch_id": "npc:902891",
+        "difficulty_id": 198,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "上层",
+          "x": 0.95,
+          "y": 0.947,
+          "map_url": "https://wuxianwow.com/instance/48",
+          "trip_url": "https://wuxianwow.com/trip?at=48,16218.3,16612.8,-34.0"
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 1454,
+              "name": "执行者黑斧",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1454",
+              "fetch_id": "item:1454"
+            },
+            {
+              "item_id": 1481,
+              "name": "冷酷之爪",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1481",
+              "fetch_id": "item:1481"
+            },
+            {
+              "item_id": 1486,
+              "name": "树皮夹克",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1486",
+              "fetch_id": "item:1486"
+            },
+            {
+              "item_id": 1491,
+              "name": "精准之戒",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1491",
+              "fetch_id": "item:1491"
+            },
+            {
+              "item_id": 2034,
+              "name": "学者长袍",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2034",
+              "fetch_id": "item:2034"
+            },
+            {
+              "item_id": 2271,
+              "name": "神佑先知法杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2271",
+              "fetch_id": "item:2271"
+            },
+            {
+              "item_id": 2567,
+              "name": "唤灵之刃",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2567",
+              "fetch_id": "item:2567"
+            },
+            {
+              "item_id": 3413,
+              "name": "末日之刺",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/3413",
+              "fetch_id": "item:3413"
+            },
+            {
+              "item_id": 3414,
+              "name": "纹章节杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/3414",
+              "fetch_id": "item:3414"
+            },
+            {
+              "item_id": 3415,
+              "name": "修士法杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/3415",
+              "fetch_id": "item:3415"
+            },
+            {
+              "item_id": 3416,
+              "name": "殉难者链甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/3416",
+              "fetch_id": "item:3416"
+            },
+            {
+              "item_id": 3417,
+              "name": "玉髓双刃刀",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/3417",
+              "fetch_id": "item:3417"
+            }
+          ]
+        },
+        {
+          "npc_id": 12876,
+          "name": "阿奎尼斯男爵",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 16782,
+              "name": "奇怪的水球",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/16782",
+              "fetch_id": "item:16782"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 125,
+      "p25_minutes": 25,
+      "p90_minutes": 32,
+      "text": "四分之一的人 25 分钟内、九成 32 分钟内（125 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [
+      {
+        "bosses": [
+          "阿奎尼斯男爵",
+          "加摩拉",
+          "萨利维丝",
+          "格里哈斯特",
+          "洛古斯·杰特",
+          "暮光领主克尔里斯",
+          "阿库麦尔"
+        ],
+        "difficulty": 198,
+        "name": "普通",
+        "players": 10
+      },
+      {
+        "bosses": [
+          "加摩拉",
+          "萨利维丝",
+          "格里哈斯特",
+          "洛古斯·杰特",
+          "瑟拉吉斯",
+          "暮光领主克尔里斯",
+          "阿库麦尔"
+        ],
+        "difficulty": 201,
+        "name": "普通",
+        "players": 10
+      }
+    ],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 48.Corpse (4249.1, 748.4) on Map 1",
+      "group_finder": "GroupFinderActivity 801、1604",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5237"
+      ],
+      "lfg": "LFGDungeons 9 黑暗深渊",
+      "loading": "LoadingScreens 196 (fdid 131823)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=48",
+      "map_url": "https://wuxianwow.com/trip?instance=48&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=1,4249.1,748.4",
+      "map_levels": 2,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 6562,
+        "name": "帮助耶努萨克雷",
+        "url": "https://wuxianwow.com/quest/6562",
+        "fetch_id": "quest:6562",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 6563,
+        "name": "阿库麦尔水晶",
+        "url": "https://wuxianwow.com/quest/6563",
+        "fetch_id": "quest:6563",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 6564,
+        "name": "上古之神的仆从",
+        "url": "https://wuxianwow.com/quest/6564",
+        "fetch_id": "quest:6564",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 971,
+        "name": "深渊中的知识",
+        "url": "https://wuxianwow.com/quest/971",
+        "fetch_id": "quest:971",
+        "level": 23,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1198,
+        "name": "寻找塞尔瑞德",
+        "url": "https://wuxianwow.com/quest/1198",
+        "fetch_id": "quest:1198",
+        "level": 24,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "Polestar 更正"
+        }
+      },
+      {
+        "quest_id": 1275,
+        "name": "研究堕落",
+        "url": "https://wuxianwow.com/quest/1275",
+        "fetch_id": "quest:1275",
+        "level": 24,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1199,
+        "name": "暮光之锤的末日",
+        "url": "https://wuxianwow.com/quest/1199",
+        "fetch_id": "quest:1199",
+        "level": 25,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 78916,
+        "name": "虚空之心",
+        "url": "https://wuxianwow.com/quest/78916",
+        "fetch_id": "quest:78916",
+        "level": 25,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 78917,
+        "name": "虚空之心",
+        "url": "https://wuxianwow.com/quest/78917",
+        "fetch_id": "quest:78917",
+        "level": 25,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 6565,
+        "name": "上古之神的仆从",
+        "url": "https://wuxianwow.com/quest/6565",
+        "fetch_id": "quest:6565",
+        "level": 26,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1200,
+        "name": "黑暗深渊中的恶魔",
+        "url": "https://wuxianwow.com/quest/1200",
+        "fetch_id": "quest:1200",
+        "level": 27,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 6561,
+        "name": "黑暗深渊中的邪恶",
+        "url": "https://wuxianwow.com/quest/6561",
+        "fetch_id": "quest:6561",
+        "level": 27,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 6921,
+        "name": "废墟之间",
+        "url": "https://wuxianwow.com/quest/6921",
+        "fetch_id": "quest:6921",
+        "level": 27,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      }
+    ],
+    "quests_total": 13,
+    "quests_confirmed": 13,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "黑暗深渊（地下城 · 5 / 10 人 · 准入 15 级 · 集合石 24–32 级 · 灰谷）\n入口：灰谷（4249.1, 748.4，Map.Corpse）\n首领：加摩拉、萨利维丝、格里哈斯特、洛古斯·杰特、瑟拉吉斯、暮光领主克尔里斯、阿库麦尔\n首领位置（临时 · EG Link / cMaNGOS）：6/7 个首领有开打位置，另有同一张地图上其他难度的首领战 11 场（副本地图上的比例 0–1，0 在西、北）：加摩拉 下层 0.237, 0.454（EG Link）；萨利维丝 下层 0.036, 0.311（EG Link）；格里哈斯特 下层 0.418, 0.416（EG Link）；瑟拉吉斯 楼层未定（上层 / 下层） 0.638, 0.869（EG Link）；暮光领主克尔里斯 上层 0.63, 0.911（EG Link）；阿库麦尔 上层 0.884, 0.93（EG Link）；加摩拉 下层 0.235, 0.452（cMaNGOS）；萨利维丝 下层 0.017, 0.278（cMaNGOS）；格里哈斯特 下层 0.418, 0.416（cMaNGOS）；加摩拉 下层 0.235, 0.452（cMaNGOS）；萨利维丝 下层 0.017, 0.278（cMaNGOS）；格里哈斯特 下层 0.418, 0.416（cMaNGOS）；瑟拉吉斯 下层 0.645, 0.823（cMaNGOS）；暮光领主克尔里斯 上层 0.63, 0.911（cMaNGOS）；阿库麦尔 上层 0.95, 0.947（cMaNGOS）；暮光领主克尔里斯 上层 0.63, 0.911（cMaNGOS）；阿库麦尔 上层 0.95, 0.947（cMaNGOS）\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 25 分钟内、九成 32 分钟内（125 人）\n副本任务（13 个，服务器确认 13）：帮助耶努萨克雷、阿库麦尔水晶、上古之神的仆从、深渊中的知识、寻找塞尔瑞德、研究堕落、暮光之锤的末日、虚空之心、虚空之心、上古之神的仆从、黑暗深渊中的恶魔、黑暗深渊中的邪恶 …\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

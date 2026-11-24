@@ -1,0 +1,664 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 3039
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "access",
+        "kind": "filter",
+        "text": "access：进入要的钥匙（key）、要带的凭证物品（token）与前置任务（quest），来自校订层的手写表（pipeline/instance_access.json），每行的 evidence 都由流水线按客户端物品、服务器任务缓存、EG Link 与 QuestieDB 核对过（from：client 客户端 · server 服务器下发 · thirdparty 第三方临时）；basis data 是证据里有东西把它和副本连上，curated 是人工校订；from_quests 是给这件物品的任务、drops_from 是掉落它的怪、chain_before 是之前的任务链。没列出的副本不等于没有条件"
+      },
+      {
+        "on": "quests",
+        "kind": "temporary",
+        "text": "15 个任务里 1 个不在服务器任务缓存里：其中 1 个 EG Link 见过（服务器下发的数据经第三方转来，confirmed eglink），其余来自 QuestieDB 等，名称、等级、类型等写在 temporary 里的是第三方临时数据"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "entrance",
+        "kind": "estimate",
+        "text": "entrance：估算，按规则 ENTRANCE_APPROX 推出"
+      },
+      {
+        "on": "level",
+        "kind": "temporary",
+        "text": "1 行的 level 是第三方临时（来自 EG Link）"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "1 行的 side 是第三方临时（来自 EG Link）"
+      }
+    ],
+    "id": 3039,
+    "fetch_id": "instance:3039",
+    "title": "克罗多克要塞",
+    "url": "https://wuxianwow.com/instance/3039",
+    "kind": "地下城",
+    "players": [
+      10
+    ],
+    "players_text": "10 人",
+    "level": {
+      "group": [
+        40,
+        47
+      ],
+      "max": null,
+      "min": 40,
+      "target": 40
+    },
+    "level_text": "准入 40 级 · 集合石 40–47 级",
+    "zone": "河林",
+    "entrance": {
+      "zone": "河林",
+      "area": "克罗多克要塞",
+      "continent": "东部王国",
+      "source": "WorldMapOverlay",
+      "confidence": "medium",
+      "approx": true,
+      "source_detail": "同名子区域 克罗多克要塞",
+      "world_xy": [
+        -7323.4,
+        -4045.6
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 2548,
+      "atlas": [
+        {
+          "name": "河林",
+          "ui_map": 2548,
+          "x": 0.4441,
+          "y": 0.265,
+          "url": "https://wuxianwow.com/atlas/2548?i=3039",
+          "fetch_id": "map:2548"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.5695,
+          "y": 0.6303,
+          "url": "https://wuxianwow.com/atlas/1415?i=3039",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.82,
+          "y": 0.5779,
+          "url": "https://wuxianwow.com/atlas/947?i=3039",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1463,
+          "x": 0.6406,
+          "y": 0.6029,
+          "url": "https://wuxianwow.com/atlas/1463?i=3039",
+          "fetch_id": "map:1463"
+        }
+      ]
+    },
+    "boss_count": 5,
+    "new_in_160": true,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/3039.webp",
+    "picture": "https://wuxianwow.com/data/loading/3039.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=3039",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "name": "普通",
+        "players": 10
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "碎奴者格罗克斯",
+        "encounter_id": 3450,
+        "npc_id": 903450,
+        "url": "https://wuxianwow.com/npc/903450",
+        "fetch_id": "npc:903450",
+        "portrait": "https://wuxianwow.com/data/bosses/3450.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3450_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.288,
+          "y": 0.667,
+          "map_url": "https://wuxianwow.com/instance/3039",
+          "trip_url": "https://wuxianwow.com/trip?at=3039,-7454.9,-3921.0,124.0",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 2,
+        "name": "暮光指挥官扎尔莫克",
+        "encounter_id": 3452,
+        "npc_id": 903452,
+        "url": "https://wuxianwow.com/npc/903452",
+        "fetch_id": "npc:903452",
+        "portrait": "https://wuxianwow.com/data/bosses/3452.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3452_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.389,
+          "y": 0.695,
+          "map_url": "https://wuxianwow.com/instance/3039",
+          "trip_url": "https://wuxianwow.com/trip?at=3039,-7494.6,-4077.0,151.3",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 3,
+        "name": "驯兽师阿什卡",
+        "encounter_id": 3453,
+        "npc_id": 903453,
+        "url": "https://wuxianwow.com/npc/903453",
+        "fetch_id": "npc:903453",
+        "portrait": "https://wuxianwow.com/data/bosses/3453.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3453_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.662,
+          "y": 0.531,
+          "map_url": "https://wuxianwow.com/instance/3039",
+          "trip_url": "https://wuxianwow.com/trip?at=3039,-7261.6,-4500.9,177.3",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 4,
+        "name": "纳古克",
+        "encounter_id": 3449,
+        "npc_id": 903449,
+        "url": "https://wuxianwow.com/npc/903449",
+        "fetch_id": "npc:903449",
+        "portrait": "https://wuxianwow.com/data/bosses/3449.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3449_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.351,
+          "y": 0.572,
+          "map_url": "https://wuxianwow.com/instance/3039",
+          "trip_url": "https://wuxianwow.com/trip?at=3039,-7319.5,-4019.1,264.1",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 5,
+        "name": "监工莫格",
+        "encounter_id": 3451,
+        "npc_id": 903451,
+        "url": "https://wuxianwow.com/npc/903451",
+        "fetch_id": "npc:903451",
+        "portrait": "https://wuxianwow.com/data/bosses/3451.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3451_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.715,
+          "y": 0.226,
+          "map_url": "https://wuxianwow.com/instance/3039",
+          "trip_url": "https://wuxianwow.com/trip?at=3039,-6827.1,-4583.3,241.3",
+          "pulls": 2
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 287007,
+              "name": "撑松的软鞋",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287007",
+              "fetch_id": "item:287007"
+            },
+            {
+              "item_id": 287008,
+              "name": "食人魔法师的护肩",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287008",
+              "fetch_id": "item:287008"
+            },
+            {
+              "item_id": 287009,
+              "name": "暮光执行者的护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287009",
+              "fetch_id": "item:287009"
+            },
+            {
+              "item_id": 287010,
+              "name": "前锋手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287010",
+              "fetch_id": "item:287010"
+            },
+            {
+              "item_id": 287011,
+              "name": "征战面甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287011",
+              "fetch_id": "item:287011"
+            },
+            {
+              "item_id": 287012,
+              "name": "克罗多克战争板甲护手",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287012",
+              "fetch_id": "item:287012"
+            },
+            {
+              "item_id": 287013,
+              "name": "克罗多克战争板甲腿铠",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287013",
+              "fetch_id": "item:287013"
+            },
+            {
+              "item_id": 287014,
+              "name": "克罗多克战争板甲护肩",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287014",
+              "fetch_id": "item:287014"
+            },
+            {
+              "item_id": 287015,
+              "name": "至尊粉碎锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287015",
+              "fetch_id": "item:287015"
+            },
+            {
+              "item_id": 287016,
+              "name": "暗影先知宝珠",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287016",
+              "fetch_id": "item:287016"
+            }
+          ]
+        },
+        {
+          "npc_id": 262716,
+          "name": "克鲁格",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 279857,
+              "name": "克鲁格的痒痒挠",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/279857",
+              "fetch_id": "item:279857"
+            },
+            {
+              "item_id": 279863,
+              "name": "黑角项链",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/279863",
+              "fetch_id": "item:279863"
+            }
+          ]
+        },
+        {
+          "npc_id": 264773,
+          "name": "头目图夫",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 286428,
+              "name": "头目指环",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286428",
+              "fetch_id": "item:286428"
+            },
+            {
+              "item_id": 286429,
+              "name": "大肚皮腰带",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286429",
+              "fetch_id": "item:286429"
+            },
+            {
+              "item_id": 286430,
+              "name": "碎牙锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286430",
+              "fetch_id": "item:286430"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 59,
+      "p25_minutes": 44,
+      "p90_minutes": 47,
+      "text": "四分之一的人 44 分钟内、九成 47 分钟内（59 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "同名子区域 克罗多克要塞",
+      "group_finder": "GroupFinderActivity 1986",
+      "kind": "Map.InstanceType",
+      "level": [
+        "ContentTuning 6326"
+      ],
+      "lfg": "LFGDungeons 3275 克罗多克要塞",
+      "loading": "LoadingScreens 694 (fdid 7963780)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=3039",
+      "map_url": "https://wuxianwow.com/trip?instance=3039&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=0,-7323.4,-4045.6",
+      "map_levels": 1,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 94973,
+        "name": "克罗多克铸件",
+        "url": "https://wuxianwow.com/quest/94973",
+        "fetch_id": "quest:94973",
+        "level": 41,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94974,
+        "name": "关键耗材",
+        "url": "https://wuxianwow.com/quest/94974",
+        "fetch_id": "quest:94974",
+        "level": 41,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94980,
+        "name": "克罗多克铸件",
+        "url": "https://wuxianwow.com/quest/94980",
+        "fetch_id": "quest:94980",
+        "level": 41,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94981,
+        "name": "关键耗材",
+        "url": "https://wuxianwow.com/quest/94981",
+        "fetch_id": "quest:94981",
+        "level": 41,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94969,
+        "name": "踏平克罗多克！",
+        "url": "https://wuxianwow.com/quest/94969",
+        "fetch_id": "quest:94969",
+        "level": 42,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94975,
+        "name": "复仇印记",
+        "url": "https://wuxianwow.com/quest/94975",
+        "fetch_id": "quest:94975",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94983,
+        "name": "暮光遗物",
+        "url": "https://wuxianwow.com/quest/94983",
+        "fetch_id": "quest:94983",
+        "level": 42,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94997,
+        "name": "残留精华",
+        "url": "https://wuxianwow.com/quest/94997",
+        "fetch_id": "quest:94997",
+        "level": 42,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94998,
+        "name": "奇珍异宝",
+        "url": "https://wuxianwow.com/quest/94998",
+        "fetch_id": "quest:94998",
+        "level": 42,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95056,
+        "name": "任务 #95056",
+        "url": "https://wuxianwow.com/quest/95056",
+        "fetch_id": "quest:95056",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "eglink",
+        "temporary": {
+          "level": "EG Link",
+          "type": "EG Link",
+          "side": "EG Link"
+        }
+      },
+      {
+        "quest_id": 94972,
+        "name": "暮光宝典",
+        "url": "https://wuxianwow.com/quest/94972",
+        "fetch_id": "quest:94972",
+        "level": 44,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94984,
+        "name": "暮光宝典",
+        "url": "https://wuxianwow.com/quest/94984",
+        "fetch_id": "quest:94984",
+        "level": 44,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94968,
+        "name": "莫格之眼",
+        "url": "https://wuxianwow.com/quest/94968",
+        "fetch_id": "quest:94968",
+        "level": 45,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 94982,
+        "name": "莫格之眼",
+        "url": "https://wuxianwow.com/quest/94982",
+        "fetch_id": "quest:94982",
+        "level": 45,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96771,
+        "name": "上层精灵的复仇",
+        "url": "https://wuxianwow.com/quest/96771",
+        "fetch_id": "quest:96771",
+        "level": 45,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 15,
+    "quests_confirmed": 14,
+    "quests_seen_eglink": 1,
+    "access": [
+      {
+        "kind": "key",
+        "kind_name": "钥匙",
+        "item": {
+          "item_id": 267089,
+          "name": "克罗多克大门钥匙",
+          "url": "https://wuxianwow.com/item/267089",
+          "fetch_id": "item:267089",
+          "key_class": true,
+          "description": null
+        },
+        "quests": [],
+        "from_quests": [
+          {
+            "quest_id": 94974,
+            "name": "关键耗材",
+            "how": "奖励",
+            "url": "https://wuxianwow.com/quest/94974",
+            "fetch_id": "quest:94974"
+          },
+          {
+            "quest_id": 94981,
+            "name": "关键耗材",
+            "how": "奖励",
+            "url": "https://wuxianwow.com/quest/94981",
+            "fetch_id": "quest:94981"
+          }
+        ],
+        "drops_from": [],
+        "chain_before": [
+          {
+            "quest_id": 94973,
+            "name": "克罗多克铸件",
+            "url": "https://wuxianwow.com/quest/94973",
+            "fetch_id": "quest:94973",
+            "level": 41,
+            "confirmed": "server"
+          },
+          {
+            "quest_id": 94980,
+            "name": "克罗多克铸件",
+            "url": "https://wuxianwow.com/quest/94980",
+            "fetch_id": "quest:94980",
+            "level": 41,
+            "confirmed": "server"
+          }
+        ],
+        "note": null,
+        "basis": "data",
+        "temporary_sources": [],
+        "evidence": [
+          {
+            "ref": "item:267089",
+            "what": "物品名「克罗多克大门钥匙」",
+            "from": "client"
+          },
+          {
+            "ref": "quest:94974",
+            "what": "任务「关键耗材」奖励「克罗多克大门钥匙」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:94981",
+            "what": "任务「关键耗材」奖励「克罗多克大门钥匙」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:94974",
+            "what": "任务的区域是「克罗多克要塞」",
+            "from": "server"
+          }
+        ],
+        "source": "file:pipeline/instance_access.json#26",
+        "text": "钥匙：克罗多克大门钥匙（关键耗材奖励）"
+      }
+    ],
+    "text": "克罗多克要塞（地下城 · 10 人 · 准入 40 级 · 集合石 40–47 级 · 河林 · 1.60 新增）\n入口：河林 · 克罗多克要塞（-7323.4, -4045.6，WorldMapOverlay，近似）\n首领：碎奴者格罗克斯、暮光指挥官扎尔莫克、驯兽师阿什卡、纳古克、监工莫格\n首领位置（临时 · EG Link）：5/5 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：碎奴者格罗克斯 0.288, 0.667；暮光指挥官扎尔莫克 0.389, 0.695；驯兽师阿什卡 0.662, 0.531；纳古克 0.351, 0.572；监工莫格 0.715, 0.226\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 44 分钟内、九成 47 分钟内（59 人）\n副本任务（15 个，服务器确认 14，EG Link 见过 1）：克罗多克铸件、关键耗材、克罗多克铸件、关键耗材、踏平克罗多克！、复仇印记、暮光遗物、残留精华、奇珍异宝、任务 #95056、暮光宝典、暮光宝典 …\n进入条件：钥匙：克罗多克大门钥匙（关键耗材奖励）\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287009
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287009",
+    "title": "暮光执行者的护腿",
+    "url": "https://wuxianwow.com/item/287009",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKABKHCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287009:::::::::::::|h[暮光执行者的护腿]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287009,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 44,
+    "slot": "腿部",
+    "req_level": 39,
+    "sell": 9207,
+    "sell_text": "92银 7铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腿部",
+      "armor_type": "皮甲",
+      "ilvl": 44,
+      "req_level": 39,
+      "armor": 115,
+      "stats": [
+        {
+          "stat": "攻击强度",
+          "value": 33
+        },
+        {
+          "stat": "耐力",
+          "value": 12
+        },
+        {
+          "stat": "暗影抗性",
+          "value": 10
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "克罗多克要塞",
+          "instance": {
+            "instance_id": 3039,
+            "url": "https://wuxianwow.com/instance/3039",
+            "fetch_id": "instance:3039"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287009,
+        "name": "暮光执行者的护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 14000,
+        "guidance_text": "1金 40银",
+        "q1": 14000,
+        "q3": 14000,
+        "min": 13800,
+        "min_now": 14000,
+        "listings": 2,
+        "quantity": 2,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.2,
+        "reference": {
+          "price": 15976.74,
+          "low": 4338.36,
+          "high": 58837.01,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287009",
+        "fetch_id": "item:287009",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 40银，价格区间 1金 40银 – 1金 40银，2 条挂单 / 2 个"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287009,
+        "name": "暮光执行者的护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 35599,
+        "guidance_text": "3金 55银 99铜",
+        "q1": 33000,
+        "q3": 35599,
+        "min": 30000,
+        "min_now": 30000,
+        "listings": 11,
+        "quantity": 11,
+        "change_1d": -0.39,
+        "quantity_change_1d": 0.47,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.31,
+        "reference": {
+          "price": 44226.11,
+          "low": 10333.81,
+          "high": 189276.63,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287009&h=normal-horde",
+        "fetch_id": "item:287009",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 3金 55银 99铜，价格区间 3金 30银 – 3金 55银 99铜，11 条挂单 / 11 个，比上次 −39%"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287009,
+        "name": "暮光执行者的护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 11900,
+        "guidance_text": "1金 19银",
+        "q1": 11900,
+        "q3": 14000,
+        "min": 11900,
+        "min_now": 11900,
+        "listings": 7,
+        "quantity": 7,
+        "change_1d": -0.21,
+        "quantity_change_1d": -0.55,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.2,
+        "reference": {
+          "price": 13527.09,
+          "low": 3911.57,
+          "high": 46779.75,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287009&h=normal-alliance",
+        "fetch_id": "item:287009",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 19银，价格区间 1金 19银 – 1金 40银，7 条挂单 / 7 个，比上次 −21%"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287009,
+        "name": "暮光执行者的护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 13500,
+        "guidance_text": "1金 35银",
+        "q1": 13489,
+        "q3": 14086,
+        "min": 13489,
+        "min_now": 13489,
+        "listings": 37,
+        "quantity": 37,
+        "change_1d": -0.83,
+        "quantity_change_1d": 0.44,
+        "change_since": "2026-11-20",
+        "surprise_sd": -1.04,
+        "reference": {
+          "price": 27454.61,
+          "low": 6728.98,
+          "high": 112016.27,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287009&h=pvp-alliance",
+        "fetch_id": "item:287009",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 35银，价格区间 1金 34银 89铜 – 1金 40银 86铜，37 条挂单 / 37 个，比上次 −83%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 287009,
+        "name": "暮光执行者的护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 260000,
+        "guidance_text": "26金",
+        "q1": 260000,
+        "q3": 260000,
+        "min": 260000,
+        "min_now": 260000,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 1.77,
+        "reference": {
+          "price": 97549.35,
+          "low": 29774.88,
+          "high": 319594.05,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287009&h=rp-alliance",
+        "fetch_id": "item:287009",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 26金，价格区间 26金 – 26金，1 条挂单 / 1 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 41–45",
+      "bracket_id": 23,
+      "bracket_items": 138,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜",
+          "item_guidance": 14000,
+          "item_guidance_text": "1金 40银"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5437,
+          "value_text": "54银 37铜",
+          "item_guidance": 35599,
+          "item_guidance_text": "3金 55银 99铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜",
+          "item_guidance": 11900,
+          "item_guidance_text": "1金 19银"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜",
+          "item_guidance": 13500,
+          "item_guidance_text": "1金 35银"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银",
+          "item_guidance": 260000,
+          "item_guidance_text": "26金"
+        }
+      ]
+    },
+    "text": "暮光执行者的护腿 · 腿部 · 装等 44\n属性：115 护甲；+33 攻击强度，+12 耐力，+10 暗影抗性\n\n售价：92银 7铜\n来源：克罗多克要塞各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜，物品自己的指导价 1金 40银\n分解约值（普通 · 部落，2026-11-24）：54银 37铜，物品自己的指导价 3金 55银 99铜\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜，物品自己的指导价 1金 19银\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜，物品自己的指导价 1金 35银\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银，物品自己的指导价 26金\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 40银，价格区间 1金 40银 – 1金 40银，2 条挂单 / 2 个\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 3金 55银 99铜，价格区间 3金 30银 – 3金 55银 99铜，11 条挂单 / 11 个，比上次 −39%\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 19银，价格区间 1金 19银 – 1金 40银，7 条挂单 / 7 个，比上次 −21%\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 35银，价格区间 1金 34银 89铜 – 1金 40银 86铜，37 条挂单 / 37 个，比上次 −83%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 26金，价格区间 26金 – 26金，1 条挂单 / 1 个",
+    "matched_by": "id"
+  }
+}

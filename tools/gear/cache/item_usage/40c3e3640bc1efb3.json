@@ -1,0 +1,339 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 7760
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 QuestieDB"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:7760",
+    "title": "统帅褶裙",
+    "url": "https://wuxianwow.com/item/7760",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKABNA8AA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:7760:::::::::::::|h[统帅褶裙]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 7760,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 39,
+    "slot": "腿部",
+    "req_level": 34,
+    "sell": 6126,
+    "sell_text": "61银 26铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腿部",
+      "armor_type": "皮甲",
+      "ilvl": 39,
+      "req_level": 34,
+      "armor": 105,
+      "stats": [
+        {
+          "stat": "智力",
+          "value": 6
+        },
+        {
+          "stat": "精神",
+          "value": 14
+        },
+        {
+          "stat": "力量",
+          "value": 5
+        },
+        {
+          "stat": "治疗强度",
+          "value": 24
+        },
+        {
+          "stat": "法术伤害",
+          "value": 8
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 7760,
+        "name": "统帅褶裙",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 99799,
+        "guidance_text": "9金 97银 99铜",
+        "q1": 99799,
+        "q3": 99799,
+        "min": 99799,
+        "min_now": null,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -1,
+        "reference": {
+          "price": 191116.49,
+          "low": 51688.7,
+          "high": 706644.03,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7760",
+        "fetch_id": "item:7760",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 9金 97银 99铜，价格区间 9金 97银 99铜 – 9金 97银 99铜，1 条挂单 / 1 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 7760,
+        "name": "统帅褶裙",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "皮甲",
+        "guidance": 79197,
+        "guidance_text": "7金 91银 97铜",
+        "q1": 79197,
+        "q3": 79200,
+        "min": 79197,
+        "min_now": 79197,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.46,
+        "reference": {
+          "price": 106431.01,
+          "low": 30974.58,
+          "high": 365705.04,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7760&h=normal-alliance",
+        "fetch_id": "item:7760",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 7金 91银 97铜，价格区间 7金 91银 97铜 – 7金 92银，3 条挂单 / 3 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 36–40",
+      "bracket_id": 19,
+      "bracket_items": 108,
+      "outcomes": [
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2807,
+          "value_text": "28银 7铜",
+          "item_guidance": 99799,
+          "item_guidance_text": "9金 97银 99铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 3250,
+          "value_text": "32银 50铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 2343,
+          "value_text": "23银 43铜",
+          "item_guidance": 79197,
+          "item_guidance_text": "7金 91银 97铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 3499,
+          "value_text": "34银 99铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 8300,
+          "value_text": "83银"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "QuestieDB",
+      "note": "临时数据：客户端的冒险指南没有掉落。QuestieDB 记下的是经典旧世（1.15.9）掉落，没有掉落率；shared 为副本里其他怪物也会掉；QuestieDB 的 npcs / objects 是掉它的生物与物件（宝箱一类的随机掉落不列），zone 是 QuestieDB 记的刷新区域。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 4286,
+          "name": "血色士兵",
+          "on_site": false,
+          "fetch_id": "npc:4286",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4289,
+          "name": "血色招魂师",
+          "on_site": false,
+          "fetch_id": "npc:4289",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4290,
+          "name": "血色卫兵",
+          "on_site": false,
+          "fetch_id": "npc:4290",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4292,
+          "name": "血色保卫者",
+          "on_site": false,
+          "fetch_id": "npc:4292",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4294,
+          "name": "血色魔术师",
+          "on_site": false,
+          "fetch_id": "npc:4294",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4295,
+          "name": "血色仆从",
+          "on_site": false,
+          "fetch_id": "npc:4295",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4298,
+          "name": "血色防御者",
+          "on_site": false,
+          "fetch_id": "npc:4298",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4299,
+          "name": "血色牧师",
+          "on_site": false,
+          "fetch_id": "npc:4299",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4300,
+          "name": "血色巫师",
+          "on_site": false,
+          "fetch_id": "npc:4300",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4301,
+          "name": "血色百夫长",
+          "on_site": false,
+          "fetch_id": "npc:4301",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4302,
+          "name": "血色勇士",
+          "on_site": false,
+          "fetch_id": "npc:4302",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4303,
+          "name": "血色修士",
+          "on_site": false,
+          "fetch_id": "npc:4303",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4540,
+          "name": "血色僧侣",
+          "on_site": false,
+          "fetch_id": "npc:4540",
+          "temporary": true,
+          "source": "QuestieDB"
+        }
+      ]
+    },
+    "text": "统帅褶裙 · 腿部 · 装等 39\n属性：105 护甲；+6 智力，+14 精神，+5 力量，+24 治疗强度，+8 法术伤害\n\n售价：61银 26铜\n来源：血色修道院各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 36–40，一次出一样）：大块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：28银 7铜，物品自己的指导价 9金 97银 99铜\n分解约值（普通 · 部落，2026-11-24）：32银 50铜\n分解约值（普通 · 联盟，2026-11-24）：23银 43铜，物品自己的指导价 7金 91银 97铜\n分解约值（PvP · 联盟，2026-11-21）：34银 99铜\n分解约值（角色扮演 · 联盟，2026-11-19）：83银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 9金 97银 99铜，价格区间 9金 97银 99铜 – 9金 97银 99铜，1 条挂单 / 1 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 7金 91银 97铜，价格区间 7金 91银 97铜 – 7金 92银，3 条挂单 / 3 个",
+    "matched_by": "id"
+  }
+}

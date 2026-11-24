@@ -1,0 +1,144 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 279474
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:279474",
+    "title": "尘泥短剑",
+    "url": "https://wuxianwow.com/item/279474",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAELKHEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:279474:::::::::::::|h[尘泥短剑]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 279474,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 55,
+    "slot": "单手",
+    "req_level": 1,
+    "sell": 37180,
+    "sell_text": "3金 71银 80铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "单手",
+      "weapon_type": "匕首",
+      "ilvl": 55,
+      "req_level": 1,
+      "damage": {
+        "dps": 36.5,
+        "max": 81,
+        "min": 43,
+        "speed": 1.7
+      },
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 10
+        },
+        {
+          "stat": "敏捷",
+          "value": 6
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "任务",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "quest_rewards": [
+      {
+        "quest_id": 95264,
+        "name": "事关重大",
+        "url": "https://wuxianwow.com/quest/95264",
+        "fetch_id": "quest:95264",
+        "level": 53,
+        "side": "联盟",
+        "reward": "任选"
+      },
+      {
+        "quest_id": 95483,
+        "name": "大酋长必须知情",
+        "url": "https://wuxianwow.com/quest/95483",
+        "fetch_id": "quest:95483",
+        "level": 53,
+        "side": "部落",
+        "reward": "任选"
+      }
+    ],
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 51–55",
+      "bracket_id": 35,
+      "bracket_items": 69,
+      "outcomes": [
+        {
+          "item_id": 14343,
+          "name": "小块魔光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/14343",
+          "fetch_id": "item:14343"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 8442,
+          "value_text": "84银 42铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 8174,
+          "value_text": "81银 74铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 9460,
+          "value_text": "94银 60铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 19975,
+          "value_text": "1金 99银 75铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 69754,
+          "value_text": "6金 97银 54铜"
+        }
+      ]
+    },
+    "text": "尘泥短剑 · 单手 · 装等 55\n属性：43–81 伤害 · 速度 1.7 · DPS 36.5；+10 耐力，+6 敏捷\n\n售价：3金 71银 80铜\n来源：任务「事关重大」（任选）；任务「大酋长必须知情」（任选）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 51–55，一次出一样）：小块魔光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：84银 42铜\n分解约值（普通 · 部落，2026-11-24）：81银 74铜\n分解约值（普通 · 联盟，2026-11-24）：94银 60铜\n分解约值（PvP · 联盟，2026-11-21）：1金 99银 75铜\n分解约值（角色扮演 · 联盟，2026-11-19）：6金 97银 54铜",
+    "matched_by": "id"
+  }
+}

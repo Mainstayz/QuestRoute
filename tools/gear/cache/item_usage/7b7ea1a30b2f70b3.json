@@ -1,0 +1,1209 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287068
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287068",
+    "title": "出土匕首",
+    "url": "https://wuxianwow.com/item/287068",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAENzCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287068:::::::::::::|h[出土匕首]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287068,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 33,
+    "slot": "投掷",
+    "req_level": 28,
+    "sell": 5381,
+    "sell_text": "53银 81铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "投掷",
+      "weapon_type": "投掷武器",
+      "ilvl": 33,
+      "req_level": 28,
+      "damage": {
+        "dps": 19.2,
+        "max": 35,
+        "min": 34,
+        "speed": 1.8
+      },
+      "stats": [
+        {
+          "stat": "力量",
+          "value": 4
+        },
+        {
+          "stat": "敏捷",
+          "value": 4
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "挖掘场：湿地",
+          "instance": {
+            "instance_id": 2998,
+            "url": "https://wuxianwow.com/instance/2998",
+            "fetch_id": "instance:2998"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "transmog": {
+      "sources": [],
+      "same_appearance_sources": [
+        {
+          "source_id": 180640,
+          "item_id": 15327,
+          "item_name": "邪恶飞刀",
+          "item_url": "https://wuxianwow.com/item/15327",
+          "fetch_id": "item:15327",
+          "appearance_id": 67609,
+          "source_type": "商人",
+          "item_source_type": "商人",
+          "note": "World Shop Common",
+          "note_label": "客户端内部注释（英文）",
+          "vendors": [
+            {
+              "vendor_id": 246020,
+              "creature_id": 7942,
+              "on_site": false,
+              "zone": "菲拉斯",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -4379,
+                3311.8,
+                13.6
+              ],
+              "zone_map": {
+                "ui_map": 1444,
+                "name": "菲拉斯",
+                "x": 0.3065,
+                "y": 0.4343,
+                "coords": "30.6, 43.4",
+                "url": "https://wuxianwow.com/atlas/1444",
+                "fetch_id": "map:1444"
+              }
+            },
+            {
+              "vendor_id": 246023,
+              "creature_id": 2803,
+              "on_site": false,
+              "zone": "费伍德森林",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                6150.4,
+                -1941.8,
+                574.6
+              ],
+              "zone_map": {
+                "ui_map": 1448,
+                "name": "费伍德森林",
+                "x": 0.6232,
+                "y": 0.2564,
+                "coords": "62.3, 25.6",
+                "url": "https://wuxianwow.com/atlas/1448",
+                "fetch_id": "map:1448"
+              }
+            },
+            {
+              "vendor_id": 246024,
+              "creature_id": 2806,
+              "on_site": false,
+              "zone": "费伍德森林",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                5093,
+                -356.5,
+                357.3
+              ],
+              "zone_map": {
+                "ui_map": 1448,
+                "name": "费伍德森林",
+                "x": 0.3475,
+                "y": 0.5323,
+                "coords": "34.8, 53.2",
+                "url": "https://wuxianwow.com/atlas/1448",
+                "fetch_id": "map:1448"
+              }
+            },
+            {
+              "vendor_id": 246026,
+              "creature_id": 2401,
+              "on_site": false,
+              "zone": "希尔斯布莱德丘陵",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -24.8,
+                -935.2,
+                55.2
+              ],
+              "zone_map": {
+                "ui_map": 1424,
+                "name": "希尔斯布莱德丘陵",
+                "x": 0.6256,
+                "y": 0.1991,
+                "coords": "62.6, 19.9",
+                "url": "https://wuxianwow.com/atlas/1424",
+                "fetch_id": "map:1424"
+              }
+            },
+            {
+              "vendor_id": 246027,
+              "creature_id": 255895,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -8189.2,
+                -5607.3,
+                3.8
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.7661,
+                "y": 0.5327,
+                "coords": "76.6, 53.3",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246028,
+              "creature_id": 12021,
+              "on_site": false,
+              "zone": "月光林地",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                7956.8,
+                -2424.4,
+                488.9
+              ],
+              "zone_map": {
+                "ui_map": 1450,
+                "name": "月光林地",
+                "x": 0.4519,
+                "y": 0.3474,
+                "coords": "45.2, 34.7",
+                "url": "https://wuxianwow.com/atlas/1450",
+                "fetch_id": "map:1450"
+              }
+            },
+            {
+              "vendor_id": 246029,
+              "creature_id": 43411,
+              "on_site": false,
+              "zone": "海加尔山",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                5200.8,
+                -3308.6,
+                1644.5
+              ],
+              "zone_map": {
+                "ui_map": 2482,
+                "name": "海加尔山",
+                "x": 0.6869,
+                "y": 0.4767,
+                "coords": "68.7, 47.7",
+                "url": "https://wuxianwow.com/atlas/2482",
+                "fetch_id": "map:2482"
+              }
+            },
+            {
+              "vendor_id": 246031,
+              "creature_id": 259860,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -9188.1,
+                -5009.7,
+                36.3
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.6429,
+                "y": 0.8417,
+                "coords": "64.3, 84.2",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246032,
+              "creature_id": 8139,
+              "on_site": false,
+              "zone": "塔纳利斯",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -6886.5,
+                -4842.3,
+                8.5
+              ],
+              "zone_map": {
+                "ui_map": 1446,
+                "name": "塔纳利斯",
+                "x": 0.6701,
+                "y": 0.2199,
+                "coords": "67.0, 22.0",
+                "url": "https://wuxianwow.com/atlas/1446",
+                "fetch_id": "map:1446"
+              }
+            },
+            {
+              "vendor_id": 246033,
+              "creature_id": 3313,
+              "on_site": false,
+              "zone": "奥格瑞玛",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                1520.5,
+                -4355.6,
+                18.8
+              ],
+              "zone_map": {
+                "ui_map": 1454,
+                "name": "奥格瑞玛",
+                "x": 0.4812,
+                "y": 0.8054,
+                "coords": "48.1, 80.5",
+                "url": "https://wuxianwow.com/atlas/1454",
+                "fetch_id": "map:1454"
+              }
+            },
+            {
+              "vendor_id": 246034,
+              "creature_id": 3541,
+              "on_site": false,
+              "zone": "希尔斯布莱德丘陵",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -774.5,
+                -505.7,
+                23.6
+              ],
+              "zone_map": {
+                "ui_map": 1424,
+                "name": "希尔斯布莱德丘陵",
+                "x": 0.4914,
+                "y": 0.5506,
+                "coords": "49.1, 55.1",
+                "url": "https://wuxianwow.com/atlas/1424",
+                "fetch_id": "map:1424"
+              }
+            },
+            {
+              "vendor_id": 246036,
+              "creature_id": 12027,
+              "on_site": false,
+              "zone": "凄凉之地",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -1701.8,
+                3112.6,
+                32.7
+              ],
+              "zone_map": {
+                "ui_map": 1443,
+                "name": "凄凉之地",
+                "x": 0.2493,
+                "y": 0.7184,
+                "coords": "24.9, 71.8",
+                "url": "https://wuxianwow.com/atlas/1443",
+                "fetch_id": "map:1443"
+              }
+            },
+            {
+              "vendor_id": 246037,
+              "creature_id": 255895,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -8393.8,
+                -4537,
+                24.7
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.5454,
+                "y": 0.596,
+                "coords": "54.5, 59.6",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246038,
+              "creature_id": 8362,
+              "on_site": false,
+              "zone": "雷霆崖",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -1300.2,
+                110.5,
+                131.4
+              ],
+              "zone_map": {
+                "ui_map": 1456,
+                "name": "雷霆崖",
+                "x": 0.3891,
+                "y": 0.647,
+                "coords": "38.9, 64.7",
+                "url": "https://wuxianwow.com/atlas/1456",
+                "fetch_id": "map:1456"
+              }
+            },
+            {
+              "vendor_id": 246039,
+              "creature_id": 1285,
+              "on_site": false,
+              "zone": "暴风城",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -8831.8,
+                596.4,
+                95.7
+              ],
+              "zone_map": {
+                "ui_map": 1453,
+                "name": "暴风城",
+                "x": 0.6484,
+                "y": 0.7217,
+                "coords": "64.8, 72.2",
+                "url": "https://wuxianwow.com/atlas/1453",
+                "fetch_id": "map:1453"
+              }
+            },
+            {
+              "vendor_id": 246042,
+              "creature_id": 12960,
+              "on_site": false,
+              "zone": "凄凉之地",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                243,
+                1238.6,
+                192.2
+              ],
+              "zone_map": {
+                "ui_map": 1443,
+                "name": "凄凉之地",
+                "x": 0.6661,
+                "y": 0.0697,
+                "coords": "66.6, 7.0",
+                "url": "https://wuxianwow.com/atlas/1443",
+                "fetch_id": "map:1443"
+              }
+            },
+            {
+              "vendor_id": 246205,
+              "creature_id": 4555,
+              "on_site": false,
+              "zone": "幽暗城",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                1564.8,
+                209.6,
+                -43.1
+              ],
+              "zone_map": {
+                "ui_map": 1458,
+                "name": "幽暗城",
+                "x": 0.6917,
+                "y": 0.4893,
+                "coords": "69.2, 48.9",
+                "url": "https://wuxianwow.com/atlas/1458",
+                "fetch_id": "map:1458"
+              }
+            },
+            {
+              "vendor_id": 246310,
+              "creature_id": 15174,
+              "on_site": false,
+              "zone": "希利苏斯",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -6868,
+                729.9,
+                45.7
+              ],
+              "zone_map": {
+                "ui_map": 1451,
+                "name": "希利苏斯",
+                "x": 0.5189,
+                "y": 0.3916,
+                "coords": "51.9, 39.2",
+                "url": "https://wuxianwow.com/atlas/1451",
+                "fetch_id": "map:1451"
+              }
+            },
+            {
+              "vendor_id": 246313,
+              "creature_id": 255897,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -8389.8,
+                -4532.6,
+                24.7
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.5445,
+                "y": 0.5948,
+                "coords": "54.4, 59.5",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246314,
+              "creature_id": 260343,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -7948.9,
+                -4712.8,
+                23.8
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.5817,
+                "y": 0.4584,
+                "coords": "58.2, 45.8",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246315,
+              "creature_id": 3350,
+              "on_site": false,
+              "zone": "奥格瑞玛",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                1891.6,
+                -4326.8,
+                23.2
+              ],
+              "zone_map": {
+                "ui_map": 1454,
+                "name": "奥格瑞玛",
+                "x": 0.4607,
+                "y": 0.4087,
+                "coords": "46.1, 40.9",
+                "url": "https://wuxianwow.com/atlas/1454",
+                "fetch_id": "map:1454"
+              }
+            },
+            {
+              "vendor_id": 246316,
+              "creature_id": 3625,
+              "on_site": false,
+              "zone": "奥特兰克山谷",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 30,
+              "map_name": "奥特兰克山谷",
+              "world_xyz": [
+                -1235.2,
+                -332.3,
+                60.2
+              ],
+              "zone_map": {
+                "ui_map": 1459,
+                "name": "奥特兰克山谷",
+                "x": 0.4988,
+                "y": 0.8214,
+                "coords": "49.9, 82.1",
+                "url": "https://wuxianwow.com/atlas/1459",
+                "fetch_id": "map:1459"
+              }
+            },
+            {
+              "vendor_id": 246317,
+              "creature_id": 734,
+              "on_site": false,
+              "zone": "荆棘谷",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -11295.8,
+                -201.3,
+                75.7
+              ],
+              "zone_map": {
+                "ui_map": 1434,
+                "name": "荆棘谷",
+                "x": 0.3796,
+                "y": 0.0299,
+                "coords": "38.0, 3.0",
+                "url": "https://wuxianwow.com/atlas/1434",
+                "fetch_id": "map:1434"
+              }
+            },
+            {
+              "vendor_id": 246319,
+              "creature_id": 14624,
+              "on_site": false,
+              "zone": "灼热峡谷",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -6524,
+                -1188.7,
+                309.3
+              ],
+              "zone_map": {
+                "ui_map": 1427,
+                "name": "灼热峡谷",
+                "x": 0.388,
+                "y": 0.2851,
+                "coords": "38.8, 28.5",
+                "url": "https://wuxianwow.com/atlas/1427",
+                "fetch_id": "map:1427"
+              }
+            },
+            {
+              "vendor_id": 246320,
+              "creature_id": 12959,
+              "on_site": false,
+              "zone": "安戈洛环形山",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -6157.4,
+                -1067.7,
+                -194.9
+              ],
+              "zone_map": {
+                "ui_map": 1449,
+                "name": "安戈洛环形山",
+                "x": 0.4327,
+                "y": 0.0773,
+                "coords": "43.3, 7.7",
+                "url": "https://wuxianwow.com/atlas/1449",
+                "fetch_id": "map:1449"
+              }
+            },
+            {
+              "vendor_id": 246321,
+              "creature_id": 2084,
+              "on_site": false,
+              "zone": "冬泉谷",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                7073.9,
+                -3969.7,
+                745.6
+              ],
+              "zone_map": {
+                "ui_map": 1452,
+                "name": "冬泉谷",
+                "x": 0.5145,
+                "y": 0.3083,
+                "coords": "51.4, 30.8",
+                "url": "https://wuxianwow.com/atlas/1452",
+                "fetch_id": "map:1452"
+              }
+            },
+            {
+              "vendor_id": 246322,
+              "creature_id": 255897,
+              "on_site": false,
+              "zone": "河林",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -8177.3,
+                -5631,
+                3.2
+              ],
+              "zone_map": {
+                "ui_map": 2548,
+                "name": "河林",
+                "x": 0.771,
+                "y": 0.5291,
+                "coords": "77.1, 52.9",
+                "url": "https://wuxianwow.com/atlas/2548",
+                "fetch_id": "map:2548"
+              }
+            },
+            {
+              "vendor_id": 246323,
+              "creature_id": 2908,
+              "on_site": false,
+              "zone": "荒芜之地",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -6651.3,
+                -2156.9,
+                245.4
+              ],
+              "zone_map": {
+                "ui_map": 1418,
+                "name": "荒芜之地",
+                "x": 0.0312,
+                "y": 0.4593,
+                "coords": "3.1, 45.9",
+                "url": "https://wuxianwow.com/atlas/1418",
+                "fetch_id": "map:1418"
+              }
+            },
+            {
+              "vendor_id": 246324,
+              "creature_id": 2808,
+              "on_site": false,
+              "zone": "阿拉希高地",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -1275.8,
+                -2538.7,
+                21.5
+              ],
+              "zone_map": {
+                "ui_map": 1417,
+                "name": "阿拉希高地",
+                "x": 0.4645,
+                "y": 0.476,
+                "coords": "46.5, 47.6",
+                "url": "https://wuxianwow.com/atlas/1417",
+                "fetch_id": "map:1417"
+              }
+            },
+            {
+              "vendor_id": 246326,
+              "creature_id": 1149,
+              "on_site": false,
+              "zone": "荆棘谷",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -12358,
+                207.4,
+                4.1
+              ],
+              "zone_map": {
+                "ui_map": 1434,
+                "name": "荆棘谷",
+                "x": 0.3155,
+                "y": 0.2795,
+                "coords": "31.6, 28.0",
+                "url": "https://wuxianwow.com/atlas/1434",
+                "fetch_id": "map:1434"
+              }
+            },
+            {
+              "vendor_id": 246327,
+              "creature_id": 5101,
+              "on_site": false,
+              "zone": "铁炉堡",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -4962.1,
+                -1023.8,
+                503.9
+              ],
+              "zone_map": {
+                "ui_map": 1455,
+                "name": "铁炉堡",
+                "x": 0.3923,
+                "y": 0.7446,
+                "coords": "39.2, 74.5",
+                "url": "https://wuxianwow.com/atlas/1455",
+                "fetch_id": "map:1455"
+              }
+            },
+            {
+              "vendor_id": 246328,
+              "creature_id": 2820,
+              "on_site": false,
+              "zone": "阿拉希高地",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -910.3,
+                -3534.8,
+                72.7
+              ],
+              "zone_map": {
+                "ui_map": 1417,
+                "name": "阿拉希高地",
+                "x": 0.7412,
+                "y": 0.3237,
+                "coords": "74.1, 32.4",
+                "url": "https://wuxianwow.com/atlas/1417",
+                "fetch_id": "map:1417"
+              }
+            },
+            {
+              "vendor_id": 246332,
+              "creature_id": 4896,
+              "on_site": false,
+              "zone": "尘泥沼泽",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -3843.5,
+                -4516.2,
+                9.8
+              ],
+              "zone_map": {
+                "ui_map": 1445,
+                "name": "尘泥沼泽",
+                "x": 0.6745,
+                "y": 0.5172,
+                "coords": "67.5, 51.7",
+                "url": "https://wuxianwow.com/atlas/1445",
+                "fetch_id": "map:1445"
+              }
+            },
+            {
+              "vendor_id": 246334,
+              "creature_id": 5134,
+              "on_site": false,
+              "zone": "奥特兰克山谷",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 30,
+              "map_name": "奥特兰克山谷",
+              "world_xyz": [
+                591.5,
+                -44.5,
+                37.5
+              ],
+              "zone_map": {
+                "ui_map": 1459,
+                "name": "奥特兰克山谷",
+                "x": 0.4308,
+                "y": 0.1749,
+                "coords": "43.1, 17.5",
+                "url": "https://wuxianwow.com/atlas/1459",
+                "fetch_id": "map:1459"
+              }
+            },
+            {
+              "vendor_id": 246335,
+              "creature_id": 12246,
+              "on_site": false,
+              "zone": "凄凉之地",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                -1926.6,
+                2412.8,
+                60.6
+              ],
+              "zone_map": {
+                "ui_map": 1443,
+                "name": "凄凉之地",
+                "x": 0.4049,
+                "y": 0.7934,
+                "coords": "40.5, 79.3",
+                "url": "https://wuxianwow.com/atlas/1443",
+                "fetch_id": "map:1443"
+              }
+            },
+            {
+              "vendor_id": 246337,
+              "creature_id": 11555,
+              "on_site": false,
+              "zone": "费伍德森林",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                7030.7,
+                -2106.3,
+                587.4
+              ],
+              "zone_map": {
+                "ui_map": 1448,
+                "name": "费伍德森林",
+                "x": 0.6518,
+                "y": 0.0268,
+                "coords": "65.2, 2.7",
+                "url": "https://wuxianwow.com/atlas/1448",
+                "fetch_id": "map:1448"
+              }
+            },
+            {
+              "vendor_id": 246341,
+              "creature_id": 11038,
+              "on_site": false,
+              "zone": "东瘟疫之地",
+              "subzone": null,
+              "faction": "不限",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                2150,
+                -5264.8,
+                96
+              ],
+              "zone_map": {
+                "ui_map": 1423,
+                "name": "东瘟疫之地",
+                "x": 0.6993,
+                "y": 0.5378,
+                "coords": "69.9, 53.8",
+                "url": "https://wuxianwow.com/atlas/1423",
+                "fetch_id": "map:1423"
+              }
+            }
+          ],
+          "unlocated_vendor_rows": 1,
+          "unlocated_factions": [
+            "联盟"
+          ]
+        }
+      ],
+      "same_appearance_total": 1,
+      "note": "商人来源来自 CollectableSourceInfo / CollectableSourceVendor / CollectableSourceVendorSparse：只有商人的生物 ID、坐标与阵营，客户端没有商人名字，来源表里也没有价格字段；note 是客户端内部的英文注释（设计用的来源分类），不是游戏内文本"
+    },
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287068,
+        "name": "出土匕首",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "投掷武器",
+        "guidance": 180500,
+        "guidance_text": "18金 5银",
+        "q1": 180500,
+        "q3": 180500,
+        "min": 180500,
+        "min_now": 180500,
+        "listings": 6,
+        "quantity": 6,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.53,
+        "reference": {
+          "price": 253859.51,
+          "low": 68750.43,
+          "high": 937370.94,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287068",
+        "fetch_id": "item:287068",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 18金 5银，价格区间 18金 5银 – 18金 5银，6 条挂单 / 6 个"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287068,
+        "name": "出土匕首",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "投掷武器",
+        "guidance": 188887,
+        "guidance_text": "18金 88银 87铜",
+        "q1": 188887,
+        "q3": 188887,
+        "min": 188887,
+        "min_now": 188887,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": 0.24,
+        "reference": {
+          "price": 160813.28,
+          "low": 40773.96,
+          "high": 634250.59,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287068&h=normal-horde",
+        "fetch_id": "item:287068",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 18金 88银 87铜，价格区间 18金 88银 87铜 – 18金 88银 87铜，1 条挂单 / 1 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287068,
+        "name": "出土匕首",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "投掷武器",
+        "guidance": 150000,
+        "guidance_text": "15金",
+        "q1": 150000,
+        "q3": 151700,
+        "min": 150000,
+        "min_now": 150000,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.21,
+        "reference": {
+          "price": 171816.52,
+          "low": 49979.15,
+          "high": 590664.65,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287068&h=normal-alliance",
+        "fetch_id": "item:287068",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 15金，价格区间 15金 – 15金 17银，3 条挂单 / 3 个"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287068,
+        "name": "出土匕首",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "投掷武器",
+        "guidance": 198500,
+        "guidance_text": "19金 85银",
+        "q1": 198498,
+        "q3": 198598,
+        "min": 198498,
+        "min_now": 198498,
+        "listings": 6,
+        "quantity": 6,
+        "change_1d": 0.33,
+        "quantity_change_1d": -0.07,
+        "change_since": "2026-11-20",
+        "surprise_sd": 0.14,
+        "reference": {
+          "price": 180678.98,
+          "low": 46727.4,
+          "high": 698624.26,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287068&h=pvp-alliance",
+        "fetch_id": "item:287068",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 19金 85银，价格区间 19金 84银 98铜 – 19金 85银 98铜，6 条挂单 / 6 个，比上次 +33%"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 31–35",
+      "bracket_id": 16,
+      "bracket_items": 60,
+      "outcomes": [
+        {
+          "item_id": 11138,
+          "name": "小块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11138",
+          "fetch_id": "item:11138"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2010,
+          "value_text": "20银 10铜",
+          "item_guidance": 180500,
+          "item_guidance_text": "18金 5银"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 2803,
+          "value_text": "28银 3铜",
+          "item_guidance": 188887,
+          "item_guidance_text": "18金 88银 87铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 1200,
+          "value_text": "12银",
+          "item_guidance": 150000,
+          "item_guidance_text": "15金"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 1399,
+          "value_text": "13银 99铜",
+          "item_guidance": 198500,
+          "item_guidance_text": "19金 85银"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 1300,
+          "value_text": "13银"
+        }
+      ]
+    },
+    "text": "出土匕首 · 投掷 · 装等 33\n属性：34–35 伤害 · 速度 1.8 · DPS 19.2；+4 力量，+4 敏捷\n\n售价：53银 81铜\n来源：挖掘场：湿地各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n同外观可从商人购买：邪恶飞刀\n分解（精良武器 · 物品等级 31–35，一次出一样）：小块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：20银 10铜，物品自己的指导价 18金 5银\n分解约值（普通 · 部落，2026-11-24）：28银 3铜，物品自己的指导价 18金 88银 87铜\n分解约值（普通 · 联盟，2026-11-24）：12银，物品自己的指导价 15金\n分解约值（PvP · 联盟，2026-11-21）：13银 99铜，物品自己的指导价 19金 85银\n分解约值（角色扮演 · 联盟，2026-11-19）：13银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 18金 5银，价格区间 18金 5银 – 18金 5银，6 条挂单 / 6 个\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 18金 88银 87铜，价格区间 18金 88银 87铜 – 18金 88银 87铜，1 条挂单 / 1 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 15金，价格区间 15金 – 15金 17银，3 条挂单 / 3 个\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 19金 85银，价格区间 19金 84银 98铜 – 19金 85银 98铜，6 条挂单 / 6 个，比上次 +33%",
+    "matched_by": "id"
+  }
+}

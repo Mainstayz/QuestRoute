@@ -1,0 +1,196 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 901887
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:901887",
+    "npc_id": 901887,
+    "name": "黑曜石哨兵",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/901887",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      42,
+      42
+    ],
+    "dungeon": "奥达曼",
+    "instance": {
+      "id": 70,
+      "fetch_id": "instance:70",
+      "name": "奥达曼",
+      "level_text": "准入 30 级 · 集合石 41–51 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          41,
+          51
+        ],
+        "max": null,
+        "min": 30,
+        "target": 35
+      },
+      "url": "https://wuxianwow.com/instance/70"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/1887.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/1887_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 1887,
+      "dungeon": "奥达曼",
+      "instance": {
+        "instance_id": 70,
+        "url": "https://wuxianwow.com/instance/70",
+        "fetch_id": "instance:70"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 4,
+      "of": 8,
+      "bosses": [
+        {
+          "npc_id": 900547,
+          "name": "鲁维罗什",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900547",
+          "fetch_id": "npc:900547",
+          "portrait": "https://wuxianwow.com/data/bosses/547.webp"
+        },
+        {
+          "npc_id": 900548,
+          "name": "失踪的矮人",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900548",
+          "fetch_id": "npc:900548",
+          "portrait": "https://wuxianwow.com/data/bosses/548.webp"
+        },
+        {
+          "npc_id": 900549,
+          "name": "艾隆纳亚",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900549",
+          "fetch_id": "npc:900549",
+          "portrait": "https://wuxianwow.com/data/bosses/549.webp"
+        },
+        {
+          "npc_id": 901887,
+          "name": "黑曜石哨兵",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/901887",
+          "fetch_id": "npc:901887",
+          "portrait": "https://wuxianwow.com/data/bosses/1887.webp"
+        },
+        {
+          "npc_id": 900551,
+          "name": "古代的石头看守者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900551",
+          "fetch_id": "npc:900551",
+          "portrait": "https://wuxianwow.com/data/bosses/551.webp"
+        },
+        {
+          "npc_id": 900552,
+          "name": "加加恩·火锤",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900552",
+          "fetch_id": "npc:900552",
+          "portrait": "https://wuxianwow.com/data/bosses/552.webp"
+        },
+        {
+          "npc_id": 900553,
+          "name": "格瑞姆洛克",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900553",
+          "fetch_id": "npc:900553",
+          "portrait": "https://wuxianwow.com/data/bosses/553.webp"
+        },
+        {
+          "npc_id": 900554,
+          "name": "阿扎达斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900554",
+          "fetch_id": "npc:900554",
+          "portrait": "https://wuxianwow.com/data/bosses/554.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 251400,
+          "name": "设计图：守望者长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251400",
+          "fetch_id": "item:251400"
+        },
+        {
+          "item_id": 274425,
+          "name": "白色黑曜石魔杖",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274425",
+          "fetch_id": "item:274425"
+        },
+        {
+          "item_id": 274428,
+          "name": "黑暗魔像胸甲",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274428",
+          "fetch_id": "item:274428"
+        },
+        {
+          "item_id": 274430,
+          "name": "岩石哨兵利剑",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274430",
+          "fetch_id": "item:274430"
+        },
+        {
+          "item_id": 274485,
+          "name": "萦绕恐惧之斧",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274485",
+          "fetch_id": "item:274485"
+        }
+      ]
+    },
+    "text": "黑曜石哨兵（首领 · 42 级（临时 · QuestieDB） · 奥达曼）\n奥达曼 第 4/8 个首领\n副本：instance:70（地下城 · 准入 30 级 · 集合石 41–51 级）\n掉落（临时 · Spyglass）：设计图：守望者长靴、白色黑曜石魔杖、黑暗魔像胸甲、岩石哨兵利剑、萦绕恐惧之斧\n位置（临时 · cMaNGOS）：奥达曼副本地图 上层 0.149, 0.621（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "cMaNGOS",
+      "floor": "上层",
+      "x": 0.149,
+      "y": 0.621,
+      "map_url": "https://wuxianwow.com/instance/70",
+      "trip_url": "https://wuxianwow.com/trip?at=70,16902.9,17454.7,-36.4"
+    }
+  }
+}

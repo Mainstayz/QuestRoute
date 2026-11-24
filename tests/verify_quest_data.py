@@ -2359,7 +2359,7 @@ return passed
 
 LEGACY_RELOAD_CHECKS = r'''
 local api=WoWBridgeNS.QuestRoute
-assert(api.apiRevision==16 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
+assert(api.apiRevision==17 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
 assert(api.route.driver==FixtureHotload.driver,'legacy upgrade still reuses driver')
@@ -2386,13 +2386,14 @@ return 10
 
 LOAD_CHECKS = r'''
 local api=...
-assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==16,'manifest publishes the shared r16 namespace')
+assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==17,'manifest publishes the shared r17 namespace')
 local endpoints={
     get_quests='GetQuests',get_player_context='GetPlayerContext',get_quest_pois='GetQuestPOIs',
     get_quest_details='GetQuestDetails',get_database_entity='GetDatabaseEntity',get_quest_targets='GetQuestTargets',
     get_plan='GetPlan',replan='Replan',set_quest_skip='SetQuestSkip',reset_quest_skips='ResetQuestSkips',
     set_route_options='SetRouteOptions',change_quest_spot='ChangeQuestSpot',
     clear_spot_avoidances='ClearSpotAvoidances',get_unit_tasks='GetUnitTasks',
+    get_gear_candidates='GetGearCandidates',
 }
 local public={RegisterSettings=true,StartRoute=true,OnUnload=true,OnReload=true}
 for _,member in pairs(endpoints) do public[member]=true end

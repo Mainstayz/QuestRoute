@@ -1,0 +1,895 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 70
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "18 行的 side 是第三方临时（来自 QuestieDB）"
+      }
+    ],
+    "id": 70,
+    "fetch_id": "instance:70",
+    "title": "奥达曼",
+    "url": "https://wuxianwow.com/instance/70",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        41,
+        51
+      ],
+      "max": null,
+      "min": 30,
+      "target": 35
+    },
+    "level_text": "准入 30 级 · 集合石 41–51 级",
+    "zone": "荒芜之地",
+    "entrance": {
+      "zone": "荒芜之地",
+      "area": null,
+      "continent": "东部王国",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 70.Corpse (-6060.2, -2955.0) on Map 0",
+      "world_xy": [
+        -6060.2,
+        -2955
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 1418,
+      "atlas": [
+        {
+          "name": "荒芜之地",
+          "ui_map": 1418,
+          "x": 0.3521,
+          "y": 0.1029,
+          "url": "https://wuxianwow.com/atlas/1418?i=70",
+          "fetch_id": "map:1418"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.5385,
+          "y": 0.5764,
+          "url": "https://wuxianwow.com/atlas/1415?i=70",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.7956,
+          "y": 0.5355,
+          "url": "https://wuxianwow.com/atlas/947?i=70",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1463,
+          "x": 0.5905,
+          "y": 0.5449,
+          "url": "https://wuxianwow.com/atlas/1463?i=70",
+          "fetch_id": "map:1463"
+        }
+      ]
+    },
+    "boss_count": 8,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/70.webp",
+    "picture": "https://wuxianwow.com/data/loading/70.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=70",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "lore": {
+      "entities": [
+        {
+          "id": 790,
+          "name": "奥达曼",
+          "kind": "地点",
+          "summary": "艾隆纳亚所建地下殿堂，后藏诺甘农圆盘",
+          "url": "https://wuxianwow.com/lore/n/790"
+        }
+      ],
+      "events_here": [
+        {
+          "id": 668,
+          "title": "土灵觉醒为矮人",
+          "year": "约前 2500 年",
+          "where": "奥达曼",
+          "cite": "《魔兽编年史 卷一》第四章 新世界",
+          "url": "https://wuxianwow.com/lore/e/668"
+        }
+      ],
+      "events_total": 1,
+      "note": "无限世界书（魔兽小说与编年史设定集）里的同一个人物、地点或势力，逐条人工核对；书中内容只到《无限》当下（第 25 年）。详情用 lore_entity / lore_event。"
+    },
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少30级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "鲁维罗什",
+        "encounter_id": 547,
+        "npc_id": 900547,
+        "url": "https://wuxianwow.com/npc/900547",
+        "fetch_id": "npc:900547",
+        "portrait": "https://wuxianwow.com/data/bosses/547.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/547_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.537,
+          "y": 0.732,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,16839.9,17243.6,-44.6",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 2,
+        "name": "失踪的矮人",
+        "encounter_id": 548,
+        "npc_id": 900548,
+        "url": "https://wuxianwow.com/npc/900548",
+        "fetch_id": "npc:900548",
+        "portrait": "https://wuxianwow.com/data/bosses/548.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/548_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.619,
+          "y": 0.963,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,16709.7,17198.8,-47.8",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 3,
+        "name": "艾隆纳亚",
+        "encounter_id": 549,
+        "npc_id": 900549,
+        "url": "https://wuxianwow.com/npc/900549",
+        "fetch_id": "npc:900549",
+        "portrait": "https://wuxianwow.com/data/bosses/549.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/549_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.348,
+          "y": 0.747,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,16831.5,17346.3,-48.6",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 4,
+        "name": "黑曜石哨兵",
+        "encounter_id": 1887,
+        "npc_id": 901887,
+        "url": "https://wuxianwow.com/npc/901887",
+        "fetch_id": "npc:901887",
+        "portrait": "https://wuxianwow.com/data/bosses/1887.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/1887_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": "上层",
+          "x": 0.149,
+          "y": 0.621,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,16902.9,17454.7,-36.4"
+        }
+      },
+      {
+        "order": 5,
+        "name": "古代的石头看守者",
+        "encounter_id": 551,
+        "npc_id": 900551,
+        "url": "https://wuxianwow.com/npc/900551",
+        "fetch_id": "npc:900551",
+        "portrait": "https://wuxianwow.com/data/bosses/551.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/551_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.456,
+          "y": 0.428,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,17011.8,17287.3,-48.3",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 6,
+        "name": "加加恩·火锤",
+        "encounter_id": 552,
+        "npc_id": 900552,
+        "url": "https://wuxianwow.com/npc/900552",
+        "fetch_id": "npc:900552",
+        "portrait": "https://wuxianwow.com/data/bosses/552.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/552_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.117,
+          "y": 0.33,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,17066.9,17472.2,-47.6",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 7,
+        "name": "格瑞姆洛克",
+        "encounter_id": 553,
+        "npc_id": 900553,
+        "url": "https://wuxianwow.com/npc/900553",
+        "fetch_id": "npc:900553",
+        "portrait": "https://wuxianwow.com/data/bosses/553.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/553_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.026,
+          "y": 0.23,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,17123.4,17522.0,-41.0",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 8,
+        "name": "阿扎达斯",
+        "encounter_id": 554,
+        "npc_id": 900554,
+        "url": "https://wuxianwow.com/npc/900554",
+        "fetch_id": "npc:900554",
+        "portrait": "https://wuxianwow.com/data/bosses/554.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/554_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.361,
+          "y": 0.145,
+          "map_url": "https://wuxianwow.com/instance/70",
+          "trip_url": "https://wuxianwow.com/trip?at=70,17171.0,17339.0,-26.5",
+          "pulls": 1
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 9381,
+              "name": "土灵之杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9381",
+              "fetch_id": "item:9381"
+            },
+            {
+              "item_id": 9383,
+              "name": "黑曜石利斧",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9383",
+              "fetch_id": "item:9383"
+            },
+            {
+              "item_id": 9384,
+              "name": "石窟利刃",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9384",
+              "fetch_id": "item:9384"
+            },
+            {
+              "item_id": 9386,
+              "name": "挖掘者之炬",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9386",
+              "fetch_id": "item:9386"
+            },
+            {
+              "item_id": 9391,
+              "name": "巨铲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9391",
+              "fetch_id": "item:9391"
+            },
+            {
+              "item_id": 9392,
+              "name": "退火钢刃",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9392",
+              "fetch_id": "item:9392"
+            },
+            {
+              "item_id": 9393,
+              "name": "希望信标",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9393",
+              "fetch_id": "item:9393"
+            },
+            {
+              "item_id": 9396,
+              "name": "宝窟腿甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9396",
+              "fetch_id": "item:9396"
+            },
+            {
+              "item_id": 9397,
+              "name": "能量披风",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9397",
+              "fetch_id": "item:9397"
+            },
+            {
+              "item_id": 9406,
+              "name": "塔风皮甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9406",
+              "fetch_id": "item:9406"
+            },
+            {
+              "item_id": 9420,
+              "name": "冒险者木盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9420",
+              "fetch_id": "item:9420"
+            },
+            {
+              "item_id": 9422,
+              "name": "暗炉火枪",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9422",
+              "fetch_id": "item:9422"
+            },
+            {
+              "item_id": 9423,
+              "name": "千斤锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9423",
+              "fetch_id": "item:9423"
+            },
+            {
+              "item_id": 9424,
+              "name": "疾速之剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9424",
+              "fetch_id": "item:9424"
+            },
+            {
+              "item_id": 9425,
+              "name": "厄运之锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9425",
+              "fetch_id": "item:9425"
+            },
+            {
+              "item_id": 9426,
+              "name": "浑石弓",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9426",
+              "fetch_id": "item:9426"
+            },
+            {
+              "item_id": 9427,
+              "name": "石窟碎骨锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9427",
+              "fetch_id": "item:9427"
+            },
+            {
+              "item_id": 9428,
+              "name": "掘地腕轮",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9428",
+              "fetch_id": "item:9428"
+            },
+            {
+              "item_id": 9429,
+              "name": "深渊矿工帽",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9429",
+              "fetch_id": "item:9429"
+            },
+            {
+              "item_id": 9430,
+              "name": "失落年代的肩甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9430",
+              "fetch_id": "item:9430"
+            },
+            {
+              "item_id": 9431,
+              "name": "教皇毡帽",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9431",
+              "fetch_id": "item:9431"
+            },
+            {
+              "item_id": 9432,
+              "name": "骨甲护腕",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9432",
+              "fetch_id": "item:9432"
+            },
+            {
+              "item_id": 9465,
+              "name": "挖掘大师5000型",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/9465",
+              "fetch_id": "item:9465"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 42,
+      "p25_minutes": 43,
+      "p90_minutes": 48,
+      "text": "四分之一的人 43 分钟内、九成 48 分钟内（42 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 70.Corpse (-6060.2, -2955.0) on Map 0",
+      "group_finder": "GroupFinderActivity 807",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5253"
+      ],
+      "lfg": "LFGDungeons 21 奥达曼",
+      "loading": "LoadingScreens 144 (fdid 131876)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=70",
+      "map_url": "https://wuxianwow.com/trip?instance=70&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=0,-6060.2,-2955.0",
+      "map_levels": 2,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 721,
+        "name": "一线希望",
+        "url": "https://wuxianwow.com/quest/721",
+        "fetch_id": "quest:721",
+        "level": 35,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2418,
+        "name": "能量石",
+        "url": "https://wuxianwow.com/quest/2418",
+        "fetch_id": "quest:2418",
+        "level": 36,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 704,
+        "name": "阿戈莫德的命运",
+        "url": "https://wuxianwow.com/quest/704",
+        "fetch_id": "quest:704",
+        "level": 38,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 709,
+        "name": "化解灾难",
+        "url": "https://wuxianwow.com/quest/709",
+        "fetch_id": "quest:709",
+        "level": 40,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 722,
+        "name": "铁趾的护符",
+        "url": "https://wuxianwow.com/quest/722",
+        "fetch_id": "quest:722",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2240,
+        "name": "密室",
+        "url": "https://wuxianwow.com/quest/2240",
+        "fetch_id": "quest:2240",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2398,
+        "name": "失踪的矮人",
+        "url": "https://wuxianwow.com/quest/2398",
+        "fetch_id": "quest:2398",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2198,
+        "name": "破碎的项链",
+        "url": "https://wuxianwow.com/quest/2198",
+        "fetch_id": "quest:2198",
+        "level": 41,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2199,
+        "name": "昂贵的知识",
+        "url": "https://wuxianwow.com/quest/2199",
+        "fetch_id": "quest:2199",
+        "level": 41,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2283,
+        "name": "搜寻项链",
+        "url": "https://wuxianwow.com/quest/2283",
+        "fetch_id": "quest:2283",
+        "level": 41,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2284,
+        "name": "搜寻项链，再来一次",
+        "url": "https://wuxianwow.com/quest/2284",
+        "fetch_id": "quest:2284",
+        "level": 41,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 17,
+        "name": "奥达曼的蘑菇",
+        "url": "https://wuxianwow.com/quest/17",
+        "fetch_id": "quest:17",
+        "level": 42,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2200,
+        "name": "回到奥达曼",
+        "url": "https://wuxianwow.com/quest/2200",
+        "fetch_id": "quest:2200",
+        "level": 42,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2202,
+        "name": "奥达曼的蘑菇",
+        "url": "https://wuxianwow.com/quest/2202",
+        "fetch_id": "quest:2202",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2318,
+        "name": "翻译日记",
+        "url": "https://wuxianwow.com/quest/2318",
+        "fetch_id": "quest:2318",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2338,
+        "name": "翻译日记",
+        "url": "https://wuxianwow.com/quest/2338",
+        "fetch_id": "quest:2338",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 3375,
+        "name": "占卜之瓶",
+        "url": "https://wuxianwow.com/quest/3375",
+        "fetch_id": "quest:3375",
+        "level": 42,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1360,
+        "name": "失而复得",
+        "url": "https://wuxianwow.com/quest/1360",
+        "fetch_id": "quest:1360",
+        "level": 43,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2201,
+        "name": "寻找宝石",
+        "url": "https://wuxianwow.com/quest/2201",
+        "fetch_id": "quest:2201",
+        "level": 43,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2342,
+        "name": "寻找宝物",
+        "url": "https://wuxianwow.com/quest/2342",
+        "fetch_id": "quest:2342",
+        "level": 43,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2204,
+        "name": "修复项链",
+        "url": "https://wuxianwow.com/quest/2204",
+        "fetch_id": "quest:2204",
+        "level": 44,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2339,
+        "name": "寻找宝贝",
+        "url": "https://wuxianwow.com/quest/2339",
+        "fetch_id": "quest:2339",
+        "level": 44,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2340,
+        "name": "交付宝石",
+        "url": "https://wuxianwow.com/quest/2340",
+        "fetch_id": "quest:2340",
+        "level": 44,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2341,
+        "name": "项链任务的终结",
+        "url": "https://wuxianwow.com/quest/2341",
+        "fetch_id": "quest:2341",
+        "level": 44,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2361,
+        "name": "修复项链",
+        "url": "https://wuxianwow.com/quest/2361",
+        "fetch_id": "quest:2361",
+        "level": 44,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1139,
+        "name": "意志石板",
+        "url": "https://wuxianwow.com/quest/1139",
+        "fetch_id": "quest:1139",
+        "level": 45,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 2278,
+        "name": "白金圆盘",
+        "url": "https://wuxianwow.com/quest/2278",
+        "fetch_id": "quest:2278",
+        "level": 47,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2279,
+        "name": "白金圆盘",
+        "url": "https://wuxianwow.com/quest/2279",
+        "fetch_id": "quest:2279",
+        "level": 47,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 2280,
+        "name": "白金圆盘",
+        "url": "https://wuxianwow.com/quest/2280",
+        "fetch_id": "quest:2280",
+        "level": 47,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 29,
+    "quests_confirmed": 29,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "奥达曼（地下城 · 5 / 10 人 · 准入 30 级 · 集合石 41–51 级 · 荒芜之地）\n入口：荒芜之地（-6060.2, -2955，Map.Corpse）\n首领：鲁维罗什、失踪的矮人、艾隆纳亚、黑曜石哨兵、古代的石头看守者、加加恩·火锤、格瑞姆洛克、阿扎达斯\n首领位置（临时 · EG Link / cMaNGOS）：8/8 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：鲁维罗什 上层 0.537, 0.732（EG Link）；失踪的矮人 上层 0.619, 0.963（EG Link）；艾隆纳亚 上层 0.348, 0.747（EG Link）；黑曜石哨兵 上层 0.149, 0.621（cMaNGOS）；古代的石头看守者 下层 0.456, 0.428（EG Link）；加加恩·火锤 上层 0.117, 0.33（EG Link）；格瑞姆洛克 上层 0.026, 0.23（EG Link）；阿扎达斯 楼层未定（上层 / 下层） 0.361, 0.145（EG Link）\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 43 分钟内、九成 48 分钟内（42 人）\n副本任务（29 个，服务器确认 29）：一线希望、能量石、阿戈莫德的命运、化解灾难、铁趾的护符、密室、失踪的矮人、破碎的项链、昂贵的知识、搜寻项链、搜寻项链，再来一次、奥达曼的蘑菇 …\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

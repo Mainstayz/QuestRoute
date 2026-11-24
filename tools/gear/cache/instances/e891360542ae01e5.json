@@ -1,0 +1,639 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 2959
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "access",
+        "kind": "filter",
+        "text": "access：进入要的钥匙（key）、要带的凭证物品（token）与前置任务（quest），来自校订层的手写表（pipeline/instance_access.json），每行的 evidence 都由流水线按客户端物品、服务器任务缓存、EG Link 与 QuestieDB 核对过（from：client 客户端 · server 服务器下发 · thirdparty 第三方临时）；basis data 是证据里有东西把它和副本连上，curated 是人工校订；from_quests 是给这件物品的任务、drops_from 是掉落它的怪、chain_before 是之前的任务链。没列出的副本不等于没有条件"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "entrance",
+        "kind": "estimate",
+        "text": "entrance：估算，按规则 ENTRANCE_APPROX 推出"
+      }
+    ],
+    "id": 2959,
+    "fetch_id": "instance:2959",
+    "title": "达拉然城",
+    "url": "https://wuxianwow.com/instance/2959",
+    "kind": "地下城",
+    "players": [
+      5
+    ],
+    "players_text": "5 人",
+    "level": {
+      "group": [
+        28,
+        35
+      ],
+      "max": null,
+      "min": 28,
+      "target": 28
+    },
+    "level_text": "准入 28 级 · 集合石 28–35 级",
+    "zone": "奥特兰克山脉",
+    "entrance": {
+      "zone": "奥特兰克山脉",
+      "area": "达拉然",
+      "continent": "东部王国",
+      "source": "WorldMapOverlay",
+      "confidence": "low",
+      "approx": true,
+      "source_detail": "子区域 达拉然（副本名包含该子区域名）",
+      "world_xy": [
+        270.5,
+        357.2
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 1416,
+      "atlas": [
+        {
+          "name": "奥特兰克山脉",
+          "ui_map": 1416,
+          "x": 0.1522,
+          "y": 0.6587,
+          "url": "https://wuxianwow.com/atlas/1416?i=2959",
+          "fetch_id": "map:1416"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.4444,
+          "y": 0.3067,
+          "url": "https://wuxianwow.com/atlas/1415?i=2959",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.7215,
+          "y": 0.323,
+          "url": "https://wuxianwow.com/atlas/947?i=2959",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1463,
+          "x": 0.4386,
+          "y": 0.2545,
+          "url": "https://wuxianwow.com/atlas/1463?i=2959",
+          "fetch_id": "map:1463"
+        }
+      ]
+    },
+    "boss_count": 9,
+    "new_in_160": true,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/2959.webp",
+    "picture": "https://wuxianwow.com/data/loading/2959.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=2959",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 5,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "奥术畸体",
+        "encounter_id": 3298,
+        "npc_id": 903298,
+        "url": "https://wuxianwow.com/npc/903298",
+        "fetch_id": "npc:903298",
+        "portrait": "https://wuxianwow.com/data/bosses/3298.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3298_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.652,
+          "y": 0.706,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,71.5,224.4,107.5",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 2,
+        "name": "邪能古树",
+        "encounter_id": 3299,
+        "npc_id": 903299,
+        "url": "https://wuxianwow.com/npc/903299",
+        "fetch_id": "npc:903299",
+        "portrait": "https://wuxianwow.com/data/bosses/3299.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3299_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.539,
+          "y": 0.493,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,238.6,305.1,96.2",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 3,
+        "name": "法力吞噬者",
+        "encounter_id": 3300,
+        "npc_id": 903300,
+        "url": "https://wuxianwow.com/npc/903300",
+        "fetch_id": "npc:903300",
+        "portrait": "https://wuxianwow.com/data/bosses/3300.webp",
+        "model_image": null,
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.474,
+          "y": 0.673,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,97.5,352.1,98.5",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 4,
+        "name": "法力元素",
+        "encounter_id": 3301,
+        "npc_id": 903301,
+        "url": "https://wuxianwow.com/npc/903301",
+        "fetch_id": "npc:903301",
+        "portrait": "https://wuxianwow.com/data/bosses/3301.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3301_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.703,
+          "y": 0.402,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,310.4,187.1,91.2",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 5,
+        "name": "不稳定的哨兵",
+        "encounter_id": 3302,
+        "npc_id": 903302,
+        "url": "https://wuxianwow.com/npc/903302",
+        "fetch_id": "npc:903302",
+        "portrait": "https://wuxianwow.com/data/bosses/3302.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3302_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.598,
+          "y": 0.336,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,361.8,263.2,88.3",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 6,
+        "name": "被无视的琳恩",
+        "encounter_id": 3310,
+        "npc_id": 903310,
+        "url": "https://wuxianwow.com/npc/903310",
+        "fetch_id": "npc:903310",
+        "portrait": "https://wuxianwow.com/data/bosses/3310.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3310_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.714,
+          "y": 0.509,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,225.9,179.7,109.8",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 7,
+        "name": "墓穴骑士阿特雷克斯",
+        "encounter_id": 3311,
+        "npc_id": 903311,
+        "url": "https://wuxianwow.com/npc/903311",
+        "fetch_id": "npc:903311",
+        "portrait": "https://wuxianwow.com/data/bosses/3311.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3311_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.542,
+          "y": 0.491,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,240.1,302.9,96.1",
+          "pulls": 5
+        }
+      },
+      {
+        "order": 8,
+        "name": "法力怨魂",
+        "encounter_id": 3312,
+        "npc_id": 903312,
+        "url": "https://wuxianwow.com/npc/903312",
+        "fetch_id": "npc:903312",
+        "portrait": "https://wuxianwow.com/data/bosses/3312.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3312_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false
+      },
+      {
+        "order": 9,
+        "name": "大法师之影",
+        "encounter_id": 3303,
+        "npc_id": 903303,
+        "url": "https://wuxianwow.com/npc/903303",
+        "fetch_id": "npc:903303",
+        "portrait": "https://wuxianwow.com/data/bosses/3303.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3303_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.468,
+          "y": 0.217,
+          "map_url": "https://wuxianwow.com/instance/2959",
+          "trip_url": "https://wuxianwow.com/trip?at=2959,455.5,356.6,110.5",
+          "pulls": 5
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 286987,
+              "name": "紫罗兰巫师的凉鞋",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286987",
+              "fetch_id": "item:286987"
+            },
+            {
+              "item_id": 286988,
+              "name": "紫罗兰巫师的护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286988",
+              "fetch_id": "item:286988"
+            },
+            {
+              "item_id": 286989,
+              "name": "紫罗兰巫师的裹手",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286989",
+              "fetch_id": "item:286989"
+            },
+            {
+              "item_id": 286990,
+              "name": "奥术残迹护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286990",
+              "fetch_id": "item:286990"
+            },
+            {
+              "item_id": 286991,
+              "name": "自然初醒裹足",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286991",
+              "fetch_id": "item:286991"
+            },
+            {
+              "item_id": 286992,
+              "name": "构造体的护手",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286992",
+              "fetch_id": "item:286992"
+            },
+            {
+              "item_id": 286993,
+              "name": "充盈束腰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286993",
+              "fetch_id": "item:286993"
+            },
+            {
+              "item_id": 286994,
+              "name": "褴褛的肯瑞托披风",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286994",
+              "fetch_id": "item:286994"
+            },
+            {
+              "item_id": 286995,
+              "name": "守卫徽章",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286995",
+              "fetch_id": "item:286995"
+            },
+            {
+              "item_id": 286996,
+              "name": "城市卫兵的黯淡之刃",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286996",
+              "fetch_id": "item:286996"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 123,
+      "p25_minutes": 32,
+      "p90_minutes": 36,
+      "text": "四分之一的人 32 分钟内、九成 36 分钟内（123 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "子区域 达拉然（副本名包含该子区域名）",
+      "group_finder": "GroupFinderActivity 1983",
+      "kind": "Map.InstanceType",
+      "level": [
+        "ContentTuning 4512"
+      ],
+      "lfg": "LFGDungeons 3271 达拉然城",
+      "loading": "LoadingScreens 647 (fdid 7963775)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=2959",
+      "map_url": "https://wuxianwow.com/trip?instance=2959&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=0,270.5,357.2",
+      "map_levels": 1,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 92456,
+        "name": "绿色样本",
+        "url": "https://wuxianwow.com/quest/92456",
+        "fetch_id": "quest:92456",
+        "level": 33,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92457,
+        "name": "饥渴的奥术",
+        "url": "https://wuxianwow.com/quest/92457",
+        "fetch_id": "quest:92457",
+        "level": 33,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92458,
+        "name": "动乱之源",
+        "url": "https://wuxianwow.com/quest/92458",
+        "fetch_id": "quest:92458",
+        "level": 33,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92489,
+        "name": "势不可挡",
+        "url": "https://wuxianwow.com/quest/92489",
+        "fetch_id": "quest:92489",
+        "level": 33,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96984,
+        "name": "动乱之源",
+        "url": "https://wuxianwow.com/quest/96984",
+        "fetch_id": "quest:96984",
+        "level": 33,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96986,
+        "name": "墓穴骑士",
+        "url": "https://wuxianwow.com/quest/96986",
+        "fetch_id": "quest:96986",
+        "level": 33,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96987,
+        "name": "投机教育",
+        "url": "https://wuxianwow.com/quest/96987",
+        "fetch_id": "quest:96987",
+        "level": 33,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96988,
+        "name": "力量之源",
+        "url": "https://wuxianwow.com/quest/96988",
+        "fetch_id": "quest:96988",
+        "level": 33,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96609,
+        "name": "家的滋味",
+        "url": "https://wuxianwow.com/quest/96609",
+        "fetch_id": "quest:96609",
+        "level": 52,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96812,
+        "name": "血浓于水",
+        "url": "https://wuxianwow.com/quest/96812",
+        "fetch_id": "quest:96812",
+        "level": 54,
+        "type": null,
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96603,
+        "name": "不稳定的魔法",
+        "url": "https://wuxianwow.com/quest/96603",
+        "fetch_id": "quest:96603",
+        "level": 60,
+        "type": "精英",
+        "side": "联盟",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 11,
+    "quests_confirmed": 11,
+    "quests_seen_eglink": 0,
+    "access": [
+      {
+        "kind": "key",
+        "kind_name": "钥匙",
+        "item": {
+          "item_id": 277507,
+          "name": "达拉然下水道钥匙",
+          "url": "https://wuxianwow.com/item/277507",
+          "fetch_id": "item:277507",
+          "key_class": true,
+          "description": null
+        },
+        "quests": [],
+        "from_quests": [
+          {
+            "quest_id": 92458,
+            "name": "动乱之源",
+            "how": "接任务时给",
+            "url": "https://wuxianwow.com/quest/92458",
+            "fetch_id": "quest:92458"
+          },
+          {
+            "quest_id": 96984,
+            "name": "动乱之源",
+            "how": "接任务时给",
+            "url": "https://wuxianwow.com/quest/96984",
+            "fetch_id": "quest:96984"
+          }
+        ],
+        "drops_from": [],
+        "chain_before": [
+          {
+            "quest_id": 92432,
+            "name": "紧急求援",
+            "url": "https://wuxianwow.com/quest/92432",
+            "fetch_id": "quest:92432",
+            "level": 33,
+            "confirmed": "server"
+          },
+          {
+            "quest_id": 92434,
+            "name": "喋血街头",
+            "url": "https://wuxianwow.com/quest/92434",
+            "fetch_id": "quest:92434",
+            "level": 34,
+            "confirmed": "server"
+          }
+        ],
+        "note": null,
+        "basis": "data",
+        "temporary_sources": [],
+        "evidence": [
+          {
+            "ref": "quest:92458",
+            "what": "任务「动乱之源」接任务时给「达拉然下水道钥匙」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:96984",
+            "what": "任务「动乱之源」接任务时给「达拉然下水道钥匙」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:92458",
+            "what": "任务的区域是「达拉然城」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:92458",
+            "what": "任务文字「…法找条隐蔽的路潜入城中。带上这把钥匙，进城后直接来城堡找我。…」",
+            "from": "server"
+          },
+          {
+            "ref": "quest:93680",
+            "what": "任务文字「…师沃迪恩·伍德格莱尔取得达拉然下水道钥匙。 联盟曾有一支名为肯瑞…」",
+            "from": "server"
+          }
+        ],
+        "source": "file:pipeline/instance_access.json#24",
+        "text": "钥匙：达拉然下水道钥匙（动乱之源接任务时给）"
+      }
+    ],
+    "text": "达拉然城（地下城 · 5 人 · 准入 28 级 · 集合石 28–35 级 · 奥特兰克山脉 · 1.60 新增）\n入口：奥特兰克山脉 · 达拉然（270.5, 357.2，WorldMapOverlay，近似）\n首领：奥术畸体、邪能古树、法力吞噬者、法力元素、不稳定的哨兵、被无视的琳恩、墓穴骑士阿特雷克斯、法力怨魂、大法师之影\n首领位置（临时 · EG Link）：8/9 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：奥术畸体 0.652, 0.706；邪能古树 0.539, 0.493；法力吞噬者 0.474, 0.673；法力元素 0.703, 0.402；不稳定的哨兵 0.598, 0.336；被无视的琳恩 0.714, 0.509；墓穴骑士阿特雷克斯 0.542, 0.491；大法师之影 0.468, 0.217\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 32 分钟内、九成 36 分钟内（123 人）\n副本任务（11 个，服务器确认 11）：绿色样本、饥渴的奥术、动乱之源、势不可挡、动乱之源、墓穴骑士、投机教育、力量之源、家的滋味、血浓于水、不稳定的魔法\n进入条件：钥匙：达拉然下水道钥匙（动乱之源接任务时给）\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

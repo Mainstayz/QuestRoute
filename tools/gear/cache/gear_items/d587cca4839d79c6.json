@@ -1,0 +1,67 @@
+{
+  "tool": "gear_items",
+  "arguments": {
+    "class": "战士",
+    "slot": "肩部",
+    "max_req": 40,
+    "quality": "精良,史诗",
+    "sort": "ilvl",
+    "limit": 40,
+    "offset": 40
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "url",
+        "kind": "scope",
+        "text": "物品库网页没有这些筛选，打开 url 的件数会多：没设需要等级的按装等 − 5 估（网页按 1 级算）"
+      }
+    ],
+    "quality": [
+      3,
+      4
+    ],
+    "quality_name": "精良至史诗",
+    "url": "https://wuxianwow.com/items/gear?ql=34&lv=-40&for=1&slot=shoulder",
+    "total": 41,
+    "page": 2,
+    "page_size": 40,
+    "limit": 40,
+    "offset": 40,
+    "has_more": false,
+    "matched": {
+      "class": {
+        "id": 1,
+        "name": "战士",
+        "matched_by": "exact",
+        "rule": "职业专属的，加上不限职业、这个职业会用这种护甲 / 武器的",
+        "learn_at": {
+          "板甲": 40,
+          "长柄武器": 20
+        }
+      }
+    },
+    "filter_note": "需要等级按 req_level；客户端没设（0）的 18 件按装等 − 5 估门槛（有需要等级的物品多数正好差 5），估出的写在 req_estimate：2 件在范围内列出，16 件够不着没列；include_unset_req: true 一律列出",
+    "results": [
+      {
+        "id": "item:287628",
+        "title": "鎏金剑圣护肩",
+        "url": "https://wuxianwow.com/item/287628",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 1,
+        "slot": "肩部",
+        "type": null,
+        "req_level": 1,
+        "classes": [],
+        "new_in_160": true,
+        "new_effect_in_160": false,
+        "set": null,
+        "crafted": false,
+        "source_type": "隐藏直到收集",
+        "summary": ""
+      }
+    ]
+  }
+}

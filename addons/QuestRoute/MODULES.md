@@ -2,7 +2,7 @@
 
 插件按 `QuestRoute.toc` 顺序执行全部 Lua 文件；不使用 `require`、`loadfile` 或额外加载框架。每个文件通过 `local _, ns = ...` 取得同一份插件命名空间。业务模块只定义功能，最后的 `QuestRoute.lua` 注册命令、桥接 API 和事件，并启动路线。
 
-当前 `apiRevision=16`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 14 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
+当前 `apiRevision=17`、`schemaVersion=1`，SavedVariables 为 `QuestRouteDB`，提供 15 个工坊入口及对应 Lua 公开函数。接口契约见[插件 README](README.md)，装备候选见 [GEAR.md](GEAR.md)，验证与部署状态统一见[开发进度](../../开发进度.md)。
 
 ## 职责与加载顺序
 
@@ -25,6 +25,8 @@
 | `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠、同地点接取建议合并和备选图元 | `ns.MapPins` |
 | `WorldMap.lua` | 大地图/战场地图图层、矩形裁剪 | `ns.WorldMap` |
 | `Minimap.lua` | 小地图朝向、圆形裁剪和视野外下一步指示 | `ns.Minimap` |
+| `GearData.lua` | 生成的战士候选目录，只含任务奖励和已关联副本的掉落 | `ns.GearCatalog` |
+| `Gear.lua` | 等级、职业、来源和槽位约束，以及仅用于战士防护的生存启发式 | `ns.Gear`、`ns.GetGearCandidates` |
 | `QuestRoute.lua` | 事件/计时驱动、命令、桥接入口、登录/热加载生命周期 | `ns.StartRoute`、`ns.OnUnload`、`ns.OnReload` |
 
 规划依赖任务数据、目标解析、权重、导航、热点和 NPC 用途索引；绘图消费同一份路线快照。地图共用图元不依赖具体地图模块，大地图与小地图各自负责几何裁剪。所有初始化依赖都排在使用者之前。

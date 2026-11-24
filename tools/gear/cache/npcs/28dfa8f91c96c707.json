@@ -1,0 +1,320 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 902779
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:902779",
+    "npc_id": 902779,
+    "name": "血法师萨尔诺斯",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/902779",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      34,
+      34
+    ],
+    "dungeon": "血色修道院",
+    "instance": {
+      "id": 189,
+      "fetch_id": "instance:189",
+      "name": "血色修道院",
+      "level_text": "准入 20 级 · 集合石 30–46 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          30,
+          46
+        ],
+        "max": null,
+        "min": 20,
+        "target": 30
+      },
+      "url": "https://wuxianwow.com/instance/189"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/2779.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/2779_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 2779,
+      "dungeon": "血色修道院",
+      "instance": {
+        "instance_id": 189,
+        "url": "https://wuxianwow.com/instance/189",
+        "fetch_id": "instance:189"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 2,
+      "of": 7,
+      "bosses": [
+        {
+          "npc_id": 900444,
+          "name": "审讯员韦沙斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900444",
+          "fetch_id": "npc:900444",
+          "portrait": "https://wuxianwow.com/data/bosses/444.webp"
+        },
+        {
+          "npc_id": 902779,
+          "name": "血法师萨尔诺斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902779",
+          "fetch_id": "npc:902779",
+          "portrait": "https://wuxianwow.com/data/bosses/2779.webp"
+        },
+        {
+          "npc_id": 900446,
+          "name": "驯犬者洛克希",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900446",
+          "fetch_id": "npc:900446",
+          "portrait": "https://wuxianwow.com/data/bosses/446.webp"
+        },
+        {
+          "npc_id": 900447,
+          "name": "奥法师杜安",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900447",
+          "fetch_id": "npc:900447",
+          "portrait": "https://wuxianwow.com/data/bosses/447.webp"
+        },
+        {
+          "npc_id": 900448,
+          "name": "赫洛德",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900448",
+          "fetch_id": "npc:900448",
+          "portrait": "https://wuxianwow.com/data/bosses/448.webp"
+        },
+        {
+          "npc_id": 900449,
+          "name": "大检察官法尔班克斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900449",
+          "fetch_id": "npc:900449",
+          "portrait": "https://wuxianwow.com/data/bosses/449.webp"
+        },
+        {
+          "npc_id": 900450,
+          "name": "大检察官怀特迈恩",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900450",
+          "fetch_id": "npc:900450",
+          "portrait": "https://wuxianwow.com/data/bosses/450.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 7684,
+          "name": "血法师衬肩",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/7684",
+          "fetch_id": "item:7684"
+        },
+        {
+          "item_id": 7685,
+          "name": "遗忘先知宝珠",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/7685",
+          "fetch_id": "item:7685"
+        },
+        {
+          "item_id": 251350,
+          "name": "设计图：老兵的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251350",
+          "fetch_id": "item:251350"
+        },
+        {
+          "item_id": 251351,
+          "name": "设计图：卫兵的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251351",
+          "fetch_id": "item:251351"
+        },
+        {
+          "item_id": 251352,
+          "name": "设计图：保护者的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251352",
+          "fetch_id": "item:251352"
+        },
+        {
+          "item_id": 251353,
+          "name": "设计图：助祭的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251353",
+          "fetch_id": "item:251353"
+        },
+        {
+          "item_id": 251354,
+          "name": "设计图：十字军的链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251354",
+          "fetch_id": "item:251354"
+        },
+        {
+          "item_id": 252455,
+          "name": "防御者的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252455",
+          "fetch_id": "item:252455"
+        },
+        {
+          "item_id": 252513,
+          "name": "捕兽者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252513",
+          "fetch_id": "item:252513"
+        },
+        {
+          "item_id": 252814,
+          "name": "图样：争斗者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252814",
+          "fetch_id": "item:252814"
+        },
+        {
+          "item_id": 252815,
+          "name": "图样：捕兽者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252815",
+          "fetch_id": "item:252815"
+        },
+        {
+          "item_id": 252816,
+          "name": "图样：防御者的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252816",
+          "fetch_id": "item:252816"
+        },
+        {
+          "item_id": 252817,
+          "name": "图样：图腾师的皮头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252817",
+          "fetch_id": "item:252817"
+        },
+        {
+          "item_id": 252818,
+          "name": "图样：风暴行者的皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252818",
+          "fetch_id": "item:252818"
+        },
+        {
+          "item_id": 252819,
+          "name": "图样：智慧皮盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252819",
+          "fetch_id": "item:252819"
+        },
+        {
+          "item_id": 252822,
+          "name": "图样：防御者的皮短裙",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252822",
+          "fetch_id": "item:252822"
+        },
+        {
+          "item_id": 253976,
+          "name": "图样：金丝无瑕头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253976",
+          "fetch_id": "item:253976"
+        },
+        {
+          "item_id": 253978,
+          "name": "图样：金丝柔滑头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253978",
+          "fetch_id": "item:253978"
+        },
+        {
+          "item_id": 253980,
+          "name": "图样：金丝烈焰头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253980",
+          "fetch_id": "item:253980"
+        },
+        {
+          "item_id": 253982,
+          "name": "图样：金丝暗影头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253982",
+          "fetch_id": "item:253982"
+        },
+        {
+          "item_id": 253984,
+          "name": "图样：金丝珍珠头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253984",
+          "fetch_id": "item:253984"
+        },
+        {
+          "item_id": 253986,
+          "name": "图样：金丝闪光头饰",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253986",
+          "fetch_id": "item:253986"
+        },
+        {
+          "item_id": 274291,
+          "name": "抛光的颅帽",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274291",
+          "fetch_id": "item:274291"
+        }
+      ]
+    },
+    "text": "血法师萨尔诺斯（首领 · 34 级（临时 · QuestieDB） · 血色修道院）\n血色修道院 第 2/7 个首领\n副本：instance:189（地下城 · 准入 20 级 · 集合石 30–46 级）\n掉落（临时 · Spyglass）：血法师衬肩、遗忘先知宝珠、设计图：老兵的链甲头盔、设计图：卫兵的链甲头盔、设计图：保护者的链甲头盔、设计图：助祭的链甲头盔、设计图：十字军的链甲头盔、防御者的皮头盔、捕兽者的皮盔、图样：争斗者的皮盔、图样：捕兽者的皮盔、图样：防御者的皮头盔、图样：图腾师的皮头盔、图样：风暴行者的皮盔、图样：智慧皮盔、图样：防御者的皮短裙、图样：金丝无瑕头饰、图样：金丝柔滑头饰、图样：金丝烈焰头饰、图样：金丝暗影头饰、图样：金丝珍珠头饰、图样：金丝闪光头饰、抛光的颅帽\n位置（临时 · EG Link）：血色修道院副本地图 楼层未定（西北部 · 上层 / 西北部 · 下层） 0.069, 0.181（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "floor_unsure": true,
+      "floors": [
+        "西北部 · 上层",
+        "西北部 · 下层"
+      ],
+      "x": 0.069,
+      "y": 0.181,
+      "map_url": "https://wuxianwow.com/instance/189",
+      "trip_url": "https://wuxianwow.com/trip?at=189,1820.3,1416.7,21.6",
+      "pulls": 2
+    }
+  }
+}

@@ -1,0 +1,538 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 2970
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "entrance",
+        "kind": "temporary",
+        "text": "entrance：第三方临时，来自 OpenMap"
+      }
+    ],
+    "id": 2970,
+    "fetch_id": "instance:2970",
+    "title": "沉没之城",
+    "url": "https://wuxianwow.com/instance/2970",
+    "kind": "地下城",
+    "players": [
+      5
+    ],
+    "players_text": "5 人",
+    "level": {
+      "group": [
+        35,
+        42
+      ],
+      "max": null,
+      "min": 35,
+      "target": 35
+    },
+    "level_text": "准入 35 级 · 集合石 35–42 级",
+    "zone": null,
+    "entrance": {
+      "zone": "荆棘谷",
+      "area": null,
+      "continent": "东部王国",
+      "source": "OpenMap",
+      "confidence": null,
+      "approx": false,
+      "temporary": true,
+      "source_detail": "OpenMap v0.8.9 的副本位置（Places.lua）：荆棘谷地图 21.3, 27.8，按这张地图的范围换成世界坐标；第三方临时",
+      "world_xy": [
+        -12351.4,
+        861.6
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 1434,
+      "atlas": [
+        {
+          "name": "荆棘谷",
+          "ui_map": 1434,
+          "x": 0.213,
+          "y": 0.278,
+          "url": "https://wuxianwow.com/atlas/1434?i=2970",
+          "fetch_id": "map:1434"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.7102,
+          "y": 0.7466,
+          "url": "https://wuxianwow.com/atlas/947?i=2970",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.4301,
+          "y": 0.8445,
+          "url": "https://wuxianwow.com/atlas/1415?i=2970",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1463,
+          "x": 0.4154,
+          "y": 0.8335,
+          "url": "https://wuxianwow.com/atlas/1463?i=2970",
+          "fetch_id": "map:1463"
+        }
+      ]
+    },
+    "boss_count": 6,
+    "new_in_160": true,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/2970.webp",
+    "picture": "https://wuxianwow.com/data/loading/2970.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=2970",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 5,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "祖拉莱",
+        "encounter_id": 3474,
+        "npc_id": 903474,
+        "url": "https://wuxianwow.com/npc/903474",
+        "fetch_id": "npc:903474",
+        "portrait": "https://wuxianwow.com/data/bosses/3474.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3474_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.693,
+          "y": 0.497,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13328.0,2461.8,0.3",
+          "pulls": 2,
+          "spread_yards": 7
+        }
+      },
+      {
+        "order": 2,
+        "name": "瓦尔塔卡",
+        "encounter_id": 3475,
+        "npc_id": 903475,
+        "url": "https://wuxianwow.com/npc/903475",
+        "fetch_id": "npc:903475",
+        "portrait": "https://wuxianwow.com/data/bosses/3475.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3475_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.464,
+          "y": 0.71,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13506.6,2787.7,-10.8",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 3,
+        "name": "德雷德莱斯船长",
+        "encounter_id": 3476,
+        "npc_id": 903476,
+        "url": "https://wuxianwow.com/npc/903476",
+        "fetch_id": "npc:903476",
+        "portrait": "https://wuxianwow.com/data/bosses/3476.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3476_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.508,
+          "y": 0.221,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13097.1,2724.8,-32.6",
+          "pulls": 2,
+          "spread_yards": 7
+        }
+      },
+      {
+        "order": 4,
+        "name": "不死守护者",
+        "encounter_id": 3478,
+        "npc_id": 903478,
+        "url": "https://wuxianwow.com/npc/903478",
+        "fetch_id": "npc:903478",
+        "portrait": "https://wuxianwow.com/data/bosses/3478.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3478_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.263,
+          "y": 0.491,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13323.0,3073.2,-7.9",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 5,
+        "name": "原始元素",
+        "encounter_id": 3511,
+        "npc_id": 903511,
+        "url": "https://wuxianwow.com/npc/903511",
+        "fetch_id": "npc:903511",
+        "portrait": "https://wuxianwow.com/data/bosses/3511.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3511_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.606,
+          "y": 0.686,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13486.8,2586.1,-5.0",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 6,
+        "name": "毒蛇明洛斯",
+        "encounter_id": 3479,
+        "npc_id": 903479,
+        "url": "https://wuxianwow.com/npc/903479",
+        "fetch_id": "npc:903479",
+        "portrait": "https://wuxianwow.com/data/bosses/3479.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3479_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.078,
+          "y": 0.49,
+          "map_url": "https://wuxianwow.com/instance/2970",
+          "trip_url": "https://wuxianwow.com/trip?at=2970,-13322.7,3335.9,-0.6",
+          "pulls": 2,
+          "spread_yards": 6
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 286997,
+              "name": "出渊护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286997",
+              "fetch_id": "item:286997"
+            },
+            {
+              "item_id": 286998,
+              "name": "深水草木护腕",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286998",
+              "fetch_id": "item:286998"
+            },
+            {
+              "item_id": 286999,
+              "name": "亡行者的护胸",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286999",
+              "fetch_id": "item:286999"
+            },
+            {
+              "item_id": 287000,
+              "name": "剥皮护足",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287000",
+              "fetch_id": "item:287000"
+            },
+            {
+              "item_id": 287001,
+              "name": "水浸护肩",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287001",
+              "fetch_id": "item:287001"
+            },
+            {
+              "item_id": 287002,
+              "name": "复活的哨兵链甲护腿",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287002",
+              "fetch_id": "item:287002"
+            },
+            {
+              "item_id": 287003,
+              "name": "锈蚀护手",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287003",
+              "fetch_id": "item:287003"
+            },
+            {
+              "item_id": 287004,
+              "name": "深渊之触",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287004",
+              "fetch_id": "item:287004"
+            },
+            {
+              "item_id": 287005,
+              "name": "肢解之剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287005",
+              "fetch_id": "item:287005"
+            },
+            {
+              "item_id": 287006,
+              "name": "再起之斧",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/287006",
+              "fetch_id": "item:287006"
+            }
+          ]
+        },
+        {
+          "npc_id": 260468,
+          "name": "“炎术师”布拉克斯顿",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 286650,
+              "name": "炎术师的短杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286650",
+              "fetch_id": "item:286650"
+            },
+            {
+              "item_id": 286651,
+              "name": "纵火者的印戒",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286651",
+              "fetch_id": "item:286651"
+            }
+          ]
+        },
+        {
+          "npc_id": 264177,
+          "name": "吉尔",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 271718,
+              "name": "林克的铁靴",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/271718",
+              "fetch_id": "item:271718"
+            },
+            {
+              "item_id": 286646,
+              "name": "吉尔之鳃",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286646",
+              "fetch_id": "item:286646"
+            },
+            {
+              "item_id": 286649,
+              "name": "潮缚匕首",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286649",
+              "fetch_id": "item:286649"
+            }
+          ]
+        },
+        {
+          "npc_id": 264172,
+          "name": "乌姆布拉",
+          "on_site": false,
+          "items": [
+            {
+              "item_id": 286658,
+              "name": "暗影缀鳞腰带",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286658",
+              "fetch_id": "item:286658"
+            },
+            {
+              "item_id": 286662,
+              "name": "幽邃住民的护手",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286662",
+              "fetch_id": "item:286662"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 80,
+      "p25_minutes": 38,
+      "p90_minutes": 44,
+      "text": "四分之一的人 38 分钟内、九成 44 分钟内（80 人）"
+    },
+    "entrance_missing": "Map.Corpse 为空（CorpseMapID -1，1.60 新地图）；AreaPOI 没有同名标记；AreaTable 没有同名户外子区域；所在区域也未知",
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "OpenMap v0.8.9 的副本位置（Places.lua）：荆棘谷地图 21.3, 27.8，按这张地图的范围换成世界坐标；第三方临时",
+      "group_finder": "GroupFinderActivity 1985",
+      "kind": "Map.InstanceType",
+      "level": [
+        "ContentTuning 4522"
+      ],
+      "lfg": "LFGDungeons 3270 沉没之城",
+      "loading": "LoadingScreens 695 (fdid 7963741)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=2970",
+      "map_url": "https://wuxianwow.com/trip?instance=2970&map=1",
+      "map_levels": 1,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 95776,
+        "name": "唯一的好盐鳞……",
+        "url": "https://wuxianwow.com/quest/95776",
+        "fetch_id": "quest:95776",
+        "level": 38,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95775,
+        "name": "沉没之城",
+        "url": "https://wuxianwow.com/quest/95775",
+        "fetch_id": "quest:95775",
+        "level": 40,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95787,
+        "name": "就水服下两片",
+        "url": "https://wuxianwow.com/quest/95787",
+        "fetch_id": "quest:95787",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95788,
+        "name": "沉没之城的魔法",
+        "url": "https://wuxianwow.com/quest/95788",
+        "fetch_id": "quest:95788",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95789,
+        "name": "可疑的盐水先知",
+        "url": "https://wuxianwow.com/quest/95789",
+        "fetch_id": "quest:95789",
+        "level": 40,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95791,
+        "name": "盐水先知船长",
+        "url": "https://wuxianwow.com/quest/95791",
+        "fetch_id": "quest:95791",
+        "level": 40,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96774,
+        "name": "上古古拉巴什神像",
+        "url": "https://wuxianwow.com/quest/96774",
+        "fetch_id": "quest:96774",
+        "level": 40,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97130,
+        "name": "上古古拉巴什秘密",
+        "url": "https://wuxianwow.com/quest/97130",
+        "fetch_id": "quest:97130",
+        "level": 40,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 8,
+    "quests_confirmed": 8,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "沉没之城（地下城 · 5 人 · 准入 35 级 · 集合石 35–42 级 · 1.60 新增）\n入口：荆棘谷（-12351.4, 861.6，OpenMap，第三方临时）\n首领：祖拉莱、瓦尔塔卡、德雷德莱斯船长、不死守护者、原始元素、毒蛇明洛斯\n首领位置（临时 · EG Link）：6/6 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：祖拉莱 0.693, 0.497；瓦尔塔卡 0.464, 0.71；德雷德莱斯船长 0.508, 0.221；不死守护者 0.263, 0.491；原始元素 0.606, 0.686；毒蛇明洛斯 0.078, 0.49\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 38 分钟内、九成 44 分钟内（80 人）\n副本任务（8 个，服务器确认 8）：唯一的好盐鳞……、沉没之城、就水服下两片、沉没之城的魔法、可疑的盐水先知、盐水先知船长、上古古拉巴什神像、上古古拉巴什秘密\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 900548
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      }
+    ],
+    "id": "npc:900548",
+    "npc_id": 900548,
+    "name": "失踪的矮人",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/900548",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "dungeon": "奥达曼",
+    "instance": {
+      "id": 70,
+      "fetch_id": "instance:70",
+      "name": "奥达曼",
+      "level_text": "准入 30 级 · 集合石 41–51 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          41,
+          51
+        ],
+        "max": null,
+        "min": 30,
+        "target": 35
+      },
+      "url": "https://wuxianwow.com/instance/70"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/548.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/548_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 548,
+      "dungeon": "奥达曼",
+      "instance": {
+        "instance_id": 70,
+        "url": "https://wuxianwow.com/instance/70",
+        "fetch_id": "instance:70"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 2,
+      "of": 8,
+      "bosses": [
+        {
+          "npc_id": 900547,
+          "name": "鲁维罗什",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900547",
+          "fetch_id": "npc:900547",
+          "portrait": "https://wuxianwow.com/data/bosses/547.webp"
+        },
+        {
+          "npc_id": 900548,
+          "name": "失踪的矮人",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900548",
+          "fetch_id": "npc:900548",
+          "portrait": "https://wuxianwow.com/data/bosses/548.webp"
+        },
+        {
+          "npc_id": 900549,
+          "name": "艾隆纳亚",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900549",
+          "fetch_id": "npc:900549",
+          "portrait": "https://wuxianwow.com/data/bosses/549.webp"
+        },
+        {
+          "npc_id": 901887,
+          "name": "黑曜石哨兵",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/901887",
+          "fetch_id": "npc:901887",
+          "portrait": "https://wuxianwow.com/data/bosses/1887.webp"
+        },
+        {
+          "npc_id": 900551,
+          "name": "古代的石头看守者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900551",
+          "fetch_id": "npc:900551",
+          "portrait": "https://wuxianwow.com/data/bosses/551.webp"
+        },
+        {
+          "npc_id": 900552,
+          "name": "加加恩·火锤",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900552",
+          "fetch_id": "npc:900552",
+          "portrait": "https://wuxianwow.com/data/bosses/552.webp"
+        },
+        {
+          "npc_id": 900553,
+          "name": "格瑞姆洛克",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900553",
+          "fetch_id": "npc:900553",
+          "portrait": "https://wuxianwow.com/data/bosses/553.webp"
+        },
+        {
+          "npc_id": 900554,
+          "name": "阿扎达斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/900554",
+          "fetch_id": "npc:900554",
+          "portrait": "https://wuxianwow.com/data/bosses/554.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 9394,
+          "name": "海盗角盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9394",
+          "fetch_id": "item:9394"
+        },
+        {
+          "item_id": 9398,
+          "name": "穿旧的跑鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9398",
+          "fetch_id": "item:9398"
+        },
+        {
+          "item_id": 9400,
+          "name": "巴尔洛戈的短弓",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9400",
+          "fetch_id": "item:9400"
+        },
+        {
+          "item_id": 9401,
+          "name": "盗匪长剑",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9401",
+          "fetch_id": "item:9401"
+        },
+        {
+          "item_id": 9403,
+          "name": "破碎的海盗之盾",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9403",
+          "fetch_id": "item:9403"
+        },
+        {
+          "item_id": 9404,
+          "name": "奥拉夫之盾",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/9404",
+          "fetch_id": "item:9404"
+        },
+        {
+          "item_id": 251400,
+          "name": "设计图：守望者长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251400",
+          "fetch_id": "item:251400"
+        },
+        {
+          "item_id": 252896,
+          "name": "图样：追踪者的锁甲靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252896",
+          "fetch_id": "item:252896"
+        },
+        {
+          "item_id": 9399,
+          "name": "精准之箭",
+          "quality": 2,
+          "url": "https://wuxianwow.com/item/9399",
+          "fetch_id": "item:9399"
+        }
+      ]
+    },
+    "text": "失踪的矮人（首领 · 奥达曼）\n奥达曼 第 2/8 个首领\n副本：instance:70（地下城 · 准入 30 级 · 集合石 41–51 级）\n掉落（临时 · Spyglass）：海盗角盔、穿旧的跑鞋、巴尔洛戈的短弓、盗匪长剑、破碎的海盗之盾、奥拉夫之盾、设计图：守望者长靴、图样：追踪者的锁甲靴、精准之箭\n位置（临时 · EG Link）：奥达曼副本地图 上层 0.619, 0.963（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": "上层",
+      "x": 0.619,
+      "y": 0.963,
+      "map_url": "https://wuxianwow.com/instance/70",
+      "trip_url": "https://wuxianwow.com/trip?at=70,16709.7,17198.8,-47.8",
+      "pulls": 1
+    }
+  }
+}

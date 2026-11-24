@@ -1,0 +1,700 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 47
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "4 行的 side 是第三方临时（来自 QuestieDB）"
+      }
+    ],
+    "id": 47,
+    "fetch_id": "instance:47",
+    "title": "剃刀沼泽",
+    "url": "https://wuxianwow.com/instance/47",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        29,
+        38
+      ],
+      "max": null,
+      "min": 25,
+      "target": 24
+    },
+    "level_text": "准入 25 级 · 集合石 29–38 级",
+    "zone": "贫瘠之地",
+    "entrance": {
+      "zone": "贫瘠之地",
+      "area": null,
+      "continent": "卡利姆多",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 47.Corpse (-4459.4, -1660.2) on Map 1",
+      "world_xy": [
+        -4459.4,
+        -1660.2
+      ],
+      "continent_map_id": 1,
+      "zone_ui_map": 1413,
+      "atlas": [
+        {
+          "name": "贫瘠之地",
+          "ui_map": 1413,
+          "x": 0.4227,
+          "y": 0.8987,
+          "url": "https://wuxianwow.com/atlas/1413?i=47",
+          "fetch_id": "map:1413"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1414,
+          "x": 0.5089,
+          "y": 0.7035,
+          "url": "https://wuxianwow.com/atlas/1414?i=47",
+          "fetch_id": "map:1414"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.2314,
+          "y": 0.6446,
+          "url": "https://wuxianwow.com/atlas/947?i=47",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1464,
+          "x": 0.5189,
+          "y": 0.6955,
+          "url": "https://wuxianwow.com/atlas/1464?i=47",
+          "fetch_id": "map:1464"
+        }
+      ]
+    },
+    "boss_count": 6,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/47.webp",
+    "picture": "https://wuxianwow.com/data/loading/47.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=47",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少25级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "鲁古格",
+        "encounter_id": 2773,
+        "npc_id": 902773,
+        "url": "https://wuxianwow.com/npc/902773",
+        "fetch_id": "npc:902773",
+        "portrait": "https://wuxianwow.com/data/bosses/2773.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2773_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.477,
+          "y": 0.558,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2066.1,1734.7,76.3",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 2,
+        "name": "阿格姆",
+        "encounter_id": 2774,
+        "npc_id": 902774,
+        "url": "https://wuxianwow.com/npc/902774",
+        "fetch_id": "npc:902774",
+        "portrait": "https://wuxianwow.com/data/bosses/2774.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2774_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.827,
+          "y": 0.522,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2082.3,1463.5,73.1",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 3,
+        "name": "亡语者贾格巴",
+        "encounter_id": 2775,
+        "npc_id": 902775,
+        "url": "https://wuxianwow.com/npc/902775",
+        "fetch_id": "npc:902775",
+        "portrait": "https://wuxianwow.com/data/bosses/2775.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2775_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.894,
+          "y": 0.38,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2146.4,1411.2,73.9",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 4,
+        "name": "主宰拉姆塔斯",
+        "encounter_id": 2776,
+        "npc_id": 902776,
+        "url": "https://wuxianwow.com/npc/902776",
+        "fetch_id": "npc:902776",
+        "portrait": "https://wuxianwow.com/data/bosses/2776.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2776_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.602,
+          "y": 0.253,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2204.1,1637.9,86.0",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 5,
+        "name": "暴怒的阿迦赛罗斯",
+        "encounter_id": 2777,
+        "npc_id": 902777,
+        "url": "https://wuxianwow.com/npc/902777",
+        "fetch_id": "npc:902777",
+        "portrait": "https://wuxianwow.com/data/bosses/2777.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2777_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.146,
+          "y": 0.685,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2008.5,1991.7,120.7",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 6,
+        "name": "卡尔加·刺肋",
+        "encounter_id": 2778,
+        "npc_id": 902778,
+        "url": "https://wuxianwow.com/npc/902778",
+        "fetch_id": "npc:902778",
+        "portrait": "https://wuxianwow.com/data/bosses/2778.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2778_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.31,
+          "y": 0.283,
+          "map_url": "https://wuxianwow.com/instance/47",
+          "trip_url": "https://wuxianwow.com/trip?at=47,2190.4,1864.3,58.3",
+          "pulls": 1
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 776,
+              "name": "仇杀",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/776",
+              "fetch_id": "item:776"
+            },
+            {
+              "item_id": 1488,
+              "name": "复仇者之甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1488",
+              "fetch_id": "item:1488"
+            },
+            {
+              "item_id": 1727,
+              "name": "凋零之剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1727",
+              "fetch_id": "item:1727"
+            },
+            {
+              "item_id": 1975,
+              "name": "派森的巨剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1975",
+              "fetch_id": "item:1975"
+            },
+            {
+              "item_id": 1976,
+              "name": "熔渣战锤",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1976",
+              "fetch_id": "item:1976"
+            },
+            {
+              "item_id": 1978,
+              "name": "狼爪手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/1978",
+              "fetch_id": "item:1978"
+            },
+            {
+              "item_id": 2039,
+              "name": "朴素之戒",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2039",
+              "fetch_id": "item:2039"
+            },
+            {
+              "item_id": 2264,
+              "name": "潜行者衬肩",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2264",
+              "fetch_id": "item:2264"
+            },
+            {
+              "item_id": 2549,
+              "name": "暗影法杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/2549",
+              "fetch_id": "item:2549"
+            },
+            {
+              "item_id": 4438,
+              "name": "拳王护腕",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/4438",
+              "fetch_id": "item:4438"
+            },
+            {
+              "item_id": 6679,
+              "name": "刺甲之矛",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/6679",
+              "fetch_id": "item:6679"
+            }
+          ]
+        },
+        {
+          "npc_id": 4842,
+          "name": "唤地者哈穆加",
+          "on_site": false,
+          "fetch_id": "npc:4842",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 6688,
+              "name": "轻风头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6688",
+              "fetch_id": "item:6688"
+            },
+            {
+              "item_id": 6689,
+              "name": "风灵法杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6689",
+              "fetch_id": "item:6689"
+            },
+            {
+              "item_id": 251351,
+              "name": "设计图：卫兵的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251351",
+              "fetch_id": "item:251351"
+            },
+            {
+              "item_id": 251352,
+              "name": "设计图：保护者的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251352",
+              "fetch_id": "item:251352"
+            },
+            {
+              "item_id": 251353,
+              "name": "设计图：助祭的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251353",
+              "fetch_id": "item:251353"
+            },
+            {
+              "item_id": 252455,
+              "name": "防御者的皮头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252455",
+              "fetch_id": "item:252455"
+            },
+            {
+              "item_id": 252514,
+              "name": "风暴行者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252514",
+              "fetch_id": "item:252514"
+            },
+            {
+              "item_id": 252815,
+              "name": "图样：捕兽者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252815",
+              "fetch_id": "item:252815"
+            },
+            {
+              "item_id": 252818,
+              "name": "图样：风暴行者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252818",
+              "fetch_id": "item:252818"
+            },
+            {
+              "item_id": 252819,
+              "name": "图样：智慧皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252819",
+              "fetch_id": "item:252819"
+            },
+            {
+              "item_id": 253976,
+              "name": "图样：金丝无瑕头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253976",
+              "fetch_id": "item:253976"
+            },
+            {
+              "item_id": 253980,
+              "name": "图样：金丝烈焰头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253980",
+              "fetch_id": "item:253980"
+            },
+            {
+              "item_id": 253984,
+              "name": "图样：金丝珍珠头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253984",
+              "fetch_id": "item:253984"
+            }
+          ]
+        },
+        {
+          "npc_id": 4425,
+          "name": "盲眼猎手",
+          "url": "https://wuxianwow.com/npc/4425",
+          "fetch_id": "npc:4425",
+          "items": [
+            {
+              "item_id": 6695,
+              "name": "冥骨护符",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6695",
+              "fetch_id": "item:6695"
+            },
+            {
+              "item_id": 6696,
+              "name": "夜行者之弓",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6696",
+              "fetch_id": "item:6696"
+            },
+            {
+              "item_id": 6697,
+              "name": "蝙蝠之翼",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6697",
+              "fetch_id": "item:6697"
+            },
+            {
+              "item_id": 251351,
+              "name": "设计图：卫兵的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251351",
+              "fetch_id": "item:251351"
+            },
+            {
+              "item_id": 251352,
+              "name": "设计图：保护者的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251352",
+              "fetch_id": "item:251352"
+            },
+            {
+              "item_id": 251353,
+              "name": "设计图：助祭的链甲头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/251353",
+              "fetch_id": "item:251353"
+            },
+            {
+              "item_id": 252814,
+              "name": "图样：争斗者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252814",
+              "fetch_id": "item:252814"
+            },
+            {
+              "item_id": 252815,
+              "name": "图样：捕兽者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252815",
+              "fetch_id": "item:252815"
+            },
+            {
+              "item_id": 252816,
+              "name": "图样：防御者的皮头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252816",
+              "fetch_id": "item:252816"
+            },
+            {
+              "item_id": 252817,
+              "name": "图样：图腾师的皮头盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252817",
+              "fetch_id": "item:252817"
+            },
+            {
+              "item_id": 252818,
+              "name": "图样：风暴行者的皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252818",
+              "fetch_id": "item:252818"
+            },
+            {
+              "item_id": 252819,
+              "name": "图样：智慧皮盔",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252819",
+              "fetch_id": "item:252819"
+            },
+            {
+              "item_id": 253976,
+              "name": "图样：金丝无瑕头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253976",
+              "fetch_id": "item:253976"
+            },
+            {
+              "item_id": 253978,
+              "name": "图样：金丝柔滑头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253978",
+              "fetch_id": "item:253978"
+            },
+            {
+              "item_id": 253980,
+              "name": "图样：金丝烈焰头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253980",
+              "fetch_id": "item:253980"
+            },
+            {
+              "item_id": 253982,
+              "name": "图样：金丝暗影头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253982",
+              "fetch_id": "item:253982"
+            },
+            {
+              "item_id": 253984,
+              "name": "图样：金丝珍珠头饰",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/253984",
+              "fetch_id": "item:253984"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 104,
+      "p25_minutes": 31,
+      "p90_minutes": 37,
+      "text": "四分之一的人 31 分钟内、九成 37 分钟内（104 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 47.Corpse (-4459.4, -1660.2) on Map 1",
+      "group_finder": "GroupFinderActivity 804",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5246"
+      ],
+      "lfg": "LFGDungeons 15 剃刀沼泽",
+      "loading": "LoadingScreens 188 (fdid 131865)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=47",
+      "map_url": "https://wuxianwow.com/trip?instance=47&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=1,-4459.4,-1660.2",
+      "map_levels": 2,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 1221,
+        "name": "蓝叶薯",
+        "url": "https://wuxianwow.com/quest/1221",
+        "fetch_id": "quest:1221",
+        "level": 26,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 1142,
+        "name": "临终遗言",
+        "url": "https://wuxianwow.com/quest/1142",
+        "fetch_id": "quest:1142",
+        "level": 30,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1144,
+        "name": "进口商威利克斯",
+        "url": "https://wuxianwow.com/quest/1144",
+        "fetch_id": "quest:1144",
+        "level": 30,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 1109,
+        "name": "蝙蝠的粪便",
+        "url": "https://wuxianwow.com/quest/1109",
+        "fetch_id": "quest:1109",
+        "level": 33,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1101,
+        "name": "卡尔加·刺肋",
+        "url": "https://wuxianwow.com/quest/1101",
+        "fetch_id": "quest:1101",
+        "level": 34,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1102,
+        "name": "奥尔德的报复",
+        "url": "https://wuxianwow.com/quest/1102",
+        "fetch_id": "quest:1102",
+        "level": 34,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      }
+    ],
+    "quests_total": 6,
+    "quests_confirmed": 6,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "剃刀沼泽（地下城 · 5 / 10 人 · 准入 25 级 · 集合石 29–38 级 · 贫瘠之地）\n入口：贫瘠之地（-4459.4, -1660.2，Map.Corpse）\n首领：鲁古格、阿格姆、亡语者贾格巴、主宰拉姆塔斯、暴怒的阿迦赛罗斯、卡尔加·刺肋\n首领位置（临时 · EG Link）：6/6 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：鲁古格 上层 0.477, 0.558；阿格姆 上层 0.827, 0.522；亡语者贾格巴 上层 0.894, 0.38；主宰拉姆塔斯 上层 0.602, 0.253；暴怒的阿迦赛罗斯 楼层未定（上层 / 下层） 0.146, 0.685；卡尔加·刺肋 下层 0.31, 0.283\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 31 分钟内、九成 37 分钟内（104 人）\n副本任务（6 个，服务器确认 6）：蓝叶薯、临终遗言、进口商威利克斯、蝙蝠的粪便、卡尔加·刺肋、奥尔德的报复\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

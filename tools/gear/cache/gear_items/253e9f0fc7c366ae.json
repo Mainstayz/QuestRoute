@@ -1,0 +1,168 @@
+{
+  "tool": "gear_items",
+  "arguments": {
+    "class": "战士",
+    "slot": "手",
+    "max_req": 40,
+    "quality": "精良,史诗",
+    "sort": "ilvl",
+    "limit": 40,
+    "offset": 80
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "url",
+        "kind": "scope",
+        "text": "物品库网页没有这些筛选，打开 url 的件数会多：没设需要等级的按装等 − 5 估（网页按 1 级算）"
+      }
+    ],
+    "quality": [
+      3,
+      4
+    ],
+    "quality_name": "精良至史诗",
+    "url": "https://wuxianwow.com/items/gear?ql=34&lv=-40&for=1&slot=hands",
+    "total": 86,
+    "page": 3,
+    "page_size": 40,
+    "limit": 40,
+    "offset": 80,
+    "has_more": false,
+    "matched": {
+      "class": {
+        "id": 1,
+        "name": "战士",
+        "matched_by": "exact",
+        "rule": "职业专属的，加上不限职业、这个职业会用这种护甲 / 武器的",
+        "learn_at": {
+          "板甲": 40,
+          "长柄武器": 20
+        }
+      }
+    },
+    "filter_note": "需要等级按 req_level；客户端没设（0）的 30 件按装等 − 5 估门槛（有需要等级的物品多数正好差 5），估出的写在 req_estimate：2 件在范围内列出，28 件够不着没列；include_unset_req: true 一律列出",
+    "results": [
+      {
+        "id": "item:250511",
+        "title": "助祭手套",
+        "url": "https://wuxianwow.com/item/250511",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 20,
+        "slot": "手",
+        "type": "锁甲",
+        "req_level": 15,
+        "classes": [],
+        "new_in_160": true,
+        "new_effect_in_160": false,
+        "set": null,
+        "crafted": true,
+        "source_type": "专业制造",
+        "summary": "115 护甲；+5 智力，+3 法术伤害，+10 治疗强度，+3 耐力"
+      },
+      {
+        "id": "item:10401",
+        "title": "黑暗迪菲亚手套",
+        "url": "https://wuxianwow.com/item/10401",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 19,
+        "slot": "手",
+        "type": "皮甲",
+        "req_level": 14,
+        "classes": [],
+        "new_in_160": false,
+        "new_effect_in_160": false,
+        "set": {
+          "id": 161,
+          "name": "迪菲亚皮甲",
+          "group": "其他"
+        },
+        "crafted": false,
+        "source_type": "世界掉落",
+        "obtain": "死亡矿井各处掉落（临时）",
+        "summary": "52 护甲；+6 力量，+2 耐力；套装：迪菲亚皮甲（5 件）"
+      },
+      {
+        "id": "item:10413",
+        "title": "尖牙手套",
+        "url": "https://wuxianwow.com/item/10413",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 19,
+        "slot": "手",
+        "type": "皮甲",
+        "req_level": 14,
+        "classes": [],
+        "new_in_160": false,
+        "new_effect_in_160": false,
+        "set": {
+          "id": 162,
+          "name": "毒蛇的拥抱",
+          "group": "其他"
+        },
+        "crafted": false,
+        "source_type": "世界掉落",
+        "obtain": "哀嚎洞穴各处掉落（临时）",
+        "summary": "52 护甲；+6 敏捷，+4 力量；套装：毒蛇的拥抱（5 件）"
+      },
+      {
+        "id": "item:270231",
+        "title": "焰拳护手",
+        "url": "https://wuxianwow.com/item/270231",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 18,
+        "slot": "手",
+        "type": "皮甲",
+        "req_level": 13,
+        "classes": [],
+        "new_in_160": true,
+        "new_effect_in_160": false,
+        "set": null,
+        "crafted": false,
+        "source_type": "世界掉落",
+        "obtain": "茵弗努斯掉落 32.9%（临时）",
+        "summary": "51 护甲；+5 敏捷，+5 精神"
+      },
+      {
+        "id": "item:4768",
+        "title": "专家手套",
+        "url": "https://wuxianwow.com/item/4768",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 17,
+        "slot": "手",
+        "type": "布甲",
+        "req_level": 12,
+        "classes": [],
+        "new_in_160": false,
+        "new_effect_in_160": false,
+        "set": null,
+        "crafted": false,
+        "source_type": "世界掉落",
+        "summary": "21 护甲；+5 智力，+5 耐力"
+      },
+      {
+        "id": "item:287625",
+        "title": "鎏金剑圣手套",
+        "url": "https://wuxianwow.com/item/287625",
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": 1,
+        "slot": "手",
+        "type": null,
+        "req_level": 1,
+        "classes": [],
+        "new_in_160": true,
+        "new_effect_in_160": false,
+        "set": null,
+        "crafted": false,
+        "source_type": "隐藏直到收集",
+        "summary": ""
+      }
+    ]
+  }
+}

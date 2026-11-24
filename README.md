@@ -4,7 +4,7 @@
 
 ## 安装
 
-1. 完整退出游戏。若安装过旧版，先禁用或移走 `Interface/AddOns/YYQQuestAPI`，避免两版同时运行。
+1. 完整退出游戏。
 2. 将仓库中的整个 `addons/QuestRoute` 文件夹复制到游戏的 `Interface/AddOns/`，最终为 `Interface/AddOns/QuestRoute/`。保留 `QuestRoute.toc` 及其列出的全部 Lua 文件。
    - 若在本机源码仓库上开发，不要复制，改用目录联接让安装指向仓库，编辑即生效：
      ```powershell
@@ -15,15 +15,6 @@
 插件目录改名、增加文件或修改 `.toc` 后，必须完整退出并重新启动游戏，`/reload` 不够。
 
 原生客户端数据决定角色状态与进度；可选安装 QuestieDB 补充任务链、附近与目的地相关任务、启动物品、目标实体和静态地点。插件可以独立运行，无限工坊用于开发调试与 API 调用。
-
-## 旧配置迁移
-
-新 SavedVariables 为 `QuestRouteDB`。游戏不会自动跨文件读取旧存档；需要手动迁移，否则会从新配置开始。
-
-1. 完整退出游戏，在 `WTF/Account/<账号>/SavedVariables/` 中备份旧 `YYQQuestAPI.lua`。
-2. 将旧文件复制为 `QuestRoute.lua`。如果已有新文件，先单独备份并确认要沿用哪份配置，避免覆盖已有设置。
-3. 只把新副本中顶层赋值的变量名 `YYQQuestAPIDB` 改为 `QuestRouteDB`，其余内容保持原样。完整保留 `routes` 中各服务器/角色的跳过记录和选项。
-4. 保存后启动游戏，保留旧文件及备份供恢复。
 
 ## 使用
 
@@ -72,7 +63,7 @@
 
 ## 开发与文档
 
-当前 `apiRevision=16`、`schemaVersion=1`，源码按职责拆为 18 个 Lua 文件。仓库版本的验证与安装状态统一见[开发进度](开发进度.md)，尚未完成的实机验收见[待办事项](待办事项.md)。
+当前 `apiRevision=17`、`schemaVersion=1`，源码按职责拆为 20 个 Lua 文件。仓库版本的验证与安装状态统一见[开发进度](开发进度.md)，尚未完成的实机验收见[待办事项](待办事项.md)。装备候选的取数和评分见[GEAR.md](addons/QuestRoute/GEAR.md)。
 
 | 文档 | 用途 |
 | --- | --- |

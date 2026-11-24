@@ -1,0 +1,287 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 902781
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:902781",
+    "npc_id": 902781,
+    "name": "腐烂的普雷莫尔",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/902781",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      40,
+      40
+    ],
+    "dungeon": "剃刀高地",
+    "instance": {
+      "id": 129,
+      "fetch_id": "instance:129",
+      "name": "剃刀高地",
+      "level_text": "准入 35 级 · 集合石 37–46 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          37,
+          46
+        ],
+        "max": null,
+        "min": 35,
+        "target": 34
+      },
+      "url": "https://wuxianwow.com/instance/129"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/2781.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/2781_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 2781,
+      "dungeon": "剃刀高地",
+      "instance": {
+        "instance_id": 129,
+        "url": "https://wuxianwow.com/instance/129",
+        "fetch_id": "instance:129"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 2,
+      "of": 6,
+      "bosses": [
+        {
+          "npc_id": 902780,
+          "name": "图特卡什",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902780",
+          "fetch_id": "npc:902780",
+          "portrait": "https://wuxianwow.com/data/bosses/2780.webp"
+        },
+        {
+          "npc_id": 902781,
+          "name": "腐烂的普雷莫尔",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902781",
+          "fetch_id": "npc:902781",
+          "portrait": "https://wuxianwow.com/data/bosses/2781.webp"
+        },
+        {
+          "npc_id": 902782,
+          "name": "火眼莫德雷斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902782",
+          "fetch_id": "npc:902782",
+          "portrait": "https://wuxianwow.com/data/bosses/2782.webp"
+        },
+        {
+          "npc_id": 902783,
+          "name": "拉戈斯诺特",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902783",
+          "fetch_id": "npc:902783",
+          "portrait": "https://wuxianwow.com/data/bosses/2783.webp"
+        },
+        {
+          "npc_id": 902784,
+          "name": "暴食者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902784",
+          "fetch_id": "npc:902784",
+          "portrait": "https://wuxianwow.com/data/bosses/2784.webp"
+        },
+        {
+          "npc_id": 902785,
+          "name": "寒冰之王亚门纳尔",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902785",
+          "fetch_id": "npc:902785",
+          "portrait": "https://wuxianwow.com/data/bosses/2785.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 10760,
+          "name": "野猪之拳",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/10760",
+          "fetch_id": "item:10760"
+        },
+        {
+          "item_id": 10766,
+          "name": "瘟疫短枝",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/10766",
+          "fetch_id": "item:10766"
+        },
+        {
+          "item_id": 251398,
+          "name": "设计图：军官长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251398",
+          "fetch_id": "item:251398"
+        },
+        {
+          "item_id": 251399,
+          "name": "设计图：哨兵长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251399",
+          "fetch_id": "item:251399"
+        },
+        {
+          "item_id": 251400,
+          "name": "设计图：守望者长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251400",
+          "fetch_id": "item:251400"
+        },
+        {
+          "item_id": 251401,
+          "name": "设计图：督军长靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251401",
+          "fetch_id": "item:251401"
+        },
+        {
+          "item_id": 252843,
+          "name": "图样：潜伏者的皮鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252843",
+          "fetch_id": "item:252843"
+        },
+        {
+          "item_id": 252844,
+          "name": "图样：潜行者的皮鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252844",
+          "fetch_id": "item:252844"
+        },
+        {
+          "item_id": 252845,
+          "name": "图样：守望者的皮鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252845",
+          "fetch_id": "item:252845"
+        },
+        {
+          "item_id": 252846,
+          "name": "图样：唤天者的皮鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252846",
+          "fetch_id": "item:252846"
+        },
+        {
+          "item_id": 252847,
+          "name": "图样：修补者的皮鞋",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252847",
+          "fetch_id": "item:252847"
+        },
+        {
+          "item_id": 252896,
+          "name": "图样：追踪者的锁甲靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252896",
+          "fetch_id": "item:252896"
+        },
+        {
+          "item_id": 252897,
+          "name": "图样：唤天者的锁甲靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252897",
+          "fetch_id": "item:252897"
+        },
+        {
+          "item_id": 252898,
+          "name": "图样：散兵的锁甲靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252898",
+          "fetch_id": "item:252898"
+        },
+        {
+          "item_id": 252899,
+          "name": "图样：修补者的锁甲靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252899",
+          "fetch_id": "item:252899"
+        },
+        {
+          "item_id": 254038,
+          "name": "图样：镀金腰绳",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/254038",
+          "fetch_id": "item:254038"
+        },
+        {
+          "item_id": 254040,
+          "name": "图样：飞沫腰绳",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/254040",
+          "fetch_id": "item:254040"
+        },
+        {
+          "item_id": 254042,
+          "name": "图样：炽热腰绳",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/254042",
+          "fetch_id": "item:254042"
+        },
+        {
+          "item_id": 254044,
+          "name": "图样：黑色腰绳",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/254044",
+          "fetch_id": "item:254044"
+        },
+        {
+          "item_id": 274380,
+          "name": "腐朽血肉护腕",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274380",
+          "fetch_id": "item:274380"
+        }
+      ]
+    },
+    "text": "腐烂的普雷莫尔（首领 · 40 级（临时 · QuestieDB） · 剃刀高地）\n剃刀高地 第 2/6 个首领\n副本：instance:129（地下城 · 准入 35 级 · 集合石 37–46 级）\n掉落（临时 · Spyglass）：野猪之拳、瘟疫短枝、设计图：军官长靴、设计图：哨兵长靴、设计图：守望者长靴、设计图：督军长靴、图样：潜伏者的皮鞋、图样：潜行者的皮鞋、图样：守望者的皮鞋、图样：唤天者的皮鞋、图样：修补者的皮鞋、图样：追踪者的锁甲靴、图样：唤天者的锁甲靴、图样：散兵的锁甲靴、图样：修补者的锁甲靴、图样：镀金腰绳、图样：飞沫腰绳、图样：炽热腰绳、图样：黑色腰绳、腐朽血肉护腕\n位置（临时 · EG Link）：剃刀高地副本地图 0.488, 0.136（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "x": 0.488,
+      "y": 0.136,
+      "map_url": "https://wuxianwow.com/instance/129",
+      "trip_url": "https://wuxianwow.com/trip?at=129,2577.3,954.9,52.4",
+      "pulls": 3,
+      "spread_yards": 6
+    }
+  }
+}

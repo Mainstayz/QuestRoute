@@ -1,0 +1,352 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287002
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 Polestar 玩家录制"
+      },
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287002",
+    "title": "复活的哨兵链甲护腿",
+    "url": "https://wuxianwow.com/item/287002",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKABJrCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287002:::::::::::::|h[复活的哨兵链甲护腿]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287002,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 40,
+    "slot": "腿部",
+    "req_level": 35,
+    "sell": 7916,
+    "sell_text": "79银 16铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腿部",
+      "armor_type": "锁甲",
+      "ilvl": 40,
+      "req_level": 35,
+      "armor": 222,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 15
+        },
+        {
+          "stat": "力量",
+          "value": 8
+        },
+        {
+          "stat": "防御等级",
+          "value": 8
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "沉没之城",
+          "instance": {
+            "instance_id": 2970,
+            "url": "https://wuxianwow.com/instance/2970",
+            "fetch_id": "instance:2970"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287002,
+        "name": "复活的哨兵链甲护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 16665,
+        "guidance_text": "1金 66银 65铜",
+        "q1": 16665,
+        "q3": 16666,
+        "min": 16665,
+        "min_now": 16665,
+        "listings": 12,
+        "quantity": 12,
+        "change_1d": -0.17,
+        "quantity_change_1d": -0.33,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.79,
+        "reference": {
+          "price": 27708.56,
+          "low": 7517.98,
+          "high": 102123.81,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287002",
+        "fetch_id": "item:287002",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 66银 65铜，价格区间 1金 66银 65铜 – 1金 66银 66铜，12 条挂单 / 12 个，比上次 −17%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287002,
+        "name": "复活的哨兵链甲护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 43300,
+        "guidance_text": "4金 33银",
+        "q1": 43300,
+        "q3": 45500,
+        "min": 41100,
+        "min_now": 41100,
+        "listings": 10,
+        "quantity": 10,
+        "change_1d": -0.09,
+        "quantity_change_1d": 1,
+        "change_since": "2026-11-23",
+        "surprise_sd": 0.18,
+        "reference": {
+          "price": 38356.41,
+          "low": 9763.1,
+          "high": 150691.24,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287002&h=normal-horde",
+        "fetch_id": "item:287002",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 4金 33银，价格区间 4金 33银 – 4金 55银，10 条挂单 / 10 个，比上次 −9%"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287002,
+        "name": "复活的哨兵链甲护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 15095,
+        "guidance_text": "1金 50银 95铜",
+        "q1": 15095,
+        "q3": 15095,
+        "min": 15095,
+        "min_now": 15095,
+        "listings": 4,
+        "quantity": 4,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.44,
+        "reference": {
+          "price": 20064.16,
+          "low": 5785.64,
+          "high": 69580.99,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287002&h=normal-alliance",
+        "fetch_id": "item:287002",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 50银 95铜，价格区间 1金 50银 95铜 – 1金 50银 95铜，4 条挂单 / 4 个"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287002,
+        "name": "复活的哨兵链甲护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 19900,
+        "guidance_text": "1金 99银",
+        "q1": 17900,
+        "q3": 20000,
+        "min": 17800,
+        "min_now": 17800,
+        "listings": 25,
+        "quantity": 25,
+        "change_1d": 0.47,
+        "quantity_change_1d": 0.06,
+        "change_since": "2026-11-20",
+        "surprise_sd": 0.55,
+        "reference": {
+          "price": 13987.58,
+          "low": 3687.79,
+          "high": 53054.03,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287002&h=pvp-alliance",
+        "fetch_id": "item:287002",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 99银，价格区间 1金 79银 – 2金，25 条挂单 / 25 个，比上次 +47%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 287002,
+        "name": "复活的哨兵链甲护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 81900,
+        "guidance_text": "8金 19银",
+        "q1": 81900,
+        "q3": 81900,
+        "min": 81900,
+        "min_now": 81900,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 0.24,
+        "reference": {
+          "price": 71809.5,
+          "low": 21923.08,
+          "high": 235213.5,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287002&h=rp-alliance",
+        "fetch_id": "item:287002",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 8金 19银，价格区间 8金 19银 – 8金 19银，1 条挂单 / 1 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 36–40",
+      "bracket_id": 19,
+      "bracket_items": 108,
+      "outcomes": [
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2807,
+          "value_text": "28银 7铜",
+          "item_guidance": 16665,
+          "item_guidance_text": "1金 66银 65铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 3250,
+          "value_text": "32银 50铜",
+          "item_guidance": 43300,
+          "item_guidance_text": "4金 33银"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 2343,
+          "value_text": "23银 43铜",
+          "item_guidance": 15095,
+          "item_guidance_text": "1金 50银 95铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 3499,
+          "value_text": "34银 99铜",
+          "item_guidance": 19900,
+          "item_guidance_text": "1金 99银"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 8300,
+          "value_text": "83银",
+          "item_guidance": 81900,
+          "item_guidance_text": "8金 19银"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "Polestar 玩家录制",
+      "note": "临时数据：客户端的冒险指南没有掉落。Polestar 玩家录制（fitzforge/polestar，CC BY 4.0）是老玩家在无限正式服录下的拾取，3 人以上录到才收：drop_chance_percent 是录制给出的掉率（没有就不写），voters 是录到的人数；objects 里录制的是开出它的物件（箱子等），布、药水这类几十种生物都掉的通用掉落不列。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 258792,
+          "name": "复活的哨兵",
+          "on_site": false,
+          "fetch_id": "npc:258792",
+          "temporary": true,
+          "source": "Polestar 玩家录制",
+          "voters": 5
+        }
+      ]
+    },
+    "text": "复活的哨兵链甲护腿 · 腿部 · 装等 40\n属性：222 护甲；+15 耐力，+8 力量，+8 防御等级\n\n售价：79银 16铜\n来源：沉没之城各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 36–40，一次出一样）：大块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：28银 7铜，物品自己的指导价 1金 66银 65铜\n分解约值（普通 · 部落，2026-11-24）：32银 50铜，物品自己的指导价 4金 33银\n分解约值（普通 · 联盟，2026-11-24）：23银 43铜，物品自己的指导价 1金 50银 95铜\n分解约值（PvP · 联盟，2026-11-21）：34银 99铜，物品自己的指导价 1金 99银\n分解约值（角色扮演 · 联盟，2026-11-19）：83银，物品自己的指导价 8金 19银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 66银 65铜，价格区间 1金 66银 65铜 – 1金 66银 66铜，12 条挂单 / 12 个，比上次 −17%\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 4金 33银，价格区间 4金 33银 – 4金 55银，10 条挂单 / 10 个，比上次 −9%\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 50银 95铜，价格区间 1金 50银 95铜 – 1金 50银 95铜，4 条挂单 / 4 个\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 99银，价格区间 1金 79银 – 2金，25 条挂单 / 25 个，比上次 +47%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 8金 19银，价格区间 8金 19银 – 8金 19银，1 条挂单 / 1 个",
+    "matched_by": "id"
+  }
+}

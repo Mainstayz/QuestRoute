@@ -1,0 +1,175 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 903676
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:903676",
+    "npc_id": 903676,
+    "name": "矿工约翰森",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/903676",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      19,
+      19
+    ],
+    "dungeon": "死亡矿井",
+    "instance": {
+      "id": 36,
+      "fetch_id": "instance:36",
+      "name": "死亡矿井",
+      "level_text": "准入 10 级 · 集合石 17–26 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          17,
+          26
+        ],
+        "max": null,
+        "min": 10,
+        "target": 16
+      },
+      "url": "https://wuxianwow.com/instance/36"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/3676.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/3676_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 3676,
+      "dungeon": "死亡矿井",
+      "instance": {
+        "instance_id": 36,
+        "url": "https://wuxianwow.com/instance/36",
+        "fetch_id": "instance:36"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 3,
+      "of": 8,
+      "bosses": [
+        {
+          "npc_id": 902741,
+          "name": "拉克佐",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902741",
+          "fetch_id": "npc:902741",
+          "portrait": "https://wuxianwow.com/data/bosses/2741.webp"
+        },
+        {
+          "npc_id": 902742,
+          "name": "斯尼德",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902742",
+          "fetch_id": "npc:902742",
+          "portrait": "https://wuxianwow.com/data/bosses/2742.webp"
+        },
+        {
+          "npc_id": 903676,
+          "name": "矿工约翰森",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903676",
+          "fetch_id": "npc:903676",
+          "portrait": "https://wuxianwow.com/data/bosses/3676.webp"
+        },
+        {
+          "npc_id": 902743,
+          "name": "基尔尼格",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902743",
+          "fetch_id": "npc:902743",
+          "portrait": "https://wuxianwow.com/data/bosses/2743.webp"
+        },
+        {
+          "npc_id": 902744,
+          "name": "绿皮船长",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902744",
+          "fetch_id": "npc:902744",
+          "portrait": "https://wuxianwow.com/data/bosses/2744.webp"
+        },
+        {
+          "npc_id": 902745,
+          "name": "重拳先生",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902745",
+          "fetch_id": "npc:902745",
+          "portrait": "https://wuxianwow.com/data/bosses/2745.webp"
+        },
+        {
+          "npc_id": 902746,
+          "name": "曲奇",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902746",
+          "fetch_id": "npc:902746",
+          "portrait": "https://wuxianwow.com/data/bosses/2746.webp"
+        },
+        {
+          "npc_id": 902747,
+          "name": "艾德温·范克里夫",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902747",
+          "fetch_id": "npc:902747",
+          "portrait": "https://wuxianwow.com/data/bosses/2747.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 5443,
+          "name": "镀金圆盾",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/5443",
+          "fetch_id": "item:5443"
+        },
+        {
+          "item_id": 5444,
+          "name": "矿工斗篷",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/5444",
+          "fetch_id": "item:5444"
+        }
+      ]
+    },
+    "text": "矿工约翰森（首领 · 19 级（临时 · QuestieDB） · 死亡矿井）\n死亡矿井 第 3/8 个首领\n副本：instance:36（地下城 · 准入 10 级 · 集合石 17–26 级）\n掉落（临时 · Spyglass）：镀金圆盾、矿工斗篷\n位置（临时 · cMaNGOS）：死亡矿井副本地图 上层 0.349, 0.543（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "cMaNGOS",
+      "floor": "上层",
+      "x": 0.349,
+      "y": 0.543,
+      "map_url": "https://wuxianwow.com/instance/36",
+      "trip_url": "https://wuxianwow.com/trip?at=36,-153.1,-532.1,49.7"
+    }
+  }
+}

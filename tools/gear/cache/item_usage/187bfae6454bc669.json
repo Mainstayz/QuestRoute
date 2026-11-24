@@ -1,0 +1,554 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 10329
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 Polestar 玩家录制"
+      },
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:10329",
+    "title": "血色十字军腰带",
+    "url": "https://wuxianwow.com/item/10329",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAAtlQAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:10329:::::::::::::|h[血色十字军腰带]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 10329,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 37,
+    "slot": "腰带",
+    "req_level": 32,
+    "sell": 3151,
+    "sell_text": "31银 51铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腰带",
+      "armor_type": "锁甲",
+      "ilvl": 37,
+      "req_level": 32,
+      "armor": 136,
+      "stats": [
+        {
+          "stat": "力量",
+          "value": 12
+        },
+        {
+          "stat": "耐力",
+          "value": 10
+        }
+      ],
+      "stats_source": "客户端公式推算",
+      "set": {
+        "id": 163,
+        "fetch_id": "set:163",
+        "name": "血色十字军链甲",
+        "url": "https://wuxianwow.com/set/163",
+        "group": "其他",
+        "classes": [],
+        "armor_type": "锁甲",
+        "faction": null,
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": [
+          35,
+          44
+        ],
+        "req_level": [
+          30,
+          39
+        ],
+        "req_text": "需要等级：30–39 级",
+        "pieces_total": 6,
+        "pieces_visible": 6,
+        "pieces_hidden": 0,
+        "fully_hidden": false,
+        "crafted": false,
+        "pieces": [
+          {
+            "item_id": 10329,
+            "name": "血色十字军腰带",
+            "slot": "腰带",
+            "ilvl": 37,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10329",
+            "fetch_id": "item:10329",
+            "previewable": true
+          },
+          {
+            "item_id": 10332,
+            "name": "血色十字军战靴",
+            "slot": "脚",
+            "ilvl": 35,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10332",
+            "fetch_id": "item:10332",
+            "previewable": true
+          },
+          {
+            "item_id": 10328,
+            "name": "血色十字军护胸",
+            "slot": "胸甲",
+            "ilvl": 39,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10328",
+            "fetch_id": "item:10328",
+            "previewable": true
+          },
+          {
+            "item_id": 10331,
+            "name": "血色十字军护手",
+            "slot": "手",
+            "ilvl": 38,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10331",
+            "fetch_id": "item:10331",
+            "previewable": true
+          },
+          {
+            "item_id": 10330,
+            "name": "血色十字军护腿",
+            "slot": "腿部",
+            "ilvl": 44,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10330",
+            "fetch_id": "item:10330",
+            "previewable": true
+          },
+          {
+            "item_id": 10333,
+            "name": "血色十字军腕甲",
+            "slot": "手腕",
+            "ilvl": 36,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10333",
+            "fetch_id": "item:10333",
+            "previewable": true
+          }
+        ],
+        "bonuses": [
+          {
+            "pieces": 2,
+            "text": "+10 暗影抗性。"
+          },
+          {
+            "pieces": 3,
+            "text": "对亡灵的攻击强度提高30点。"
+          },
+          {
+            "pieces": 4,
+            "text": "受到伤害时有15%的几率获得激怒之光效果，持续10秒，使你的近战攻击造成20点神圣伤害。对亡灵造成3倍的伤害。"
+          },
+          {
+            "pieces": 5,
+            "text": "使你的命中几率提高1.0%。"
+          },
+          {
+            "pieces": 6,
+            "text": "在生命值等于或低于20%时受到伤害，会使你获得一个可吸收N点伤害的护盾，持续10秒。此效果每4分钟只能触发一次。"
+          }
+        ]
+      }
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "transmog": {
+      "sources": [],
+      "same_appearance_sources": [
+        {
+          "source_id": 179883,
+          "item_id": 19092,
+          "item_name": "雷矛锁甲腰带",
+          "item_url": "https://wuxianwow.com/item/19092",
+          "fetch_id": "item:19092",
+          "appearance_id": 66356,
+          "source_type": "商人",
+          "item_source_type": "商人",
+          "note": "Monastery Armor Set",
+          "note_label": "客户端内部注释（英文）",
+          "vendors": [
+            {
+              "vendor_id": 244582,
+              "creature_id": 13216,
+              "on_site": false,
+              "zone": "奥特兰克山谷",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 30,
+              "map_name": "奥特兰克山谷",
+              "world_xyz": [
+                570,
+                -95,
+                37.9
+              ],
+              "zone_map": {
+                "ui_map": 1459,
+                "name": "奥特兰克山谷",
+                "x": 0.4428,
+                "y": 0.1825,
+                "coords": "44.3, 18.3",
+                "url": "https://wuxianwow.com/atlas/1459",
+                "fetch_id": "map:1459"
+              }
+            },
+            {
+              "vendor_id": 244583,
+              "creature_id": 13217,
+              "on_site": false,
+              "zone": "奥特兰克山脉",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 0,
+              "map_name": "东部王国",
+              "world_xyz": [
+                -24.2,
+                -321.2,
+                131.2
+              ],
+              "zone_map": {
+                "ui_map": 1416,
+                "name": "奥特兰克山脉",
+                "x": 0.3945,
+                "y": 0.8165,
+                "coords": "39.5, 81.7",
+                "url": "https://wuxianwow.com/atlas/1416",
+                "fetch_id": "map:1416"
+              }
+            },
+            {
+              "vendor_id": 244648,
+              "creature_id": 13216,
+              "on_site": false,
+              "zone": "Tyler's Test Map (Desolace)",
+              "subzone": null,
+              "faction": "联盟",
+              "world_map_id": 2908,
+              "map_name": null,
+              "world_xyz": [
+                -1194.6,
+                2681.3,
+                111.3
+              ],
+              "dev_map": true,
+              "zone_map": null
+            }
+          ],
+          "unlocated_vendor_rows": 0
+        }
+      ],
+      "same_appearance_total": 1,
+      "note": "商人来源来自 CollectableSourceInfo / CollectableSourceVendor / CollectableSourceVendorSparse：只有商人的生物 ID、坐标与阵营，客户端没有商人名字，来源表里也没有价格字段；note 是客户端内部的英文注释（设计用的来源分类），不是游戏内文本"
+    },
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 10329,
+        "name": "血色十字军腰带",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 10228,
+        "guidance_text": "1金 2银 28铜",
+        "q1": 9999,
+        "q3": 10399,
+        "min": 9798,
+        "min_now": 9798,
+        "listings": 42,
+        "quantity": 42,
+        "change_1d": -0.05,
+        "quantity_change_1d": 0.18,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.34,
+        "reference": {
+          "price": 12745.62,
+          "low": 3463.3,
+          "high": 46906.39,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=10329",
+        "fetch_id": "item:10329",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 2银 28铜，价格区间 99银 99铜 – 1金 3银 99铜，42 条挂单 / 42 个，比上次 −5%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 10329,
+        "name": "血色十字军腰带",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 78893,
+        "guidance_text": "7金 88银 93铜",
+        "q1": 66600,
+        "q3": 79994,
+        "min": 39994,
+        "min_now": 39994,
+        "listings": 32,
+        "quantity": 32,
+        "change_1d": 6.89,
+        "quantity_change_1d": 1.02,
+        "change_since": "2026-11-23",
+        "surprise_sd": 2.54,
+        "reference": {
+          "price": 14813.93,
+          "low": 3740.75,
+          "high": 58665.31,
+          "verdict": "明显偏高"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=10329&h=normal-horde",
+        "fetch_id": "item:10329",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 7金 88银 93铜，价格区间 6金 66银 – 7金 99银 94铜，32 条挂单 / 32 个，比上次 +689%"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 10329,
+        "name": "血色十字军腰带",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 10199,
+        "guidance_text": "1金 1银 99铜",
+        "q1": 10180,
+        "q3": 10200,
+        "min": 10100,
+        "min_now": 10100,
+        "listings": 43,
+        "quantity": 43,
+        "change_1d": -0.75,
+        "quantity_change_1d": -0.05,
+        "change_since": "2026-11-23",
+        "surprise_sd": -1.33,
+        "reference": {
+          "price": 24299.31,
+          "low": 6935.03,
+          "high": 85141.15,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=10329&h=normal-alliance",
+        "fetch_id": "item:10329",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 1银 99铜，价格区间 1金 1银 80铜 – 1金 2银，43 条挂单 / 43 个，比上次 −75%"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 10329,
+        "name": "血色十字军腰带",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 16299,
+        "guidance_text": "1金 62银 99铜",
+        "q1": 13099,
+        "q3": 16500,
+        "min": 11098,
+        "min_now": 11098,
+        "listings": 52,
+        "quantity": 52,
+        "change_1d": -0.29,
+        "quantity_change_1d": -0.12,
+        "change_since": "2026-11-20",
+        "surprise_sd": -0.27,
+        "reference": {
+          "price": 19363.02,
+          "low": 5082.41,
+          "high": 73769.38,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=10329&h=pvp-alliance",
+        "fetch_id": "item:10329",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 62银 99铜，价格区间 1金 30银 99铜 – 1金 65银，52 条挂单 / 52 个，比上次 −29%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 10329,
+        "name": "血色十字军腰带",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 94800,
+        "guidance_text": "9金 48银",
+        "q1": 94800,
+        "q3": 94800,
+        "min": 94800,
+        "min_now": 94800,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 1.05,
+        "reference": {
+          "price": 44222.08,
+          "low": 9230.37,
+          "high": 211864.94,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=10329&h=rp-alliance",
+        "fetch_id": "item:10329",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 9金 48银，价格区间 9金 48银 – 9金 48银，3 条挂单 / 3 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 36–40",
+      "bracket_id": 19,
+      "bracket_items": 108,
+      "outcomes": [
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2807,
+          "value_text": "28银 7铜",
+          "item_guidance": 10228,
+          "item_guidance_text": "1金 2银 28铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 3250,
+          "value_text": "32银 50铜",
+          "item_guidance": 78893,
+          "item_guidance_text": "7金 88银 93铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 2343,
+          "value_text": "23银 43铜",
+          "item_guidance": 10199,
+          "item_guidance_text": "1金 1银 99铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 3499,
+          "value_text": "34银 99铜",
+          "item_guidance": 16299,
+          "item_guidance_text": "1金 62银 99铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 8300,
+          "value_text": "83银",
+          "item_guidance": 94800,
+          "item_guidance_text": "9金 48银"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "Polestar 玩家录制",
+      "note": "临时数据：客户端的冒险指南没有掉落。Polestar 玩家录制（fitzforge/polestar，CC BY 4.0）是老玩家在无限正式服录下的拾取，3 人以上录到才收：drop_chance_percent 是录制给出的掉率（没有就不写），voters 是录到的人数；objects 里录制的是开出它的物件（箱子等），布、药水这类几十种生物都掉的通用掉落不列。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 4298,
+          "name": "血色防御者",
+          "on_site": false,
+          "fetch_id": "npc:4298",
+          "temporary": true,
+          "source": "Polestar 玩家录制",
+          "voters": 13
+        },
+        {
+          "npc_id": 4295,
+          "name": "血色仆从",
+          "on_site": false,
+          "fetch_id": "npc:4295",
+          "temporary": true,
+          "source": "Polestar 玩家录制",
+          "voters": 6
+        }
+      ]
+    },
+    "text": "血色十字军腰带 · 腰带 · 装等 37\n属性：136 护甲；+12 力量，+10 耐力；套装：血色十字军链甲（6 件）\n\n售价：31银 51铜\n来源：血色修道院各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n同外观可从商人购买：雷矛锁甲腰带\n分解（精良护甲 · 物品等级 36–40，一次出一样）：大块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：28银 7铜，物品自己的指导价 1金 2银 28铜\n分解约值（普通 · 部落，2026-11-24）：32银 50铜，物品自己的指导价 7金 88银 93铜\n分解约值（普通 · 联盟，2026-11-24）：23银 43铜，物品自己的指导价 1金 1银 99铜\n分解约值（PvP · 联盟，2026-11-21）：34银 99铜，物品自己的指导价 1金 62银 99铜\n分解约值（角色扮演 · 联盟，2026-11-19）：83银，物品自己的指导价 9金 48银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 2银 28铜，价格区间 99银 99铜 – 1金 3银 99铜，42 条挂单 / 42 个，比上次 −5%\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 7金 88银 93铜，价格区间 6金 66银 – 7金 99银 94铜，32 条挂单 / 32 个，比上次 +689%\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 1金 1银 99铜，价格区间 1金 1银 80铜 – 1金 2银，43 条挂单 / 43 个，比上次 −75%\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 1金 62银 99铜，价格区间 1金 30银 99铜 – 1金 65银，52 条挂单 / 52 个，比上次 −29%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 9金 48银，价格区间 9金 48银 – 9金 48银，3 条挂单 / 3 个",
+    "matched_by": "id"
+  }
+}

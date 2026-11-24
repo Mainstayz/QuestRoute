@@ -1,0 +1,165 @@
+{
+  "tool": "stats",
+  "arguments": {},
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "counts.factions",
+        "kind": "scope",
+        "text": "含 5 条系统 / 测试条目，factions 工具与声望页默认不列，列表是 70 条"
+      },
+      {
+        "on": "counts.achievements",
+        "kind": "scope",
+        "text": "合并成对记录后的数，含客户端不显示的内部条目（原始记录里 118 条）；achievements 工具默认不列它们"
+      }
+    ],
+    "build": "1.60.1.71037",
+    "built_at": "2026-11-24T10:17:09+11:00",
+    "codename": "camelot",
+    "counts": {
+      "achievements": 432,
+      "atlas_maps": 60,
+      "atlas_zones": 50,
+      "boss_models": 365,
+      "boss_portraits": 366,
+      "bosses": 374,
+      "calendar_holidays": 18,
+      "categories": 196,
+      "charpanel_skills": 16,
+      "combatui_switches": 5,
+      "commerce_certs": 6,
+      "commerce_crates": 30,
+      "commerce_goods": 105,
+      "commerce_rep_spells": 14,
+      "creature_models": 138,
+      "damage_meter_types": 11,
+      "epics": 1993,
+      "experience_rows": 6,
+      "factions": 75,
+      "factions_listed": 75,
+      "factions_new": 18,
+      "gear": 12739,
+      "groupfinder_activities": 114,
+      "hardcore_causes": 10,
+      "hunterpets_beasts": 759,
+      "hunterpets_families": 19,
+      "icons": 2440,
+      "instances": 52,
+      "instances_placed": 41,
+      "instances_unplaced": 11,
+      "item_visuals": 131,
+      "items": 22681,
+      "items_tp": 251,
+      "items_with_stats": 11884,
+      "itemsets": 541,
+      "looks": 1718,
+      "looks_races": 26,
+      "mounts_total": 144,
+      "new_achievements": 184,
+      "new_instances": 24,
+      "new_races": 2,
+      "new_recipes": 1148,
+      "npcs": 665,
+      "npcs_new": 182,
+      "ping_types": 6,
+      "professions": 14,
+      "pvp_arenas": 0,
+      "pvp_battlegrounds": 5,
+      "pvp_rank_items": 949,
+      "pvp_reputations": 8,
+      "questlines": 3,
+      "quests": 7021,
+      "quests_new": 1790,
+      "quests_titled": 5471,
+      "quests_titled_new": 1481,
+      "races": 10,
+      "racial_abilities": 40,
+      "recipes": 2596,
+      "ruleset_limits": 5,
+      "spellbook_hidden": 261,
+      "spellbook_new": 67,
+      "spellbook_spells": 1606,
+      "taxi_nodes": 73,
+      "taxi_paths": 296,
+      "texts_unresolved": 0,
+      "titles": 41,
+      "titles_new": 12,
+      "transmog_holiday_items": 4,
+      "transmog_new_appearances": 1345,
+      "transmog_new_sets": 7,
+      "transmog_new_wearable_items": 3168,
+      "transmog_outfits": 50,
+      "transmog_set_pieces": 75,
+      "transmog_sets": 9,
+      "transmog_situations": 30,
+      "transmog_source_items": 1277,
+      "transmog_sources": 1283,
+      "transmog_vendor_points": 205,
+      "transmog_vendors": 165,
+      "transmog_zones": 47
+    },
+    "product": "wowf",
+    "server": {
+      "build": "1.60.1.71037",
+      "entries": 108784,
+      "written": "2026-11-22T23:28:42+11:00"
+    },
+    "counts_note": "网站现在的全部记录：客户端数据加服务器下发后补入的（物品、只有服务器记录的任务等）；builds 里每个版本的 counts 只算客户端数据，所以同名计数会小一些。achievements 含统计条目（Achievement 表里的统计与成就同一张表，achievements 工具 include_statistics 才列出统计）；items 含未公开的占位物品（搜索不到）",
+    "fields": "https://wuxianwow.com/fields.json",
+    "tables_count": 281,
+    "auction_house": {
+      "house": {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "age_text": "今天 08:30"
+      },
+      "day": "2026-11-24",
+      "collected_at": "北京时间 2026-11-24 08:30",
+      "side": "PvP 部落拍卖行",
+      "listings": 252877,
+      "items_on_sale": 6926,
+      "days": 20,
+      "first_day": "2026-11-05",
+      "url": "https://wuxianwow.com/ah",
+      "houses": [
+        {
+          "key": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24"
+        },
+        {
+          "key": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24"
+        },
+        {
+          "key": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-23"
+        },
+        {
+          "key": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21"
+        },
+        {
+          "key": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19"
+        }
+      ]
+    },
+    "app": "https://wuxianwow.com",
+    "data": "https://wuxianwow.com/data/",
+    "legal": {
+      "unofficial": true,
+      "notice": "非官方：本站为玩家自制网站，与暴雪娱乐、网易均无关联。《魔兽世界》及相关名称、图标、模型与美术素材的版权和商标归暴雪娱乐（Blizzard Entertainment, Inc.）所有。数据取自客户端，仅供参考，以游戏内为准。",
+      "attribution": "无限图鉴 wuxianwow.com",
+      "url": "https://wuxianwow.com/legal",
+      "contact": "contact@wuxianwow.com"
+    }
+  }
+}

@@ -1,0 +1,571 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 43
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "4 行的 side 是第三方临时（来自 QuestieDB）"
+      }
+    ],
+    "id": 43,
+    "fetch_id": "instance:43",
+    "title": "哀嚎洞穴",
+    "url": "https://wuxianwow.com/instance/43",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        15,
+        24
+      ],
+      "max": null,
+      "min": 10,
+      "target": 17
+    },
+    "level_text": "准入 10 级 · 集合石 15–24 级",
+    "zone": "贫瘠之地",
+    "entrance": {
+      "zone": "贫瘠之地",
+      "area": null,
+      "continent": "卡利姆多",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 43.Corpse (-751.1, -2209.2) on Map 1",
+      "world_xy": [
+        -751.1,
+        -2209.2
+      ],
+      "continent_map_id": 1,
+      "zone_ui_map": 1413,
+      "atlas": [
+        {
+          "name": "贫瘠之地",
+          "ui_map": 1413,
+          "x": 0.4769,
+          "y": 0.3498,
+          "url": "https://wuxianwow.com/atlas/1413?i=43",
+          "fetch_id": "map:1413"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1414,
+          "x": 0.5238,
+          "y": 0.5524,
+          "url": "https://wuxianwow.com/atlas/1414?i=43",
+          "fetch_id": "map:1414"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.2436,
+          "y": 0.5206,
+          "url": "https://wuxianwow.com/atlas/947?i=43",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1464,
+          "x": 0.5415,
+          "y": 0.5432,
+          "url": "https://wuxianwow.com/atlas/1464?i=43",
+          "fetch_id": "map:1464"
+        }
+      ]
+    },
+    "boss_count": 8,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/43.webp",
+    "picture": "https://wuxianwow.com/data/loading/43.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=43",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "lore": {
+      "entities": [
+        {
+          "id": 1979,
+          "name": "哀嚎洞穴",
+          "kind": "地点",
+          "summary": "德鲁伊被困、遭梦魇腐化的溶洞",
+          "url": "https://wuxianwow.com/lore/n/1979"
+        }
+      ],
+      "events_here": [
+        {
+          "id": 2330,
+          "title": "哀嚎洞穴的救援",
+          "year": "约第 25 年",
+          "where": "哀嚎洞穴",
+          "cite": "《魔兽编年史 卷三》第四章",
+          "url": "https://wuxianwow.com/lore/e/2330"
+        }
+      ],
+      "events_total": 1,
+      "note": "无限世界书（魔兽小说与编年史设定集）里的同一个人物、地点或势力，逐条人工核对；书中内容只到《无限》当下（第 25 年）。详情用 lore_entity / lore_event。"
+    },
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少10级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "安娜科德拉",
+        "encounter_id": 585,
+        "npc_id": 900585,
+        "url": "https://wuxianwow.com/npc/900585",
+        "fetch_id": "npc:900585",
+        "portrait": "https://wuxianwow.com/data/bosses/585.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/585_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.293,
+          "y": 0.423,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,17011.4,17341.4,-92.8",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 2,
+        "name": "考布莱恩",
+        "encounter_id": 586,
+        "npc_id": 900586,
+        "url": "https://wuxianwow.com/npc/900586",
+        "fetch_id": "npc:900586",
+        "portrait": "https://wuxianwow.com/data/bosses/586.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/586_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.141,
+          "y": 0.586,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,16915.6,17481.1,-72.7",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 3,
+        "name": "克雷什",
+        "encounter_id": 587,
+        "npc_id": 900587,
+        "url": "https://wuxianwow.com/npc/900587",
+        "fetch_id": "npc:900587",
+        "portrait": "https://wuxianwow.com/data/bosses/587.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/587_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.332,
+          "y": 0.346,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,17056.7,17306.0,-106.2",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 4,
+        "name": "皮萨斯",
+        "encounter_id": 588,
+        "npc_id": 900588,
+        "url": "https://wuxianwow.com/npc/900588",
+        "fetch_id": "npc:900588",
+        "portrait": "https://wuxianwow.com/data/bosses/588.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/588_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.854,
+          "y": 0.266,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,17103.5,16825.6,-79.4",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 5,
+        "name": "斯卡姆",
+        "encounter_id": 589,
+        "npc_id": 900589,
+        "url": "https://wuxianwow.com/npc/900589",
+        "fetch_id": "npc:900589",
+        "portrait": "https://wuxianwow.com/data/bosses/589.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/589_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.932,
+          "y": 0.814,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,16781.7,16753.6,-69.2",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 6,
+        "name": "瑟芬迪斯",
+        "encounter_id": 590,
+        "npc_id": 900590,
+        "url": "https://wuxianwow.com/npc/900590",
+        "fetch_id": "npc:900590",
+        "portrait": "https://wuxianwow.com/data/bosses/590.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/590_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.619,
+          "y": 0.532,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,16947.5,17041.4,-74.0",
+          "pulls": 2,
+          "off_floor_yards": 5.6
+        }
+      },
+      {
+        "order": 7,
+        "name": "永生者沃尔丹",
+        "encounter_id": 591,
+        "npc_id": 900591,
+        "url": "https://wuxianwow.com/npc/900591",
+        "fetch_id": "npc:900591",
+        "portrait": "https://wuxianwow.com/data/bosses/591.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/591_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "下层",
+          "x": 0.557,
+          "y": 0.468,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,16984.8,17098.9,-106.0",
+          "pulls": 2,
+          "off_floor_yards": 23.4
+        }
+      },
+      {
+        "order": 8,
+        "name": "吞噬者穆坦努斯",
+        "encounter_id": 592,
+        "npc_id": 900592,
+        "url": "https://wuxianwow.com/npc/900592",
+        "fetch_id": "npc:900592",
+        "portrait": "https://wuxianwow.com/data/bosses/592.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/592_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.315,
+          "y": 0.096,
+          "map_url": "https://wuxianwow.com/instance/43",
+          "trip_url": "https://wuxianwow.com/trip?at=43,17203.5,17321.2,-100.3",
+          "pulls": 2
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 5243,
+              "name": "彩火魔杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/5243",
+              "fetch_id": "item:5243"
+            },
+            {
+              "item_id": 6632,
+              "name": "灵鳞披风",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6632",
+              "fetch_id": "item:6632"
+            },
+            {
+              "item_id": 10413,
+              "name": "尖牙手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10413",
+              "fetch_id": "item:10413"
+            }
+          ]
+        },
+        {
+          "npc_id": 5912,
+          "name": "变异精灵龙",
+          "on_site": false,
+          "fetch_id": "npc:5912",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 5243,
+              "name": "彩火魔杖",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/5243",
+              "fetch_id": "item:5243"
+            },
+            {
+              "item_id": 6632,
+              "name": "灵鳞披风",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/6632",
+              "fetch_id": "item:6632"
+            },
+            {
+              "item_id": 252781,
+              "name": "图样：风暴行者的皮手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/252781",
+              "fetch_id": "item:252781"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 120,
+      "p25_minutes": 21,
+      "p90_minutes": 34,
+      "text": "四分之一的人 21 分钟内、九成 34 分钟内（120 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 43.Corpse (-751.1, -2209.2) on Map 1",
+      "group_finder": "GroupFinderActivity 796",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5254"
+      ],
+      "lfg": "LFGDungeons 1 哀嚎洞穴",
+      "loading": "LoadingScreens 143 (fdid 131882)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaPOI"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=43",
+      "map_url": "https://wuxianwow.com/trip?instance=43&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=1,-751.1,-2209.2",
+      "map_levels": 2,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 1489,
+        "name": "哈缪尔·符文图腾",
+        "url": "https://wuxianwow.com/quest/1489",
+        "fetch_id": "quest:1489",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1490,
+        "name": "纳拉·蛮鬃",
+        "url": "https://wuxianwow.com/quest/1490",
+        "fetch_id": "quest:1490",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1486,
+        "name": "变异皮革",
+        "url": "https://wuxianwow.com/quest/1486",
+        "fetch_id": "quest:1486",
+        "level": 17,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 959,
+        "name": "港口的麻烦",
+        "url": "https://wuxianwow.com/quest/959",
+        "fetch_id": "quest:959",
+        "level": 18,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 962,
+        "name": "毒蛇花",
+        "url": "https://wuxianwow.com/quest/962",
+        "fetch_id": "quest:962",
+        "level": 18,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 1491,
+        "name": "智慧饮料",
+        "url": "https://wuxianwow.com/quest/1491",
+        "fetch_id": "quest:1491",
+        "level": 18,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 1487,
+        "name": "清除变异者",
+        "url": "https://wuxianwow.com/quest/1487",
+        "fetch_id": "quest:1487",
+        "level": 21,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 914,
+        "name": "尖牙德鲁伊",
+        "url": "https://wuxianwow.com/quest/914",
+        "fetch_id": "quest:914",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 999,
+        "name": "噩梦成真",
+        "url": "https://wuxianwow.com/quest/999",
+        "fetch_id": "quest:999",
+        "level": 25,
+        "type": "精英",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 1500,
+        "name": "唤醒纳拉雷克斯",
+        "url": "https://wuxianwow.com/quest/1500",
+        "fetch_id": "quest:1500",
+        "level": 25,
+        "type": "精英",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 3366,
+        "name": "发光的碎片",
+        "url": "https://wuxianwow.com/quest/3366",
+        "fetch_id": "quest:3366",
+        "level": 25,
+        "type": null,
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 6981,
+        "name": "发光的碎片",
+        "url": "https://wuxianwow.com/quest/6981",
+        "fetch_id": "quest:6981",
+        "level": 26,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 12,
+    "quests_confirmed": 12,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "哀嚎洞穴（地下城 · 5 / 10 人 · 准入 10 级 · 集合石 15–24 级 · 贫瘠之地）\n入口：贫瘠之地（-751.1, -2209.2，Map.Corpse）\n首领：安娜科德拉、考布莱恩、克雷什、皮萨斯、斯卡姆、瑟芬迪斯、永生者沃尔丹、吞噬者穆坦努斯\n首领位置（临时 · EG Link）：8/8 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：安娜科德拉 上层 0.293, 0.423；考布莱恩 上层 0.141, 0.586；克雷什 下层 0.332, 0.346；皮萨斯 上层 0.854, 0.266；斯卡姆 上层 0.932, 0.814；瑟芬迪斯 上层 0.619, 0.532；永生者沃尔丹 下层 0.557, 0.468；吞噬者穆坦努斯 上层 0.315, 0.096\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 21 分钟内、九成 34 分钟内（120 人）\n副本任务（12 个，服务器确认 12）：哈缪尔·符文图腾、纳拉·蛮鬃、变异皮革、港口的麻烦、毒蛇花、智慧饮料、清除变异者、尖牙德鲁伊、噩梦成真、唤醒纳拉雷克斯、发光的碎片、发光的碎片\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

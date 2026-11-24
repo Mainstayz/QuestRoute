@@ -1,0 +1,136 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 273029
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:273029",
+    "title": "魔像视觉长枪",
+    "url": "https://wuxianwow.com/item/273029",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAEIXVEAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:273029:::::::::::::|h[魔像视觉长枪]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 273029,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 33,
+    "slot": "枪弓弩",
+    "req_level": 28,
+    "sell": 5456,
+    "sell_text": "54银 56铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "枪弓弩",
+      "weapon_type": "枪械",
+      "ilvl": 33,
+      "req_level": 28,
+      "damage": {
+        "dps": 16.6,
+        "max": 54,
+        "min": 29,
+        "speed": 2.5
+      },
+      "stats": [
+        {
+          "stat": "敏捷",
+          "value": 6
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "npc_id": 260326,
+          "name": "遗迹守卫者",
+          "url": "https://wuxianwow.com/npc/903482",
+          "fetch_id": "npc:903482",
+          "zone": "挖掘场：湿地",
+          "drop_chance_percent": 31.6
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 31–35",
+      "bracket_id": 16,
+      "bracket_items": 60,
+      "outcomes": [
+        {
+          "item_id": 11138,
+          "name": "小块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11138",
+          "fetch_id": "item:11138"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2010,
+          "value_text": "20银 10铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 2803,
+          "value_text": "28银 3铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 1200,
+          "value_text": "12银"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 1399,
+          "value_text": "13银 99铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 1300,
+          "value_text": "13银"
+        }
+      ]
+    },
+    "text": "魔像视觉长枪 · 枪弓弩 · 装等 33\n属性：29–54 伤害 · 速度 2.5 · DPS 16.6；+6 敏捷\n\n售价：54银 56铜\n来源：遗迹守卫者掉落 31.6%（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 31–35，一次出一样）：小块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：20银 10铜\n分解约值（普通 · 部落，2026-11-24）：28银 3铜\n分解约值（普通 · 联盟，2026-11-24）：12银\n分解约值（PvP · 联盟，2026-11-21）：13银 99铜\n分解约值（角色扮演 · 联盟，2026-11-19）：13银",
+    "matched_by": "id"
+  }
+}

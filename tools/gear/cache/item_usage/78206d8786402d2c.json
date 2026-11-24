@@ -1,0 +1,295 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 286997
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:286997",
+    "title": "出渊护腿",
+    "url": "https://wuxianwow.com/item/286997",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKABJXCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:286997:::::::::::::|h[出渊护腿]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 286997,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 40,
+    "slot": "腿部",
+    "req_level": 35,
+    "sell": 5180,
+    "sell_text": "51银 80铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腿部",
+      "armor_type": "布甲",
+      "ilvl": 40,
+      "req_level": 35,
+      "armor": 51,
+      "stats": [
+        {
+          "stat": "精神",
+          "value": 17
+        },
+        {
+          "stat": "法术强度",
+          "value": 10
+        },
+        {
+          "stat": "法术穿透",
+          "value": 2
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "沉没之城",
+          "instance": {
+            "instance_id": 2970,
+            "url": "https://wuxianwow.com/instance/2970",
+            "fetch_id": "instance:2970"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 286997,
+        "name": "出渊护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "布甲",
+        "guidance": 70000,
+        "guidance_text": "7金",
+        "q1": 70000,
+        "q3": 70000,
+        "min": 68800,
+        "min_now": 68800,
+        "listings": 4,
+        "quantity": 4,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.33,
+        "reference": {
+          "price": 86562.37,
+          "low": 23498.78,
+          "high": 318869.44,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=286997",
+        "fetch_id": "item:286997",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 7金，价格区间 7金 – 7金，4 条挂单 / 4 个"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 286997,
+        "name": "出渊护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "布甲",
+        "guidance": 100100,
+        "guidance_text": "10金 1银",
+        "q1": 100000,
+        "q3": 100155,
+        "min": 100000,
+        "min_now": 100000,
+        "listings": 8,
+        "quantity": 8,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.22,
+        "reference": {
+          "price": 115773.15,
+          "low": 29481.44,
+          "high": 454639.4,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=286997&h=normal-horde",
+        "fetch_id": "item:286997",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 10金 1银，价格区间 10金 – 10金 1银 55铜，8 条挂单 / 8 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 286997,
+        "name": "出渊护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "布甲",
+        "guidance": 54300,
+        "guidance_text": "5金 43银",
+        "q1": 54299,
+        "q3": 64500,
+        "min": 54299,
+        "min_now": 54299,
+        "listings": 7,
+        "quantity": 7,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.37,
+        "reference": {
+          "price": 69228.82,
+          "low": 19945.52,
+          "high": 240286.07,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=286997&h=normal-alliance",
+        "fetch_id": "item:286997",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 5金 43银，价格区间 5金 42银 99铜 – 6金 45银，7 条挂单 / 7 个"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 286997,
+        "name": "出渊护腿",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "布甲",
+        "guidance": 89999,
+        "guidance_text": "8金 99银 99铜",
+        "q1": 89899,
+        "q3": 89999,
+        "min": 89799,
+        "min_now": 89799,
+        "listings": 5,
+        "quantity": 5,
+        "change_1d": 0.63,
+        "quantity_change_1d": -0.33,
+        "change_since": "2026-11-20",
+        "surprise_sd": 0.79,
+        "reference": {
+          "price": 54115.86,
+          "low": 14241.62,
+          "high": 205631.61,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=286997&h=pvp-alliance",
+        "fetch_id": "item:286997",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 8金 99银 99铜，价格区间 8金 98银 99铜 – 8金 99银 99铜，5 条挂单 / 5 个，比上次 +63%"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 36–40",
+      "bracket_id": 19,
+      "bracket_items": 108,
+      "outcomes": [
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2807,
+          "value_text": "28银 7铜",
+          "item_guidance": 70000,
+          "item_guidance_text": "7金"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 3250,
+          "value_text": "32银 50铜",
+          "item_guidance": 100100,
+          "item_guidance_text": "10金 1银"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 2343,
+          "value_text": "23银 43铜",
+          "item_guidance": 54300,
+          "item_guidance_text": "5金 43银"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 3499,
+          "value_text": "34银 99铜",
+          "item_guidance": 89999,
+          "item_guidance_text": "8金 99银 99铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 8300,
+          "value_text": "83银"
+        }
+      ]
+    },
+    "text": "出渊护腿 · 腿部 · 装等 40\n属性：51 护甲；+17 精神，+10 法术强度，+2 法术穿透\n\n售价：51银 80铜\n来源：沉没之城各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 36–40，一次出一样）：大块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：28银 7铜，物品自己的指导价 7金\n分解约值（普通 · 部落，2026-11-24）：32银 50铜，物品自己的指导价 10金 1银\n分解约值（普通 · 联盟，2026-11-24）：23银 43铜，物品自己的指导价 5金 43银\n分解约值（PvP · 联盟，2026-11-21）：34银 99铜，物品自己的指导价 8金 99银 99铜\n分解约值（角色扮演 · 联盟，2026-11-19）：83银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 7金，价格区间 7金 – 7金，4 条挂单 / 4 个\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 10金 1银，价格区间 10金 – 10金 1银 55铜，8 条挂单 / 8 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 5金 43银，价格区间 5金 42银 99铜 – 6金 45银，7 条挂单 / 7 个\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 8金 99银 99铜，价格区间 8金 98银 99铜 – 8金 99银 99铜，5 条挂单 / 5 个，比上次 +63%",
+    "matched_by": "id"
+  }
+}

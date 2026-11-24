@@ -1,0 +1,157 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 7726
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:7726",
+    "title": "血色指挥官之盾",
+    "url": "https://wuxianwow.com/item/7726",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAIK48AA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:7726:::::::::::::|h[血色指挥官之盾]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 7726,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 44,
+    "slot": "副手盾",
+    "req_level": 39,
+    "sell": 11522,
+    "sell_text": "1金 15银 22铜",
+    "use": "每次格挡时造成13到15点神圣伤害。",
+    "use_kind": "装备",
+    "effects": [
+      {
+        "kind": "装备",
+        "text": "每次格挡时造成13到15点神圣伤害。"
+      }
+    ],
+    "new_effect_in_160": true,
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "副手盾",
+      "armor_type": "盾牌",
+      "ilvl": 44,
+      "req_level": 39,
+      "armor": 1548,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 8
+        },
+        {
+          "stat": "力量",
+          "value": 7
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "npc_id": 3976,
+          "name": "血色十字军指挥官莫格莱尼",
+          "on_site": false,
+          "fetch_id": "npc:3976",
+          "temporary": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          },
+          "drop_chance_percent": 24.4
+        },
+        {
+          "npc_id": 3977,
+          "name": "大检察官怀特迈恩",
+          "url": "https://wuxianwow.com/npc/900450",
+          "fetch_id": "npc:900450",
+          "zone": "血色修道院"
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 41–45",
+      "bracket_id": 23,
+      "bracket_items": 138,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5437,
+          "value_text": "54银 37铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银"
+        }
+      ]
+    },
+    "text": "血色指挥官之盾 · 副手盾 · 装等 44\n属性：1548 护甲；+8 耐力，+7 力量\n装备：每次格挡时造成13到15点神圣伤害。\n售价：1金 15银 22铜\n来源：血色十字军指挥官莫格莱尼掉落 24.4%（临时）；大检察官怀特迈恩掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜\n分解约值（普通 · 部落，2026-11-24）：54银 37铜\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银",
+    "matched_by": "id"
+  }
+}

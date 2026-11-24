@@ -1,0 +1,150 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 281587
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:281587",
+    "title": "巨胁剥皮刃",
+    "url": "https://wuxianwow.com/item/281587",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAEPOXEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:281587:::::::::::::|h[巨胁剥皮刃]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 281587,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 60,
+    "slot": "单手",
+    "req_level": 1,
+    "sell": 49926,
+    "sell_text": "4金 99银 26铜",
+    "hidden": false,
+    "equipment": {
+      "slot": "单手",
+      "weapon_type": "单手剑",
+      "ilvl": 60,
+      "req_level": 1,
+      "damage": {
+        "dps": 39.3,
+        "max": 118,
+        "min": 63,
+        "speed": 2.3
+      },
+      "stats": [
+        {
+          "stat": "力量",
+          "value": 5
+        },
+        {
+          "stat": "耐力",
+          "value": 11
+        },
+        {
+          "stat": "防御等级",
+          "value": 3
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "任务",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "quest_rewards": [
+      {
+        "quest_id": 92446,
+        "name": "挠头者",
+        "url": "https://wuxianwow.com/quest/92446",
+        "fetch_id": "quest:92446",
+        "level": 60,
+        "side": "部落",
+        "reward": "任选"
+      }
+    ],
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 56–60",
+      "bracket_id": 45,
+      "bracket_items": 94,
+      "outcomes": [
+        {
+          "item_id": 14344,
+          "name": "大块魔光碎片",
+          "chance_pct": 99.5,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/14344",
+          "fetch_id": "item:14344"
+        },
+        {
+          "item_id": 20725,
+          "name": "连结水晶",
+          "chance_pct": 0.5,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/20725",
+          "fetch_id": "item:20725"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 26901,
+          "value_text": "2金 69银 1铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 32403,
+          "value_text": "3金 24银 3铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 30977,
+          "value_text": "3金 9银 77铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 31939,
+          "value_text": "3金 19银 39铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 119500,
+          "value_text": "11金 95银",
+          "missing": [
+            "连结水晶"
+          ]
+        }
+      ]
+    },
+    "text": "巨胁剥皮刃 · 单手 · 装等 60\n属性：63–118 伤害 · 速度 2.3 · DPS 39.3；+5 力量，+11 耐力，+3 防御等级\n\n售价：4金 99银 26铜\n来源：任务「挠头者」（任选）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 56–60，一次出一样）：大块魔光碎片 99.5% ×1、连结水晶 0.5% ×1\n分解约值（PvP · 部落，2026-11-24）：2金 69银 1铜\n分解约值（普通 · 部落，2026-11-24）：3金 24银 3铜\n分解约值（普通 · 联盟，2026-11-24）：3金 9银 77铜\n分解约值（PvP · 联盟，2026-11-21）：3金 19银 39铜\n分解约值（角色扮演 · 联盟，2026-11-19）：11金 95银（连结水晶没在售，没算）",
+    "matched_by": "id"
+  }
+}

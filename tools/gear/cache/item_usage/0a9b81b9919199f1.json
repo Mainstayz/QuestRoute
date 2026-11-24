@@ -1,0 +1,575 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 7787
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 QuestieDB"
+      },
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:7787",
+    "title": "光辉盾牌",
+    "url": "https://wuxianwow.com/item/7787",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAIOs8AA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:7787:::::::::::::|h[光辉盾牌]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 7787,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 31,
+    "slot": "副手盾",
+    "req_level": 26,
+    "sell": 3794,
+    "sell_text": "37银 94铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "副手盾",
+      "armor_type": "盾牌",
+      "ilvl": 31,
+      "req_level": 26,
+      "armor": 680,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 7
+        },
+        {
+          "stat": "格挡等级",
+          "value": 5
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 7787,
+        "name": "光辉盾牌",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "盾牌",
+        "guidance": 22990,
+        "guidance_text": "2金 29银 90铜",
+        "q1": 22990,
+        "q3": 23000,
+        "min": 22990,
+        "min_now": 22990,
+        "listings": 4,
+        "quantity": 4,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.28,
+        "reference": {
+          "price": 27593.21,
+          "low": 7499.99,
+          "high": 101518.13,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7787",
+        "fetch_id": "item:7787",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 2金 29银 90铜，价格区间 2金 29银 90铜 – 2金 30银，4 条挂单 / 4 个"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 7787,
+        "name": "光辉盾牌",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "盾牌",
+        "guidance": 50000,
+        "guidance_text": "5金",
+        "q1": 40000,
+        "q3": 50000,
+        "min": 40000,
+        "min_now": 40000,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": 1.03,
+        "reference": {
+          "price": 25125.98,
+          "low": 6239.97,
+          "high": 101172.7,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7787&h=normal-horde",
+        "fetch_id": "item:7787",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 5金，价格区间 4金 – 5金，3 条挂单 / 3 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 7787,
+        "name": "光辉盾牌",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "盾牌",
+        "guidance": 38888,
+        "guidance_text": "3金 88银 88铜",
+        "q1": 38888,
+        "q3": 38888,
+        "min": 38888,
+        "min_now": 38888,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.02,
+        "reference": {
+          "price": 39370.69,
+          "low": 11445.94,
+          "high": 135423.63,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7787&h=normal-alliance",
+        "fetch_id": "item:7787",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 3金 88银 88铜，价格区间 3金 88银 88铜 – 3金 88银 88铜，1 条挂单 / 1 个"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 7787,
+        "name": "光辉盾牌",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "盾牌",
+        "guidance": 40000,
+        "guidance_text": "4金",
+        "q1": 39900,
+        "q3": 40098,
+        "min": 38000,
+        "min_now": 38000,
+        "listings": 9,
+        "quantity": 9,
+        "change_1d": -0.18,
+        "quantity_change_1d": -0.07,
+        "change_since": "2026-11-20",
+        "surprise_sd": -0.11,
+        "reference": {
+          "price": 43006.88,
+          "low": 11321.75,
+          "high": 163366.21,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7787&h=pvp-alliance",
+        "fetch_id": "item:7787",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 4金，价格区间 3金 99银 – 4金 98铜，9 条挂单 / 9 个，比上次 −18%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 7787,
+        "name": "光辉盾牌",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "盾牌",
+        "guidance": 35500,
+        "guidance_text": "3金 55银",
+        "q1": 35500,
+        "q3": 35500,
+        "min": 35500,
+        "min_now": 35500,
+        "listings": 2,
+        "quantity": 2,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 1.02,
+        "reference": {
+          "price": 18039.02,
+          "low": 4330.06,
+          "high": 75150.49,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=7787&h=rp-alliance",
+        "fetch_id": "item:7787",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 3金 55银，价格区间 3金 55银 – 3金 55银，2 条挂单 / 2 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 31–35",
+      "bracket_id": 15,
+      "bracket_items": 129,
+      "outcomes": [
+        {
+          "item_id": 11138,
+          "name": "小块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11138",
+          "fetch_id": "item:11138"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2010,
+          "value_text": "20银 10铜",
+          "item_guidance": 22990,
+          "item_guidance_text": "2金 29银 90铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 2803,
+          "value_text": "28银 3铜",
+          "item_guidance": 50000,
+          "item_guidance_text": "5金"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 1200,
+          "value_text": "12银",
+          "item_guidance": 38888,
+          "item_guidance_text": "3金 88银 88铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 1399,
+          "value_text": "13银 99铜",
+          "item_guidance": 40000,
+          "item_guidance_text": "4金"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 1300,
+          "value_text": "13银",
+          "item_guidance": 35500,
+          "item_guidance_text": "3金 55银"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "QuestieDB",
+      "note": "临时数据：客户端的冒险指南没有掉落。QuestieDB 记下的是经典旧世（1.15.9）掉落，没有掉落率；shared 为副本里其他怪物也会掉；QuestieDB 的 npcs / objects 是掉它的生物与物件（宝箱一类的随机掉落不列），zone 是 QuestieDB 记的刷新区域。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 4281,
+          "name": "血色斥候",
+          "zone": "提瑞斯法林地",
+          "on_site": false,
+          "fetch_id": "npc:4281",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4282,
+          "name": "血色魔法师",
+          "zone": "提瑞斯法林地",
+          "on_site": false,
+          "fetch_id": "npc:4282",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4283,
+          "name": "血色哨兵",
+          "zone": "提瑞斯法林地",
+          "on_site": false,
+          "fetch_id": "npc:4283",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4284,
+          "name": "血色预言师",
+          "zone": "提瑞斯法林地",
+          "on_site": false,
+          "fetch_id": "npc:4284",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4285,
+          "name": "血色追随者",
+          "zone": "提瑞斯法林地",
+          "on_site": false,
+          "fetch_id": "npc:4285",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4286,
+          "name": "血色士兵",
+          "on_site": false,
+          "fetch_id": "npc:4286",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4287,
+          "name": "血色豪侠",
+          "on_site": false,
+          "fetch_id": "npc:4287",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4288,
+          "name": "血色驯兽员",
+          "on_site": false,
+          "fetch_id": "npc:4288",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4289,
+          "name": "血色招魂师",
+          "on_site": false,
+          "fetch_id": "npc:4289",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4290,
+          "name": "血色卫兵",
+          "on_site": false,
+          "fetch_id": "npc:4290",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4291,
+          "name": "血色教士",
+          "on_site": false,
+          "fetch_id": "npc:4291",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4292,
+          "name": "血色保卫者",
+          "on_site": false,
+          "fetch_id": "npc:4292",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4293,
+          "name": "血色占卜师",
+          "on_site": false,
+          "fetch_id": "npc:4293",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4294,
+          "name": "血色魔术师",
+          "on_site": false,
+          "fetch_id": "npc:4294",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4295,
+          "name": "血色仆从",
+          "on_site": false,
+          "fetch_id": "npc:4295",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4296,
+          "name": "血色老兵",
+          "on_site": false,
+          "fetch_id": "npc:4296",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4298,
+          "name": "血色防御者",
+          "on_site": false,
+          "fetch_id": "npc:4298",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4299,
+          "name": "血色牧师",
+          "on_site": false,
+          "fetch_id": "npc:4299",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4300,
+          "name": "血色巫师",
+          "on_site": false,
+          "fetch_id": "npc:4300",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4301,
+          "name": "血色百夫长",
+          "on_site": false,
+          "fetch_id": "npc:4301",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4302,
+          "name": "血色勇士",
+          "on_site": false,
+          "fetch_id": "npc:4302",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4303,
+          "name": "血色修士",
+          "on_site": false,
+          "fetch_id": "npc:4303",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4304,
+          "name": "血色捕猎犬",
+          "url": "https://wuxianwow.com/npc/4304",
+          "fetch_id": "npc:4304",
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4306,
+          "name": "血色拷问者",
+          "on_site": false,
+          "fetch_id": "npc:4306",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4308,
+          "name": "自由的幽魂",
+          "on_site": false,
+          "fetch_id": "npc:4308",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4540,
+          "name": "血色僧侣",
+          "on_site": false,
+          "fetch_id": "npc:4540",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 6426,
+          "name": "痛苦的死者",
+          "on_site": false,
+          "fetch_id": "npc:6426",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 6427,
+          "name": "鬼魅幻影",
+          "on_site": false,
+          "fetch_id": "npc:6427",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 14693,
+          "name": "瑟克恩",
+          "on_site": false,
+          "fetch_id": "npc:14693",
+          "temporary": true,
+          "source": "QuestieDB"
+        }
+      ]
+    },
+    "text": "光辉盾牌 · 副手盾 · 装等 31\n属性：680 护甲；+7 耐力，+5 格挡等级\n\n售价：37银 94铜\n来源：血色修道院各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 31–35，一次出一样）：小块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：20银 10铜，物品自己的指导价 2金 29银 90铜\n分解约值（普通 · 部落，2026-11-24）：28银 3铜，物品自己的指导价 5金\n分解约值（普通 · 联盟，2026-11-24）：12银，物品自己的指导价 3金 88银 88铜\n分解约值（PvP · 联盟，2026-11-21）：13银 99铜，物品自己的指导价 4金\n分解约值（角色扮演 · 联盟，2026-11-19）：13银，物品自己的指导价 3金 55银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 2金 29银 90铜，价格区间 2金 29银 90铜 – 2金 30银，4 条挂单 / 4 个\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 5金，价格区间 4金 – 5金，3 条挂单 / 3 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 3金 88银 88铜，价格区间 3金 88银 88铜 – 3金 88银 88铜，1 条挂单 / 1 个\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 4金，价格区间 3金 99银 – 4金 98铜，9 条挂单 / 9 个，比上次 −18%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 3金 55银，价格区间 3金 55银 – 3金 55银，2 条挂单 / 2 个",
+    "matched_by": "id"
+  }
+}

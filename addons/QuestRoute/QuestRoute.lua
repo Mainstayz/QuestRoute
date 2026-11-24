@@ -253,6 +253,10 @@ WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args
 WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args:questID可选默认1号；objectiveKey可选需questID。hotspotID可选需同时带questID/objectiveKey，取get_plan.steps[].hotspots[].id以指定备选；省略选其他最近热点。旧点150码内避开600秒，无备选保留路线/跳过。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")
+WB:Expose("get_gear_candidates", ns.GetGearCandidates,
+    "只读查询升级路线里的战斗装备候选。args:level=1..60，class，spec，faction=联盟/部落，可选gear、weights、questLevelWindow、limit=1..100、race。"
+    .. "只对战士防护打生存/仇恨启发式分数，其他战士玩法只给未评分候选，其他职业直接拒绝。不使用60级模拟，不把特效和套装算进分数。"
+    .. "没有现装时只称候选；现装不在数据集里不比较。衬衣和战袍不参与。数据覆盖和来源限制见 GEAR.md。")
 
 function ns.OnUnload()
     HideTaskMarkers()

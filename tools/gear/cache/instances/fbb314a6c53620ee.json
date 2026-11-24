@@ -1,0 +1,510 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 129
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "4 行的 side 是第三方临时（来自 QuestieDB）"
+      }
+    ],
+    "id": 129,
+    "fetch_id": "instance:129",
+    "title": "剃刀高地",
+    "url": "https://wuxianwow.com/instance/129",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        37,
+        46
+      ],
+      "max": null,
+      "min": 35,
+      "target": 34
+    },
+    "level_text": "准入 35 级 · 集合石 37–46 级",
+    "zone": "贫瘠之地",
+    "entrance": {
+      "zone": "贫瘠之地",
+      "area": null,
+      "continent": "卡利姆多",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 129.Corpse (-4662.9, -2535.9) on Map 1",
+      "world_xy": [
+        -4662.9,
+        -2535.9
+      ],
+      "continent_map_id": 1,
+      "zone_ui_map": 1413,
+      "atlas": [
+        {
+          "name": "贫瘠之地",
+          "ui_map": 1413,
+          "x": 0.5091,
+          "y": 0.9288,
+          "url": "https://wuxianwow.com/atlas/1413?i=129",
+          "fetch_id": "map:1413"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1414,
+          "x": 0.5327,
+          "y": 0.7118,
+          "url": "https://wuxianwow.com/atlas/1414?i=129",
+          "fetch_id": "map:1414"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.2509,
+          "y": 0.6514,
+          "url": "https://wuxianwow.com/atlas/947?i=129",
+          "fetch_id": "map:947"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1464,
+          "x": 0.5549,
+          "y": 0.7039,
+          "url": "https://wuxianwow.com/atlas/1464?i=129",
+          "fetch_id": "map:1464"
+        }
+      ]
+    },
+    "boss_count": 6,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/129.webp",
+    "picture": "https://wuxianwow.com/data/loading/129.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=129",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少35级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "图特卡什",
+        "encounter_id": 2780,
+        "npc_id": 902780,
+        "url": "https://wuxianwow.com/npc/902780",
+        "fetch_id": "npc:902780",
+        "portrait": "https://wuxianwow.com/data/bosses/2780.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2780_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.648,
+          "y": 0.332,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2507.8,846.6,47.7",
+          "pulls": 3,
+          "spread_yards": 29
+        }
+      },
+      {
+        "order": 2,
+        "name": "腐烂的普雷莫尔",
+        "encounter_id": 2781,
+        "npc_id": 902781,
+        "url": "https://wuxianwow.com/npc/902781",
+        "fetch_id": "npc:902781",
+        "portrait": "https://wuxianwow.com/data/bosses/2781.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2781_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.488,
+          "y": 0.136,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2577.3,954.9,52.4",
+          "pulls": 3,
+          "spread_yards": 6
+        }
+      },
+      {
+        "order": 3,
+        "name": "火眼莫德雷斯",
+        "encounter_id": 2782,
+        "npc_id": 902782,
+        "url": "https://wuxianwow.com/npc/902782",
+        "fetch_id": "npc:902782",
+        "portrait": "https://wuxianwow.com/data/bosses/2782.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2782_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.906,
+          "y": 0.448,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2466.6,671.4,63.6",
+          "pulls": 3
+        }
+      },
+      {
+        "order": 4,
+        "name": "拉戈斯诺特",
+        "encounter_id": 2783,
+        "npc_id": 902783,
+        "url": "https://wuxianwow.com/npc/902783",
+        "fetch_id": "npc:902783",
+        "portrait": "https://wuxianwow.com/data/bosses/2783.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2783_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "cMaNGOS",
+          "floor": null,
+          "x": 0.563,
+          "y": 0.735,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2364.8,904.5,28.7"
+        }
+      },
+      {
+        "order": 5,
+        "name": "暴食者",
+        "encounter_id": 2784,
+        "npc_id": 902784,
+        "url": "https://wuxianwow.com/npc/902784",
+        "fetch_id": "npc:902784",
+        "portrait": "https://wuxianwow.com/data/bosses/2784.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2784_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.371,
+          "y": 0.73,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2366.5,1034.4,25.2",
+          "pulls": 2,
+          "spread_yards": 82
+        }
+      },
+      {
+        "order": 6,
+        "name": "寒冰之王亚门纳尔",
+        "encounter_id": 2785,
+        "npc_id": 902785,
+        "url": "https://wuxianwow.com/npc/902785",
+        "fetch_id": "npc:902785",
+        "portrait": "https://wuxianwow.com/data/bosses/2785.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2785_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "x": 0.479,
+          "y": 0.626,
+          "map_url": "https://wuxianwow.com/instance/129",
+          "trip_url": "https://wuxianwow.com/trip?at=129,2403.4,960.9,76.1",
+          "pulls": 2
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 10567,
+              "name": "硬刺之弓",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10567",
+              "fetch_id": "item:10567"
+            },
+            {
+              "item_id": 10570,
+              "name": "杀人者",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10570",
+              "fetch_id": "item:10570"
+            },
+            {
+              "item_id": 10571,
+              "name": "乌黑骨棒",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10571",
+              "fetch_id": "item:10571"
+            },
+            {
+              "item_id": 10572,
+              "name": "寒冰碎片",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10572",
+              "fetch_id": "item:10572"
+            },
+            {
+              "item_id": 10573,
+              "name": "斩骨剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10573",
+              "fetch_id": "item:10573"
+            },
+            {
+              "item_id": 10574,
+              "name": "裹尸头巾",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10574",
+              "fetch_id": "item:10574"
+            },
+            {
+              "item_id": 10578,
+              "name": "心灵长靴",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10578",
+              "fetch_id": "item:10578"
+            },
+            {
+              "item_id": 10581,
+              "name": "亡首外衣",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10581",
+              "fetch_id": "item:10581"
+            },
+            {
+              "item_id": 10582,
+              "name": "石楠皮靴",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10582",
+              "fetch_id": "item:10582"
+            },
+            {
+              "item_id": 10583,
+              "name": "硬刺皮甲",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10583",
+              "fetch_id": "item:10583"
+            },
+            {
+              "item_id": 10584,
+              "name": "强风之拳",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/10584",
+              "fetch_id": "item:10584"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 54,
+      "p25_minutes": 40,
+      "p90_minutes": 45,
+      "text": "四分之一的人 40 分钟内、九成 45 分钟内（54 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 129.Corpse (-4662.9, -2535.9) on Map 1",
+      "group_finder": "GroupFinderActivity 806",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5245"
+      ],
+      "lfg": "LFGDungeons 19 剃刀高地",
+      "loading": "LoadingScreens 145 (fdid 131864)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=129",
+      "map_url": "https://wuxianwow.com/trip?instance=129&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=1,-4662.9,-2535.9",
+      "map_levels": 1,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 6626,
+        "name": "邪恶之地",
+        "url": "https://wuxianwow.com/quest/6626",
+        "fetch_id": "quest:6626",
+        "level": 35,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 6521,
+        "name": "邪恶的盟友",
+        "url": "https://wuxianwow.com/quest/6521",
+        "fetch_id": "quest:6521",
+        "level": 36,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 6522,
+        "name": "邪恶的盟友",
+        "url": "https://wuxianwow.com/quest/6522",
+        "fetch_id": "quest:6522",
+        "level": 36,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 3523,
+        "name": "剃刀高地的亡灵天灾",
+        "url": "https://wuxianwow.com/quest/3523",
+        "fetch_id": "quest:3523",
+        "level": 37,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 3525,
+        "name": "封印神像",
+        "url": "https://wuxianwow.com/quest/3525",
+        "fetch_id": "quest:3525",
+        "level": 37,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 96773,
+        "name": "凛风之眼",
+        "url": "https://wuxianwow.com/quest/96773",
+        "fetch_id": "quest:96773",
+        "level": 41,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97196,
+        "name": "凛风之眼",
+        "url": "https://wuxianwow.com/quest/97196",
+        "fetch_id": "quest:97196",
+        "level": 41,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 3341,
+        "name": "寒冰之王",
+        "url": "https://wuxianwow.com/quest/3341",
+        "fetch_id": "quest:3341",
+        "level": 42,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 3636,
+        "name": "与圣光同在",
+        "url": "https://wuxianwow.com/quest/3636",
+        "fetch_id": "quest:3636",
+        "level": 42,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 93604,
+        "name": "阿迦玛甘之血",
+        "url": "https://wuxianwow.com/quest/93604",
+        "fetch_id": "quest:93604",
+        "level": 45,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 10,
+    "quests_confirmed": 10,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "剃刀高地（地下城 · 5 / 10 人 · 准入 35 级 · 集合石 37–46 级 · 贫瘠之地）\n入口：贫瘠之地（-4662.9, -2535.9，Map.Corpse）\n首领：图特卡什、腐烂的普雷莫尔、火眼莫德雷斯、拉戈斯诺特、暴食者、寒冰之王亚门纳尔\n首领位置（临时 · EG Link / cMaNGOS）：6/6 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：图特卡什 0.648, 0.332（EG Link）；腐烂的普雷莫尔 0.488, 0.136（EG Link）；火眼莫德雷斯 0.906, 0.448（EG Link）；拉戈斯诺特 0.563, 0.735（cMaNGOS）；暴食者 0.371, 0.73（EG Link）；寒冰之王亚门纳尔 0.479, 0.626（EG Link）\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 40 分钟内、九成 45 分钟内（54 人）\n副本任务（10 个，服务器确认 10）：邪恶之地、邪恶的盟友、邪恶的盟友、剃刀高地的亡灵天灾、封印神像、凛风之眼、凛风之眼、寒冰之王、与圣光同在、阿迦玛甘之血\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

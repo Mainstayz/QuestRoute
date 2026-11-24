@@ -1,0 +1,78 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 273457
+  },
+  "response": {
+    "outcome": "ok",
+    "id": "item:273457",
+    "title": "巫师项圈",
+    "url": "https://wuxianwow.com/item/273457",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:273457:::::::::::::|h[巫师项圈]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 273457,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 22,
+    "slot": "颈部",
+    "req_level": 17,
+    "sell": 878,
+    "sell_text": "8银 78铜",
+    "use": "使你被沉默效果命中的几率降低4%。",
+    "use_kind": "装备",
+    "effects": [
+      {
+        "kind": "装备",
+        "text": "使你被沉默效果命中的几率降低4%。"
+      }
+    ],
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "颈部",
+      "ilvl": 22,
+      "req_level": 17,
+      "stats": [
+        {
+          "stat": "智力",
+          "value": 2
+        },
+        {
+          "stat": "精神",
+          "value": 2
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": null,
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "npc_id": 3914,
+          "name": "雷希戈尔",
+          "url": "https://wuxianwow.com/npc/902748",
+          "fetch_id": "npc:902748",
+          "zone": "影牙城堡",
+          "drop_chance_percent": 30
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": false,
+      "text": "不能分解（客户端的物品标志）"
+    },
+    "text": "巫师项圈 · 颈部 · 装等 22\n属性：+2 智力，+2 精神\n装备：使你被沉默效果命中的几率降低4%。\n售价：8银 78铜\n来源：雷希戈尔掉落 30%（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解：不能分解（客户端的物品标志）",
+    "matched_by": "id"
+  }
+}

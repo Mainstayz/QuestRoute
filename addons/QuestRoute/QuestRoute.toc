@@ -24,4 +24,6 @@ Settings.lua
 MapPins.lua
 WorldMap.lua
 Minimap.lua
+GearData.lua
+Gear.lua
 QuestRoute.lua

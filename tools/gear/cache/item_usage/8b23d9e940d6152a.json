@@ -1,0 +1,328 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287003
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287003",
+    "title": "锈蚀护手",
+    "url": "https://wuxianwow.com/item/287003",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAAZvCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287003:::::::::::::|h[锈蚀护手]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287003,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 39,
+    "slot": "手",
+    "req_level": 34,
+    "sell": 3678,
+    "sell_text": "36银 78铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "手",
+      "armor_type": "锁甲",
+      "ilvl": 39,
+      "req_level": 34,
+      "armor": 156,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 5
+        },
+        {
+          "stat": "爆击等级",
+          "value": 14
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "沉没之城",
+          "instance": {
+            "instance_id": 2970,
+            "url": "https://wuxianwow.com/instance/2970",
+            "fetch_id": "instance:2970"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287003,
+        "name": "锈蚀护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 11175,
+        "guidance_text": "1金 11银 75铜",
+        "q1": 11175,
+        "q3": 11175,
+        "min": 11100,
+        "min_now": 11175,
+        "listings": 5,
+        "quantity": 5,
+        "change_1d": -0.26,
+        "quantity_change_1d": -0.6,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.4,
+        "reference": {
+          "price": 14447.98,
+          "low": 3930.41,
+          "high": 53110.02,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287003",
+        "fetch_id": "item:287003",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 11银 75铜，价格区间 1金 11银 75铜 – 1金 11银 75铜，5 条挂单 / 5 个，比上次 −26%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287003,
+        "name": "锈蚀护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 14900,
+        "guidance_text": "1金 49银",
+        "q1": 13000,
+        "q3": 14900,
+        "min": 13000,
+        "min_now": 13000,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.59,
+        "reference": {
+          "price": 22040.73,
+          "low": 5537.48,
+          "high": 87728.35,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287003&h=normal-horde",
+        "fetch_id": "item:287003",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 1金 49银，价格区间 1金 30银 – 1金 49银，3 条挂单 / 3 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287003,
+        "name": "锈蚀护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 29999,
+        "guidance_text": "2金 99银 99铜",
+        "q1": 29900,
+        "q3": 69999,
+        "min": 29900,
+        "min_now": 29900,
+        "listings": 6,
+        "quantity": 6,
+        "change_1d": 0.02,
+        "quantity_change_1d": -0.27,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.04,
+        "reference": {
+          "price": 30970.93,
+          "low": 7252.39,
+          "high": 132259.71,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287003&h=normal-alliance",
+        "fetch_id": "item:287003",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 2金 99银 99铜，价格区间 2金 99银 – 6金 99银 99铜，6 条挂单 / 6 个，比上次 +2%"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287003,
+        "name": "锈蚀护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 20500,
+        "guidance_text": "2金 5银",
+        "q1": 20500,
+        "q3": 35050,
+        "min": 20500,
+        "min_now": 20500,
+        "listings": 15,
+        "quantity": 15,
+        "change_1d": -0.47,
+        "quantity_change_1d": 0.08,
+        "change_since": "2026-11-20",
+        "surprise_sd": -0.46,
+        "reference": {
+          "price": 28032.44,
+          "low": 6920.38,
+          "high": 113551.21,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287003&h=pvp-alliance",
+        "fetch_id": "item:287003",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 2金 5银，价格区间 2金 5银 – 3金 50银 50铜，15 条挂单 / 15 个，比上次 −47%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 287003,
+        "name": "锈蚀护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "锁甲",
+        "guidance": 47600,
+        "guidance_text": "4金 76银",
+        "q1": 47600,
+        "q3": 47600,
+        "min": 47600,
+        "min_now": 47600,
+        "listings": 2,
+        "quantity": 2,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 0.02,
+        "reference": {
+          "price": 47162.49,
+          "low": 14398.47,
+          "high": 154481.7,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287003&h=rp-alliance",
+        "fetch_id": "item:287003",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 4金 76银，价格区间 4金 76银 – 4金 76银，2 条挂单 / 2 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 36–40",
+      "bracket_id": 19,
+      "bracket_items": 108,
+      "outcomes": [
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 2807,
+          "value_text": "28银 7铜",
+          "item_guidance": 11175,
+          "item_guidance_text": "1金 11银 75铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 3250,
+          "value_text": "32银 50铜",
+          "item_guidance": 14900,
+          "item_guidance_text": "1金 49银"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 2343,
+          "value_text": "23银 43铜",
+          "item_guidance": 29999,
+          "item_guidance_text": "2金 99银 99铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 3499,
+          "value_text": "34银 99铜",
+          "item_guidance": 20500,
+          "item_guidance_text": "2金 5银"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 8300,
+          "value_text": "83银",
+          "item_guidance": 47600,
+          "item_guidance_text": "4金 76银"
+        }
+      ]
+    },
+    "text": "锈蚀护手 · 手 · 装等 39\n属性：156 护甲；+5 耐力，+14 爆击等级\n\n售价：36银 78铜\n来源：沉没之城各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 36–40，一次出一样）：大块闪光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：28银 7铜，物品自己的指导价 1金 11银 75铜\n分解约值（普通 · 部落，2026-11-24）：32银 50铜，物品自己的指导价 1金 49银\n分解约值（普通 · 联盟，2026-11-24）：23银 43铜，物品自己的指导价 2金 99银 99铜\n分解约值（PvP · 联盟，2026-11-21）：34银 99铜，物品自己的指导价 2金 5银\n分解约值（角色扮演 · 联盟，2026-11-19）：83银，物品自己的指导价 4金 76银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 1金 11银 75铜，价格区间 1金 11银 75铜 – 1金 11银 75铜，5 条挂单 / 5 个，比上次 −26%\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 1金 49银，价格区间 1金 30银 – 1金 49银，3 条挂单 / 3 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 2金 99银 99铜，价格区间 2金 99银 – 6金 99银 99铜，6 条挂单 / 6 个，比上次 +2%\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 2金 5银，价格区间 2金 5银 – 3金 50银 50铜，15 条挂单 / 15 个，比上次 −47%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 4金 76银，价格区间 4金 76银 – 4金 76银，2 条挂单 / 2 个",
+    "matched_by": "id"
+  }
+}

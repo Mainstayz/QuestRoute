@@ -1,0 +1,178 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 903511
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "encounter.members",
+        "kind": "absent",
+        "text": "客户端的冒险指南是空的；members 是组成这场首领战的 NPC：source 为 cache 的来自服务器生物缓存，checked 的在游戏里向服务器查过、还没导入服务器层，owner 的是站长情报、还没有生物编号"
+      },
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      }
+    ],
+    "id": "npc:903511",
+    "npc_id": 903511,
+    "name": "原始元素",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/903511",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "dungeon": "沉没之城",
+    "instance": {
+      "id": 2970,
+      "fetch_id": "instance:2970",
+      "name": "沉没之城",
+      "level_text": "准入 35 级 · 集合石 35–42 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          35,
+          42
+        ],
+        "max": null,
+        "min": 35,
+        "target": 35
+      },
+      "url": "https://wuxianwow.com/instance/2970"
+    },
+    "difficulty": null,
+    "new_in_160": true,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/3511.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/3511_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 3511,
+      "dungeon": "沉没之城",
+      "instance": {
+        "instance_id": 2970,
+        "url": "https://wuxianwow.com/instance/2970",
+        "fetch_id": "instance:2970"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 5,
+      "of": 6,
+      "bosses": [
+        {
+          "npc_id": 903474,
+          "name": "祖拉莱",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903474",
+          "fetch_id": "npc:903474",
+          "portrait": "https://wuxianwow.com/data/bosses/3474.webp"
+        },
+        {
+          "npc_id": 903475,
+          "name": "瓦尔塔卡",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903475",
+          "fetch_id": "npc:903475",
+          "portrait": "https://wuxianwow.com/data/bosses/3475.webp"
+        },
+        {
+          "npc_id": 903476,
+          "name": "德雷德莱斯船长",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903476",
+          "fetch_id": "npc:903476",
+          "portrait": "https://wuxianwow.com/data/bosses/3476.webp"
+        },
+        {
+          "npc_id": 903478,
+          "name": "不死守护者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903478",
+          "fetch_id": "npc:903478",
+          "portrait": "https://wuxianwow.com/data/bosses/3478.webp"
+        },
+        {
+          "npc_id": 903511,
+          "name": "原始元素",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903511",
+          "fetch_id": "npc:903511",
+          "portrait": "https://wuxianwow.com/data/bosses/3511.webp"
+        },
+        {
+          "npc_id": 903479,
+          "name": "毒蛇明洛斯",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903479",
+          "fetch_id": "npc:903479",
+          "portrait": "https://wuxianwow.com/data/bosses/3479.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则",
+      "members": [
+        {
+          "creature_id": 270887,
+          "name": "原始元素",
+          "title": "初始区域 4",
+          "source": "cache"
+        }
+      ]
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 271718,
+          "name": "林克的铁靴",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/271718",
+          "fetch_id": "item:271718"
+        },
+        {
+          "item_id": 274611,
+          "name": "溺水者长袍",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274611",
+          "fetch_id": "item:274611"
+        },
+        {
+          "item_id": 274612,
+          "name": "浸水的裹尸布",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274612",
+          "fetch_id": "item:274612"
+        },
+        {
+          "item_id": 274615,
+          "name": "原始之心",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/274615",
+          "fetch_id": "item:274615"
+        }
+      ]
+    },
+    "text": "原始元素（首领 · 沉没之城 · 1.60 新增）\n沉没之城 第 5/6 个首领\n副本：instance:2970（地下城 · 准入 35 级 · 集合石 35–42 级）\n掉落（临时 · Spyglass）：林克的铁靴、溺水者长袍、浸水的裹尸布、原始之心\n位置（临时 · EG Link）：沉没之城副本地图 0.606, 0.686（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "x": 0.606,
+      "y": 0.686,
+      "map_url": "https://wuxianwow.com/instance/2970",
+      "trip_url": "https://wuxianwow.com/trip?at=2970,-13486.8,2586.1,-5.0",
+      "pulls": 2
+    }
+  }
+}

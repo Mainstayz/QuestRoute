@@ -1,0 +1,453 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287012
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 Polestar 玩家录制"
+      },
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287012",
+    "title": "克罗多克战争板甲护手",
+    "url": "https://wuxianwow.com/item/287012",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAAaTCEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287012:::::::::::::|h[克罗多克战争板甲护手]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287012,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 45,
+    "slot": "手",
+    "req_level": 40,
+    "sell": 6572,
+    "sell_text": "65银 72铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "手",
+      "armor_type": "板甲",
+      "ilvl": 45,
+      "req_level": 40,
+      "armor": 300,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 9
+        },
+        {
+          "stat": "招架等级",
+          "value": 15
+        }
+      ],
+      "stats_source": "客户端公式推算",
+      "set": {
+        "id": 2135,
+        "fetch_id": "set:2135",
+        "name": "克罗多克战甲",
+        "url": "https://wuxianwow.com/set/2135",
+        "group": "1.60 新增小套",
+        "classes": [],
+        "armor_type": "板甲",
+        "faction": null,
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": [
+          45,
+          46
+        ],
+        "req_level": [
+          40,
+          41
+        ],
+        "req_text": "需要等级：40–41 级",
+        "pieces_total": 5,
+        "pieces_visible": 5,
+        "pieces_hidden": 0,
+        "fully_hidden": false,
+        "crafted": false,
+        "pieces": [
+          {
+            "item_id": 275006,
+            "name": "克罗多克战争板甲头盔",
+            "slot": "头部",
+            "ilvl": 46,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/275006",
+            "fetch_id": "item:275006",
+            "previewable": true
+          },
+          {
+            "item_id": 287014,
+            "name": "克罗多克战争板甲护肩",
+            "slot": "肩部",
+            "ilvl": 46,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/287014",
+            "fetch_id": "item:287014",
+            "previewable": true
+          },
+          {
+            "item_id": 275005,
+            "name": "克罗多克战争板甲护胸",
+            "slot": "胸甲",
+            "ilvl": 46,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/275005",
+            "fetch_id": "item:275005",
+            "previewable": true
+          },
+          {
+            "item_id": 287013,
+            "name": "克罗多克战争板甲腿铠",
+            "slot": "腿部",
+            "ilvl": 46,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/287013",
+            "fetch_id": "item:287013",
+            "previewable": true
+          },
+          {
+            "item_id": 287012,
+            "name": "克罗多克战争板甲护手",
+            "slot": "手",
+            "ilvl": 45,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/287012",
+            "fetch_id": "item:287012",
+            "previewable": true
+          }
+        ],
+        "bonuses": [
+          {
+            "pieces": 2,
+            "text": "护甲值提高100点。"
+          },
+          {
+            "pieces": 3,
+            "text": "防御提高5点。"
+          },
+          {
+            "pieces": 4,
+            "text": "格挡时有几率恢复14到22点生命值。在据点或城市区域时，恢复效果翻倍。"
+          },
+          {
+            "pieces": 5,
+            "text": "受到伤害时有很高几率使耐力提高1点，持续30秒，最多叠加20层。"
+          }
+        ]
+      }
+    },
+    "source_type": "首领掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "克罗多克要塞",
+          "instance": {
+            "instance_id": 3039,
+            "url": "https://wuxianwow.com/instance/3039",
+            "fetch_id": "instance:3039"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287012,
+        "name": "克罗多克战争板甲护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "板甲",
+        "guidance": 79900,
+        "guidance_text": "7金 99银",
+        "q1": 68899,
+        "q3": 86665,
+        "min": 68888,
+        "min_now": 68888,
+        "listings": 34,
+        "quantity": 34,
+        "change_1d": -0.2,
+        "quantity_change_1d": -0.22,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.17,
+        "reference": {
+          "price": 89273.9,
+          "low": 24115.89,
+          "high": 330480.41,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287012",
+        "fetch_id": "item:287012",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 7金 99银，价格区间 6金 88银 99铜 – 8金 66银 65铜，34 条挂单 / 34 个，比上次 −20%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:49",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287012,
+        "name": "克罗多克战争板甲护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "板甲",
+        "guidance": 99999,
+        "guidance_text": "9金 99银 99铜",
+        "q1": 99999,
+        "q3": 119988,
+        "min": 99999,
+        "min_now": 99999,
+        "listings": 25,
+        "quantity": 25,
+        "change_1d": -0.26,
+        "quantity_change_1d": -0.14,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.37,
+        "reference": {
+          "price": 127023.51,
+          "low": 32397.32,
+          "high": 498034.23,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287012&h=normal-horde",
+        "fetch_id": "item:287012",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 9金 99银 99铜，价格区间 9金 99银 99铜 – 11金 99银 88铜，25 条挂单 / 25 个，比上次 −26%"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287012,
+        "name": "克罗多克战争板甲护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "板甲",
+        "guidance": 90000,
+        "guidance_text": "9金",
+        "q1": 90000,
+        "q3": 100000,
+        "min": 90000,
+        "min_now": 90000,
+        "listings": 12,
+        "quantity": 12,
+        "change_1d": -0.15,
+        "quantity_change_1d": -0.44,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.1,
+        "reference": {
+          "price": 96064.68,
+          "low": 27179.55,
+          "high": 339535.56,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287012&h=normal-alliance",
+        "fetch_id": "item:287012",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 9金，价格区间 9金 – 10金，12 条挂单 / 12 个，比上次 −15%"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287012,
+        "name": "克罗多克战争板甲护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "板甲",
+        "guidance": 105088,
+        "guidance_text": "10金 50银 88铜",
+        "q1": 95000,
+        "q3": 105088,
+        "min": 93500,
+        "min_now": 93500,
+        "listings": 19,
+        "quantity": 19,
+        "change_1d": 0.46,
+        "quantity_change_1d": -0.11,
+        "change_since": "2026-11-20",
+        "surprise_sd": 0.63,
+        "reference": {
+          "price": 69839.32,
+          "low": 18407.68,
+          "high": 264972.64,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287012&h=pvp-alliance",
+        "fetch_id": "item:287012",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 10金 50银 88铜，价格区间 9金 50银 – 10金 50银 88铜，19 条挂单 / 19 个，比上次 +46%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 287012,
+        "name": "克罗多克战争板甲护手",
+        "quality": 3,
+        "class": "护甲",
+        "subclass": "板甲",
+        "guidance": 290000,
+        "guidance_text": "29金",
+        "q1": 290000,
+        "q3": 300000,
+        "min": 290000,
+        "min_now": 290000,
+        "listings": 2,
+        "quantity": 2,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 0.07,
+        "reference": {
+          "price": 278892.61,
+          "low": 80686.7,
+          "high": 963989.01,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287012&h=rp-alliance",
+        "fetch_id": "item:287012",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 29金，价格区间 29金 – 30金，2 条挂单 / 2 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 41–45",
+      "bracket_id": 23,
+      "bracket_items": 138,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜",
+          "item_guidance": 79900,
+          "item_guidance_text": "7金 99银"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5437,
+          "value_text": "54银 37铜",
+          "item_guidance": 99999,
+          "item_guidance_text": "9金 99银 99铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜",
+          "item_guidance": 90000,
+          "item_guidance_text": "9金"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜",
+          "item_guidance": 105088,
+          "item_guidance_text": "10金 50银 88铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银",
+          "item_guidance": 290000,
+          "item_guidance_text": "29金"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "Polestar 玩家录制",
+      "note": "临时数据：客户端的冒险指南没有掉落。Polestar 玩家录制（fitzforge/polestar，CC BY 4.0）是老玩家在无限正式服录下的拾取，3 人以上录到才收：drop_chance_percent 是录制给出的掉率（没有就不写），voters 是录到的人数；objects 里录制的是开出它的物件（箱子等），布、药水这类几十种生物都掉的通用掉落不列。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 258687,
+          "name": "克罗多克蛮兵",
+          "on_site": false,
+          "fetch_id": "npc:258687",
+          "temporary": true,
+          "source": "Polestar 玩家录制",
+          "voters": 5
+        },
+        {
+          "npc_id": 258042,
+          "name": "暮光步兵",
+          "on_site": false,
+          "fetch_id": "npc:258042",
+          "temporary": true,
+          "source": "Polestar 玩家录制",
+          "voters": 4
+        }
+      ]
+    },
+    "text": "克罗多克战争板甲护手 · 手 · 装等 45\n属性：300 护甲；+9 耐力，+15 招架等级；套装：克罗多克战甲（5 件）\n\n售价：65银 72铜\n来源：克罗多克要塞各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜，物品自己的指导价 7金 99银\n分解约值（普通 · 部落，2026-11-24）：54银 37铜，物品自己的指导价 9金 99银 99铜\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜，物品自己的指导价 9金\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜，物品自己的指导价 10金 50银 88铜\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银，物品自己的指导价 29金\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 7金 99银，价格区间 6金 88银 99铜 – 8金 66银 65铜，34 条挂单 / 34 个，比上次 −20%\n拍卖行（普通 · 部落，北京时间 2026-11-24 08:49）：指导价 9金 99银 99铜，价格区间 9金 99银 99铜 – 11金 99银 88铜，25 条挂单 / 25 个，比上次 −26%\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 9金，价格区间 9金 – 10金，12 条挂单 / 12 个，比上次 −15%\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 10金 50银 88铜，价格区间 9金 50银 – 10金 50银 88铜，19 条挂单 / 19 个，比上次 +46%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 29金，价格区间 29金 – 30金，2 条挂单 / 2 个",
+    "matched_by": "id"
+  }
+}

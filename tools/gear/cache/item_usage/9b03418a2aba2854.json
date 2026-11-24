@@ -1,0 +1,275 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 10330
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:10330",
+    "title": "血色十字军护腿",
+    "url": "https://wuxianwow.com/item/10330",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKABNpQAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:10330:::::::::::::|h[血色十字军护腿]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 10330,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 44,
+    "slot": "腿部",
+    "req_level": 39,
+    "sell": 10802,
+    "sell_text": "1金 8银 2铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "腿部",
+      "armor_type": "锁甲",
+      "ilvl": 44,
+      "req_level": 39,
+      "armor": 236,
+      "stats": [
+        {
+          "stat": "力量",
+          "value": 21
+        },
+        {
+          "stat": "耐力",
+          "value": 10
+        }
+      ],
+      "stats_source": "客户端公式推算",
+      "set": {
+        "id": 163,
+        "fetch_id": "set:163",
+        "name": "血色十字军链甲",
+        "url": "https://wuxianwow.com/set/163",
+        "group": "其他",
+        "classes": [],
+        "armor_type": "锁甲",
+        "faction": null,
+        "quality": 3,
+        "quality_name": "精良",
+        "ilvl": [
+          35,
+          44
+        ],
+        "req_level": [
+          30,
+          39
+        ],
+        "req_text": "需要等级：30–39 级",
+        "pieces_total": 6,
+        "pieces_visible": 6,
+        "pieces_hidden": 0,
+        "fully_hidden": false,
+        "crafted": false,
+        "pieces": [
+          {
+            "item_id": 10329,
+            "name": "血色十字军腰带",
+            "slot": "腰带",
+            "ilvl": 37,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10329",
+            "fetch_id": "item:10329",
+            "previewable": true
+          },
+          {
+            "item_id": 10332,
+            "name": "血色十字军战靴",
+            "slot": "脚",
+            "ilvl": 35,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10332",
+            "fetch_id": "item:10332",
+            "previewable": true
+          },
+          {
+            "item_id": 10328,
+            "name": "血色十字军护胸",
+            "slot": "胸甲",
+            "ilvl": 39,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10328",
+            "fetch_id": "item:10328",
+            "previewable": true
+          },
+          {
+            "item_id": 10331,
+            "name": "血色十字军护手",
+            "slot": "手",
+            "ilvl": 38,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10331",
+            "fetch_id": "item:10331",
+            "previewable": true
+          },
+          {
+            "item_id": 10330,
+            "name": "血色十字军护腿",
+            "slot": "腿部",
+            "ilvl": 44,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10330",
+            "fetch_id": "item:10330",
+            "previewable": true
+          },
+          {
+            "item_id": 10333,
+            "name": "血色十字军腕甲",
+            "slot": "手腕",
+            "ilvl": 36,
+            "hidden": false,
+            "url": "https://wuxianwow.com/item/10333",
+            "fetch_id": "item:10333",
+            "previewable": true
+          }
+        ],
+        "bonuses": [
+          {
+            "pieces": 2,
+            "text": "+10 暗影抗性。"
+          },
+          {
+            "pieces": 3,
+            "text": "对亡灵的攻击强度提高30点。"
+          },
+          {
+            "pieces": 4,
+            "text": "受到伤害时有15%的几率获得激怒之光效果，持续10秒，使你的近战攻击造成20点神圣伤害。对亡灵造成3倍的伤害。"
+          },
+          {
+            "pieces": 5,
+            "text": "使你的命中几率提高1.0%。"
+          },
+          {
+            "pieces": 6,
+            "text": "在生命值等于或低于20%时受到伤害，会使你获得一个可吸收N点伤害的护盾，持续10秒。此效果每4分钟只能触发一次。"
+          }
+        ]
+      }
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "npc_id": 3976,
+          "name": "血色十字军指挥官莫格莱尼",
+          "on_site": false,
+          "fetch_id": "npc:3976",
+          "temporary": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          },
+          "drop_chance_percent": 23
+        },
+        {
+          "npc_id": 3975,
+          "name": "赫洛德",
+          "url": "https://wuxianwow.com/npc/900448",
+          "fetch_id": "npc:900448",
+          "zone": "血色修道院",
+          "drop_chance_percent": 11.8
+        },
+        {
+          "npc_id": 3977,
+          "name": "大检察官怀特迈恩",
+          "url": "https://wuxianwow.com/npc/900450",
+          "fetch_id": "npc:900450",
+          "zone": "血色修道院"
+        },
+        {
+          "anywhere_in_zone": true,
+          "zone": "血色修道院",
+          "instance": {
+            "instance_id": 189,
+            "url": "https://wuxianwow.com/instance/189",
+            "fetch_id": "instance:189"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 41–45",
+      "bracket_id": 23,
+      "bracket_items": 138,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5437,
+          "value_text": "54银 37铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银"
+        }
+      ]
+    },
+    "text": "血色十字军护腿 · 腿部 · 装等 44\n属性：236 护甲；+21 力量，+10 耐力；套装：血色十字军链甲（6 件）\n\n售价：1金 8银 2铜\n来源：血色十字军指挥官莫格莱尼掉落 23%（临时）；赫洛德掉落 11.8%（临时）；大检察官怀特迈恩掉落（临时）；血色修道院各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良护甲 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜\n分解约值（普通 · 部落，2026-11-24）：54银 37铜\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银",
+    "matched_by": "id"
+  }
+}

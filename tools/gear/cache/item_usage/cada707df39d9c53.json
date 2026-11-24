@@ -1,0 +1,54 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 8703
+  },
+  "response": {
+    "outcome": "ok",
+    "id": "item:8703",
+    "title": "技艺徽记",
+    "url": "https://wuxianwow.com/item/8703",
+    "kind": "item",
+    "game_link": "|cff1eff00|Hitem:8703:::::::::::::|h[技艺徽记]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 8703,
+    "quality": 2,
+    "quality_name": "优秀",
+    "item_kind": "装备",
+    "ilvl": 45,
+    "slot": "饰品",
+    "req_level": 0,
+    "sell": 8101,
+    "sell_text": "81银 1铜",
+    "use": "召唤锻造锤。",
+    "use_kind": "使用",
+    "effects": [
+      {
+        "kind": "使用",
+        "text": "召唤锻造锤。"
+      }
+    ],
+    "description": "光荣的秘银会成员",
+    "hidden": false,
+    "equipment": null,
+    "unique": "装备唯一",
+    "source_type": null,
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "quest_rewards": [
+      {
+        "quest_id": 2765,
+        "name": "锻造专家!",
+        "url": "https://wuxianwow.com/quest/2765",
+        "fetch_id": "quest:2765",
+        "level": 45,
+        "reward": "固定"
+      }
+    ],
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "text": "技艺徽记 · 饰品 · 装等 45\n使用：召唤锻造锤。\n售价：81银 1铜\n来源：任务「锻造专家!」（固定）\n由 0 条配方制作，被 0 条配方使用。",
+    "matched_by": "id"
+  }
+}
