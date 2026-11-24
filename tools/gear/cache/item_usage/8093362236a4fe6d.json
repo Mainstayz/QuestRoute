@@ -1,0 +1,391 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 9424
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_dropped_by",
+        "kind": "temporary",
+        "text": "掉落来源：第三方临时，来自 QuestieDB"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:9424",
+    "title": "疾速之剑",
+    "url": "https://wuxianwow.com/item/9424",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAENBJAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:9424:::::::::::::|h[疾速之剑]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 9424,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 41,
+    "slot": "单手",
+    "req_level": 36,
+    "sell": 14291,
+    "sell_text": "1金 42银 91铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "单手",
+      "weapon_type": "单手剑",
+      "ilvl": 41,
+      "req_level": 36,
+      "damage": {
+        "dps": 27.9,
+        "max": 62,
+        "min": 33,
+        "speed": 1.7
+      },
+      "stats": [
+        {
+          "stat": "敏捷",
+          "value": 8
+        },
+        {
+          "stat": "力量",
+          "value": 4
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "奥达曼",
+          "instance": {
+            "instance_id": 70,
+            "url": "https://wuxianwow.com/instance/70",
+            "fetch_id": "instance:70"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 9424,
+        "name": "疾速之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "单手剑",
+        "guidance": 510000,
+        "guidance_text": "51金",
+        "q1": 500000,
+        "q3": 550000,
+        "min": 450000,
+        "min_now": 450000,
+        "listings": 12,
+        "quantity": 12,
+        "change_1d": -0.15,
+        "quantity_change_1d": 1.58,
+        "change_since": "2026-11-23",
+        "surprise_sd": -0.56,
+        "reference": {
+          "price": 734704.52,
+          "low": 198858.13,
+          "high": 2714451.44,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=9424",
+        "fetch_id": "item:9424",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 51金，价格区间 50金 – 55金，12 条挂单 / 12 个，比上次 −15%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 13:10",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 9424,
+        "name": "疾速之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "单手剑",
+        "guidance": 2981500,
+        "guidance_text": "298金 15银",
+        "q1": 2451500,
+        "q3": 3001500,
+        "min": 2451500,
+        "min_now": 2451500,
+        "listings": 3,
+        "quantity": 3,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": 2.78,
+        "reference": {
+          "price": 517557.71,
+          "low": 139935.57,
+          "high": 1914209.36,
+          "verdict": "明显偏高"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=9424&h=normal-horde",
+        "fetch_id": "item:9424",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 13:10）：指导价 298金 15银，价格区间 245金 15银 – 300金 15银，3 条挂单 / 3 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 9424,
+        "name": "疾速之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "单手剑",
+        "guidance": 800100,
+        "guidance_text": "80金 1银",
+        "q1": 800100,
+        "q3": 800100,
+        "min": 800100,
+        "min_now": 800100,
+        "listings": 2,
+        "quantity": 2,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": 1.14,
+        "reference": {
+          "price": 372051.8,
+          "low": 102648.34,
+          "high": 1348512.29,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=9424&h=normal-alliance",
+        "fetch_id": "item:9424",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 80金 1银，价格区间 80金 1银 – 80金 1银，2 条挂单 / 2 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 41–45",
+      "bracket_id": 24,
+      "bracket_items": 64,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜",
+          "item_guidance": 510000,
+          "item_guidance_text": "51金"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5441,
+          "value_text": "54银 41铜",
+          "item_guidance": 2981500,
+          "item_guidance_text": "298金 15银"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜",
+          "item_guidance": 800100,
+          "item_guidance_text": "80金 1银"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银"
+        }
+      ]
+    },
+    "temporary_dropped_by": {
+      "source": "QuestieDB",
+      "note": "临时数据：客户端的冒险指南没有掉落。QuestieDB 记下的是经典旧世（1.15.9）掉落，没有掉落率；shared 为副本里其他怪物也会掉；QuestieDB 的 npcs / objects 是掉它的生物与物件（宝箱一类的随机掉落不列），zone 是 QuestieDB 记的刷新区域。《无限》里可能不同，官方数据出现后替换",
+      "npcs": [
+        {
+          "npc_id": 4847,
+          "name": "暗炉发掘者",
+          "on_site": false,
+          "fetch_id": "npc:4847",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4848,
+          "name": "暗炉暗法师",
+          "on_site": false,
+          "fetch_id": "npc:4848",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4849,
+          "name": "暗炉考古学家",
+          "on_site": false,
+          "fetch_id": "npc:4849",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4850,
+          "name": "石窟潜伏者",
+          "on_site": false,
+          "fetch_id": "npc:4850",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4852,
+          "name": "石窟智者",
+          "on_site": false,
+          "fetch_id": "npc:4852",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4853,
+          "name": "石窟地占师",
+          "on_site": false,
+          "fetch_id": "npc:4853",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4855,
+          "name": "石窟争斗者",
+          "on_site": false,
+          "fetch_id": "npc:4855",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4857,
+          "name": "石头看守者",
+          "on_site": false,
+          "fetch_id": "npc:4857",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4860,
+          "name": "石头管理者",
+          "on_site": false,
+          "fetch_id": "npc:4860",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4861,
+          "name": "利齿蝙蝠",
+          "url": "https://wuxianwow.com/npc/4861",
+          "fetch_id": "npc:4861",
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 4863,
+          "name": "玉脊蜥蜴",
+          "on_site": false,
+          "fetch_id": "npc:4863",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 7012,
+          "name": "土灵雕刻者",
+          "on_site": false,
+          "fetch_id": "npc:7012",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 7022,
+          "name": "毒鞭蝎",
+          "url": "https://wuxianwow.com/npc/7022",
+          "fetch_id": "npc:7022",
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 7290,
+          "name": "暗炉狙击手",
+          "on_site": false,
+          "fetch_id": "npc:7290",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 7320,
+          "name": "石窟虐待者",
+          "on_site": false,
+          "fetch_id": "npc:7320",
+          "temporary": true,
+          "source": "QuestieDB"
+        },
+        {
+          "npc_id": 7321,
+          "name": "石窟织炎者",
+          "on_site": false,
+          "fetch_id": "npc:7321",
+          "temporary": true,
+          "source": "QuestieDB"
+        }
+      ]
+    },
+    "text": "疾速之剑 · 单手 · 装等 41\n属性：33–62 伤害 · 速度 1.7 · DPS 27.9；+8 敏捷，+4 力量\n\n售价：1金 42银 91铜\n来源：奥达曼各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜，物品自己的指导价 51金\n分解约值（普通 · 部落，2026-11-24）：54银 41铜，物品自己的指导价 298金 15银\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜，物品自己的指导价 80金 1银\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 51金，价格区间 50金 – 55金，12 条挂单 / 12 个，比上次 −15%\n拍卖行（普通 · 部落，北京时间 2026-11-24 13:10）：指导价 298金 15银，价格区间 245金 15银 – 300金 15银，3 条挂单 / 3 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 80金 1银，价格区间 80金 1银 – 80金 1银，2 条挂单 / 2 个",
+    "matched_by": "id"
+  }
+}

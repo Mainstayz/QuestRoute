@@ -1,7 +1,7 @@
 """魔兽世界无限服钓鱼助理。
 
 监听默认播放设备上的声音。启动时视为未钓鱼，立刻把游戏切到前台，
-用真实按键按下 1，再回到 RETURN_EXE 指定的程序。抛竿 5 秒后才把水花当成咬钩，
+用真实按键按下 1。抛竿 5 秒后才把水花当成咬钩，
 按 F 收竿，等 1 到 2 秒再按 1。连续 30 秒没有咬钩水花，就再按一次 1。
 
     python fish.py
@@ -40,8 +40,6 @@ REACT_MIN = 0.3
 REACT_MAX = 0.9
 CAST_KEY = "1"
 LOOT_KEY = "F"
-# 按完键回到这个程序。Cursor 是 Cursor.exe，VS Code 是 Code.exe。
-RETURN_EXE = "Cursor.exe"
 # 按下和回弹的时长每次不同，两段都留在游戏前台。
 KEY_DOWN_MIN = 0.08
 KEY_DOWN_MAX = 0.18
@@ -127,16 +125,6 @@ user32.BringWindowToTop.restype = wintypes.BOOL
 user32.GetAncestor.argtypes = [wintypes.HWND, wintypes.UINT]
 user32.GetAncestor.restype = wintypes.HWND
 user32.SwitchToThisWindow.argtypes = [wintypes.HWND, wintypes.BOOL]
-user32.SetWindowPos.argtypes = [
-    wintypes.HWND,
-    wintypes.HWND,
-    ctypes.c_int,
-    ctypes.c_int,
-    ctypes.c_int,
-    ctypes.c_int,
-    wintypes.UINT,
-]
-user32.SetWindowPos.restype = wintypes.BOOL
 user32.LockSetForegroundWindow.argtypes = [wintypes.UINT]
 user32.LockSetForegroundWindow.restype = wintypes.BOOL
 user32.SetFocus.argtypes = [wintypes.HWND]
@@ -402,11 +390,6 @@ def virtual_key(name):
 
 GA_ROOT = 2
 SW_SHOW = 5
-HWND_NOTOPMOST = wintypes.HWND(-2)
-SWP_NOMOVE = 0x0002
-SWP_NOSIZE = 0x0001
-SWP_NOACTIVATE = 0x0010
-SWP_SHOWWINDOW = 0x0040
 LSFW_UNLOCK = 2
 
 
@@ -483,26 +466,6 @@ def tap(vk):
     return True
 
 
-def find_return():
-    want = os.path.basename(RETURN_EXE).lower()
-    found = []
-    title_buf = ctypes.create_unicode_buffer(512)
-
-    @WNDENUMPROC
-    def visit(hwnd, _):
-        if not user32.IsWindowVisible(hwnd):
-            return True
-        if os.path.basename(image_path(hwnd)).lower() != want:
-            return True
-        user32.GetWindowTextW(hwnd, title_buf, 512)
-        if title_buf.value:
-            found.append(int(hwnd))
-        return True
-
-    user32.EnumWindows(visit, 0)
-    return found[0] if found else 0
-
-
 def press(key):
     found = find_wow()
     if not found:
@@ -513,13 +476,6 @@ def press(key):
         print(f"没能把「{title}」切到前台，这次不按键")
         return False
     ok = tap(virtual_key(key))
-    flags = SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE
-    user32.SetWindowPos(root_window(hwnd), HWND_NOTOPMOST, 0, 0, 0, 0, flags)
-    back = find_return()
-    if not back:
-        print(f"没找到 {RETURN_EXE} 窗口")
-    elif not same_window(back, hwnd) and not focus(back):
-        print(f"没能切回 {RETURN_EXE}")
     if not ok:
         print(f"向「{title}」发送 {key} 失败（{kernel32.GetLastError()}）")
     return ok
@@ -646,11 +602,6 @@ def run(threshold, dry):
         raise SystemExit("SILENCE_SEC 至少要 5 秒，避免不停抛竿")
     if not RECAST_MIN <= RECAST_MAX:
         raise SystemExit("RECAST_MIN 不能大于 RECAST_MAX")
-    if not dry:
-        if not os.path.basename(RETURN_EXE).strip():
-            raise SystemExit("RETURN_EXE 不能为空")
-        if not find_return():
-            raise SystemExit(f"没找到 {RETURN_EXE} 的窗口，脚本不启动")
     pa, stream, frames, dev = open_stream()
     stop = threading.Event()
     worker = None
@@ -663,7 +614,7 @@ def run(threshold, dry):
             print("只监听，不会按键。低于阈值的入水和收竿水花不会报。Ctrl+F12 结束。")
         else:
             print(
-                f"启动即视为未钓鱼，立刻把游戏切到前台按 1，然后回到 {RETURN_EXE}。抛竿 {IGNORE_SEC:.0f} 秒后才认咬钩，"
+                f"启动即视为未钓鱼，立刻把游戏切到前台按 1。抛竿 {IGNORE_SEC:.0f} 秒后才认咬钩，"
                 f"然后按 F，1 到 2 秒后再按 1。{SILENCE_SEC:.0f} 秒没有水花会再按 1。Ctrl+F12 结束。"
             )
             found = find_wow()

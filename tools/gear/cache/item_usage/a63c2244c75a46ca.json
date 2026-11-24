@@ -1,0 +1,137 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 271801
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:271801",
+    "title": "被遗弃的凶猛",
+    "url": "https://wuxianwow.com/item/271801",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAELnLEAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:271801:::::::::::::|h[被遗弃的凶猛]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 271801,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 42,
+    "slot": "双手",
+    "req_level": 35,
+    "sell": 18693,
+    "sell_text": "1金 86银 93铜",
+    "hidden": false,
+    "equipment": {
+      "slot": "双手",
+      "weapon_type": "双手斧",
+      "ilvl": 42,
+      "req_level": 35,
+      "damage": {
+        "dps": 37.2,
+        "max": 143,
+        "min": 95,
+        "speed": 3.2
+      },
+      "stats": [
+        {
+          "stat": "力量",
+          "value": 10
+        },
+        {
+          "stat": "耐力",
+          "value": 12
+        },
+        {
+          "stat": "敏捷",
+          "value": 4
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "任务",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "quest_rewards": [
+      {
+        "quest_id": 93128,
+        "name": "杰恩可汗",
+        "url": "https://wuxianwow.com/quest/93128",
+        "fetch_id": "quest:93128",
+        "level": 42,
+        "reward": "任选"
+      }
+    ],
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 41–45",
+      "bracket_id": 24,
+      "bracket_items": 64,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5441,
+          "value_text": "54银 41铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银"
+        }
+      ]
+    },
+    "text": "被遗弃的凶猛 · 双手 · 装等 42\n属性：95–143 伤害 · 速度 3.2 · DPS 37.2；+10 力量，+12 耐力，+4 敏捷\n\n售价：1金 86银 93铜\n来源：任务「杰恩可汗」（任选）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜\n分解约值（普通 · 部落，2026-11-24）：54银 41铜\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银",
+    "matched_by": "id"
+  }
+}

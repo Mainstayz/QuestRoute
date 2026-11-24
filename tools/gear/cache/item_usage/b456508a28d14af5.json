@@ -1,0 +1,273 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 273005
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:273005",
+    "title": "萨特皮披风",
+    "url": "https://wuxianwow.com/item/273005",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQIE7dQQAA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:273005:::::::::::::|h[萨特皮披风]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 273005,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 18,
+    "slot": "披风",
+    "req_level": 13,
+    "sell": 376,
+    "sell_text": "3银 76铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "披风",
+      "armor_type": "布甲",
+      "ilvl": 18,
+      "req_level": 13,
+      "armor": 17,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 3
+        },
+        {
+          "stat": "火焰抗性",
+          "value": 3
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "npc_id": 11519,
+          "name": "巴扎兰",
+          "url": "https://wuxianwow.com/npc/902735",
+          "fetch_id": "npc:902735",
+          "zone": "怒焰裂谷",
+          "drop_chance_percent": 32.9
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "transmog": {
+      "sources": [],
+      "same_appearance_sources": [
+        {
+          "source_id": 179777,
+          "item_id": 20427,
+          "item_name": "战地治疗者披风",
+          "item_url": "https://wuxianwow.com/item/20427",
+          "fetch_id": "item:20427",
+          "appearance_id": 64758,
+          "source_type": "商人",
+          "item_source_type": "商人",
+          "note": "Kalimdor Uncommon",
+          "note_label": "客户端内部注释（英文）",
+          "vendors": [
+            {
+              "vendor_id": 244471,
+              "creature_id": 14754,
+              "on_site": false,
+              "zone": "贫瘠之地",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                1046.5,
+                -2104.3,
+                123
+              ],
+              "zone_map": {
+                "ui_map": 1413,
+                "name": "贫瘠之地",
+                "x": 0.4665,
+                "y": 0.0838,
+                "coords": "46.7, 8.4",
+                "url": "https://wuxianwow.com/atlas/1413",
+                "fetch_id": "map:1413"
+              }
+            },
+            {
+              "vendor_id": 244745,
+              "creature_id": 14754,
+              "on_site": false,
+              "zone": "Tyler's Test Map (Desolace)",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 2908,
+              "map_name": null,
+              "world_xyz": [
+                -1185.4,
+                2691.5,
+                111.4
+              ],
+              "dev_map": true,
+              "zone_map": null
+            }
+          ],
+          "unlocated_vendor_rows": 0
+        },
+        {
+          "source_id": 179778,
+          "item_id": 19529,
+          "item_name": "战地治疗者披风",
+          "item_url": "https://wuxianwow.com/item/19529",
+          "fetch_id": "item:19529",
+          "appearance_id": 64758,
+          "source_type": "商人",
+          "item_source_type": "商人",
+          "note": "Kalimdor Uncommon",
+          "note_label": "客户端内部注释（英文）",
+          "vendors": [
+            {
+              "vendor_id": 244471,
+              "creature_id": 14754,
+              "on_site": false,
+              "zone": "贫瘠之地",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 1,
+              "map_name": "卡利姆多",
+              "world_xyz": [
+                1046.5,
+                -2104.3,
+                123
+              ],
+              "zone_map": {
+                "ui_map": 1413,
+                "name": "贫瘠之地",
+                "x": 0.4665,
+                "y": 0.0838,
+                "coords": "46.7, 8.4",
+                "url": "https://wuxianwow.com/atlas/1413",
+                "fetch_id": "map:1413"
+              }
+            },
+            {
+              "vendor_id": 244745,
+              "creature_id": 14754,
+              "on_site": false,
+              "zone": "Tyler's Test Map (Desolace)",
+              "subzone": null,
+              "faction": "部落",
+              "world_map_id": 2908,
+              "map_name": null,
+              "world_xyz": [
+                -1185.4,
+                2691.5,
+                111.4
+              ],
+              "dev_map": true,
+              "zone_map": null
+            }
+          ],
+          "unlocated_vendor_rows": 0
+        }
+      ],
+      "same_appearance_total": 2,
+      "note": "商人来源来自 CollectableSourceInfo / CollectableSourceVendor / CollectableSourceVendorSparse：只有商人的生物 ID、坐标与阵营，客户端没有商人名字，来源表里也没有价格字段；note 是客户端内部的英文注释（设计用的来源分类），不是游戏内文本"
+    },
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良护甲 · 物品等级 16–20",
+      "bracket_id": 336,
+      "bracket_items": 80,
+      "outcomes": [
+        {
+          "item_id": 10940,
+          "name": "奇异之尘",
+          "chance_pct": 75,
+          "min": 2,
+          "max": 3,
+          "url": "https://wuxianwow.com/item/10940",
+          "fetch_id": "item:10940"
+        },
+        {
+          "item_id": 10939,
+          "name": "强效魔法精华",
+          "chance_pct": 20,
+          "min": 1,
+          "max": 2,
+          "url": "https://wuxianwow.com/item/10939",
+          "fetch_id": "item:10939"
+        },
+        {
+          "item_id": 10978,
+          "name": "小块微光碎片",
+          "chance_pct": 5,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/10978",
+          "fetch_id": "item:10978"
+        }
+      ],
+      "forever_change": "《无限》新加的等级段：实测与同等级的优秀装备相同",
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 867,
+          "value_text": "8银 67铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 499,
+          "value_text": "4银 99铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 620,
+          "value_text": "6银 20铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 522,
+          "value_text": "5银 22铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 603,
+          "value_text": "6银 3铜"
+        }
+      ]
+    },
+    "text": "萨特皮披风 · 披风 · 装等 18\n属性：17 护甲；+3 耐力，+3 火焰抗性\n\n售价：3银 76铜\n来源：巴扎兰掉落 32.9%（临时）\n由 0 条配方制作，被 0 条配方使用。\n同外观可从商人购买：战地治疗者披风、战地治疗者披风\n分解（精良护甲 · 物品等级 16–20，一次出一样）：奇异之尘 75% ×2–3、强效魔法精华 20% ×1–2、小块微光碎片 5% ×1；《无限》新加的等级段：实测与同等级的优秀装备相同\n分解约值（PvP · 部落，2026-11-24）：8银 67铜\n分解约值（普通 · 部落，2026-11-24）：4银 99铜\n分解约值（普通 · 联盟，2026-11-24）：6银 20铜\n分解约值（PvP · 联盟，2026-11-21）：5银 22铜\n分解约值（角色扮演 · 联盟，2026-11-19）：6银 3铜",
+    "matched_by": "id"
+  }
+}

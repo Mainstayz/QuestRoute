@@ -1,0 +1,293 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 902756
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "temporary_level",
+        "kind": "temporary",
+        "text": "temporary_level：第三方临时，来自 QuestieDB"
+      }
+    ],
+    "id": "npc:902756",
+    "npc_id": 902756,
+    "name": "可怕的塔格尔",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/902756",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "temporary_level": [
+      24,
+      24
+    ],
+    "dungeon": "暴风城监狱",
+    "instance": {
+      "id": 34,
+      "fetch_id": "instance:34",
+      "name": "暴风城监狱",
+      "level_text": "准入 15 级 · 集合石 24–32 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          24,
+          32
+        ],
+        "max": null,
+        "min": 15,
+        "target": 23
+      },
+      "url": "https://wuxianwow.com/instance/34"
+    },
+    "difficulty": null,
+    "new_in_160": false,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/2756.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/2756_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 2756,
+      "dungeon": "暴风城监狱",
+      "instance": {
+        "instance_id": 34,
+        "url": "https://wuxianwow.com/instance/34",
+        "fetch_id": "instance:34"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 1,
+      "of": 5,
+      "bosses": [
+        {
+          "npc_id": 902756,
+          "name": "可怕的塔格尔",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902756",
+          "fetch_id": "npc:902756",
+          "portrait": "https://wuxianwow.com/data/bosses/2756.webp"
+        },
+        {
+          "npc_id": 902757,
+          "name": "卡姆·深怒",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902757",
+          "fetch_id": "npc:902757",
+          "portrait": "https://wuxianwow.com/data/bosses/2757.webp"
+        },
+        {
+          "npc_id": 902758,
+          "name": "哈姆霍克",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902758",
+          "fetch_id": "npc:902758",
+          "portrait": "https://wuxianwow.com/data/bosses/2758.webp"
+        },
+        {
+          "npc_id": 902759,
+          "name": "迪克斯特·瓦德",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902759",
+          "fetch_id": "npc:902759",
+          "portrait": "https://wuxianwow.com/data/bosses/2759.webp"
+        },
+        {
+          "npc_id": 902760,
+          "name": "巴吉尔·特雷德",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/902760",
+          "fetch_id": "npc:902760",
+          "portrait": "https://wuxianwow.com/data/bosses/2760.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 251345,
+          "name": "设计图：老兵的链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251345",
+          "fetch_id": "item:251345"
+        },
+        {
+          "item_id": 251346,
+          "name": "设计图：卫兵的链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251346",
+          "fetch_id": "item:251346"
+        },
+        {
+          "item_id": 251347,
+          "name": "设计图：保护者的链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251347",
+          "fetch_id": "item:251347"
+        },
+        {
+          "item_id": 251348,
+          "name": "设计图：助祭的链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251348",
+          "fetch_id": "item:251348"
+        },
+        {
+          "item_id": 251349,
+          "name": "设计图：十字军的链甲护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251349",
+          "fetch_id": "item:251349"
+        },
+        {
+          "item_id": 251380,
+          "name": "设计图：老兵的镀银链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251380",
+          "fetch_id": "item:251380"
+        },
+        {
+          "item_id": 251382,
+          "name": "设计图：保护者的镀银链甲头盔",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/251382",
+          "fetch_id": "item:251382"
+        },
+        {
+          "item_id": 252792,
+          "name": "图样：争斗者的皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252792",
+          "fetch_id": "item:252792"
+        },
+        {
+          "item_id": 252793,
+          "name": "图样：捕兽者的皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252793",
+          "fetch_id": "item:252793"
+        },
+        {
+          "item_id": 252794,
+          "name": "图样：防御者的皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252794",
+          "fetch_id": "item:252794"
+        },
+        {
+          "item_id": 252795,
+          "name": "图样：图腾师的皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252795",
+          "fetch_id": "item:252795"
+        },
+        {
+          "item_id": 252796,
+          "name": "图样：风暴行者的皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252796",
+          "fetch_id": "item:252796"
+        },
+        {
+          "item_id": 252797,
+          "name": "图样：智慧皮裤",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/252797",
+          "fetch_id": "item:252797"
+        },
+        {
+          "item_id": 253938,
+          "name": "图样：金丝无瑕护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253938",
+          "fetch_id": "item:253938"
+        },
+        {
+          "item_id": 253940,
+          "name": "图样：金丝柔滑护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253940",
+          "fetch_id": "item:253940"
+        },
+        {
+          "item_id": 253942,
+          "name": "图样：金丝烈焰护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253942",
+          "fetch_id": "item:253942"
+        },
+        {
+          "item_id": 253944,
+          "name": "图样：金丝暗影护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253944",
+          "fetch_id": "item:253944"
+        },
+        {
+          "item_id": 253946,
+          "name": "图样：金丝珍珠护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253946",
+          "fetch_id": "item:253946"
+        },
+        {
+          "item_id": 253948,
+          "name": "图样：金丝闪光护腿",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/253948",
+          "fetch_id": "item:253948"
+        },
+        {
+          "item_id": 273804,
+          "name": "行刑者衬肩",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273804",
+          "fetch_id": "item:273804"
+        },
+        {
+          "item_id": 273805,
+          "name": "黑石护甲",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273805",
+          "fetch_id": "item:273805"
+        },
+        {
+          "item_id": 273806,
+          "name": "黑暗部落指环",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273806",
+          "fetch_id": "item:273806"
+        }
+      ]
+    },
+    "text": "可怕的塔格尔（首领 · 24 级（临时 · QuestieDB） · 暴风城监狱）\n暴风城监狱 第 1/5 个首领\n副本：instance:34（地下城 · 准入 15 级 · 集合石 24–32 级）\n掉落（临时 · Spyglass）：设计图：老兵的链甲护腿、设计图：卫兵的链甲护腿、设计图：保护者的链甲护腿、设计图：助祭的链甲护腿、设计图：十字军的链甲护腿、设计图：老兵的镀银链甲头盔、设计图：保护者的镀银链甲头盔、图样：争斗者的皮裤、图样：捕兽者的皮裤、图样：防御者的皮裤、图样：图腾师的皮裤、图样：风暴行者的皮裤、图样：智慧皮裤、图样：金丝无瑕护腿、图样：金丝柔滑护腿、图样：金丝烈焰护腿、图样：金丝暗影护腿、图样：金丝珍珠护腿、图样：金丝闪光护腿、行刑者衬肩、黑石护甲、黑暗部落指环\n位置（临时 · EG Link）：暴风城监狱副本地图 下层 0.556, 0.531（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": "下层",
+      "x": 0.556,
+      "y": 0.531,
+      "map_url": "https://wuxianwow.com/instance/34",
+      "trip_url": "https://wuxianwow.com/trip?at=34,17154.7,17050.0,-26.5",
+      "pulls": 2,
+      "spread_yards": 74
+    }
+  }
+}

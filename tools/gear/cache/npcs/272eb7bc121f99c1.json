@@ -1,0 +1,149 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 903481
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      }
+    ],
+    "id": "npc:903481",
+    "npc_id": 903481,
+    "name": "暗齿",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/903481",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "dungeon": "挖掘场：湿地",
+    "instance": {
+      "id": 2998,
+      "fetch_id": "instance:2998",
+      "name": "挖掘场：湿地",
+      "level_text": "准入 26 级 · 集合石 26–33 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          26,
+          33
+        ],
+        "max": null,
+        "min": 26,
+        "target": 26
+      },
+      "url": "https://wuxianwow.com/instance/2998"
+    },
+    "difficulty": null,
+    "new_in_160": true,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/3481.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/3481_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 3481,
+      "dungeon": "挖掘场：湿地",
+      "instance": {
+        "instance_id": 2998,
+        "url": "https://wuxianwow.com/instance/2998",
+        "fetch_id": "instance:2998"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 2,
+      "of": 4,
+      "bosses": [
+        {
+          "npc_id": 903480,
+          "name": "盐脊",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903480",
+          "fetch_id": "npc:903480",
+          "portrait": "https://wuxianwow.com/data/bosses/3480.webp"
+        },
+        {
+          "npc_id": 903481,
+          "name": "暗齿",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903481",
+          "fetch_id": "npc:903481",
+          "portrait": "https://wuxianwow.com/data/bosses/3481.webp"
+        },
+        {
+          "npc_id": 903644,
+          "name": "高地恐魔",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903644",
+          "fetch_id": "npc:903644",
+          "portrait": "https://wuxianwow.com/data/bosses/3644.webp"
+        },
+        {
+          "npc_id": 903482,
+          "name": "遗迹守卫者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903482",
+          "fetch_id": "npc:903482",
+          "portrait": "https://wuxianwow.com/data/bosses/3482.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 273025,
+          "name": "猛禽护胫",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273025",
+          "fetch_id": "item:273025"
+        },
+        {
+          "item_id": 273026,
+          "name": "繁花羽毛礼服",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273026",
+          "fetch_id": "item:273026"
+        },
+        {
+          "item_id": 273027,
+          "name": "迅猛龙的凝视",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/273027",
+          "fetch_id": "item:273027"
+        },
+        {
+          "item_id": 273106,
+          "name": "蓝图：温室",
+          "quality": 2,
+          "url": "https://wuxianwow.com/item/273106",
+          "fetch_id": "item:273106"
+        }
+      ]
+    },
+    "text": "暗齿（首领 · 挖掘场：湿地 · 1.60 新增）\n挖掘场：湿地 第 2/4 个首领\n副本：instance:2998（地下城 · 准入 26 级 · 集合石 26–33 级）\n掉落（临时 · Spyglass）：猛禽护胫、繁花羽毛礼服、迅猛龙的凝视、蓝图：温室\n位置（临时 · EG Link）：挖掘场：湿地副本地图 0.258, 0.576（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "x": 0.258,
+      "y": 0.576,
+      "map_url": "https://wuxianwow.com/instance/2998",
+      "trip_url": "https://wuxianwow.com/trip?at=2998,-3896.7,-1871.7,137.1",
+      "pulls": 4
+    }
+  }
+}

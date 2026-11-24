@@ -1,0 +1,1332 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 389
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "side",
+        "kind": "temporary",
+        "text": "6 行的 side 是第三方临时（来自 QuestieDB）"
+      }
+    ],
+    "id": 389,
+    "fetch_id": "instance:389",
+    "title": "怒焰裂谷",
+    "url": "https://wuxianwow.com/instance/389",
+    "kind": "地下城",
+    "players": [
+      5,
+      10
+    ],
+    "players_text": "5 / 10 人",
+    "level": {
+      "group": [
+        13,
+        18
+      ],
+      "max": null,
+      "min": 10,
+      "target": 13
+    },
+    "level_text": "准入 10 级 · 集合石 13–18 级",
+    "zone": "奥格瑞玛",
+    "entrance": {
+      "zone": "奥格瑞玛",
+      "area": null,
+      "continent": "卡利姆多",
+      "source": "Map.Corpse",
+      "confidence": "high",
+      "approx": false,
+      "source_detail": "Map 389.Corpse (1816.8, -4423.4) on Map 1",
+      "world_xy": [
+        1816.8,
+        -4423.4
+      ],
+      "continent_map_id": 1,
+      "zone_ui_map": 1454,
+      "atlas": [
+        {
+          "name": "奥格瑞玛",
+          "ui_map": 1454,
+          "x": 0.5296,
+          "y": 0.4887,
+          "url": "https://wuxianwow.com/atlas/1454?i=389",
+          "fetch_id": "map:1454"
+        },
+        {
+          "name": "卡利姆多",
+          "ui_map": 1414,
+          "x": 0.584,
+          "y": 0.4477,
+          "url": "https://wuxianwow.com/atlas/1414?i=389",
+          "fetch_id": "map:1414"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.293,
+          "y": 0.4348,
+          "url": "https://wuxianwow.com/atlas/947?i=389",
+          "fetch_id": "map:947"
+        }
+      ]
+    },
+    "boss_count": 4,
+    "new_in_160": false,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/389.webp",
+    "picture": "https://wuxianwow.com/data/loading/389.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=389",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "message": "需要达到至少10级才能进入。",
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 10,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "奥格弗林特",
+        "encounter_id": 2732,
+        "npc_id": 902732,
+        "url": "https://wuxianwow.com/npc/902732",
+        "fetch_id": "npc:902732",
+        "portrait": "https://wuxianwow.com/data/bosses/2732.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2732_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.672,
+          "y": 0.481,
+          "map_url": "https://wuxianwow.com/instance/389",
+          "trip_url": "https://wuxianwow.com/trip?at=389,16917.9,17081.9,-22.4",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 2,
+        "name": "饥饿者塔拉加曼",
+        "encounter_id": 2733,
+        "npc_id": 902733,
+        "url": "https://wuxianwow.com/npc/902733",
+        "fetch_id": "npc:902733",
+        "portrait": "https://wuxianwow.com/data/bosses/2733.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2733_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.333,
+          "y": 0.661,
+          "map_url": "https://wuxianwow.com/instance/389",
+          "trip_url": "https://wuxianwow.com/trip?at=389,16823.3,17216.1,-18.7",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 3,
+        "name": "祈求者耶戈什",
+        "encounter_id": 2734,
+        "npc_id": 902734,
+        "url": "https://wuxianwow.com/npc/902734",
+        "fetch_id": "npc:902734",
+        "portrait": "https://wuxianwow.com/data/bosses/2734.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2734_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.182,
+          "y": 0.914,
+          "map_url": "https://wuxianwow.com/instance/389",
+          "trip_url": "https://wuxianwow.com/trip?at=389,16689.9,17275.9,-21.9",
+          "pulls": 1
+        }
+      },
+      {
+        "order": 4,
+        "name": "巴扎兰",
+        "encounter_id": 2735,
+        "npc_id": 902735,
+        "url": "https://wuxianwow.com/npc/902735",
+        "fetch_id": "npc:902735",
+        "portrait": "https://wuxianwow.com/data/bosses/2735.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/2735_model.webp",
+        "fallback_icon": null,
+        "new_in_160": false,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.319,
+          "y": 0.954,
+          "map_url": "https://wuxianwow.com/instance/389",
+          "trip_url": "https://wuxianwow.com/trip?at=389,16668.7,17221.9,7.7",
+          "pulls": 1
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Polestar 玩家录制",
+      "note": "临时数据：客户端的冒险指南没有掉落，Spyglass 也没有这个副本的小怪掉落；这是 Polestar 玩家录制（fitzforge/polestar，CC BY 4.0）里在这个副本刷新的怪物（哪个副本按 cMaNGOS 的刷新点认）3 人以上录到的掉落，只列绿色及以上的武器与护甲，首领的生物除外：drop_chance_percent 是录制给出的掉率（没有就不写），voters 是录到的人数；首领的掉落在首领详情（npcs）的 temporary_drops；《无限》里可能不同，官方数据出现后替换",
+      "groups": [
+        {
+          "npc_id": 11318,
+          "name": "怒焰穴居人",
+          "on_site": false,
+          "fetch_id": "npc:11318",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2073,
+              "name": "矮人短斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2073",
+              "fetch_id": "item:2073",
+              "voters": 4
+            },
+            {
+              "item_id": 2632,
+              "name": "弧形匕首",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2632",
+              "fetch_id": "item:2632",
+              "voters": 9
+            },
+            {
+              "item_id": 3288,
+              "name": "部落外衣",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3288",
+              "fetch_id": "item:3288",
+              "voters": 4
+            },
+            {
+              "item_id": 3291,
+              "name": "先祖热裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3291",
+              "fetch_id": "item:3291",
+              "voters": 7
+            },
+            {
+              "item_id": 3302,
+              "name": "水草长靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3302",
+              "fetch_id": "item:3302",
+              "voters": 3
+            },
+            {
+              "item_id": 3307,
+              "name": "布质符文战靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3307",
+              "fetch_id": "item:3307",
+              "voters": 3
+            },
+            {
+              "item_id": 3308,
+              "name": "蛮族布质手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3308",
+              "fetch_id": "item:3308",
+              "voters": 3
+            },
+            {
+              "item_id": 3309,
+              "name": "蛮族布质缠腰",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3309",
+              "fetch_id": "item:3309",
+              "voters": 3
+            },
+            {
+              "item_id": 4564,
+              "name": "尖刺木棒",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4564",
+              "fetch_id": "item:4564",
+              "voters": 11
+            },
+            {
+              "item_id": 4566,
+              "name": "致密短杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4566",
+              "fetch_id": "item:4566",
+              "voters": 5
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 6
+            },
+            {
+              "item_id": 4570,
+              "name": "桦木槌",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4570",
+              "fetch_id": "item:4570",
+              "voters": 10
+            },
+            {
+              "item_id": 4571,
+              "name": "战斗小刀",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4571",
+              "fetch_id": "item:4571",
+              "voters": 3
+            },
+            {
+              "item_id": 4577,
+              "name": "紧凑火枪",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4577",
+              "fetch_id": "item:4577",
+              "voters": 7
+            },
+            {
+              "item_id": 5071,
+              "name": "暗影魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5071",
+              "fetch_id": "item:5071",
+              "voters": 7
+            },
+            {
+              "item_id": 14097,
+              "name": "天然短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14097",
+              "fetch_id": "item:14097",
+              "voters": 6
+            },
+            {
+              "item_id": 14113,
+              "name": "土著腰带",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14113",
+              "fetch_id": "item:14113",
+              "voters": 6
+            },
+            {
+              "item_id": 14114,
+              "name": "土著薄靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14114",
+              "fetch_id": "item:14114",
+              "voters": 4
+            },
+            {
+              "item_id": 14123,
+              "name": "礼节斗篷",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14123",
+              "fetch_id": "item:14123",
+              "voters": 3
+            },
+            {
+              "item_id": 14365,
+              "name": "秘术师斗篷",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14365",
+              "fetch_id": "item:14365",
+              "voters": 3
+            },
+            {
+              "item_id": 14366,
+              "name": "秘术师护腕",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14366",
+              "fetch_id": "item:14366",
+              "voters": 3
+            },
+            {
+              "item_id": 15011,
+              "name": "凶猛束腰",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15011",
+              "fetch_id": "item:15011",
+              "voters": 4
+            },
+            {
+              "item_id": 15210,
+              "name": "袭击者短剑",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15210",
+              "fetch_id": "item:15210",
+              "voters": 6
+            },
+            {
+              "item_id": 15268,
+              "name": "双刃斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15268",
+              "fetch_id": "item:15268",
+              "voters": 5
+            },
+            {
+              "item_id": 15303,
+              "name": "灰白短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15303",
+              "fetch_id": "item:15303",
+              "voters": 4
+            },
+            {
+              "item_id": 15306,
+              "name": "野性束腕",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15306",
+              "fetch_id": "item:15306",
+              "voters": 3
+            },
+            {
+              "item_id": 15309,
+              "name": "野性披风",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15309",
+              "fetch_id": "item:15309",
+              "voters": 4
+            },
+            {
+              "item_id": 15485,
+              "name": "久战短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15485",
+              "fetch_id": "item:15485",
+              "voters": 5
+            },
+            {
+              "item_id": 15489,
+              "name": "血斑马靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15489",
+              "fetch_id": "item:15489",
+              "voters": 4
+            },
+            {
+              "item_id": 15495,
+              "name": "血斑腕环",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15495",
+              "fetch_id": "item:15495",
+              "voters": 4
+            },
+            {
+              "item_id": 15970,
+              "name": "天然木枝",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15970",
+              "fetch_id": "item:15970",
+              "voters": 5
+            }
+          ]
+        },
+        {
+          "npc_id": 11319,
+          "name": "怒焰萨满祭司",
+          "on_site": false,
+          "fetch_id": "npc:11319",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2632,
+              "name": "弧形匕首",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2632",
+              "fetch_id": "item:2632",
+              "drop_chance_percent": 8.33,
+              "voters": 4
+            },
+            {
+              "item_id": 3283,
+              "name": "军用链甲外套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3283",
+              "fetch_id": "item:3283",
+              "voters": 3
+            },
+            {
+              "item_id": 3302,
+              "name": "水草长靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3302",
+              "fetch_id": "item:3302",
+              "voters": 3
+            },
+            {
+              "item_id": 3307,
+              "name": "布质符文战靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3307",
+              "fetch_id": "item:3307",
+              "voters": 5
+            },
+            {
+              "item_id": 4567,
+              "name": "短刃重剑",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4567",
+              "fetch_id": "item:4567",
+              "voters": 3
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 3
+            },
+            {
+              "item_id": 4577,
+              "name": "紧凑火枪",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4577",
+              "fetch_id": "item:4577",
+              "voters": 3
+            },
+            {
+              "item_id": 5071,
+              "name": "暗影魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5071",
+              "fetch_id": "item:5071",
+              "voters": 4
+            },
+            {
+              "item_id": 15011,
+              "name": "凶猛束腰",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15011",
+              "fetch_id": "item:15011",
+              "voters": 3
+            }
+          ]
+        },
+        {
+          "npc_id": 11321,
+          "name": "熔岩元素",
+          "on_site": false,
+          "fetch_id": "npc:11321",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2632,
+              "name": "弧形匕首",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2632",
+              "fetch_id": "item:2632",
+              "voters": 3
+            },
+            {
+              "item_id": 3036,
+              "name": "硬短弓",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3036",
+              "fetch_id": "item:3036",
+              "voters": 3
+            },
+            {
+              "item_id": 3288,
+              "name": "部落外衣",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3288",
+              "fetch_id": "item:3288",
+              "voters": 4
+            },
+            {
+              "item_id": 3292,
+              "name": "先祖外套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3292",
+              "fetch_id": "item:3292",
+              "voters": 3
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 3
+            },
+            {
+              "item_id": 5071,
+              "name": "暗影魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5071",
+              "fetch_id": "item:5071",
+              "voters": 3
+            },
+            {
+              "item_id": 6527,
+              "name": "先祖长袍",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/6527",
+              "fetch_id": "item:6527",
+              "voters": 3
+            },
+            {
+              "item_id": 14724,
+              "name": "战痕披风",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14724",
+              "fetch_id": "item:14724",
+              "voters": 4
+            },
+            {
+              "item_id": 15268,
+              "name": "双刃斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15268",
+              "fetch_id": "item:15268",
+              "voters": 3
+            },
+            {
+              "item_id": 15304,
+              "name": "灰白夹克",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15304",
+              "fetch_id": "item:15304",
+              "voters": 3
+            },
+            {
+              "item_id": 15495,
+              "name": "血斑腕环",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15495",
+              "fetch_id": "item:15495",
+              "voters": 4
+            }
+          ]
+        },
+        {
+          "npc_id": 11322,
+          "name": "燃刃信徒",
+          "on_site": false,
+          "fetch_id": "npc:11322",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2073,
+              "name": "矮人短斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2073",
+              "fetch_id": "item:2073",
+              "voters": 7
+            },
+            {
+              "item_id": 2075,
+              "name": "牧师钉锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2075",
+              "fetch_id": "item:2075",
+              "voters": 5
+            },
+            {
+              "item_id": 2632,
+              "name": "弧形匕首",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2632",
+              "fetch_id": "item:2632",
+              "voters": 6
+            },
+            {
+              "item_id": 3036,
+              "name": "硬短弓",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3036",
+              "fetch_id": "item:3036",
+              "voters": 9
+            },
+            {
+              "item_id": 3283,
+              "name": "军用链甲外套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3283",
+              "fetch_id": "item:3283",
+              "voters": 4
+            },
+            {
+              "item_id": 3288,
+              "name": "部落外衣",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3288",
+              "fetch_id": "item:3288",
+              "voters": 3
+            },
+            {
+              "item_id": 3291,
+              "name": "先祖热裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3291",
+              "fetch_id": "item:3291",
+              "voters": 6
+            },
+            {
+              "item_id": 3302,
+              "name": "水草长靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3302",
+              "fetch_id": "item:3302",
+              "voters": 4
+            },
+            {
+              "item_id": 3307,
+              "name": "布质符文战靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3307",
+              "fetch_id": "item:3307",
+              "voters": 4
+            },
+            {
+              "item_id": 3308,
+              "name": "蛮族布质手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3308",
+              "fetch_id": "item:3308",
+              "voters": 5
+            },
+            {
+              "item_id": 3314,
+              "name": "典礼皮手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3314",
+              "fetch_id": "item:3314",
+              "voters": 3
+            },
+            {
+              "item_id": 3653,
+              "name": "典礼圆盾",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3653",
+              "fetch_id": "item:3653",
+              "voters": 7
+            },
+            {
+              "item_id": 3654,
+              "name": "水草盾牌",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3654",
+              "fetch_id": "item:3654",
+              "voters": 3
+            },
+            {
+              "item_id": 4564,
+              "name": "尖刺木棒",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4564",
+              "fetch_id": "item:4564",
+              "voters": 5
+            },
+            {
+              "item_id": 4566,
+              "name": "致密短杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4566",
+              "fetch_id": "item:4566",
+              "voters": 4
+            },
+            {
+              "item_id": 4567,
+              "name": "短刃重剑",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4567",
+              "fetch_id": "item:4567",
+              "voters": 3
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 4
+            },
+            {
+              "item_id": 4570,
+              "name": "桦木槌",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4570",
+              "fetch_id": "item:4570",
+              "voters": 8
+            },
+            {
+              "item_id": 4577,
+              "name": "紧凑火枪",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4577",
+              "fetch_id": "item:4577",
+              "voters": 3
+            },
+            {
+              "item_id": 5069,
+              "name": "火焰魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5069",
+              "fetch_id": "item:5069",
+              "voters": 4
+            },
+            {
+              "item_id": 5071,
+              "name": "暗影魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5071",
+              "fetch_id": "item:5071",
+              "voters": 7
+            },
+            {
+              "item_id": 5212,
+              "name": "闪耀魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5212",
+              "fetch_id": "item:5212",
+              "voters": 3
+            },
+            {
+              "item_id": 14097,
+              "name": "天然短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14097",
+              "fetch_id": "item:14097",
+              "voters": 5
+            },
+            {
+              "item_id": 14113,
+              "name": "土著腰带",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14113",
+              "fetch_id": "item:14113",
+              "voters": 3
+            },
+            {
+              "item_id": 14365,
+              "name": "秘术师斗篷",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14365",
+              "fetch_id": "item:14365",
+              "voters": 4
+            },
+            {
+              "item_id": 14366,
+              "name": "秘术师护腕",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14366",
+              "fetch_id": "item:14366",
+              "voters": 3
+            },
+            {
+              "item_id": 15011,
+              "name": "凶猛束腰",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15011",
+              "fetch_id": "item:15011",
+              "voters": 6
+            },
+            {
+              "item_id": 15012,
+              "name": "凶猛便鞋",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15012",
+              "fetch_id": "item:15012",
+              "voters": 3
+            },
+            {
+              "item_id": 15487,
+              "name": "久战外套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15487",
+              "fetch_id": "item:15487",
+              "voters": 3
+            },
+            {
+              "item_id": 15489,
+              "name": "血斑马靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15489",
+              "fetch_id": "item:15489",
+              "voters": 3
+            },
+            {
+              "item_id": 15491,
+              "name": "血斑手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15491",
+              "fetch_id": "item:15491",
+              "voters": 4
+            },
+            {
+              "item_id": 15495,
+              "name": "血斑腕环",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15495",
+              "fetch_id": "item:15495",
+              "voters": 3
+            },
+            {
+              "item_id": 15970,
+              "name": "天然木枝",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15970",
+              "fetch_id": "item:15970",
+              "voters": 3
+            }
+          ]
+        },
+        {
+          "npc_id": 11323,
+          "name": "燃刃执行者",
+          "on_site": false,
+          "fetch_id": "npc:11323",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2073,
+              "name": "矮人短斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2073",
+              "fetch_id": "item:2073",
+              "voters": 6
+            },
+            {
+              "item_id": 2075,
+              "name": "牧师钉锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2075",
+              "fetch_id": "item:2075",
+              "voters": 3
+            },
+            {
+              "item_id": 3036,
+              "name": "硬短弓",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3036",
+              "fetch_id": "item:3036",
+              "voters": 3
+            },
+            {
+              "item_id": 3288,
+              "name": "部落外衣",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3288",
+              "fetch_id": "item:3288",
+              "voters": 5
+            },
+            {
+              "item_id": 3314,
+              "name": "典礼皮手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3314",
+              "fetch_id": "item:3314",
+              "voters": 4
+            },
+            {
+              "item_id": 4566,
+              "name": "致密短杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4566",
+              "fetch_id": "item:4566",
+              "voters": 6
+            },
+            {
+              "item_id": 4567,
+              "name": "短刃重剑",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4567",
+              "fetch_id": "item:4567",
+              "voters": 5
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 7
+            },
+            {
+              "item_id": 4570,
+              "name": "桦木槌",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4570",
+              "fetch_id": "item:4570",
+              "voters": 5
+            },
+            {
+              "item_id": 4577,
+              "name": "紧凑火枪",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4577",
+              "fetch_id": "item:4577",
+              "voters": 4
+            },
+            {
+              "item_id": 6527,
+              "name": "先祖长袍",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/6527",
+              "fetch_id": "item:6527",
+              "voters": 3
+            },
+            {
+              "item_id": 14096,
+              "name": "天然外衣",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14096",
+              "fetch_id": "item:14096",
+              "voters": 4
+            },
+            {
+              "item_id": 14113,
+              "name": "土著腰带",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14113",
+              "fetch_id": "item:14113",
+              "voters": 3
+            },
+            {
+              "item_id": 14114,
+              "name": "土著薄靴",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/14114",
+              "fetch_id": "item:14114",
+              "voters": 3
+            },
+            {
+              "item_id": 15012,
+              "name": "凶猛便鞋",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15012",
+              "fetch_id": "item:15012",
+              "voters": 3
+            },
+            {
+              "item_id": 15268,
+              "name": "双刃斧",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15268",
+              "fetch_id": "item:15268",
+              "voters": 7
+            },
+            {
+              "item_id": 15303,
+              "name": "灰白短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15303",
+              "fetch_id": "item:15303",
+              "voters": 5
+            },
+            {
+              "item_id": 15306,
+              "name": "野性束腕",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15306",
+              "fetch_id": "item:15306",
+              "voters": 3
+            },
+            {
+              "item_id": 15492,
+              "name": "血斑束带",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15492",
+              "fetch_id": "item:15492",
+              "voters": 5
+            },
+            {
+              "item_id": 15970,
+              "name": "天然木枝",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15970",
+              "fetch_id": "item:15970",
+              "voters": 3
+            }
+          ]
+        },
+        {
+          "npc_id": 11324,
+          "name": "燃刃术士",
+          "on_site": false,
+          "fetch_id": "npc:11324",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 3308,
+              "name": "蛮族布质手套",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3308",
+              "fetch_id": "item:3308",
+              "voters": 4
+            },
+            {
+              "item_id": 3309,
+              "name": "蛮族布质缠腰",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3309",
+              "fetch_id": "item:3309",
+              "voters": 3
+            },
+            {
+              "item_id": 4570,
+              "name": "桦木槌",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4570",
+              "fetch_id": "item:4570",
+              "voters": 3
+            },
+            {
+              "item_id": 5069,
+              "name": "火焰魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5069",
+              "fetch_id": "item:5069",
+              "voters": 3
+            }
+          ]
+        },
+        {
+          "npc_id": 11320,
+          "name": "钻土虫",
+          "on_site": false,
+          "fetch_id": "npc:11320",
+          "temporary": true,
+          "items": [
+            {
+              "item_id": 2632,
+              "name": "弧形匕首",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/2632",
+              "fetch_id": "item:2632",
+              "voters": 4
+            },
+            {
+              "item_id": 3287,
+              "name": "部落短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3287",
+              "fetch_id": "item:3287",
+              "voters": 3
+            },
+            {
+              "item_id": 3291,
+              "name": "先祖热裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/3291",
+              "fetch_id": "item:3291",
+              "voters": 3
+            },
+            {
+              "item_id": 4564,
+              "name": "尖刺木棒",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4564",
+              "fetch_id": "item:4564",
+              "voters": 7
+            },
+            {
+              "item_id": 4569,
+              "name": "硬铁锤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/4569",
+              "fetch_id": "item:4569",
+              "voters": 4
+            },
+            {
+              "item_id": 5071,
+              "name": "暗影魔杖",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/5071",
+              "fetch_id": "item:5071",
+              "voters": 6
+            },
+            {
+              "item_id": 6527,
+              "name": "先祖长袍",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/6527",
+              "fetch_id": "item:6527",
+              "voters": 4
+            },
+            {
+              "item_id": 15485,
+              "name": "久战短裤",
+              "quality": 2,
+              "url": "https://wuxianwow.com/item/15485",
+              "fetch_id": "item:15485",
+              "voters": 3
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 88,
+      "p25_minutes": 14,
+      "p90_minutes": 21,
+      "text": "四分之一的人 14 分钟内、九成 21 分钟内（88 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "Map 389.Corpse (1816.8, -4423.4) on Map 1",
+      "group_finder": "GroupFinderActivity 798",
+      "kind": "Map.InstanceType",
+      "level": [
+        "MapDifficulty.Message",
+        "ContentTuning 5244"
+      ],
+      "lfg": "LFGDungeons 3 怒焰裂谷",
+      "loading": "LoadingScreens 195 (fdid 131862)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "manual"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=389",
+      "map_url": "https://wuxianwow.com/trip?instance=389&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=1,1816.8,-4423.4",
+      "map_levels": 2,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 5723,
+        "name": "试探敌人",
+        "url": "https://wuxianwow.com/quest/5723",
+        "fetch_id": "quest:5723",
+        "level": 15,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 5722,
+        "name": "寻找背包",
+        "url": "https://wuxianwow.com/quest/5722",
+        "fetch_id": "quest:5722",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 5724,
+        "name": "归还背包",
+        "url": "https://wuxianwow.com/quest/5724",
+        "fetch_id": "quest:5724",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 5725,
+        "name": "毁灭之力",
+        "url": "https://wuxianwow.com/quest/5725",
+        "fetch_id": "quest:5725",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 5728,
+        "name": "隐藏的敌人",
+        "url": "https://wuxianwow.com/quest/5728",
+        "fetch_id": "quest:5728",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      },
+      {
+        "quest_id": 5761,
+        "name": "饥饿者塔拉加曼",
+        "url": "https://wuxianwow.com/quest/5761",
+        "fetch_id": "quest:5761",
+        "level": 16,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server",
+        "temporary": {
+          "side": "QuestieDB"
+        }
+      }
+    ],
+    "quests_total": 6,
+    "quests_confirmed": 6,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "怒焰裂谷（地下城 · 5 / 10 人 · 准入 10 级 · 集合石 13–18 级 · 奥格瑞玛）\n入口：奥格瑞玛（1816.8, -4423.4，Map.Corpse）\n首领：奥格弗林特、饥饿者塔拉加曼、祈求者耶戈什、巴扎兰\n首领位置（临时 · EG Link）：4/4 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：奥格弗林特 上层 0.672, 0.481；饥饿者塔拉加曼 上层 0.333, 0.661；祈求者耶戈什 上层 0.182, 0.914；巴扎兰 上层 0.319, 0.954\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 14 分钟内、九成 21 分钟内（88 人）\n副本任务（6 个，服务器确认 6）：试探敌人、寻找背包、归还背包、毁灭之力、隐藏的敌人、饥饿者塔拉加曼\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 287005
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "auction",
+        "kind": "stale",
+        "text": "auction 里「PvP · 联盟」的快照是 2026-11-21（3 天前），「角色扮演 · 联盟」的快照是 2026-11-19（5 天前），之后还没有新的采集；价格是那一天的，现在可能已经变了"
+      },
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:287005",
+    "title": "肢解之剑",
+    "url": "https://wuxianwow.com/item/287005",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQKAEJ3CEQA",
+    "kind": "item",
+    "game_link": "|cff0070dd|Hitem:287005:::::::::::::|h[肢解之剑]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 287005,
+    "quality": 3,
+    "quality_name": "精良",
+    "item_kind": "装备",
+    "ilvl": 42,
+    "slot": "双手",
+    "req_level": 37,
+    "sell": 19451,
+    "sell_text": "1金 94银 51铜",
+    "use": "瓦解目标，造成335到1005点物理伤害。",
+    "use_kind": "击中时可能",
+    "effects": [
+      {
+        "kind": "击中时可能",
+        "text": "瓦解目标，造成335到1005点物理伤害。"
+      }
+    ],
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "双手",
+      "weapon_type": "双手剑",
+      "ilvl": 42,
+      "req_level": 37,
+      "damage": {
+        "dps": 37.3,
+        "max": 166,
+        "min": 110,
+        "speed": 3.7
+      },
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "隐藏直到收集",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "temporary_sources": {
+      "sources": {
+        "drops": "Spyglass（WoW Forever 的掉落浏览插件）"
+      },
+      "note": "临时数据，不是官方数据：任务奖励来自 Polestar forever-db，只列游戏服务器没有记录的任务；掉落来自 Spyglass，掉率只有记满 10 次击杀的才有；《无限》里可能不同，官方数据出现后替换",
+      "drops": [
+        {
+          "anywhere_in_zone": true,
+          "zone": "沉没之城",
+          "instance": {
+            "instance_id": 2970,
+            "url": "https://wuxianwow.com/instance/2970",
+            "fetch_id": "instance:2970"
+          }
+        }
+      ]
+    },
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "auction": [
+      {
+        "key": "pvp-horde",
+        "label": "PvP · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 08:30",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287005,
+        "name": "肢解之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "双手剑",
+        "guidance": 1000000,
+        "guidance_text": "100金",
+        "q1": 909900,
+        "q3": 1009189,
+        "min": 888866,
+        "min_now": 909900,
+        "listings": 8,
+        "quantity": 8,
+        "change_1d": 0.43,
+        "quantity_change_1d": 0.03,
+        "change_since": "2026-11-23",
+        "surprise_sd": 0.44,
+        "reference": {
+          "price": 751765.4,
+          "low": 202218.44,
+          "high": 2794756.16,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287005",
+        "fetch_id": "item:287005",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 100金，价格区间 90金 99银 – 100金 91银 89铜，8 条挂单 / 8 个，比上次 +43%"
+      },
+      {
+        "key": "normal-horde",
+        "label": "普通 · 部落",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 13:10",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287005,
+        "name": "肢解之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "双手剑",
+        "guidance": 800000,
+        "guidance_text": "80金",
+        "q1": 800000,
+        "q3": 800000,
+        "min": 800000,
+        "min_now": 800000,
+        "listings": 4,
+        "quantity": 4,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-23",
+        "surprise_sd": 0.14,
+        "reference": {
+          "price": 732042.12,
+          "low": 203040.9,
+          "high": 2639299.08,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287005&h=normal-horde",
+        "fetch_id": "item:287005",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 部落，北京时间 2026-11-24 13:10）：指导价 80金，价格区间 80金 – 80金，4 条挂单 / 4 个"
+      },
+      {
+        "key": "normal-alliance",
+        "label": "普通 · 联盟",
+        "day": "2026-11-24",
+        "collected_at": "北京时间 2026-11-24 09:05",
+        "snapshot_day": "2026-11-24",
+        "age_days": 0,
+        "item_id": 287005,
+        "name": "肢解之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "双手剑",
+        "guidance": 518500,
+        "guidance_text": "51金 85银",
+        "q1": 517500,
+        "q3": 518500,
+        "min": 517500,
+        "min_now": 517500,
+        "listings": 8,
+        "quantity": 8,
+        "change_1d": -0.15,
+        "quantity_change_1d": -0.03,
+        "change_since": "2026-11-23",
+        "surprise_sd": 0.07,
+        "reference": {
+          "price": 495820.53,
+          "low": 140326.6,
+          "high": 1751898.74,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287005&h=normal-alliance",
+        "fetch_id": "item:287005",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 51金 85银，价格区间 51金 75银 – 51金 85银，8 条挂单 / 8 个，比上次 −15%"
+      },
+      {
+        "key": "pvp-alliance",
+        "label": "PvP · 联盟",
+        "day": "2026-11-21",
+        "collected_at": "北京时间 2026-11-21 12:44",
+        "snapshot_day": "2026-11-21",
+        "age_days": 3,
+        "item_id": 287005,
+        "name": "肢解之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "双手剑",
+        "guidance": 650000,
+        "guidance_text": "65金",
+        "q1": 580000,
+        "q3": 654400,
+        "min": 579900,
+        "min_now": 579900,
+        "listings": 5,
+        "quantity": 5,
+        "change_1d": -0.01,
+        "quantity_change_1d": -0.42,
+        "change_since": "2026-11-20",
+        "surprise_sd": 0.04,
+        "reference": {
+          "price": 633244.21,
+          "low": 166325.36,
+          "high": 2410926.54,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287005&h=pvp-alliance",
+        "fetch_id": "item:287005",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 65金，价格区间 58金 – 65金 44银，5 条挂单 / 5 个，比上次 −1%"
+      },
+      {
+        "key": "rp-alliance",
+        "label": "角色扮演 · 联盟",
+        "day": "2026-11-19",
+        "collected_at": "北京时间 2026-11-19 14:31",
+        "snapshot_day": "2026-11-19",
+        "age_days": 5,
+        "item_id": 287005,
+        "name": "肢解之剑",
+        "quality": 3,
+        "class": "武器",
+        "subclass": "双手剑",
+        "guidance": 809200,
+        "guidance_text": "80金 92银",
+        "q1": 809200,
+        "q3": 809200,
+        "min": 809200,
+        "min_now": 809200,
+        "listings": 1,
+        "quantity": 1,
+        "change_1d": null,
+        "quantity_change_1d": null,
+        "change_since": "2026-11-18",
+        "surprise_sd": 0.16,
+        "reference": {
+          "price": 739883.26,
+          "low": 224267,
+          "high": 2440962.04,
+          "verdict": "在区间内"
+        },
+        "url": "https://wuxianwow.com/ah/trend?item=287005&h=rp-alliance",
+        "fetch_id": "item:287005",
+        "source": "拍卖行价格是游戏内采集的挂单，不是客户端数据（auction_house 工具有全部视图）",
+        "text": "拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 80金 92银，价格区间 80金 92银 – 80金 92银，1 条挂单 / 1 个"
+      }
+    ],
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "精良武器 · 物品等级 41–45",
+      "bracket_id": 24,
+      "bracket_items": 64,
+      "outcomes": [
+        {
+          "item_id": 11177,
+          "name": "小块强光碎片",
+          "chance_pct": 100,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11177",
+          "fetch_id": "item:11177"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 9764,
+          "value_text": "97银 64铜",
+          "item_guidance": 1000000,
+          "item_guidance_text": "100金"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 5441,
+          "value_text": "54银 41铜",
+          "item_guidance": 800000,
+          "item_guidance_text": "80金"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 7180,
+          "value_text": "71银 80铜",
+          "item_guidance": 518500,
+          "item_guidance_text": "51金 85银"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 7472,
+          "value_text": "74银 72铜",
+          "item_guidance": 650000,
+          "item_guidance_text": "65金"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 17800,
+          "value_text": "1金 78银",
+          "item_guidance": 809200,
+          "item_guidance_text": "80金 92银"
+        }
+      ]
+    },
+    "text": "肢解之剑 · 双手 · 装等 42\n属性：110–166 伤害 · 速度 3.7 · DPS 37.3\n击中时可能：瓦解目标，造成335到1005点物理伤害。\n售价：1金 94银 51铜\n来源：沉没之城各处掉落（临时）\n由 0 条配方制作，被 0 条配方使用。\n分解（精良武器 · 物品等级 41–45，一次出一样）：小块强光碎片 100% ×1\n分解约值（PvP · 部落，2026-11-24）：97银 64铜，物品自己的指导价 100金\n分解约值（普通 · 部落，2026-11-24）：54银 41铜，物品自己的指导价 80金\n分解约值（普通 · 联盟，2026-11-24）：71银 80铜，物品自己的指导价 51金 85银\n分解约值（PvP · 联盟，2026-11-21）：74银 72铜，物品自己的指导价 65金\n分解约值（角色扮演 · 联盟，2026-11-19）：1金 78银，物品自己的指导价 80金 92银\n拍卖行（PvP · 部落，北京时间 2026-11-24 08:30）：指导价 100金，价格区间 90金 99银 – 100金 91银 89铜，8 条挂单 / 8 个，比上次 +43%\n拍卖行（普通 · 部落，北京时间 2026-11-24 13:10）：指导价 80金，价格区间 80金 – 80金，4 条挂单 / 4 个\n拍卖行（普通 · 联盟，北京时间 2026-11-24 09:05）：指导价 51金 85银，价格区间 51金 75银 – 51金 85银，8 条挂单 / 8 个，比上次 −15%\n拍卖行（PvP · 联盟，北京时间 2026-11-21 12:44，3 天前）：指导价 65金，价格区间 58金 – 65金 44银，5 条挂单 / 5 个，比上次 −1%\n拍卖行（角色扮演 · 联盟，北京时间 2026-11-19 14:31，5 天前）：指导价 80金 92银，价格区间 80金 92银 – 80金 92银，1 条挂单 / 1 个",
+    "matched_by": "id"
+  }
+}

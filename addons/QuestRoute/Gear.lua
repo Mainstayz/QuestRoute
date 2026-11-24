@@ -33,11 +33,12 @@ local STAT_LABEL = {
     intellect = "智力", spirit = "精神",
 }
 
--- 练级权重。没点名的护甲、防御、格挡值、攻击强度留着以便覆盖，默认不计。武器每秒伤害只加在主手和双手上。
+-- 练级权重。护甲、防御、攻强取温和系数，避免同级布/皮甲压过板/锁甲；仍可通过 weights 覆盖。武器每秒伤害只加在主手和双手上。
 local DEFAULT_WEIGHTS = {
-    strength = 5, hit = 5, crit = 4, stamina = 4, agility = 3,
-    dodge = 2, parry = 2, block = 2,
-    attackPower = 0, armor = 0, defense = 0, blockValue = 0,
+    strength = 5, stamina = 4, agility = 3,
+    hit = 2.5, crit = 2, attackPower = 2,
+    dodge = 1.5, parry = 1.5, block = 1.5,
+    defense = 1, blockValue = 0.5, armor = 0.05,
     weaponDps = 1.5,
 }
 
@@ -144,6 +145,9 @@ end
 local function SourceAllowed(source, query)
     if source.kind == "quest" then
         if source.profession then return false, "profession" end
+        if source.questClass and source.questClass ~= query.className then
+            return false, "quest_class"
+        end
         if source.side and source.sideStatus ~= "unknown" and source.side ~= query.faction then
             return false, "faction"
         end
@@ -168,7 +172,12 @@ local function SourceAllowed(source, query)
 end
 
 local function UsableSources(item, query)
-    local kept, rejected = {}, { faction = 0, quest_min_level = 0, quest_level_window = 0, no_instance = 0, instance_enter = 0, source = 0 }
+    local kept = {}
+    local rejected = {
+        profession = 0, quest_class = 0, faction = 0,
+        quest_min_level = 0, quest_level_window = 0,
+        no_instance = 0, instance_enter = 0, source = 0,
+    }
     for _, source in ipairs(item.sources or {}) do
         local ok, reason = SourceAllowed(source, query)
         if ok then table.insert(kept, source) else rejected[reason] = (rejected[reason] or 0) + 1 end
@@ -190,11 +199,24 @@ local function Score(item, weights)
             table.insert(terms, { stat = key, label = STAT_LABEL[key], value = stats[key], weight = weights[key], points = points })
         end
     end
-    for key, value in pairs(stats) do
-        if not Counts(weights[key]) then
+    local seenOrder = {}
+    for _, key in ipairs(ORDER) do
+        seenOrder[key] = true
+        if key ~= "weaponDps" and stats[key] ~= nil and not Counts(weights[key]) then
             local reason = weights[key] == 0 and "练级不计" or "未计入"
-            table.insert(unquantified, (STAT_LABEL[key] or key) .. " " .. tostring(value) .. " " .. reason)
+            table.insert(unquantified, (STAT_LABEL[key] or key) .. " " .. tostring(stats[key]) .. " " .. reason)
         end
+    end
+    local extraKeys = {}
+    for key in pairs(stats) do
+        if not seenOrder[key] and not Counts(weights[key]) then
+            extraKeys[#extraKeys + 1] = key
+        end
+    end
+    table.sort(extraKeys)
+    for _, key in ipairs(extraKeys) do
+        local reason = weights[key] == 0 and "练级不计" or "未计入"
+        table.insert(unquantified, (STAT_LABEL[key] or key) .. " " .. tostring(stats[key]) .. " " .. reason)
     end
     for _, row in ipairs(item.unmappedStats or {}) do
         table.insert(unquantified, tostring(row.stat) .. " 未映射，未计入")
@@ -245,7 +267,7 @@ local function StatDiff(candidate, current)
     return diff
 end
 
-local function Candidate(item, sources, query, current, reservedId)
+local function Candidate(item, sources, query, current, reservedIds)
     local scored = query.mode == "protection"
     local score, terms, unquantified
     if scored then score, terms, unquantified = Score(item, query.weights) end
@@ -265,7 +287,7 @@ local function Candidate(item, sources, query, current, reservedId)
             if diff.score > 1e-6 then relation, proven = "upgrade", true else relation = "not_upgrade" end
         end
     end
-    local blocked = reservedId and item.id == reservedId and "duplicate_item" or nil
+    local blocked = reservedIds and reservedIds[item.id] and "duplicate_item" or nil
     if blocked then proven = false end
     return {
         id = item.id, name = item.name, url = item.url, slot = item.slot, hands = item.hands, subtype = item.subtype,
@@ -326,8 +348,8 @@ local function Fits(item, spec, mode)
     return item.slot == spec.pool
 end
 
-local function BuildSlot(spec, pool, query, byId, currentEntry, reservedId, catalog)
-    local counts = { listed = 0, level = 0, class = 0, armor = 0, source = 0 }
+local function BuildSlot(spec, pool, query, byId, currentEntry, reservedIds, catalog)
+    local counts = { listed = 0, level = 0, class = 0, armor = 0, source = 0, sourceReasons = {} }
     local candidates = {}
     for _, item in ipairs(pool) do
         if Fits(item, spec, query.mode) then
@@ -341,9 +363,17 @@ local function BuildSlot(spec, pool, query, byId, currentEntry, reservedId, cata
                 if not wearable then
                     counts.level = counts.level + 1
                 else
-                    local sources = UsableSources(item, query)
-                    if #sources == 0 then counts.source = counts.source + 1
-                    else table.insert(candidates, Candidate(item, sources, query, currentEntry, reservedId)) end
+                    local sources, rejected = UsableSources(item, query)
+                    if #sources == 0 then
+                        counts.source = counts.source + 1
+                        for reason, n in pairs(rejected or {}) do
+                            if n > 0 then
+                                counts.sourceReasons[reason] = (counts.sourceReasons[reason] or 0) + n
+                            end
+                        end
+                    else
+                        table.insert(candidates, Candidate(item, sources, query, currentEntry, reservedIds))
+                    end
                 end
             end
         end
@@ -383,7 +413,7 @@ local function BuildSlot(spec, pool, query, byId, currentEntry, reservedId, cata
 end
 
 local function CurrentFor(spec, gear, byId, query)
-    local entry = gear[spec.id] or gear[spec.pool]
+    local entry = spec.pair and gear[spec.id] or (gear[spec.id] or gear[spec.pool])
     if not entry then return nil end
     local item = byId[entry]
     if not item then
@@ -422,7 +452,26 @@ local function ParseGear(gear)
     return mapped, ignored, ambiguous
 end
 
+local function AssignPaired(mapped, base, id)
+    local first, second = base .. "1", base .. "2"
+    if not mapped[first] then mapped[first] = id return true end
+    if not mapped[second] then mapped[second] = id return true end
+    return false
+end
+
 local function ResolveLooseIds(mapped, byId)
+    if mapped.twohand then
+        if mapped.mainhand and mapped.mainhand ~= mapped.twohand then return false end
+        mapped.mainhand = mapped.twohand
+        mapped.twohand = nil
+    end
+    for _, pair in ipairs({ "finger", "trinket" }) do
+        if mapped[pair] then
+            local id = mapped[pair]
+            mapped[pair] = nil
+            if not AssignPaired(mapped, pair, id) then return false end
+        end
+    end
     local loose = {}
     for _, id in ipairs(mapped) do table.insert(loose, id) end
     for index = #mapped, 1, -1 do mapped[index] = nil end
@@ -431,8 +480,13 @@ local function ResolveLooseIds(mapped, byId)
         if not item then mapped["unknown:" .. id] = id
         else
             local slot = item.slot
-            if mapped[slot] then return false end
-            mapped[slot] = id
+            if slot == "twohand" then slot = "mainhand" end
+            if slot == "finger" or slot == "trinket" then
+                if not AssignPaired(mapped, slot, id) then return false end
+            else
+                if mapped[slot] then return false end
+                mapped[slot] = id
+            end
         end
     end
     return true
@@ -482,7 +536,15 @@ function Gear.Recommend(args, catalog)
             for _, item in ipairs(byPool.mainhand or {}) do table.insert(pool, item) end
             for _, item in ipairs(byPool.twohand or {}) do table.insert(pool, item) end
         end
-        local built = BuildSlot(spec, pool, query, byId, current, spec.pair and reserved[spec.pair] or nil, catalog)
+        local reservedIds
+        if spec.pair then
+            reservedIds = {}
+            if reserved[spec.pair] then reservedIds[reserved[spec.pair]] = true end
+            local sibling = spec.id == (spec.pair .. "1") and (spec.pair .. "2") or (spec.pair .. "1")
+            local siblingId = gear[sibling]
+            if siblingId and siblingId ~= gear[spec.id] then reservedIds[siblingId] = true end
+        end
+        local built = BuildSlot(spec, pool, query, byId, current, reservedIds, catalog)
         if spec.pair and built.highlight then reserved[spec.pair] = built.highlight.id end
         table.insert(slots, built)
     end
@@ -511,7 +573,7 @@ function Gear.Recommend(args, catalog)
         profile = {
             id = "warrior-protection", label = "战士·防护", bias = "leveling", scored = true, optimum = false,
             loadout = "1h_shield", weights = query.weights, questLevelWindow = query.window,
-            weightNote = "练级：力量和命中 5，爆击和耐力 4，敏捷 3，躲闪、招架、格挡 2。护甲、防御、格挡值和攻击强度默认不计。主手和双手另计武器每秒伤害。不是 60 级团本模拟，也不是绝对最优。",
+            weightNote = "练级：力量 5、耐力 4、敏捷 3、命中等级 2.5、爆击等级和攻强 2、躲闪/招架/格挡等级 1.5、防御等级 1、格挡值 0.5、护甲 0.05；主手和双手另计武器每秒伤害 1.5。不是 60 级团本模拟，也不是绝对最优。",
         }
     else
         profile = {

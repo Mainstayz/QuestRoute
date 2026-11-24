@@ -91,6 +91,9 @@ local catalog = {
         item({ id = 20, name = "高准入", slot = "head", hands = 0, subtype = "锁甲", ilvl = 40,
             reqLevel = 1, reqLevelStatus = "known", stats = { stamina = 20 },
             sources = { drop(8, 50) } }),
+        item({ id = 22, name = "圣骑肩", slot = "shoulder", hands = 0, armorType = "板甲", subtype = "板甲", ilvl = 45,
+            reqLevel = 40, reqLevelStatus = "known", stats = { strength = 20, stamina = 20 },
+            sources = { (function() local row = quest(79970, "联盟", 35, 40); row.questClass = "圣骑士"; return row end)() } }),
     },
 }
 local base = { level = 40, class = "战士", spec = "防护", faction = "联盟" }
@@ -138,16 +141,25 @@ check(has(offhand, 2) and not has(offhand, 3) and not has(offhand, 5) and not ha
 check(has(offhand, 4).appearanceSourceType == "世界掉落" and has(offhand, 4).sources[1].instanceId == 7, "dungeon drop labeled world drop is kept")
 check(has(offhand, 4).conditions.accessComplete == false and has(offhand, 4).sources[1].suggestedGroup[1] == 50, "suggested difficulty and keys do not block")
 local better = has(offhand, 2)
-local proc, setBonus, armorLeftOut = false, false, false
+local proc, setBonus = false, false
 for _, line in ipairs(better.unquantified) do
     local text = tostring(line)
     if text:find("特效", 1, true) then proc = true end
     if text:find("套装", 1, true) then setBonus = true end
-    if text:find("护甲", 1, true) and text:find("练级不计", 1, true) then armorLeftOut = true end
 end
-check(proc and setBonus and armorLeftOut, "set, proc and armor stay outside the leveling score")
-local expected = 20 * 4
-check(math.abs(better.score - expected) < 1e-6, "default score is stamina at 4, not armor")
+check(proc and setBonus, "set and proc stay outside the leveling score")
+local expected = 20 * 4 + 100 * 0.05
+check(math.abs(better.score - expected) < 1e-6, "default score includes stamina at 4 and mild armor at 0.05")
+local noArmor = run({ weights = { armor = 0 } })
+local noArmorShield = has(slot(noArmor, "offhand"), 2)
+local armorLeftOut = false
+for _, line in ipairs(noArmorShield.unquantified) do
+    if tostring(line):find("护甲", 1, true) and tostring(line):find("练级不计", 1, true) then armorLeftOut = true end
+end
+check(armorLeftOut and math.abs(noArmorShield.score - 80) < 1e-6, "zeroed armor weight is disclosed in unquantified")
+local apTrinket = has(slot(result, "trinket1"), 13)
+check(apTrinket and math.abs(apTrinket.score - 20) < 1e-6, "attackPower scores at 2 by default")
+check(not has(slot(result, "shoulder"), 22) and slot(result, "shoulder").filtered.sourceReasons.quest_class == 1, "other-class quest rewards are excluded")
 check(better.conditions.weaponSkill == "not_in_dataset" and better.conditions.questState == "not_checked" and better.conditions.obtainable == "not_confirmed", "unknown conditions stay unknown")
 check(slot(result, "head").emptyReason == "no_allowed_source", "high dungeon entry is an explicit empty reason")
 check(not has(slot(result, "mainhand"), 7) and has(slot(result, "mainhand"), 8).wearable == "estimated", "req estimate is not treated as level zero")
@@ -162,6 +174,12 @@ check(slot(result, "trinket1").highlight.id ~= slot(result, "trinket2").highligh
 check(not has(slot(result, "trinket1"), 21) and not has(slot(result, "trinket2"), 21), "profession-category quests are excluded")
 local only = run(nil, { meta = { learnAt = {}, complete = false }, items = { catalog.items[11] } })
 check(slot(only, "finger2").highlight == nil and slot(only, "finger2").emptyReason == "no_distinct_item", "one ring cannot fill both slots")
+local loosePair = run({ gear = { 11, 12, 16 } })
+check(loosePair.ok and slot(loosePair, "finger1").current.id == 11 and slot(loosePair, "finger2").current.id == 12, "loose id array supports two rings")
+check(slot(loosePair, "mainhand").current.id == 16 and slot(loosePair, "offhand").current.id == 16, "loose id array maps two-hander to mainhand and occupies offhand")
+local singleRingKey = run({ gear = { finger = 11 } })
+check(slot(singleRingKey, "finger1").current.id == 11 and slot(singleRingKey, "finger2").current == nil, "generic finger key binds only finger1")
+check(slot(singleRingKey, "finger2").highlight and slot(singleRingKey, "finger2").highlight.id == 12, "finger2 avoids recommending ring already worn in finger1")
 local same = run()
 local again = run()
 check(slot(same, "offhand").highlight.id == slot(again, "offhand").highlight.id and slot(same, "mainhand").candidates[1].id == slot(again, "mainhand").candidates[1].id, "sort is deterministic")
@@ -286,6 +304,16 @@ for _, item in ipairs(ns.GearCatalog.items) do
     end
 end
 check(sawPlace, "quest sources keep the pickup zone and whether they are a chain")
+local sawUnique, sawTwoHand = false, false
+for _, item in ipairs(ns.GearCatalog.items) do
+    if item.uniqueStatus == "unique_equipped" then sawUnique = true end
+    if item.slot == "twohand" then sawTwoHand = true end
+end
+check(sawUnique, "unique_equipped items from MCP are preserved")
+check(sawTwoHand, "two-handed weapons are collected in the catalog")
+local fury = ns.GetGearCandidates({ level = 40, class = "战士", spec = "狂暴", faction = "联盟", limit = 100 })
+check(fury.ok and slot(fury, "mainhand").highlight and slot(fury, "mainhand").highlight.hands == 2, "fury spec sees two-handed weapons")
+check(not find(alliance, 277236) and not find(alliance, 277205) and not find(alliance, 280696), "paladin and shaman class quest rewards are excluded from warrior")
 for _, row in ipairs(alliance.slots) do
     check(row.coverage.complete == false, "slot coverage stays incomplete: "..row.slot)
 end
@@ -349,6 +377,22 @@ local where, gate = ns.GearSheet.GateLines({ sources = {{ kind = "drop", instanc
 check(where == "血色修道院 · 莫格莱尼" and gate == "临时" and not where:find("准入", 1, true), "panel dungeon line names the place and not the enter level")
 local questWhere, questGate = ns.GearSheet.GateLines({ sources = {{ kind = "quest", name = "琥珀酒", zone = "西部荒野", chainKind = "chain", chainPosition = 2, chainLength = 3, minLevel = 40 }}})
 check(questWhere == "琥珀酒 · 西部荒野" and questGate == "链2/3 · 可接40", "panel quest line stays on two short rows")
+local trinketText = ns.GearSheet.StatText({ stats = {}, effects = { "提高格挡值。" } })
+check(trinketText == "特效：提高格挡值。", "effect-only items show their effect instead of empty stats")
+local multi = ns.GearSheet.GateText({ sources = {
+    { kind = "drop", instanceName = "血色修道院", npc = "莫格莱尼", temporary = true },
+    { kind = "drop", instanceName = "血色修道院", npc = "怀特迈恩", temporary = true },
+}})
+check(multi:find("莫格莱尼", 1, true) and multi:find("怀特迈恩", 1, true), "multi-source detail lists more than one source")
+local _, multiGate = ns.GearSheet.GateLines({ sources = {
+    { kind = "drop", instanceName = "血色修道院", npc = "莫格莱尼", temporary = true },
+    { kind = "drop", instanceName = "血色修道院", npc = "怀特迈恩", temporary = true },
+}})
+check(multiGate:find("+1来源", 1, true), "panel line indicates extra sources")
+C_QuestLog = { IsQuestFlaggedCompleted = function(id) return id == 53 end }
+local _, doneGate = ns.GearSheet.GateLines({ sources = {{ kind = "quest", questId = 53, name = "琥珀酒", zone = "西部荒野", chainKind = "standalone", minLevel = 40 }}})
+check(doneGate:find("已完成", 1, true), "completed quest is marked on panel")
+C_QuestLog = nil
 return checks
 '''
 

@@ -1,0 +1,171 @@
+{
+  "tool": "npcs",
+  "arguments": {
+    "id": 903411
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      }
+    ],
+    "id": "npc:903411",
+    "npc_id": 903411,
+    "name": "邪恶的维克多",
+    "subname": null,
+    "url": "https://wuxianwow.com/npc/903411",
+    "source": "encounter",
+    "boss": true,
+    "classification": "首领",
+    "type": null,
+    "level": null,
+    "dungeon": "洛丹伦废墟",
+    "instance": {
+      "id": 2999,
+      "fetch_id": "instance:2999",
+      "name": "洛丹伦废墟",
+      "level_text": "准入 15 级 · 集合石 15–22 级",
+      "kind": "地下城",
+      "level": {
+        "group": [
+          15,
+          22
+        ],
+        "max": null,
+        "min": 15,
+        "target": 15
+      },
+      "url": "https://wuxianwow.com/instance/2999"
+    },
+    "difficulty": null,
+    "new_in_160": true,
+    "summon_spell": null,
+    "teaching_item": null,
+    "portrait": "https://wuxianwow.com/data/bosses/3411.webp",
+    "model_image": "https://wuxianwow.com/data/bosses/3411_model.webp",
+    "fallback_icon": null,
+    "family": null,
+    "pet": null,
+    "display_id": null,
+    "icon": null,
+    "cache_texts": null,
+    "note": "Creature.db2 只含客户端预置生物（宠物、坐骑与少量 NPC），其余 NPC 由服务器下发；首领来自 DungeonEncounter（id = 900000 + 首领战 ID），客户端里没有出生点、掉落与区域数据；temporary_drops 是第三方临时的掉落（Spyglass），转述时注明「临时」。",
+    "encounter": {
+      "id": 3411,
+      "dungeon": "洛丹伦废墟",
+      "instance": {
+        "instance_id": 2999,
+        "url": "https://wuxianwow.com/instance/2999",
+        "fetch_id": "instance:2999"
+      },
+      "difficulty_id": 0,
+      "difficulty": null,
+      "position": 5,
+      "of": 7,
+      "bosses": [
+        {
+          "npc_id": 903353,
+          "name": "枯牙",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903353",
+          "fetch_id": "npc:903353",
+          "portrait": "https://wuxianwow.com/data/bosses/3353.webp"
+        },
+        {
+          "npc_id": 903357,
+          "name": "被遗弃者",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903357",
+          "fetch_id": "npc:903357",
+          "portrait": "https://wuxianwow.com/data/bosses/3357.webp"
+        },
+        {
+          "npc_id": 903355,
+          "name": "屠夫",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903355",
+          "fetch_id": "npc:903355",
+          "portrait": null
+        },
+        {
+          "npc_id": 903408,
+          "name": "洛丹伦上尉",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903408",
+          "fetch_id": "npc:903408",
+          "portrait": "https://wuxianwow.com/data/bosses/3408.webp"
+        },
+        {
+          "npc_id": 903411,
+          "name": "邪恶的维克多",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903411",
+          "fetch_id": "npc:903411",
+          "portrait": "https://wuxianwow.com/data/bosses/3411.webp"
+        },
+        {
+          "npc_id": 903412,
+          "name": "比约克",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903412",
+          "fetch_id": "npc:903412",
+          "portrait": "https://wuxianwow.com/data/bosses/3412.webp"
+        },
+        {
+          "npc_id": 903354,
+          "name": "拉斯玛尔",
+          "difficulty": null,
+          "url": "https://wuxianwow.com/npc/903354",
+          "fetch_id": "npc:903354",
+          "portrait": "https://wuxianwow.com/data/bosses/3354.webp"
+        }
+      ],
+      "note": "position / of / bosses：同一副本同一难度的首领战（DungeonEncounter 按 OrderIndex），difficulty / difficulty_id 是这份列表的难度（0 = 通用）；通用的首领战并进不与它们同名的难度，与副本页的首领列表同一规则"
+    },
+    "temporary_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）整理的这个首领的掉落，大多没有掉落率；not_in_client 为客户端里没有这件物品的资料（名称是 Spyglass 的英文名）；官方数据出现后替换",
+      "items": [
+        {
+          "item_id": 271211,
+          "name": "残迹爬行者",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/271211",
+          "fetch_id": "item:271211"
+        },
+        {
+          "item_id": 271212,
+          "name": "染血胸衣",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/271212",
+          "fetch_id": "item:271212"
+        },
+        {
+          "item_id": 271218,
+          "name": "邪血弯刀",
+          "quality": 3,
+          "url": "https://wuxianwow.com/item/271218",
+          "fetch_id": "item:271218"
+        }
+      ]
+    },
+    "text": "邪恶的维克多（首领 · 洛丹伦废墟 · 1.60 新增）\n洛丹伦废墟 第 5/7 个首领\n副本：instance:2999（地下城 · 准入 15 级 · 集合石 15–22 级）\n掉落（临时 · Spyglass）：残迹爬行者、染血胸衣、邪血弯刀\n位置（临时 · EG Link）：洛丹伦废墟副本地图 楼层未定（上层 / 下层） 0.284, 0.613（副本地图上的比例 0–1，0 在西、北）",
+    "temporary_position": {
+      "source": "EG Link",
+      "floor": null,
+      "floor_unsure": true,
+      "floors": [
+        "上层",
+        "下层"
+      ],
+      "x": 0.284,
+      "y": 0.613,
+      "map_url": "https://wuxianwow.com/instance/2999",
+      "trip_url": "https://wuxianwow.com/trip?at=2999,1510.9,388.3,62.3",
+      "pulls": 2
+    }
+  }
+}

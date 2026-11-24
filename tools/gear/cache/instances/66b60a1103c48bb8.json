@@ -1,0 +1,549 @@
+{
+  "tool": "instances",
+  "arguments": {
+    "id": 2999
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "quests",
+        "kind": "scope",
+        "text": "quests：区域是这个副本自己的区域的任务（服务器任务缓存的区域，没有时用 EG Link、QuestieDB 的临时区域），按等级排；confirmed server 是服务器确认，eglink 是 EG Link 见过（临时确认），null 只有客户端编号或第三方数据；temporary 写明哪些字段来自哪个第三方；name_source 表示名字只是客户端线索（值是线索来源），不是任务标题。详情用 quests 的 id"
+      },
+      {
+        "on": "temporary_run_time",
+        "kind": "temporary",
+        "text": "通关用时是第三方临时数据，来自 Polestar 玩家录制：录制到的玩家每人一票，p25_minutes 是四分之一的人在这么多分钟内打完，p90_minutes 是九成的人，people 是人数；客户端没有这项，转述时注明「临时」"
+      },
+      {
+        "on": "bosses.temporary_position",
+        "kind": "temporary",
+        "text": "首领开打时站的位置：第三方临时，source 为来源——EG Link 是玩家在无限正式服的实测，cMaNGOS 是经典旧世的刷新点（EG Link 没有的首领才用）；换算到本站的副本地图；floor 为副本页上的层名，floor_unsure 时楼层未定，floors 是几个可能的层；x、y 为副本页地图上的比例（0–1），0 在西、北"
+      },
+      {
+        "on": "entrance",
+        "kind": "estimate",
+        "text": "entrance：估算，按规则 ENTRANCE_APPROX 推出"
+      }
+    ],
+    "id": 2999,
+    "fetch_id": "instance:2999",
+    "title": "洛丹伦废墟",
+    "url": "https://wuxianwow.com/instance/2999",
+    "kind": "地下城",
+    "players": [
+      5
+    ],
+    "players_text": "5 人",
+    "level": {
+      "group": [
+        15,
+        22
+      ],
+      "max": null,
+      "min": 15,
+      "target": 15
+    },
+    "level_text": "准入 15 级 · 集合石 15–22 级",
+    "zone": "提瑞斯法林地",
+    "entrance": {
+      "zone": "提瑞斯法林地",
+      "area": "洛丹伦废墟",
+      "continent": "东部王国",
+      "source": "WorldMapOverlay",
+      "confidence": "medium",
+      "approx": true,
+      "source_detail": "同名子区域 洛丹伦废墟",
+      "world_xy": [
+        1632.2,
+        223.8
+      ],
+      "continent_map_id": 0,
+      "zone_ui_map": 1420,
+      "atlas": [
+        {
+          "name": "提瑞斯法林地",
+          "ui_map": 1420,
+          "x": 0.6218,
+          "y": 0.732,
+          "url": "https://wuxianwow.com/atlas/1420?i=2999",
+          "fetch_id": "map:1420"
+        },
+        {
+          "name": "东部王国",
+          "ui_map": 1415,
+          "x": 0.4482,
+          "y": 0.2486,
+          "url": "https://wuxianwow.com/atlas/1415?i=2999",
+          "fetch_id": "map:1415"
+        },
+        {
+          "name": "艾泽拉斯",
+          "ui_map": 947,
+          "x": 0.7245,
+          "y": 0.2773,
+          "url": "https://wuxianwow.com/atlas/947?i=2999",
+          "fetch_id": "map:947"
+        }
+      ]
+    },
+    "boss_count": 7,
+    "new_in_160": true,
+    "incomplete": false,
+    "loading_art": "https://wuxianwow.com/data/loading/2999.webp",
+    "picture": "https://wuxianwow.com/data/loading/2999.webp",
+    "picture_kind": "读取画面",
+    "trip_url": "https://wuxianwow.com/trip?instance=2999",
+    "entry_note": "进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "lore": {
+      "entities": [
+        {
+          "id": 1361,
+          "name": "洛丹伦都城",
+          "kind": "地点",
+          "summary": "希尔瓦娜斯攻下的城市，地下建起幽暗城",
+          "url": "https://wuxianwow.com/lore/n/1361"
+        }
+      ],
+      "events_here": [
+        {
+          "id": 2027,
+          "title": "希尔瓦娜斯拒绝恐惧魔王",
+          "year": "约第 21 年",
+          "where": "洛丹伦都城",
+          "cite": "《魔兽编年史 卷三》第三章",
+          "url": "https://wuxianwow.com/lore/e/2027"
+        },
+        {
+          "id": 2028,
+          "title": "处死加里索斯",
+          "year": "约第 21 年",
+          "where": "洛丹伦都城",
+          "cite": "《魔兽编年史 卷三》第三章",
+          "url": "https://wuxianwow.com/lore/e/2028"
+        }
+      ],
+      "events_total": 2,
+      "note": "无限世界书（魔兽小说与编年史设定集）里的同一个人物、地点或势力，逐条人工核对；书中内容只到《无限》当下（第 25 年）。详情用 lore_entity / lore_event。"
+    },
+    "expansion": "经典旧世",
+    "description": null,
+    "difficulties": [
+      {
+        "id": 1,
+        "name": "普通",
+        "players": 5
+      },
+      {
+        "id": 201,
+        "name": "普通",
+        "players": 5,
+        "reset_code": 1,
+        "reset_text": "每天重置"
+      }
+    ],
+    "reset_note": "difficulties[].reset_code 是 MapDifficulty.ResetInterval 的原值：重置周期的代码，不是天数。1、2 按正式服同一字段的定义写作每天重置、每周重置（reset_text）；其余代码客户端没有写明对应多久，reset_text 只写代码；没有 reset_code 的难度在客户端里是 0",
+    "boss_difficulty": {
+      "id": 0,
+      "name": "通用"
+    },
+    "bosses": [
+      {
+        "order": 1,
+        "name": "枯牙",
+        "encounter_id": 3353,
+        "npc_id": 903353,
+        "url": "https://wuxianwow.com/npc/903353",
+        "fetch_id": "npc:903353",
+        "portrait": "https://wuxianwow.com/data/bosses/3353.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3353_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.74,
+          "y": 0.476,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1618.9,61.2,61.7",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 2,
+        "name": "被遗弃者",
+        "encounter_id": 3357,
+        "npc_id": 903357,
+        "url": "https://wuxianwow.com/npc/903357",
+        "fetch_id": "npc:903357",
+        "portrait": "https://wuxianwow.com/data/bosses/3357.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3357_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.324,
+          "y": 0.501,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1599.2,359.9,61.6",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 3,
+        "name": "屠夫",
+        "encounter_id": 3355,
+        "npc_id": 903355,
+        "url": "https://wuxianwow.com/npc/903355",
+        "fetch_id": "npc:903355",
+        "portrait": null,
+        "model_image": null,
+        "fallback_icon": "https://wuxianwow.com/data/icons/255343.webp",
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.576,
+          "y": 0.667,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1468.9,179.0,61.6",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 4,
+        "name": "洛丹伦上尉",
+        "encounter_id": 3408,
+        "npc_id": 903408,
+        "url": "https://wuxianwow.com/npc/903408",
+        "fetch_id": "npc:903408",
+        "portrait": "https://wuxianwow.com/data/bosses/3408.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3408_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false
+      },
+      {
+        "order": 5,
+        "name": "邪恶的维克多",
+        "encounter_id": 3411,
+        "npc_id": 903411,
+        "url": "https://wuxianwow.com/npc/903411",
+        "fetch_id": "npc:903411",
+        "portrait": "https://wuxianwow.com/data/bosses/3411.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3411_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.284,
+          "y": 0.613,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1510.9,388.3,62.3",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 6,
+        "name": "比约克",
+        "encounter_id": 3412,
+        "npc_id": 903412,
+        "url": "https://wuxianwow.com/npc/903412",
+        "fetch_id": "npc:903412",
+        "portrait": "https://wuxianwow.com/data/bosses/3412.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3412_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": null,
+          "floor_unsure": true,
+          "floors": [
+            "上层",
+            "下层"
+          ],
+          "x": 0.342,
+          "y": 0.321,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1740.2,346.7,61.7",
+          "pulls": 2
+        }
+      },
+      {
+        "order": 7,
+        "name": "拉斯玛尔",
+        "encounter_id": 3354,
+        "npc_id": 903354,
+        "url": "https://wuxianwow.com/npc/903354",
+        "fetch_id": "npc:903354",
+        "portrait": "https://wuxianwow.com/data/bosses/3354.webp",
+        "model_image": "https://wuxianwow.com/data/bosses/3354_model.webp",
+        "fallback_icon": null,
+        "new_in_160": true,
+        "untranslated": false,
+        "temporary_position": {
+          "source": "EG Link",
+          "floor": "上层",
+          "x": 0.382,
+          "y": 0.586,
+          "map_url": "https://wuxianwow.com/instance/2999",
+          "trip_url": "https://wuxianwow.com/trip?at=2999,1532.5,317.9,61.6",
+          "pulls": 2
+        }
+      }
+    ],
+    "temporary_trash_drops": {
+      "source": "Spyglass",
+      "note": "临时数据：客户端的冒险指南没有掉落；这是 Spyglass（WoW Forever 的掉落浏览插件）记下的这个副本里首领以外的掉落：anywhere_in_instance 为副本里小怪都可能掉的，npc_id 为按怪物记下、没有首领页的怪物的掉落；没有掉落率；首领的掉落在首领详情（npcs）的 temporary_drops；官方数据出现后替换",
+      "groups": [
+        {
+          "anywhere_in_instance": true,
+          "items": [
+            {
+              "item_id": 286977,
+              "name": "陨落者之剑",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286977",
+              "fetch_id": "item:286977"
+            },
+            {
+              "item_id": 286978,
+              "name": "腐疗者的外衣",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286978",
+              "fetch_id": "item:286978"
+            },
+            {
+              "item_id": 286979,
+              "name": "腐疗者的手套",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286979",
+              "fetch_id": "item:286979"
+            },
+            {
+              "item_id": 286980,
+              "name": "腐疗者的腰带",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286980",
+              "fetch_id": "item:286980"
+            },
+            {
+              "item_id": 286981,
+              "name": "死亡缚腕",
+              "quality": 3,
+              "url": "https://wuxianwow.com/item/286981",
+              "fetch_id": "item:286981"
+            },
+            {
+              "item_id": 268535,
+              "name": "血污徽章",
+              "quality": 1,
+              "url": "https://wuxianwow.com/item/268535",
+              "fetch_id": "item:268535"
+            }
+          ]
+        }
+      ]
+    },
+    "temporary_run_time": {
+      "source": "Polestar 玩家录制",
+      "people": 100,
+      "p25_minutes": 18,
+      "p90_minutes": 32,
+      "text": "四分之一的人 18 分钟内、九成 32 分钟内（100 人）"
+    },
+    "entrance_missing": null,
+    "entrance_note": "坐标：world_xy 为客户端世界坐标（x 北 / y 西），atlas[].x / y 为该地图图片的比例（0–1，乘 100 即区域坐标）；Map.Corpse = 副本内死亡后被放回大陆的点（副本门口），AreaPOI = 同名地图标记，WorldMapOverlay = 子区域已探索区域块中心（近似），UiMap = 整区域副本的区域中心；OpenMap、cMaNGOS = 第三方临时（temporary 为 true：客户端没有入口；OpenMap 是该插件在区域地图上标的位置，按这张地图的范围换成世界坐标，cMaNGOS 是它记下的传进这个副本的区域触发器，位置取客户端 AreaTrigger 表里这个触发器的；转述时注明临时，官方数据出现后替换；entrance_missing 照旧说客户端为什么没有）",
+    "other_difficulty_boss_lists": [],
+    "loading_art_generic": false,
+    "sources": {
+      "bosses": "DungeonEncounter",
+      "entrance": "同名子区域 洛丹伦废墟",
+      "group_finder": "GroupFinderActivity 1982",
+      "kind": "Map.InstanceType",
+      "level": [
+        "ContentTuning 5256"
+      ],
+      "lfg": "LFGDungeons 3272 洛丹伦废墟",
+      "loading": "LoadingScreens 650 (fdid 7963782)",
+      "name": "Map",
+      "players": "MapDifficulty.MaxPlayers",
+      "zone": "AreaTable"
+    },
+    "trip": {
+      "url": "https://wuxianwow.com/trip?instance=2999",
+      "map_url": "https://wuxianwow.com/trip?instance=2999&map=1",
+      "door_outside_url": "https://wuxianwow.com/trip?at=0,1632.2,223.8",
+      "map_levels": 3,
+      "map_parts": 1
+    },
+    "trip_note": "艾泽拉斯旅拍（3D 漫游拍照）：url 从入口进去，map_url 进去就打开副本地图（点地面走到任意一层），door_outside_url 是大陆上的入口；map_levels / map_parts 是副本地图的层数与块数（本站从 3D 场景画的俯视图）；null = 世界库里没有这张地图",
+    "loot_note": "掉落数据在客户端的冒险指南（JournalEncounter / JournalEncounterItem）中为空；客户端的来源类型表虽有“首领掉落”一项，但没有一件物品标成它（史诗装备多标「任务」「商人」，见 item_usage 的 source_type）。首领详情（npcs，id = 900000 + 首领战 ID）的 temporary_drops 是第三方的临时掉落（Spyglass 整理的《无限》副本掉落，没有它的首领用 QuestieDB 的经典旧世数据，两者都没有的用 Polestar 玩家录制；source 写明是哪个，大多没有掉落率）；temporary_trash_drops 是首领以外的临时掉落（Spyglass；它没有的副本用 Polestar 玩家录制）；转述时注明「临时」",
+    "quests": [
+      {
+        "quest_id": 95250,
+        "name": "憎恶生物",
+        "url": "https://wuxianwow.com/quest/95250",
+        "fetch_id": "quest:95250",
+        "level": 21,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97288,
+        "name": "无尽的折磨",
+        "url": "https://wuxianwow.com/quest/97288",
+        "fetch_id": "quest:97288",
+        "level": 21,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97289,
+        "name": "无尽的折磨",
+        "url": "https://wuxianwow.com/quest/97289",
+        "fetch_id": "quest:97289",
+        "level": 21,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97291,
+        "name": "无尽的折磨",
+        "url": "https://wuxianwow.com/quest/97291",
+        "fetch_id": "quest:97291",
+        "level": 21,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 97292,
+        "name": "无尽的折磨",
+        "url": "https://wuxianwow.com/quest/97292",
+        "fetch_id": "quest:97292",
+        "level": 21,
+        "type": null,
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92401,
+        "name": "惊恐的求援",
+        "url": "https://wuxianwow.com/quest/92401",
+        "fetch_id": "quest:92401",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92415,
+        "name": "记住我爱你",
+        "url": "https://wuxianwow.com/quest/92415",
+        "fetch_id": "quest:92415",
+        "level": 22,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92421,
+        "name": "圣光的正义",
+        "url": "https://wuxianwow.com/quest/92421",
+        "fetch_id": "quest:92421",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 92422,
+        "name": "拉斯玛尔之怒",
+        "url": "https://wuxianwow.com/quest/92422",
+        "fetch_id": "quest:92422",
+        "level": 22,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95189,
+        "name": "洛丹伦纹章",
+        "url": "https://wuxianwow.com/quest/95189",
+        "fetch_id": "quest:95189",
+        "level": 22,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95195,
+        "name": "血污徽章",
+        "url": "https://wuxianwow.com/quest/95195",
+        "fetch_id": "quest:95195",
+        "level": 22,
+        "type": "地下城",
+        "side": "联盟",
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95204,
+        "name": "洛丹伦纹章",
+        "url": "https://wuxianwow.com/quest/95204",
+        "fetch_id": "quest:95204",
+        "level": 22,
+        "type": "地下城",
+        "side": null,
+        "confirmed": "server"
+      },
+      {
+        "quest_id": 95216,
+        "name": "新的瘟疫",
+        "url": "https://wuxianwow.com/quest/95216",
+        "fetch_id": "quest:95216",
+        "level": 22,
+        "type": "地下城",
+        "side": "部落",
+        "confirmed": "server"
+      }
+    ],
+    "quests_total": 13,
+    "quests_confirmed": 13,
+    "quests_seen_eglink": 0,
+    "access": [],
+    "text": "洛丹伦废墟（地下城 · 5 人 · 准入 15 级 · 集合石 15–22 级 · 提瑞斯法林地 · 1.60 新增）\n入口：提瑞斯法林地 · 洛丹伦废墟（1632.2, 223.8，WorldMapOverlay，近似）\n首领：枯牙、被遗弃者、屠夫、洛丹伦上尉、邪恶的维克多、比约克、拉斯玛尔\n首领位置（临时 · EG Link）：6/7 个首领有开打位置（副本地图上的比例 0–1，0 在西、北）：枯牙 楼层未定（上层 / 下层） 0.74, 0.476；被遗弃者 楼层未定（上层 / 下层） 0.324, 0.501；屠夫 楼层未定（上层 / 下层） 0.576, 0.667；邪恶的维克多 楼层未定（上层 / 下层） 0.284, 0.613；比约克 楼层未定（上层 / 下层） 0.342, 0.321；拉斯玛尔 上层 0.382, 0.586\n通关用时（临时 · Polestar 玩家录制）：四分之一的人 18 分钟内、九成 32 分钟内（100 人）\n副本任务（13 个，服务器确认 13）：憎恶生物、无尽的折磨、无尽的折磨、无尽的折磨、无尽的折磨、惊恐的求援、记住我爱你、圣光的正义、拉斯玛尔之怒、洛丹伦纹章、血污徽章、洛丹伦纹章 …\n进门条件：level_text 写准入等级（MapDifficulty 的进入提示，进门门槛）与集合石建议（GroupFinderActivity，组队建议，不是限制），level.target 是 ContentTuning 的调整等级，只用于地下城查找器、玩家看不到；钥匙、凭证物品与前置任务见 access（校订层，证据逐条核对过），声望要求没有收录，没写不等于没有。副本里的任务见 quests，也可用 quests 工具按副本名查（zone），不在服务器任务缓存里的是临时数据，转述时注明「临时」",
+    "matched_by": "id"
+  }
+}

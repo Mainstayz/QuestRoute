@@ -42,8 +42,13 @@ SLOT_NAMES = (
     ("trinket", ("饰品",)),
     ("offhand", ("盾牌",)),
     ("mainhand", ("单手",)),
+    ("twohand", ("双手",)),
     ("ranged", ("远程",)),
 )
+ARMOR_SLOTS = {"head", "shoulder", "chest", "wrist", "hands", "waist", "legs", "feet"}
+CLASS_NAMES = {"战士", "圣骑士", "猎人", "潜行者", "牧师", "萨满祭司", "法师", "术士", "德鲁伊"}
+CASTER_ONLY_HINTS = ("法术伤害", "法术强度", "治疗强度", "每5秒恢复")
+PHYSICAL_HINTS = ("力量", "敏捷", "攻击强度", "格挡", "招架", "躲闪", "防御")
 POOL_BY_SLOT = {
     "头部": "head", "颈部": "neck", "肩部": "shoulder", "背部": "back", "胸部": "chest",
     "手腕": "wrist", "手": "hands", "手部": "hands", "腰部": "waist", "腿部": "legs",
@@ -131,9 +136,18 @@ def call_mcp(tool: str, arguments: dict, from_cache: bool, stats: dict) -> dict:
     return parsed
 
 
-def skip_row(row: dict) -> bool:
+def skip_row(row: dict, pool: str | None = None) -> bool:
     if row.get("crafted"):
         return True
+    # 1.60 部分 50-60 级任务装 req_level=1、ilvl 55-62，会挤占 40 级以内配额
+    if row.get("req_level") == 1 and isinstance(row.get("ilvl"), int) and row["ilvl"] > 45:
+        return True
+    if pool in ARMOR_SLOTS and row.get("type") == "布甲":
+        return True
+    if pool != "trinket":
+        summary = row.get("summary") or ""
+        if any(word in summary for word in CASTER_ONLY_HINTS) and not any(word in summary for word in PHYSICAL_HINTS):
+            return True
     source = row.get("source_type") or ""
     obtain = row.get("obtain") or ""
     if source in ("商人", "专业") or any(word in obtain for word in ("商人", "军需官", "专业", "拍卖")):
@@ -277,6 +291,13 @@ def build_item(detail: dict, listed: dict | None) -> dict:
         set_name = listed["set"].get("name") or listed["set"].get("title")
     elif isinstance(listed.get("set"), str):
         set_name = listed["set"]
+    elif isinstance(equipment.get("set"), dict):
+        set_name = equipment["set"].get("name") or equipment["set"].get("title")
+    unique_text = detail.get("unique") if isinstance(detail.get("unique"), str) and detail.get("unique") else None
+    unique_status = "unique_equipped" if unique_text else "none_recorded"
+    effects = [row.get("text") for row in (detail.get("effects") or []) if row.get("text")]
+    if not effects and isinstance(detail.get("use"), str) and detail.get("use"):
+        effects.append(detail["use"])
     return {
         "id": detail.get("item_id"),
         "name": detail.get("title"),
@@ -291,13 +312,14 @@ def build_item(detail: dict, listed: dict | None) -> dict:
         "reqEstimate": estimate,
         "reqLevelStatus": req_status,
         "classes": listed.get("classes") or [],
-        "uniqueStatus": "unknown",
+        "uniqueStatus": unique_status,
+        "uniqueText": unique_text,
         "setName": set_name,
         "stats": stats,
         "unmappedStats": unmapped,
         "statsSource": equipment.get("stats_source"),
         "weapon": weapon,
-        "effects": [row.get("text") for row in (detail.get("effects") or []) if row.get("text")],
+        "effects": effects,
         "appearanceSourceType": detail.get("source_type"),
         "sources": [],
         "_detail": detail,
@@ -376,6 +398,16 @@ def quest_context(quest: dict | None) -> dict:
     }
 
 
+def quest_class_of(quest: dict | None) -> str | None:
+    if not quest:
+        return None
+    zone = quest.get("zone")
+    zone_group = quest.get("zone_group")
+    if zone_group == "职业" and isinstance(zone, str) and zone in CLASS_NAMES:
+        return zone
+    return None
+
+
 def attach_sources(item: dict, quests: dict, instances: dict, npcs: dict) -> list[str]:
     detail = item.pop("_detail")
     reasons = []
@@ -409,7 +441,9 @@ def attach_sources(item: dict, quests: dict, instances: dict, npcs: dict) -> lis
                 "prerequisites": prerequisite_ids(quest),
                 "questState": "not_checked",
                 "profession": profession_category(quest),
+                "questClass": quest_class_of(quest),
                 "zone": place["zone"],
+                "zoneGroup": (quest or {}).get("zone_group"),
                 "zoneStatus": place["zoneStatus"],
                 "chainKind": place["chainKind"],
                 "chainPosition": place["chainPosition"],
@@ -503,12 +537,12 @@ def lua_literal(value, indent=0) -> str:
     raise CatalogError(f"不能写成 Lua: {type(value)}")
 
 
-def choose_rows(rows: list[dict]) -> list[dict]:
+def choose_rows(rows: list[dict], pool: str | None = None) -> list[dict]:
     ordered = []
     seen = set()
     for row in rows:
         number = int(str(row.get("id", "")).split(":")[-1])
-        if number in seen or skip_row(row):
+        if number in seen or skip_row(row, pool):
             continue
         ordered.append(row)
         seen.add(number)
@@ -549,12 +583,12 @@ def main() -> int:
             if page and page.get("outcome") == "ok":
                 matched = ((page.get("matched") or {}).get("class") or {}).get("learn_at") or {}
                 learn_at.update(matched)
-            picked = choose_rows(rows + uncommon_rows)
+            picked = choose_rows(rows + uncommon_rows, pool)
             coverage[pool] = {
                 "query": used,
                 "listed": len(rows) + len(uncommon_rows),
                 "detailed": len(picked),
-                "truncated": len([row for row in rows + uncommon_rows if not skip_row(row)]) > len(picked),
+                "truncated": len([row for row in rows + uncommon_rows if not skip_row(row, pool)]) > len(picked),
                 "kept": 0,
             }
             if page and page.get("outcome") != "ok":

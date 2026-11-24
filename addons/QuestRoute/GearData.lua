@@ -37,6 +37,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "琥珀酒",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 53,
           ["questLevel"] = 44,
           ["questLevelStatus"] = "known",
@@ -47,6 +48,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/53",
           ["zone"] = "西部荒野",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -55,9 +57,123 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/744",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 1282,
+      ["ilvl"] = 33,
+      ["name"] = "火花铁帽",
+      ["quality"] = 2,
+      ["reqEstimate"] = 28,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 20,
+          ["minLevelStatus"] = "known",
+          ["name"] = "摩本特·费尔",
+          ["prerequisites"] = {
+            ["ids"] = {
+              325
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "整装待发",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 55,
+          ["questLevel"] = 32,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/55",
+          ["zone"] = "暮色森林",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 168,
+        ["spirit"] = 8,
+        ["strength"] = 9
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/1282",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 1488,
+      ["ilvl"] = 31,
+      ["name"] = "复仇者之甲",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 26,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "chest",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 25,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 47,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "剃刀沼泽",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            29,
+            38
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 221,
+        ["stamina"] = 6,
+        ["strength"] = 15
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/1488",
       ["weapon"] = nil
     },
     {
@@ -111,9 +227,289 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/2262",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 2264,
+      ["ilvl"] = 30,
+      ["name"] = "潜行者衬肩",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 25,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "shoulder",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 25,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 47,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "剃刀沼泽",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            29,
+            38
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 10,
+        ["armor"] = 77,
+        ["spirit"] = 3,
+        ["stamina"] = 4
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/2264",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 2933,
+      ["ilvl"] = 31,
+      ["name"] = "乌瑞恩的图章",
+      ["quality"] = 3,
+      ["reqEstimate"] = 26,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "finger",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 4,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 16,
+          ["minLevelStatus"] = "known",
+          ["name"] = "觐见国王",
+          ["prerequisites"] = {
+            ["ids"] = {
+              395
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "兄弟会的灭亡",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 396,
+          ["questLevel"] = 31,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/396",
+          ["zone"] = "暴风城",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 3,
+        ["intellect"] = 4,
+        ["spirit"] = 3,
+        ["stamina"] = 4,
+        ["strength"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/2933",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 3228,
+      ["ilvl"] = 28,
+      ["name"] = "弯曲护腕",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 23,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "wrist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 29.2,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 34,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "暴风城监狱",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/34",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "布鲁高·铁拳",
+          ["npcId"] = 1720,
+          ["suggestedGroup"] = {
+            24,
+            32
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 92,
+        ["stamina"] = 8,
+        ["strength"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/3228",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 3230,
+      ["ilvl"] = 27,
+      ["name"] = "黑狼护腕",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 22,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "wrist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 31,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 11,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 33,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "影牙城堡",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/33",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "吞噬者芬鲁斯",
+          ["npcId"] = 4274,
+          ["suggestedGroup"] = {
+            20,
+            30
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 43,
+        ["attackPower"] = 4,
+        ["stamina"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "额外护甲",
+          ["value"] = 20
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/3230",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "死亡时对15码内的所有敌人造成420点神圣伤害。"
+      },
+      ["hands"] = 0,
+      ["id"] = 3416,
+      ["ilvl"] = 28,
+      ["name"] = "殉难者链甲",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 23,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "chest",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 48,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "黑暗深渊",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/48",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            24,
+            32
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 211,
+        ["stamina"] = 9,
+        ["strength"] = 9
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/3416",
       ["weapon"] = nil
     },
     {
@@ -166,7 +562,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -207,6 +604,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 378,
           ["questLevel"] = 27,
           ["questLevelStatus"] = "known",
@@ -217,6 +615,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/378",
           ["zone"] = "监狱",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -227,99 +626,190 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/3562",
       ["weapon"] = nil
     },
     {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 4197,
-      ["ilvl"] = 36,
-      ["name"] = "绿宝石护肩",
-      ["quality"] = 3,
-      ["reqEstimate"] = 31,
+      ["id"] = 4112,
+      ["ilvl"] = 44,
+      ["name"] = "高阶萨满祭司项圈",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
       ["reqLevel"] = nil,
       ["reqLevelStatus"] = "estimated",
       ["setName"] = nil,
-      ["slot"] = "shoulder",
+      ["slot"] = "neck",
       ["sources"] = {
         {
           ["chainKind"] = "chain",
-          ["chainLength"] = 2,
-          ["chainPosition"] = 2,
+          ["chainLength"] = 4,
+          ["chainPosition"] = 4,
           ["confidence"] = "server",
           ["kind"] = "quest",
-          ["minLevel"] = 29,
+          ["minLevel"] = 33,
           ["minLevelStatus"] = "known",
-          ["name"] = "卡尔加·刺肋",
+          ["name"] = "摩克萨尔丁的魔法",
           ["prerequisites"] = {
             ["ids"] = {
-              1100
+              571
             },
             ["status"] = "recorded"
           },
-          ["previousName"] = "亨里格的日记",
+          ["previousName"] = "摩克萨尔丁的魔法",
           ["profession"] = nil,
-          ["questId"] = 1101,
-          ["questLevel"] = 34,
+          ["questClass"] = nil,
+          ["questId"] = 573,
+          ["questLevel"] = 44,
           ["questLevelStatus"] = "known",
           ["questState"] = "not_checked",
-          ["reward"] = "任选",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/573",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["intellect"] = 5,
+        ["spirit"] = 8
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/4112",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 4124,
+      ["ilvl"] = 40,
+      ["name"] = "和谐之帽",
+      ["quality"] = 2,
+      ["reqEstimate"] = 35,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 32,
+          ["minLevelStatus"] = "known",
+          ["name"] = "向卡雷布下士回报",
+          ["prerequisites"] = {
+            ["ids"] = {
+              627
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "克拉兹克的要求",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 622,
+          ["questLevel"] = 37,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1101",
-          ["zone"] = "剃刀沼泽",
+          ["url"] = "https://wuxianwow.com/quest/622",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
-        },
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 90,
+        ["spirit"] = 10,
+        ["stamina"] = 11
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/4124",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 4131,
+      ["ilvl"] = 44,
+      ["name"] = "腐蚀腰带",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
         {
           ["chainKind"] = "standalone",
           ["chainLength"] = nil,
           ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
-          ["minLevel"] = 29,
+          ["minLevel"] = 35,
           ["minLevelStatus"] = "known",
-          ["name"] = "奥尔德的报复",
+          ["name"] = "赞吉尔的秘密",
           ["prerequisites"] = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
           ["previousName"] = nil,
           ["profession"] = nil,
-          ["questId"] = 1102,
-          ["questLevel"] = 34,
+          ["questClass"] = nil,
+          ["questId"] = 621,
+          ["questLevel"] = 44,
           ["questLevelStatus"] = "known",
           ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
+          ["reward"] = "固定",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1102",
-          ["zone"] = "剃刀沼泽",
+          ["url"] = "https://wuxianwow.com/quest/621",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
-        ["armor"] = 39,
-        ["intellect"] = 10,
-        ["stamina"] = 5
+        ["armor"] = 67,
+        ["intellect"] = 9,
+        ["stamina"] = 9
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/4197",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/4131",
       ["weapon"] = nil
     },
     {
@@ -368,7 +858,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/4438",
       ["weapon"] = nil
@@ -419,9 +910,116 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/5193",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 5404,
+      ["ilvl"] = 23,
+      ["name"] = "坚硬的肩垫",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 18,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "shoulder",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 26.5,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "安娜科德拉",
+          ["npcId"] = 3671,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 5,
+        ["armor"] = 68,
+        ["spirit"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/5404",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "盾牌",
+      ["classes"] = {},
+      ["effects"] = {
+        "进入战斗后，使你在20秒内受到的下一次物理伤害降低15点。"
+      },
+      ["hands"] = 0,
+      ["id"] = 5443,
+      ["ilvl"] = 22,
+      ["name"] = "镀金圆盾",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "offhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 45.6,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 36,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "死亡矿井",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/36",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "矿工约翰森",
+          ["npcId"] = 3586,
+          ["suggestedGroup"] = {
+            17,
+            26
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 2,
+        ["armor"] = 509,
+        ["stamina"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/5443",
       ["weapon"] = nil
     },
     {
@@ -470,7 +1068,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "采矿技能",
@@ -482,6 +1081,67 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/5444",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6087,
+      ["ilvl"] = 24,
+      ["name"] = "西部荒野马裤",
+      ["quality"] = 3,
+      ["reqEstimate"] = 19,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 14,
+          ["minLevelStatus"] = "known",
+          ["name"] = "迪菲亚兄弟会",
+          ["prerequisites"] = {
+            ["ids"] = {
+              155
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "迪菲亚兄弟会",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 166,
+          ["questLevel"] = 22,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/166",
+          ["zone"] = "死亡矿井",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 173,
+        ["stamina"] = 5,
+        ["strength"] = 11
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6087",
       ["weapon"] = nil
     },
     {
@@ -530,7 +1190,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对野兽攻击强度",
@@ -538,6 +1199,63 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/6314",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "盾牌",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6320,
+      ["ilvl"] = 26,
+      ["name"] = "指挥官纹章盾",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 21,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "offhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 11,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 33,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "影牙城堡",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/33",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "指挥官斯普林瓦尔",
+          ["npcId"] = 4278,
+          ["suggestedGroup"] = {
+            20,
+            30
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 585,
+        ["stamina"] = 3,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "每5秒生命回复",
+          ["value"] = 4
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/6320",
       ["weapon"] = nil
     },
     {
@@ -586,66 +1304,69 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6340",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "盾牌",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 6392,
-      ["ilvl"] = 28,
-      ["name"] = "阿鲁高的腰带",
+      ["id"] = 6447,
+      ["ilvl"] = 21,
+      ["name"] = "破旧的龟壳盾牌",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 23,
+      ["reqLevel"] = 16,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "waist",
+      ["slot"] = "offhand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 28,
+          ["dropChancePercent"] = 39.3,
           ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 11,
+          ["enterLevel"] = 10,
           ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 33,
+          ["instanceId"] = 43,
           ["instanceLink"] = "npc",
-          ["instanceName"] = "影牙城堡",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/33",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "大法师阿鲁高",
-          ["npcId"] = 4275,
+          ["npc"] = "克雷什",
+          ["npcId"] = 3653,
           ["suggestedGroup"] = {
-            20,
-            30
+            15,
+            24
           },
           ["temporary"] = true
         }
       },
       ["stats"] = {
-        ["agility"] = 2,
-        ["armor"] = 26,
-        ["intellect"] = 3,
-        ["spirit"] = 5
+        ["armor"] = 490
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
-          ["stat"] = "法术强度",
-          ["value"] = 9
+          ["stat"] = "每5秒法力回复",
+          ["value"] = 2
+        },
+        {
+          ["stat"] = "额外护甲",
+          ["value"] = 40
         }
       },
-      ["url"] = "https://wuxianwow.com/item/6392",
+      ["url"] = "https://wuxianwow.com/item/6447",
       ["weapon"] = nil
     },
     {
@@ -693,7 +1414,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "自然抗性",
@@ -705,13 +1427,174 @@ ns.GearCatalog = {
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "皮甲",
+      ["armorType"] = "锁甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 6688,
+      ["id"] = 6459,
+      ["ilvl"] = 23,
+      ["name"] = "野蛮锁靴",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 18,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 33.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "瑟芬迪斯",
+          ["npcId"] = 3673,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 134,
+        ["stamina"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "每5秒生命回复",
+          ["value"] = 6
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/6459",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6460,
+      ["ilvl"] = 22,
+      ["name"] = "考布莱恩的腰带",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.4,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "考布莱恩",
+          ["npcId"] = 3669,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 3,
+        ["armor"] = 107,
+        ["strength"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6460",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "布甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "在战斗中被击中时，对攻击者造成1点自然伤害。"
+      },
+      ["hands"] = 0,
+      ["id"] = 6629,
+      ["ilvl"] = 22,
+      ["name"] = "蜘蛛斗篷",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "back",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 32.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "永生者沃尔丹",
+          ["npcId"] = 5775,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 20,
+        ["stamina"] = 6
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "布甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6629",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6686,
       ["ilvl"] = 34,
-      ["name"] = "轻风头饰",
+      ["name"] = "长牙头盔",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 29,
@@ -723,18 +1606,18 @@ ns.GearCatalog = {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 51.3,
+          ["dropChancePercent"] = 29.6,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 25,
           ["enterLevelStatus"] = "recorded",
           ["instanceId"] = 47,
-          ["instanceLink"] = "drop",
+          ["instanceLink"] = "npc",
           ["instanceName"] = "剃刀沼泽",
           ["instanceUrl"] = "https://wuxianwow.com/instance/47",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "唤地者哈穆加",
-          ["npcId"] = 4842,
+          ["npc"] = "主宰拉姆塔斯",
+          ["npcId"] = 4420,
           ["suggestedGroup"] = {
             29,
             38
@@ -743,20 +1626,20 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 89,
-        ["spirit"] = 11,
-        ["stamina"] = 11
+        ["armor"] = 188,
+        ["strength"] = 13
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
-          ["stat"] = "法术强度",
-          ["value"] = 7
+          ["stat"] = "额外护甲",
+          ["value"] = 120
         }
       },
-      ["url"] = "https://wuxianwow.com/item/6688",
+      ["url"] = "https://wuxianwow.com/item/6686",
       ["weapon"] = nil
     },
     {
@@ -805,7 +1688,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6690",
       ["weapon"] = nil
@@ -857,126 +1741,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6693",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "盾牌",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 6694,
-      ["ilvl"] = 35,
-      ["name"] = "阿迦玛甘之心",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 30,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "offhand",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 29.4,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 25,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 47,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀沼泽",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "卡尔加·刺肋",
-          ["npcId"] = 4421,
-          ["suggestedGroup"] = {
-            29,
-            38
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 757,
-        ["stamina"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 15
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/6694",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 6695,
-      ["ilvl"] = 34,
-      ["name"] = "冥骨护符",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "neck",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 32.9,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 25,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 47,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "剃刀沼泽",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "盲眼猎手",
-          ["npcId"] = 4425,
-          ["suggestedGroup"] = {
-            29,
-            38
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["stamina"] = 4
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "对亡灵法术伤害",
-          ["value"] = 12
-        },
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/6695",
       ["weapon"] = nil
     },
     {
@@ -1023,7 +1791,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弓",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -1037,6 +1806,65 @@ ns.GearCatalog = {
         ["min"] = 20,
         ["speed"] = 1.7
       }
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6720,
+      ["ilvl"] = 37,
+      ["name"] = "幽魂猎手头饰",
+      ["quality"] = 2,
+      ["reqEstimate"] = 32,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 26,
+          ["minLevelStatus"] = "known",
+          ["name"] = "霜喉雪人",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1136,
+          ["questLevel"] = 37,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1136",
+          ["zone"] = "雷霆崖",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 10,
+        ["armor"] = 85,
+        ["spirit"] = 9
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6720",
+      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -1071,6 +1899,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -1081,6 +1910,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1101",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -1098,6 +1928,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -1108,6 +1939,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1102",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -1120,7 +1952,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6725",
       ["weapon"] = nil
@@ -1158,6 +1991,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -1168,6 +2002,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1101",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -1185,6 +2020,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -1195,6 +2031,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1102",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -1205,7 +2042,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -1246,6 +2084,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1048,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -1256,6 +2095,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1048",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -1266,7 +2106,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手剑",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6802",
       ["weapon"] = {
@@ -1307,6 +2148,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1053,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -1317,6 +2159,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1053",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -1326,7 +2169,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手剑",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6829",
       ["weapon"] = {
@@ -1334,6 +2178,69 @@ ns.GearCatalog = {
         ["max"] = 86,
         ["min"] = 46,
         ["speed"] = 2.2
+      }
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 6830,
+      ["ilvl"] = 44,
+      ["name"] = "咬骨之斧",
+      ["quality"] = 3,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 34,
+          ["minLevelStatus"] = "known",
+          ["name"] = "以圣光之名",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1053,
+          ["questLevel"] = 40,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1053",
+          ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 10,
+        ["strength"] = 20
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6830",
+      ["weapon"] = {
+        ["dps"] = 38.8,
+        ["max"] = 159,
+        ["min"] = 105,
+        ["speed"] = 3.4
       }
     },
     {
@@ -1369,6 +2276,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1053,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -1379,13 +2287,15 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1053",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "匕首",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6831",
       ["weapon"] = {
@@ -1428,6 +2338,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "真言药水",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1383,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -1438,6 +2349,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1383",
           ["zone"] = "暮色森林",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -1447,32 +2359,33 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/6832",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "皮甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 6901,
-      ["ilvl"] = 29,
-      ["name"] = "发光的蛇颈龙斗篷",
+      ["id"] = 6902,
+      ["ilvl"] = 27,
+      ["name"] = "瑟拉吉斯指环",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 24,
+      ["reqLevel"] = 22,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "back",
+      ["slot"] = "wrist",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.7,
+          ["dropChancePercent"] = 31.8,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 15,
           ["enterLevelStatus"] = "recorded",
@@ -1492,46 +2405,41 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 23,
-        ["spirit"] = 8
+        ["armor"] = 43,
+        ["stamina"] = 3,
+        ["strength"] = 6
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 7
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 3
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/6901",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6902",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "皮甲",
+      ["armorType"] = "锁甲",
       ["classes"] = {},
-      ["effects"] = {},
+      ["effects"] = {
+        "受到法术攻击时承受的伤害降低5点。"
+      },
       ["hands"] = 0,
-      ["id"] = 6911,
-      ["ilvl"] = 30,
-      ["name"] = "苔藓腰带",
+      ["id"] = 6907,
+      ["ilvl"] = 27,
+      ["name"] = "海龟护甲",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 25,
+      ["reqLevel"] = 22,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "waist",
+      ["slot"] = "chest",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 29.6,
+          ["dropChancePercent"] = 32.6,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 15,
           ["enterLevelStatus"] = "recorded",
@@ -1541,8 +2449,8 @@ ns.GearCatalog = {
           ["instanceUrl"] = "https://wuxianwow.com/instance/48",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "阿库麦尔",
-          ["npcId"] = 4829,
+          ["npc"] = "加摩拉",
+          ["npcId"] = 4887,
           ["suggestedGroup"] = {
             24,
             32
@@ -1551,19 +2459,301 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 58,
-        ["stamina"] = 5
+        ["armor"] = 208
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
-          ["stat"] = "法术伤害",
-          ["value"] = 12
+          ["stat"] = "额外护甲",
+          ["value"] = 40
         }
       },
-      ["url"] = "https://wuxianwow.com/item/6911",
+      ["url"] = "https://wuxianwow.com/item/6907",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {
+        "战士"
+      },
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 6971,
+      ["ilvl"] = 31,
+      ["name"] = "淬火罩帽",
+      ["quality"] = 2,
+      ["reqEstimate"] = 26,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 20,
+          ["minLevelStatus"] = "known",
+          ["name"] = "格瑞曼德的铠甲",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = "战士",
+          ["questId"] = 1706,
+          ["questLevel"] = 30,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1706",
+          ["zone"] = "战士",
+          ["zoneGroup"] = "职业",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 7,
+        ["armor"] = 163,
+        ["stamina"] = 8
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6971",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {
+        "战士"
+      },
+      ["effects"] = {
+        "怒气值提高30点。"
+      },
+      ["hands"] = 0,
+      ["id"] = 6972,
+      ["ilvl"] = 30,
+      ["name"] = "淬火锁甲",
+      ["quality"] = 3,
+      ["reqEstimate"] = 25,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "chest",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 20,
+          ["minLevelStatus"] = "known",
+          ["name"] = "弗伦的铠甲",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1782,
+          ["questLevel"] = 28,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1782",
+          ["zone"] = "战士",
+          ["zoneGroup"] = "职业",
+          ["zoneStatus"] = "temporary"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 218,
+        ["stamina"] = 14,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/6972",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "盾牌",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 7002,
+      ["ilvl"] = 29,
+      ["name"] = "极光圆盾",
+      ["quality"] = 3,
+      ["reqEstimate"] = 24,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "offhand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 18,
+          ["minLevelStatus"] = "known",
+          ["name"] = "黑暗深渊中的恶魔",
+          ["prerequisites"] = {
+            ["ids"] = {
+              1198
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "寻找塞尔瑞德",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1200,
+          ["questLevel"] = 27,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1200",
+          ["zone"] = "黑暗深渊",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        },
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 18,
+          ["minLevelStatus"] = "known",
+          ["name"] = "黑暗深渊中的邪恶",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 6561,
+          ["questLevel"] = 27,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/6561",
+          ["zone"] = "黑暗深渊",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 642,
+        ["spirit"] = 3,
+        ["stamina"] = 8
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "冰霜抗性",
+          ["value"] = 5
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/7002",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {
+        "战士"
+      },
+      ["effects"] = {
+        "怒气值提高30点。"
+      },
+      ["hands"] = 0,
+      ["id"] = 7133,
+      ["ilvl"] = 30,
+      ["name"] = "野蛮锁甲",
+      ["quality"] = 3,
+      ["reqEstimate"] = 25,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "chest",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 20,
+          ["minLevelStatus"] = "known",
+          ["name"] = "野蛮锁甲",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = "战士",
+          ["questId"] = 1848,
+          ["questLevel"] = 30,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1848",
+          ["zone"] = "战士",
+          ["zoneGroup"] = "职业",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 218,
+        ["stamina"] = 14,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/7133",
       ["weapon"] = nil
     },
     {
@@ -1617,7 +2807,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7686",
       ["weapon"] = nil
@@ -1675,7 +2866,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7688",
       ["weapon"] = nil
@@ -1733,37 +2925,40 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7690",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = nil,
       ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 7691,
-      ["ilvl"] = 35,
-      ["name"] = "裹尸布",
+      ["effects"] = {
+        "攻击附近的所有敌人，每3秒造成武器伤害外加5点伤害，持续9秒，并使你的移动速度降低80%。"
+      },
+      ["hands"] = 2,
+      ["id"] = 7717,
+      ["ilvl"] = 42,
+      ["name"] = "破坏者",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 30,
+      ["reqLevel"] = 37,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "head",
+      ["slot"] = "twohand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 27.9,
+          ["dropChancePercent"] = 25.2,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 20,
           ["enterLevelStatus"] = "recorded",
           ["instanceId"] = 189,
-          ["instanceLink"] = "drop",
+          ["instanceLink"] = "npc",
           ["instanceName"] = "血色修道院",
           ["instanceUrl"] = "https://wuxianwow.com/instance/189",
           ["keys"] = {
@@ -1774,8 +2969,8 @@ ns.GearCatalog = {
             }
           },
           ["kind"] = "drop",
-          ["npc"] = "死灵勇士",
-          ["npcId"] = 6488,
+          ["npc"] = "赫洛德",
+          ["npcId"] = 3975,
           ["suggestedGroup"] = {
             30,
             46
@@ -1783,87 +2978,19 @@ ns.GearCatalog = {
           ["temporary"] = true
         }
       },
-      ["stats"] = {
-        ["armor"] = 42,
-        ["spirit"] = 12,
-        ["stamina"] = 7
-      },
+      ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 24
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/7691",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 7709,
-      ["ilvl"] = 35,
-      ["name"] = "荒芜护腿",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 30,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 28.4,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 20,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 189,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "血色修道院",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
-          ["keys"] = {
-            {
-              ["itemId"] = 7146,
-              ["name"] = "血色十字军钥匙",
-              ["temporary"] = true
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "永醒的艾希尔",
-          ["npcId"] = 6490,
-          ["suggestedGroup"] = {
-            30,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 45,
-        ["spirit"] = 14
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "暗影伤害",
-          ["value"] = 19
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/7709",
-      ["weapon"] = nil
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/7717",
+      ["weapon"] = {
+        ["dps"] = 37.3,
+        ["max"] = 157,
+        ["min"] = 104,
+        ["speed"] = 3.5
+      }
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -1917,7 +3044,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7718",
       ["weapon"] = nil
@@ -1975,102 +3103,62 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7719",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {
-        "使复活目标的法术和效果的施法时间缩短20%。"
-      },
-      ["hands"] = 0,
-      ["id"] = 7720,
-      ["ilvl"] = 44,
-      ["name"] = "主教之冠",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 39,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 32.6,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 20,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 189,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "血色修道院",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
-          ["keys"] = {
-            {
-              ["itemId"] = 7146,
-              ["name"] = "血色十字军钥匙",
-              ["temporary"] = true
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "大检察官怀特迈恩",
-          ["npcId"] = 3977,
-          ["suggestedGroup"] = {
-            30,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 52,
-        ["intellect"] = 10,
-        ["spirit"] = 12,
-        ["stamina"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 20
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/7720",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
       ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 7722,
+      ["hands"] = 2,
+      ["id"] = 7723,
       ["ilvl"] = 44,
-      ["name"] = "圣使护符",
+      ["name"] = "莫格莱尼的力量",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 39,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "neck",
+      ["slot"] = "twohand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 33.3,
+          ["dropChancePercent"] = 26.2,
           ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 20,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 189,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "血色修道院",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
+          ["keys"] = {
+            {
+              ["itemId"] = 7146,
+              ["name"] = "血色十字军钥匙",
+              ["temporary"] = true
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = "血色十字军指挥官莫格莱尼",
+          ["npcId"] = 3976,
+          ["suggestedGroup"] = {
+            30,
+            46
+          },
+          ["temporary"] = true
+        },
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
           ["enterLevel"] = 20,
           ["enterLevelStatus"] = "recorded",
           ["instanceId"] = 189,
@@ -2095,20 +3183,22 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["spirit"] = 7,
-        ["stamina"] = 7
+        ["intellect"] = 16,
+        ["stamina"] = 14,
+        ["strength"] = 8
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/7722",
-      ["weapon"] = nil
+      ["subtype"] = "双手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/7723",
+      ["weapon"] = {
+        ["dps"] = 38.8,
+        ["max"] = 159,
+        ["min"] = 105,
+        ["speed"] = 3.4
+      }
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -2190,7 +3280,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7724",
       ["weapon"] = nil
@@ -2277,26 +3368,27 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7726",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "皮甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 7728,
-      ["ilvl"] = 34,
-      ["name"] = "欺诈者长袍",
+      ["id"] = 7727,
+      ["ilvl"] = 32,
+      ["name"] = "守卫肩铠",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
+      ["reqLevel"] = 27,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "chest",
+      ["slot"] = "shoulder",
       ["sources"] = {
         {
           ["accessComplete"] = false,
@@ -2328,20 +3420,17 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 50,
-        ["intellect"] = 12,
-        ["spirit"] = 8
+        ["armor"] = 80,
+        ["spirit"] = 4,
+        ["stamina"] = 11,
+        ["strength"] = 3
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/7728",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/7727",
       ["weapon"] = nil
     },
     {
@@ -2394,7 +3483,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7729",
       ["weapon"] = {
@@ -2455,7 +3545,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对亡灵攻击强度",
@@ -2464,6 +3555,70 @@ ns.GearCatalog = {
       },
       ["url"] = "https://wuxianwow.com/item/7731",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "使一个目标沉默，在6秒内不能施法。"
+      },
+      ["hands"] = 1,
+      ["id"] = 7736,
+      ["ilvl"] = 39,
+      ["name"] = "搏击棍棒",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 34,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "mainhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 20,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 189,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "血色修道院",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
+          ["keys"] = {
+            {
+              ["itemId"] = 7146,
+              ["name"] = "血色十字军钥匙",
+              ["temporary"] = true
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            30,
+            46
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 4,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "单手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/7736",
+      ["weapon"] = {
+        ["dps"] = 26.6,
+        ["max"] = 76,
+        ["min"] = 41,
+        ["speed"] = 2.2
+      }
     },
     {
       ["appearanceSourceType"] = nil,
@@ -2496,6 +3651,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1050,
           ["questLevel"] = 38,
           ["questLevelStatus"] = "known",
@@ -2506,6 +3662,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1050",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -2515,7 +3672,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7746",
       ["weapon"] = nil
@@ -2553,6 +3711,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1049,
           ["questLevel"] = 38,
           ["questLevelStatus"] = "known",
@@ -2563,6 +3722,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1049",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -2572,7 +3732,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7747",
       ["weapon"] = nil
@@ -2630,7 +3791,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7755",
       ["weapon"] = nil
@@ -2686,7 +3848,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对野兽攻击强度",
@@ -2748,7 +3911,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "法术强度",
@@ -2811,7 +3975,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "治疗强度",
@@ -2877,7 +4042,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/7787",
       ["weapon"] = nil
@@ -2915,6 +4081,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = "锻造",
+          ["questClass"] = nil,
           ["questId"] = 2765,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -2925,13 +4092,15 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2765",
           ["zone"] = "锻造",
+          ["zoneGroup"] = "其他",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
       ["statsSource"] = nil,
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/8703",
       ["weapon"] = nil
@@ -2980,7 +4149,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9387",
       ["weapon"] = nil
@@ -3029,7 +4199,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9388",
       ["weapon"] = nil
@@ -3078,43 +4249,44 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9389",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9390,
-      ["ilvl"] = 42,
-      ["name"] = "鲁恩乌的手套",
+      ["hands"] = 1,
+      ["id"] = 9392,
+      ["ilvl"] = 40,
+      ["name"] = "退火钢刃",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 37,
+      ["reqLevel"] = 35,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "hands",
+      ["slot"] = "mainhand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 20.6,
-          ["dropChanceStatus"] = "temporary",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
           ["enterLevel"] = 30,
           ["enterLevelStatus"] = "recorded",
           ["instanceId"] = 70,
-          ["instanceLink"] = "npc",
+          ["instanceLink"] = "drop",
           ["instanceName"] = "奥达曼",
           ["instanceUrl"] = "https://wuxianwow.com/instance/70",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "鲁维罗什",
-          ["npcId"] = 6910,
+          ["npc"] = nil,
+          ["npcId"] = nil,
           ["suggestedGroup"] = {
             41,
             51
@@ -3123,14 +4295,21 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 38
+        ["stamina"] = 6,
+        ["strength"] = 6
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "单手剑",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/9390",
-      ["weapon"] = nil
+      ["url"] = "https://wuxianwow.com/item/9392",
+      ["weapon"] = {
+        ["dps"] = 27.2,
+        ["max"] = 64,
+        ["min"] = 34,
+        ["speed"] = 1.8
+      }
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -3180,7 +4359,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9394",
       ["weapon"] = nil
@@ -3233,7 +4413,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9396",
       ["weapon"] = nil
@@ -3285,7 +4466,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9397",
       ["weapon"] = nil
@@ -3336,7 +4518,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9398",
       ["weapon"] = nil
@@ -3386,7 +4569,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弓",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9400",
       ["weapon"] = {
@@ -3441,7 +4625,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手剑",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9401",
       ["weapon"] = {
@@ -3450,65 +4635,6 @@ ns.GearCatalog = {
         ["min"] = 45,
         ["speed"] = 2.2
       }
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "盾牌",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9403,
-      ["ilvl"] = 42,
-      ["name"] = "破碎的海盗之盾",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 37,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "offhand",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 30,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 70,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "奥达曼",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "失踪的矮人",
-          ["npcId"] = 6906,
-          ["suggestedGroup"] = {
-            41,
-            51
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 1287,
-        ["spirit"] = 10
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 13
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9403",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -3557,7 +4683,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9404",
       ["weapon"] = nil
@@ -3609,32 +4736,33 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9406",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9407,
+      ["hands"] = 2,
+      ["id"] = 9408,
       ["ilvl"] = 42,
-      ["name"] = "石纹护腿",
+      ["name"] = "铁头棒",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 37,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "legs",
+      ["slot"] = "twohand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 29,
+          ["dropChancePercent"] = 29.9,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 30,
           ["enterLevelStatus"] = "recorded",
@@ -3654,26 +4782,21 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 53,
-        ["intellect"] = 8,
-        ["spirit"] = 12,
-        ["stamina"] = 9
+        ["stamina"] = 20,
+        ["strength"] = 8
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 20
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9407",
-      ["weapon"] = nil
+      ["subtype"] = "法杖",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9408",
+      ["weapon"] = {
+        ["dps"] = 37.2,
+        ["max"] = 112,
+        ["min"] = 74,
+        ["speed"] = 2.5
+      }
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -3719,7 +4842,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -3776,7 +4900,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9420",
       ["weapon"] = nil
@@ -3823,7 +4948,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -3836,6 +4962,178 @@ ns.GearCatalog = {
         ["max"] = 86,
         ["min"] = 46,
         ["speed"] = 2.9
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "使你的攻击速度提高15%，持续10秒。"
+      },
+      ["hands"] = 2,
+      ["id"] = 9423,
+      ["ilvl"] = 45,
+      ["name"] = "千斤锤",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 40,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {},
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "采矿技能",
+          ["value"] = 3
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/9423",
+      ["weapon"] = {
+        ["dps"] = 39.6,
+        ["max"] = 119,
+        ["min"] = 79,
+        ["speed"] = 2.5
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 1,
+      ["id"] = 9424,
+      ["ilvl"] = 41,
+      ["name"] = "疾速之剑",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 36,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "mainhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 8,
+        ["strength"] = 4
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "单手剑",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9424",
+      ["weapon"] = {
+        ["dps"] = 27.9,
+        ["max"] = 62,
+        ["min"] = 33,
+        ["speed"] = 1.7
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "造成重创，造成259到363点物理伤害。对生命值低于25%的目标造成的伤害提高50%。",
+        "每次挥击都会使你的攻击速度在加快100%和减慢50%之间交替。"
+      },
+      ["hands"] = 2,
+      ["id"] = 9425,
+      ["ilvl"] = 44,
+      ["name"] = "厄运之锤",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 39,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {},
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9425",
+      ["weapon"] = {
+        ["dps"] = 38.9,
+        ["max"] = 187,
+        ["min"] = 124,
+        ["speed"] = 4
       }
     },
     {
@@ -3883,7 +5181,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弓",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9426",
       ["weapon"] = {
@@ -3938,7 +5237,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9427",
       ["weapon"] = {
@@ -3993,188 +5293,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9428",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9429,
-      ["ilvl"] = 44,
-      ["name"] = "深渊矿工帽",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 39,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 30,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 70,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "奥达曼",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            41,
-            51
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 52,
-        ["intellect"] = 17,
-        ["stamina"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 12
-        },
-        {
-          ["stat"] = "额外护甲",
-          ["value"] = 40
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9429",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9430,
-      ["ilvl"] = 45,
-      ["name"] = "失落年代的肩甲",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "shoulder",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 30,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 70,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "奥达曼",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            41,
-            51
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 205,
-        ["stamina"] = 10
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 12
-        },
-        {
-          ["stat"] = "每5秒生命回复",
-          ["value"] = 15
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9430",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9431,
-      ["ilvl"] = 43,
-      ["name"] = "教皇毡帽",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 38,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 30,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 70,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "奥达曼",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            41,
-            51
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 51,
-        ["intellect"] = 17,
-        ["spirit"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 22
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9431",
       ["weapon"] = nil
     },
     {
@@ -4224,7 +5346,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9432",
       ["weapon"] = nil
@@ -4276,126 +5399,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9445",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9448,
-      ["ilvl"] = 34,
-      ["name"] = "蜘蛛坦克油布",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "wrist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 29.9,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 19,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 90,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "诺莫瑞根",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/90",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "电刑器6000型",
-          ["npcId"] = 6235,
-          ["suggestedGroup"] = {
-            29,
-            49
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 22
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 9
-        },
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 3
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9448",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "皮甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9450,
-      ["ilvl"] = 34,
-      ["name"] = "侏儒机械人操作靴",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.6,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 19,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 90,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "诺莫瑞根",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/90",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "群体打击者9-60",
-          ["npcId"] = 6229,
-          ["suggestedGroup"] = {
-            29,
-            49
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 76,
-        ["stamina"] = 12
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 11
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 4
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9450",
       ["weapon"] = nil
     },
     {
@@ -4442,7 +5449,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "奥术抗性",
@@ -4496,7 +5504,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9456",
       ["weapon"] = {
@@ -4553,7 +5562,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9458",
       ["weapon"] = nil
@@ -4600,7 +5610,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "奥术抗性",
@@ -4660,7 +5671,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手斧",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "采矿技能",
@@ -4677,38 +5689,38 @@ ns.GearCatalog = {
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "皮甲",
       ["classes"] = {},
       ["effects"] = {
-        "引导一道闪电并将其掷向施法者前方的所有敌人，造成152到172点自然伤害。随后，施法者会被一道电流屏障包围，持续5分钟。"
+        "受到的火焰伤害提高10%。"
       },
       ["hands"] = 0,
-      ["id"] = 9492,
-      ["ilvl"] = 36,
-      ["name"] = "电磁熔合激活器",
+      ["id"] = 9509,
+      ["ilvl"] = 30,
+      ["name"] = "浸油护腿",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 31,
+      ["reqLevel"] = 25,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "head",
+      ["slot"] = "legs",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 21.9,
-          ["dropChanceStatus"] = "temporary",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
           ["enterLevel"] = 19,
           ["enterLevelStatus"] = "recorded",
           ["instanceId"] = 90,
-          ["instanceLink"] = "npc",
+          ["instanceLink"] = "drop",
           ["instanceName"] = "诺莫瑞根",
           ["instanceUrl"] = "https://wuxianwow.com/instance/90",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "机械师瑟玛普拉格",
-          ["npcId"] = 7800,
+          ["npc"] = nil,
+          ["npcId"] = nil,
           ["suggestedGroup"] = {
             29,
             49
@@ -4717,20 +5729,16 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 43,
-        ["intellect"] = 8,
-        ["spirit"] = 9
+        ["agility"] = 14,
+        ["armor"] = 90,
+        ["stamina"] = 6
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9492",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9509",
       ["weapon"] = nil
     },
     {
@@ -4779,7 +5787,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -4820,6 +5829,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2948,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -4830,6 +5840,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2948",
           ["zone"] = "铁炉堡",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -4839,7 +5850,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9538",
       ["weapon"] = nil
@@ -4877,6 +5889,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "戒指归来",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2950,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -4887,6 +5900,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2950",
           ["zone"] = "奥格瑞玛",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -4896,101 +5910,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9588",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 9623,
-      ["ilvl"] = 37,
-      ["name"] = "公民长袍",
-      ["quality"] = 3,
-      ["reqEstimate"] = 32,
-      ["reqLevel"] = nil,
-      ["reqLevelStatus"] = "estimated",
-      ["setName"] = nil,
-      ["slot"] = "chest",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 25,
-          ["minLevelStatus"] = "known",
-          ["name"] = "设备之战",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 2841,
-          ["questLevel"] = 35,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2841",
-          ["zone"] = "诺莫瑞根",
-          ["zoneStatus"] = "known"
-        },
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 25,
-          ["minLevelStatus"] = "known",
-          ["name"] = "大叛徒",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 2929,
-          ["questLevel"] = 35,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2929",
-          ["zone"] = "诺莫瑞根",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 54,
-        ["spirit"] = 12,
-        ["stamina"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 26
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/9623",
       ["weapon"] = nil
     },
     {
@@ -5024,6 +5947,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2841,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -5034,6 +5958,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2841",
           ["zone"] = "诺莫瑞根",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -5051,6 +5976,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2929,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -5061,6 +5987,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2929",
           ["zone"] = "诺莫瑞根",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -5072,7 +5999,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/9624",
       ["weapon"] = nil
@@ -5108,6 +6036,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2841,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -5118,6 +6047,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2841",
           ["zone"] = "诺莫瑞根",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -5135,6 +6065,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 2929,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -5145,6 +6076,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/2929",
           ["zone"] = "诺莫瑞根",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -5155,7 +6087,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -5163,6 +6096,127 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/9625",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "板甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 9664,
+      ["ilvl"] = 45,
+      ["name"] = "卫戍头盔",
+      ["quality"] = 2,
+      ["reqEstimate"] = 40,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 4,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 40,
+          ["minLevelStatus"] = "known",
+          ["name"] = "递送遗物",
+          ["prerequisites"] = {
+            ["ids"] = {
+              2870
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "击败沙尔扎鲁",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 2871,
+          ["questLevel"] = 45,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/2871",
+          ["zone"] = "菲拉斯",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 9,
+        ["armor"] = 355,
+        ["spirit"] = 6,
+        ["stamina"] = 12
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "板甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9664",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 9682,
+      ["ilvl"] = 44,
+      ["name"] = "厨师腰带",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 35,
+          ["minLevelStatus"] = "known",
+          ["name"] = "新鲜的螃蟹腿",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1430,
+          ["questLevel"] = 44,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1430",
+          ["zone"] = "悲伤沼泽",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 67,
+        ["intellect"] = 12,
+        ["stamina"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/9682",
       ["weapon"] = nil
     },
     {
@@ -5217,7 +6271,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10328",
       ["weapon"] = nil
@@ -5274,7 +6329,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10329",
       ["weapon"] = nil
@@ -5415,7 +6471,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10330",
       ["weapon"] = nil
@@ -5472,7 +6529,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10331",
       ["weapon"] = nil
@@ -5529,7 +6587,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10332",
       ["weapon"] = nil
@@ -5585,9 +6644,270 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10333",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 10402,
+      ["ilvl"] = 20,
+      ["name"] = "黑暗迪菲亚长靴",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 15,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = "迪菲亚皮甲",
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 36,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "死亡矿井",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/36",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = nil,
+          ["npcId"] = nil,
+          ["suggestedGroup"] = {
+            17,
+            26
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 6,
+        ["armor"] = 59,
+        ["stamina"] = 4
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10402",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 10403,
+      ["ilvl"] = 22,
+      ["name"] = "黑暗迪菲亚腰带",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = "迪菲亚皮甲",
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 31,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 36,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "死亡矿井",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/36",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "绿皮船长",
+          ["npcId"] = 647,
+          ["suggestedGroup"] = {
+            17,
+            26
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 50,
+        ["attackPower"] = 18
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10403",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 10410,
+      ["ilvl"] = 22,
+      ["name"] = "尖牙护腿",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = "毒蛇的拥抱",
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 31,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "考布莱恩",
+          ["npcId"] = 3669,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 9,
+        ["armor"] = 78,
+        ["stamina"] = 4,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10410",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 10411,
+      ["ilvl"] = 22,
+      ["name"] = "尖牙足垫",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = "毒蛇的拥抱",
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 15.6,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "瑟芬迪斯",
+          ["npcId"] = 3673,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 6,
+        ["armor"] = 61,
+        ["stamina"] = 6
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10411",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 10412,
+      ["ilvl"] = 21,
+      ["name"] = "尖牙腰带",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 16,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = "毒蛇的拥抱",
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 26.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "安娜科德拉",
+          ["npcId"] = 3671,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 3,
+        ["armor"] = 49,
+        ["stamina"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10412",
       ["weapon"] = nil
     },
     {
@@ -5634,7 +6954,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弓",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10567",
       ["weapon"] = {
@@ -5643,183 +6964,6 @@ ns.GearCatalog = {
         ["min"] = 39,
         ["speed"] = 2.8
       }
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10574,
-      ["ilvl"] = 40,
-      ["name"] = "裹尸头巾",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["agility"] = 5,
-        ["armor"] = 47,
-        ["intellect"] = 19
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10574",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10578,
-      ["ilvl"] = 38,
-      ["name"] = "心灵长靴",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 33,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 38,
-        ["spirit"] = 13,
-        ["stamina"] = 3
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 13
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10578",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10581,
-      ["ilvl"] = 40,
-      ["name"] = "亡首外衣",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "chest",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 58,
-        ["intellect"] = 8,
-        ["spirit"] = 13,
-        ["stamina"] = 8
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 18
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 6
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10581",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -5868,7 +7012,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10582",
       ["weapon"] = nil
@@ -5919,7 +7064,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10583",
       ["weapon"] = nil
@@ -5971,7 +7117,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10584",
       ["weapon"] = nil
@@ -6007,6 +7154,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1048,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -6017,6 +7165,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1048",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -6026,10 +7175,69 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10711",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "挥出强力的一击，造成33到51点神圣伤害。对亡灵和野猪人造成3倍的伤害。"
+      },
+      ["hands"] = 2,
+      ["id"] = 10758,
+      ["ilvl"] = 42,
+      ["name"] = "石猪剑",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 37,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 38.4,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 35,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 129,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "剃刀高地",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "拉戈斯诺特",
+          ["npcId"] = 7354,
+          ["suggestedGroup"] = {
+            37,
+            46
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 7,
+        ["strength"] = 20
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手剑",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/10758",
+      ["weapon"] = {
+        ["dps"] = 37.3,
+        ["max"] = 148,
+        ["min"] = 98,
+        ["speed"] = 3.3
+      }
     },
     {
       ["appearanceSourceType"] = "世界掉落",
@@ -6079,68 +7287,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10760",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10762,
-      ["ilvl"] = 43,
-      ["name"] = "巫妖法袍",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 38,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "chest",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 29.7,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "寒冰之王亚门纳尔",
-          ["npcId"] = 7358,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 62,
-        ["stamina"] = 20
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "冰霜伤害",
-          ["value"] = 14
-        },
-        {
-          ["stat"] = "暗影伤害",
-          ["value"] = 14
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10762",
       ["weapon"] = nil
     },
     {
@@ -6190,7 +7340,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "冰霜抗性",
@@ -6198,67 +7349,6 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/10763",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10764,
-      ["ilvl"] = 43,
-      ["name"] = "死寒护甲",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 39,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "chest",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 28.8,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "寒冰之王亚门纳尔",
-          ["npcId"] = 7358,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 266,
-        ["intellect"] = 9,
-        ["spirit"] = 15,
-        ["stamina"] = 3
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 20
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10764",
       ["weapon"] = nil
     },
     {
@@ -6307,7 +7397,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒法力回复",
@@ -6363,7 +7454,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10767",
       ["weapon"] = nil
@@ -6414,122 +7506,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10768",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10769,
-      ["ilvl"] = 41,
-      ["name"] = "莫德雷斯之眼",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 36,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "neck",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.6,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "火眼莫德雷斯",
-          ["npcId"] = 7357,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["intellect"] = 8
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 20
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10769",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 10771,
-      ["ilvl"] = 41,
-      ["name"] = "死亡法师腰带",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 36,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 33,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 129,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀高地",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/129",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "火眼莫德雷斯",
-          ["npcId"] = 7357,
-          ["suggestedGroup"] = {
-            37,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 33,
-        ["intellect"] = 15
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/10771",
       ["weapon"] = nil
     },
     {
@@ -6576,7 +7556,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手斧",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10772",
       ["weapon"] = {
@@ -6633,7 +7614,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10774",
       ["weapon"] = nil
@@ -6685,7 +7667,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10775",
       ["weapon"] = nil
@@ -6737,7 +7720,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10776",
       ["weapon"] = nil
@@ -6786,7 +7770,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "自然抗性",
@@ -6827,6 +7812,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 3341,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -6837,6 +7823,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/3341",
           ["zone"] = "剃刀高地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -6854,6 +7841,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 3636,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -6864,6 +7852,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/3636",
           ["zone"] = "剃刀高地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -6872,7 +7861,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手剑",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10823",
       ["weapon"] = {
@@ -6913,6 +7903,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 3341,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -6923,6 +7914,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/3341",
           ["zone"] = "剃刀高地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -6940,6 +7932,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 3636,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -6950,6 +7943,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/3636",
           ["zone"] = "剃刀高地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -6960,26 +7954,198 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/10824",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 11265,
+      ["ilvl"] = 42,
+      ["name"] = "峭壁木槌",
+      ["quality"] = 3,
+      ["reqEstimate"] = 37,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 37,
+          ["minLevelStatus"] = "known",
+          ["name"] = "真言药水",
+          ["prerequisites"] = {
+            ["ids"] = {
+              1372
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "真言药水",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1383,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1383",
+          ["zone"] = "暮色森林",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 24
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/11265",
+      ["weapon"] = {
+        ["dps"] = 37.1,
+        ["max"] = 125,
+        ["min"] = 83,
+        ["speed"] = 2.8
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
       ["armorType"] = "盾牌",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 17508,
-      ["ilvl"] = 40,
-      ["name"] = "力石圆盾",
+      ["id"] = 13245,
+      ["ilvl"] = 23,
+      ["name"] = "克雷什之背",
       ["quality"] = 3,
-      ["reqEstimate"] = 35,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 18,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "offhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 40.1,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "克雷什",
+          ["npcId"] = 3653,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 528,
+        ["defense"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/13245",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "布甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 14149,
+      ["ilvl"] = 18,
+      ["name"] = "地下斗篷",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 13,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "back",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 29.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 389,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "怒焰裂谷",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/389",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "饥饿者塔拉加曼",
+          ["npcId"] = 11520,
+          ["suggestedGroup"] = {
+            13,
+            18
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 17,
+        ["strength"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "布甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "每5秒生命回复",
+          ["value"] = 5
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/14149",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 16977,
+      ["ilvl"] = 27,
+      ["name"] = "战歌长靴",
+      ["quality"] = 3,
+      ["reqEstimate"] = 22,
       ["reqLevel"] = nil,
       ["reqLevelStatus"] = "estimated",
       ["setName"] = nil,
-      ["slot"] = "offhand",
+      ["slot"] = "feet",
       ["sources"] = {
         {
           ["chainKind"] = "standalone",
@@ -6987,47 +8153,190 @@ ns.GearCatalog = {
           ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
-          ["minLevel"] = 28,
+          ["minLevel"] = 22,
           ["minLevelStatus"] = "known",
-          ["name"] = "堕落者纲要",
+          ["name"] = "战歌氏族的补给品",
           ["prerequisites"] = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
           ["previousName"] = nil,
           ["profession"] = nil,
-          ["questId"] = 1049,
-          ["questLevel"] = 38,
+          ["questClass"] = nil,
+          ["questId"] = 6571,
+          ["questLevel"] = 27,
           ["questLevelStatus"] = "known",
           ["questState"] = "not_checked",
           ["reward"] = "任选",
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1049",
-          ["zone"] = "血色修道院",
+          ["url"] = "https://wuxianwow.com/quest/6571",
+          ["zone"] = "灰谷",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
-        ["armor"] = 1078,
-        ["spirit"] = 8,
-        ["stamina"] = 4
+        ["agility"] = 8,
+        ["armor"] = 67,
+        ["stamina"] = 6
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/16977",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 17772,
+      ["ilvl"] = 44,
+      ["name"] = "热情暗影残片坠饰",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "neck",
+      ["sources"] = {
         {
-          ["stat"] = "治疗强度",
-          ["value"] = 18
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 39,
+          ["minLevelStatus"] = "known",
+          ["name"] = "暗影残片",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 7068,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/7068",
+          ["zone"] = "玛拉顿",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
         },
         {
-          ["stat"] = "法术伤害",
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 39,
+          ["minLevelStatus"] = "known",
+          ["name"] = "暗影残片",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 7070,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/7070",
+          ["zone"] = "玛拉顿",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["attackPower"] = 14
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "暗影抗性",
           ["value"] = 6
         }
       },
-      ["url"] = "https://wuxianwow.com/item/17508",
+      ["url"] = "https://wuxianwow.com/item/17772",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 18585,
+      ["ilvl"] = 35,
+      ["name"] = "忠诚指环",
+      ["quality"] = 3,
+      ["reqEstimate"] = 30,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "finger",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 30,
+          ["minLevelStatus"] = "known",
+          ["name"] = "为部落效力",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 7541,
+          ["questLevel"] = 40,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/7541",
+          ["zone"] = "尘泥沼泽",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 4,
+        ["strength"] = 9
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/18585",
       ["weapon"] = nil
     },
     {
@@ -7061,6 +8370,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 7541,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -7071,6 +8381,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/7541",
           ["zone"] = "尘泥沼泽",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -7081,74 +8392,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/18586",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 19507,
-      ["ilvl"] = 42,
-      ["name"] = "审讯者披肩",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 37,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "shoulder",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 30.4,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 20,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 189,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "血色修道院",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
-          ["keys"] = {
-            {
-              ["itemId"] = 7146,
-              ["name"] = "血色十字军钥匙",
-              ["temporary"] = true
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "大检察官法尔班克斯",
-          ["npcId"] = 4542,
-          ["suggestedGroup"] = {
-            30,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 46,
-        ["intellect"] = 13
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 22
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/19507",
       ["weapon"] = nil
     },
     {
@@ -7203,7 +8450,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/19508",
       ["weapon"] = nil
@@ -7259,7 +8507,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -7267,6 +8516,124 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/19509",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "板甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 20640,
+      ["ilvl"] = 45,
+      ["name"] = "南海小桶",
+      ["quality"] = 2,
+      ["reqEstimate"] = 40,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 40,
+          ["minLevelStatus"] = "known",
+          ["name"] = "南海复仇",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 8366,
+          ["questLevel"] = 45,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/8366",
+          ["zone"] = "塔纳利斯",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 355,
+        ["defense"] = 4,
+        ["stamina"] = 15,
+        ["strength"] = 6
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "板甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/20640",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 267090,
+      ["ilvl"] = 44,
+      ["name"] = "暮光表象",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "neck",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 38,
+          ["minLevelStatus"] = "known",
+          ["name"] = "复仇印记",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 94975,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/94975",
+          ["zone"] = "克罗多克要塞",
+          ["zoneGroup"] = "副本",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["blockValue"] = 8,
+        ["stamina"] = 8
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/267090",
       ["weapon"] = nil
     },
     {
@@ -7302,6 +8669,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "寻找塞尔瑞德",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1200,
           ["questLevel"] = 27,
           ["questLevelStatus"] = "known",
@@ -7312,6 +8680,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1200",
           ["zone"] = "黑暗深渊",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -7329,6 +8698,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 6561,
           ["questLevel"] = 27,
           ["questLevelStatus"] = "known",
@@ -7339,6 +8709,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/6561",
           ["zone"] = "黑暗深渊",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -7349,7 +8720,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/270032",
       ["weapon"] = nil
@@ -7385,6 +8757,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 6922,
           ["questLevel"] = 30,
           ["questLevelStatus"] = "known",
@@ -7395,6 +8768,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/6922",
           ["zone"] = "灰谷",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -7406,9 +8780,69 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/270043",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 270087,
+      ["ilvl"] = 43,
+      ["name"] = "厚食人魔腰带",
+      ["quality"] = 2,
+      ["reqEstimate"] = 38,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 38,
+          ["minLevelStatus"] = "known",
+          ["name"] = "莫格穆洛克的任务",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 1166,
+          ["questLevel"] = 43,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/1166",
+          ["zone"] = "尘泥沼泽",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 7,
+        ["armor"] = 136,
+        ["strength"] = 10
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/270087",
       ["weapon"] = nil
     },
     {
@@ -7417,84 +8851,307 @@ ns.GearCatalog = {
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 270081,
-      ["ilvl"] = 44,
-      ["name"] = "净化指环",
+      ["id"] = 270227,
+      ["ilvl"] = 18,
+      ["name"] = "短暂强力项圈",
       ["quality"] = 3,
-      ["reqEstimate"] = 39,
-      ["reqLevel"] = nil,
-      ["reqLevelStatus"] = "estimated",
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 13,
+      ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "finger",
+      ["slot"] = "neck",
       ["sources"] = {
         {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 37,
-          ["minLevelStatus"] = "known",
-          ["name"] = "寒冰之王",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 33.8,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 13,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 3065,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "领主大厅",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/3065",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "法德林·安威玛尔",
+          ["npcId"] = 261306,
+          ["suggestedGroup"] = {
+            13,
+            20
           },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 3341,
-          ["questLevel"] = 42,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3341",
-          ["zone"] = "剃刀高地",
-          ["zoneStatus"] = "known"
-        },
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 39,
-          ["minLevelStatus"] = "known",
-          ["name"] = "与圣光同在",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 3636,
-          ["questLevel"] = 42,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3636",
-          ["zone"] = "剃刀高地",
-          ["zoneStatus"] = "known"
+          ["temporary"] = true
         }
       },
       ["stats"] = {
-        ["intellect"] = 12
+        ["spirit"] = 5
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/270227",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 270230,
+      ["ilvl"] = 18,
+      ["name"] = "火种束带",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 13,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
         {
-          ["stat"] = "法术强度",
-          ["value"] = 5
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 31.5,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 13,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 3065,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "领主大厅",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/3065",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "茵弗努斯",
+          ["npcId"] = 261316,
+          ["suggestedGroup"] = {
+            13,
+            20
+          },
+          ["temporary"] = true
         }
       },
-      ["url"] = "https://wuxianwow.com/item/270081",
+      ["stats"] = {
+        ["armor"] = 100,
+        ["stamina"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/270230",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 271201,
+      ["ilvl"] = 20,
+      ["name"] = "萎缩束带",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 15,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "waist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 28.4,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2999,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "洛丹伦废墟",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2999",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "枯牙",
+          ["npcId"] = 250483,
+          ["suggestedGroup"] = {
+            15,
+            22
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 104,
+        ["stamina"] = 7,
+        ["strength"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271201",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 271209,
+      ["ilvl"] = 21,
+      ["name"] = "骨锈护腿",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 16,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 32.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2999,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "洛丹伦废墟",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2999",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "比约克",
+          ["npcId"] = 256097,
+          ["suggestedGroup"] = {
+            15,
+            22
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 9,
+        ["armor"] = 164,
+        ["strength"] = 4
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271209",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 271211,
+      ["ilvl"] = 22,
+      ["name"] = "残迹爬行者",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 32.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2999,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "洛丹伦废墟",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2999",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "邪恶的维克多",
+          ["npcId"] = 256035,
+          ["suggestedGroup"] = {
+            15,
+            22
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 131,
+        ["stamina"] = 5,
+        ["strength"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271211",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "盾牌",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 271213,
+      ["ilvl"] = 24,
+      ["name"] = "拉斯玛尔之镜",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 19,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "offhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 34,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2999,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "洛丹伦废墟",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2999",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "拉斯玛尔",
+          ["npcId"] = 250657,
+          ["suggestedGroup"] = {
+            15,
+            22
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 547,
+        ["block"] = 5,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "盾牌",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271213",
       ["weapon"] = nil
     },
     {
@@ -7653,10 +9310,143 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/271718",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 271800,
+      ["ilvl"] = 42,
+      ["name"] = "找回的玛格拉姆军备",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 35,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 35,
+          ["minLevelStatus"] = "known",
+          ["name"] = "杰恩可汗",
+          ["prerequisites"] = {
+            ["ids"] = {
+              93188
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "向奥尔格鲁尔复命",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 93196,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/93196",
+          ["zone"] = "凄凉之地",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 5,
+        ["attackPower"] = 12,
+        ["stamina"] = 14
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "长柄武器",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271800",
+      ["weapon"] = {
+        ["dps"] = 37.2,
+        ["max"] = 134,
+        ["min"] = 89,
+        ["speed"] = 3
+      }
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 271801,
+      ["ilvl"] = 42,
+      ["name"] = "被遗弃的凶猛",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 35,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 35,
+          ["minLevelStatus"] = "known",
+          ["name"] = "杰恩可汗",
+          ["prerequisites"] = {
+            ["ids"] = {
+              93122
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "四处侦察",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 93128,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/93128",
+          ["zone"] = "凄凉之地",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 4,
+        ["stamina"] = 12,
+        ["strength"] = 10
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271801",
+      ["weapon"] = {
+        ["dps"] = 37.2,
+        ["max"] = 143,
+        ["min"] = 95,
+        ["speed"] = 3.2
+      }
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -7691,6 +9481,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "四处侦察",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 93128,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -7701,6 +9492,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/93128",
           ["zone"] = "凄凉之地",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -7711,7 +9503,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/271802",
       ["weapon"] = {
@@ -7719,6 +9512,72 @@ ns.GearCatalog = {
         ["max"] = 82,
         ["min"] = 44,
         ["speed"] = 2.2
+      }
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 271803,
+      ["ilvl"] = 42,
+      ["name"] = "死灵可汗的巨杖",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 35,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 35,
+          ["minLevelStatus"] = "known",
+          ["name"] = "杰恩可汗",
+          ["prerequisites"] = {
+            ["ids"] = {
+              93188
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "向奥尔格鲁尔复命",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 93196,
+          ["questLevel"] = 42,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/93196",
+          ["zone"] = "凄凉之地",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["intellect"] = 12,
+        ["spirit"] = 6,
+        ["stamina"] = 16
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "法杖",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/271803",
+      ["weapon"] = {
+        ["dps"] = 27.7,
+        ["max"] = 100,
+        ["min"] = 66,
+        ["speed"] = 3
       }
     },
     {
@@ -7752,6 +9611,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 93574,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -7762,6 +9622,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/93574",
           ["zone"] = "辛德拉",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -7773,7 +9634,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/271810",
       ["weapon"] = nil
@@ -7809,6 +9671,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 93574,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -7819,6 +9682,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/93574",
           ["zone"] = "辛德拉",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -7830,66 +9694,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/271811",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 271812,
-      ["ilvl"] = 43,
-      ["name"] = "丢弃的头环",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 35,
-          ["minLevelStatus"] = "known",
-          ["name"] = "食尸者的甲壳",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 93574,
-          ["questLevel"] = 45,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = nil,
-          ["sideStatus"] = "unknown",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93574",
-          ["zone"] = "辛德拉",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 51,
-        ["intellect"] = 11,
-        ["spirit"] = 10,
-        ["stamina"] = 16
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/271812",
       ["weapon"] = nil
     },
     {
@@ -7925,6 +9733,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "林中传言",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 93404,
           ["questLevel"] = 49,
           ["questLevelStatus"] = "known",
@@ -7935,6 +9744,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/93404",
           ["zone"] = "玛拉顿",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -7946,7 +9756,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/272186",
       ["weapon"] = nil
@@ -7984,6 +9795,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "林中传言",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 93404,
           ["questLevel"] = 49,
           ["questLevelStatus"] = "known",
@@ -7994,6 +9806,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/93404",
           ["zone"] = "玛拉顿",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -8005,9 +9818,118 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/272187",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "布甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273005,
+      ["ilvl"] = 18,
+      ["name"] = "萨特皮披风",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 13,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "back",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 32.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 389,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "怒焰裂谷",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/389",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "巴扎兰",
+          ["npcId"] = 11519,
+          ["suggestedGroup"] = {
+            13,
+            18
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 17,
+        ["stamina"] = 3
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "布甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "火焰抗性",
+          ["value"] = 3
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273005",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273022,
+      ["ilvl"] = 31,
+      ["name"] = "柔软的腹皮护腿",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 26,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 33.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 26,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2998,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "挖掘场：湿地",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2998",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "盐脊",
+          ["npcId"] = 260322,
+          ["suggestedGroup"] = {
+            26,
+            33
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 92,
+        ["stamina"] = 14,
+        ["strength"] = 6
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273022",
       ["weapon"] = nil
     },
     {
@@ -8056,9 +9978,167 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273023",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273025,
+      ["ilvl"] = 31,
+      ["name"] = "猛禽护胫",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 26,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 28.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 26,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2998,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "挖掘场：湿地",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2998",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "暗齿",
+          ["npcId"] = 260325,
+          ["suggestedGroup"] = {
+            26,
+            33
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 152,
+        ["intellect"] = 6,
+        ["stamina"] = 7,
+        ["strength"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273025",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273026,
+      ["ilvl"] = 31,
+      ["name"] = "繁花羽毛礼服",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 26,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "chest",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 26,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2998,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "挖掘场：湿地",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2998",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "暗齿",
+          ["npcId"] = 260325,
+          ["suggestedGroup"] = {
+            26,
+            33
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 9,
+        ["armor"] = 105,
+        ["intellect"] = 15
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273026",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273028,
+      ["ilvl"] = 33,
+      ["name"] = "圣物匣披肩",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 28,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "shoulder",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 26,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2998,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "挖掘场：湿地",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2998",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "遗迹守卫者",
+          ["npcId"] = 260326,
+          ["suggestedGroup"] = {
+            26,
+            33
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 171,
+        ["hit"] = 4,
+        ["stamina"] = 12
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273028",
       ["weapon"] = nil
     },
     {
@@ -8105,7 +10185,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273029",
       ["weapon"] = {
@@ -8114,6 +10195,68 @@ ns.GearCatalog = {
         ["min"] = 29,
         ["speed"] = 2.5
       }
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273032,
+      ["ilvl"] = 31,
+      ["name"] = "缚骨者的印记",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 25,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "finger",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 35,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 28,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2959,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "达拉然城",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
+          ["keys"] = {
+            {
+              ["itemId"] = 277507,
+              ["name"] = "达拉然下水道钥匙",
+              ["temporary"] = false
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = "墓穴骑士阿特雷克斯",
+          ["npcId"] = 247126,
+          ["suggestedGroup"] = {
+            28,
+            35
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["spirit"] = 6,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "额外护甲",
+          ["value"] = 40
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273032",
+      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -8165,7 +10308,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弩",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对人形生物攻击强度",
@@ -8232,7 +10376,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒法力回复",
@@ -8240,71 +10385,6 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/273035",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 273036,
-      ["ilvl"] = 31,
-      ["name"] = "墓织护腕",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 26,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "wrist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 35.3,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 28,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2959,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "达拉然城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
-          ["keys"] = {
-            {
-              ["itemId"] = 277507,
-              ["name"] = "达拉然下水道钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "墓穴骑士阿特雷克斯",
-          ["npcId"] = 247126,
-          ["suggestedGroup"] = {
-            28,
-            35
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 21,
-        ["strength"] = 6
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 5
-        },
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 2
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/273036",
       ["weapon"] = nil
     },
     {
@@ -8360,74 +10440,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273038",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 273039,
-      ["ilvl"] = 34,
-      ["name"] = "枯叶草绳索",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 30.9,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 28,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2959,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "达拉然城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
-          ["keys"] = {
-            {
-              ["itemId"] = 277507,
-              ["name"] = "达拉然下水道钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "邪能古树",
-          ["npcId"] = 246003,
-          ["suggestedGroup"] = {
-            28,
-            35
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 28,
-        ["intellect"] = 10
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 7
-        },
-        {
-          ["stat"] = "每5秒生命回复",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/273039",
       ["weapon"] = nil
     },
     {
@@ -8484,7 +10500,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273041",
       ["weapon"] = nil
@@ -8542,7 +10559,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273042",
       ["weapon"] = nil
@@ -8599,9 +10617,139 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273045",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273047,
+      ["ilvl"] = 33,
+      ["name"] = "不稳定的结晶肩垫",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 28,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "shoulder",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 33,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 28,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2959,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "达拉然城",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
+          ["keys"] = {
+            {
+              ["itemId"] = 277507,
+              ["name"] = "达拉然下水道钥匙",
+              ["temporary"] = false
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = "不稳定的哨兵",
+          ["npcId"] = 246017,
+          ["suggestedGroup"] = {
+            28,
+            35
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 9,
+        ["armor"] = 81,
+        ["stamina"] = 6
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "每5秒法力回复",
+          ["value"] = 2
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273047",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273048,
+      ["ilvl"] = 33,
+      ["name"] = "折射鳞片护手",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 28,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 28,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2959,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "达拉然城",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
+          ["keys"] = {
+            {
+              ["itemId"] = 277507,
+              ["name"] = "达拉然下水道钥匙",
+              ["temporary"] = false
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = "不稳定的哨兵",
+          ["npcId"] = 246017,
+          ["suggestedGroup"] = {
+            28,
+            35
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 199,
+        ["strength"] = 12
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "额外护甲",
+          ["value"] = 100
+        },
+        {
+          ["stat"] = "奥术抗性",
+          ["value"] = 5
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273048",
       ["weapon"] = nil
     },
     {
@@ -8657,7 +10805,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273049",
       ["weapon"] = nil
@@ -8714,7 +10863,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "剥皮技能",
@@ -8777,9 +10927,63 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273055",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "布甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "移动速度降低25%。",
+        "游泳速度提高33%。"
+      },
+      ["hands"] = 0,
+      ["id"] = 273084,
+      ["ilvl"] = 22,
+      ["name"] = "隐修之福披风",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 17,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "back",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 9.7,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 43,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "哀嚎洞穴",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/43",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "克雷什",
+          ["npcId"] = 3653,
+          ["suggestedGroup"] = {
+            15,
+            24
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 20
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "布甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273084",
       ["weapon"] = nil
     },
     {
@@ -8830,7 +11034,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "火焰抗性",
@@ -8854,6 +11059,59 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/273088",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "每次格挡时造成5到7点物理伤害。"
+      },
+      ["hands"] = 0,
+      ["id"] = 273293,
+      ["ilvl"] = 21,
+      ["name"] = "带锯护腕",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 16,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "wrist",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 10,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 36,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "死亡矿井",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/36",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "斯尼德",
+          ["npcId"] = 643,
+          ["suggestedGroup"] = {
+            17,
+            26
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 82,
+        ["stamina"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273293",
       ["weapon"] = nil
     },
     {
@@ -8902,7 +11160,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273298",
       ["weapon"] = nil
@@ -8954,7 +11213,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273457",
       ["weapon"] = nil
@@ -9003,7 +11263,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒法力回复",
@@ -9011,6 +11272,175 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/273643",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273646,
+      ["ilvl"] = 27,
+      ["name"] = "被咬过一半的靴子",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 22,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 30.4,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 11,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 33,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "影牙城堡",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/33",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "吞噬者芬鲁斯",
+          ["npcId"] = 4274,
+          ["suggestedGroup"] = {
+            20,
+            30
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 143,
+        ["strength"] = 8
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "额外护甲",
+          ["value"] = -100
+        },
+        {
+          ["stat"] = "自然抗性",
+          ["value"] = 10
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273646",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273647,
+      ["ilvl"] = 26,
+      ["name"] = "座狼皮护腿",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 21,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "legs",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 27.8,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 11,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 33,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "影牙城堡",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/33",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "狼王南杜斯",
+          ["npcId"] = 3927,
+          ["suggestedGroup"] = {
+            20,
+            30
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 10,
+        ["armor"] = 84,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "火焰抗性",
+          ["value"] = 7
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/273647",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 273804,
+      ["ilvl"] = 26,
+      ["name"] = "行刑者衬肩",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 21,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "shoulder",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 27.6,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 34,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "暴风城监狱",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/34",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "可怕的塔格尔",
+          ["npcId"] = 1696,
+          ["suggestedGroup"] = {
+            24,
+            32
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 72,
+        ["attackPower"] = 10,
+        ["spirit"] = 9
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273804",
       ["weapon"] = nil
     },
     {
@@ -9058,7 +11488,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "法术伤害",
@@ -9070,25 +11501,25 @@ ns.GearCatalog = {
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "锁甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 273808,
-      ["ilvl"] = 29,
-      ["name"] = "破桥护腕",
+      ["id"] = 273810,
+      ["ilvl"] = 30,
+      ["name"] = "食人魔护手",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 24,
+      ["reqLevel"] = 25,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "wrist",
+      ["slot"] = "hands",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 27.6,
+          ["dropChancePercent"] = 26.7,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 15,
           ["enterLevelStatus"] = "recorded",
@@ -9098,8 +11529,8 @@ ns.GearCatalog = {
           ["instanceUrl"] = "https://wuxianwow.com/instance/34",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "卡姆·深怒",
-          ["npcId"] = 1666,
+          ["npc"] = "哈姆霍克",
+          ["npcId"] = 1717,
           ["suggestedGroup"] = {
             24,
             32
@@ -9108,26 +11539,16 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 20
+        ["armor"] = 136,
+        ["stamina"] = 10,
+        ["strength"] = 4
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "火焰抗性",
-          ["value"] = 7
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 9
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 3
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/273808",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273810",
       ["weapon"] = nil
     },
     {
@@ -9175,7 +11596,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "法术强度",
@@ -9187,25 +11609,27 @@ ns.GearCatalog = {
     },
     {
       ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
+      ["armorType"] = "皮甲",
       ["classes"] = {},
-      ["effects"] = {},
+      ["effects"] = {
+        "开锁+4。"
+      },
       ["hands"] = 0,
-      ["id"] = 273825,
+      ["id"] = 273824,
       ["ilvl"] = 31,
-      ["name"] = "红毛纺披风",
+      ["name"] = "迪菲亚越狱者",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 26,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "back",
+      ["slot"] = "hands",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 21.1,
+          ["dropChancePercent"] = 20.1,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 15,
           ["enterLevelStatus"] = "recorded",
@@ -9225,26 +11649,16 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 24
+        ["agility"] = 6,
+        ["armor"] = 65,
+        ["stamina"] = 7
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 3
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 9
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 3
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/273825",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273824",
       ["weapon"] = nil
     },
     {
@@ -9289,7 +11703,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弩",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "远程攻击强度",
@@ -9348,9 +11763,64 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = nil,
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/273840",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "产生的所有威胁值提高1%。"
+      },
+      ["hands"] = 0,
+      ["id"] = 273842,
+      ["ilvl"] = 28,
+      ["name"] = "背信弃义的足具",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 23,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "feet",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 29.8,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 15,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 48,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "黑暗深渊",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/48",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "洛古斯·杰特",
+          ["npcId"] = 12902,
+          ["suggestedGroup"] = {
+            24,
+            32
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 145,
+        ["stamina"] = 7,
+        ["strength"] = 5
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/273842",
       ["weapon"] = nil
     },
     {
@@ -9399,7 +11869,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -9455,7 +11926,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274068",
       ["weapon"] = nil
@@ -9493,6 +11965,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -9503,6 +11976,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1101",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -9520,6 +11994,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
           ["questLevelStatus"] = "known",
@@ -9530,6 +12005,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/1102",
           ["zone"] = "剃刀沼泽",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -9539,7 +12015,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274084",
       ["weapon"] = {
@@ -9548,61 +12025,6 @@ ns.GearCatalog = {
         ["min"] = 36,
         ["speed"] = 2.8
       }
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274149,
-      ["ilvl"] = 30,
-      ["name"] = "织棘者披风",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 25,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "back",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 27.7,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 25,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 47,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "剃刀沼泽",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "鲁古格",
-          ["npcId"] = 6168,
-          ["suggestedGroup"] = {
-            29,
-            38
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 24,
-        ["spirit"] = 6
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274149",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = nil,
@@ -9650,9 +12072,63 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274152",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {
+        "你的近战武器攻击会对你和目标同时造成2点自然伤害。"
+      },
+      ["hands"] = 0,
+      ["id"] = 274159,
+      ["ilvl"] = 33,
+      ["name"] = "咒棘裹手",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 27,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "hands",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 33.8,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 25,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 47,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "剃刀沼泽",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/47",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "阿格姆",
+          ["npcId"] = 4424,
+          ["suggestedGroup"] = {
+            29,
+            38
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 68,
+        ["attackPower"] = 18
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/274159",
       ["weapon"] = nil
     },
     {
@@ -9699,7 +12175,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "投掷武器",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -9761,76 +12238,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274161",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "盾牌",
-      ["classes"] = {},
-      ["effects"] = {
-        "在战斗中被击中时，有17%的几率每5秒恢复12点法力值，持续10秒。"
-      },
-      ["hands"] = 0,
-      ["id"] = 274290,
-      ["ilvl"] = 34,
-      ["name"] = "痛行者圆盾",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 29,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "offhand",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 32.2,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 20,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 189,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "血色修道院",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
-          ["keys"] = {
-            {
-              ["itemId"] = 7146,
-              ["name"] = "血色十字军钥匙",
-              ["temporary"] = true
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "审讯员韦沙斯",
-          ["npcId"] = 3983,
-          ["suggestedGroup"] = {
-            30,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 738,
-        ["stamina"] = 6
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 13
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274290",
       ["weapon"] = nil
     },
     {
@@ -9885,7 +12296,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -9946,7 +12358,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "投掷武器",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对野兽攻击强度",
@@ -10013,7 +12426,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弩",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274293",
       ["weapon"] = {
@@ -10024,92 +12438,26 @@ ns.GearCatalog = {
       }
     },
     {
-      ["appearanceSourceType"] = nil,
+      ["appearanceSourceType"] = "世界掉落",
       ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274295,
-      ["ilvl"] = 42,
-      ["name"] = "赤红之光指环",
+      ["hands"] = 2,
+      ["id"] = 274381,
+      ["ilvl"] = 43,
+      ["name"] = "凛风脊骨",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 37,
+      ["reqLevel"] = 38,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "finger",
+      ["slot"] = "twohand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 25,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 20,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 189,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "血色修道院",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/189",
-          ["keys"] = {
-            {
-              ["itemId"] = 7146,
-              ["name"] = "血色十字军钥匙",
-              ["temporary"] = true
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "赫洛德",
-          ["npcId"] = 3975,
-          ["suggestedGroup"] = {
-            30,
-            46
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {},
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术穿透",
-          ["value"] = 3
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 18
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 6
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274295",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274380,
-      ["ilvl"] = 42,
-      ["name"] = "腐朽血肉护腕",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 37,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "wrist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 34.2,
+          ["dropChancePercent"] = 27.8,
           ["dropChanceStatus"] = "temporary",
           ["enterLevel"] = 35,
           ["enterLevelStatus"] = "recorded",
@@ -10119,8 +12467,8 @@ ns.GearCatalog = {
           ["instanceUrl"] = "https://wuxianwow.com/instance/129",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "腐烂的普雷莫尔",
-          ["npcId"] = 7356,
+          ["npc"] = "寒冰之王亚门纳尔",
+          ["npcId"] = 7358,
           ["suggestedGroup"] = {
             37,
             46
@@ -10129,22 +12477,26 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["agility"] = 9,
-        ["armor"] = 27,
-        ["spirit"] = -6,
-        ["stamina"] = -6
+        ["hit"] = 10,
+        ["spirit"] = 20
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "法杖",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
-          ["stat"] = "自然抗性",
-          ["value"] = 13
+          ["stat"] = "冰霜伤害",
+          ["value"] = 59
         }
       },
-      ["url"] = "https://wuxianwow.com/item/274380",
-      ["weapon"] = nil
+      ["url"] = "https://wuxianwow.com/item/274381",
+      ["weapon"] = {
+        ["dps"] = 28.2,
+        ["max"] = 95,
+        ["min"] = 63,
+        ["speed"] = 2.8
+      }
     },
     {
       ["appearanceSourceType"] = nil,
@@ -10192,7 +12544,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对人形生物攻击强度",
@@ -10249,10 +12602,180 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274428",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "在战斗中，你的治疗法术有几率使一名盟友获得300点护甲值，持续10秒。"
+      },
+      ["hands"] = 2,
+      ["id"] = 274430,
+      ["ilvl"] = 44,
+      ["name"] = "岩石哨兵利剑",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 39,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 28.8,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "黑曜石哨兵",
+          ["npcId"] = 7023,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["intellect"] = 12
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/274430",
+      ["weapon"] = {
+        ["dps"] = 28.8,
+        ["max"] = 97,
+        ["min"] = 64,
+        ["speed"] = 2.8
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "对目标造成140到196点伤害。",
+        "将萦绕恐惧之斧与必然毁灭之斧组合，重铸成厄运钟摆。"
+      },
+      ["hands"] = 2,
+      ["id"] = 274484,
+      ["ilvl"] = 42,
+      ["name"] = "必然毁灭之斧",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 37,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 11.4,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "艾隆纳亚",
+          ["npcId"] = 7228,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {},
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/274484",
+      ["weapon"] = {
+        ["dps"] = 37.2,
+        ["max"] = 134,
+        ["min"] = 89,
+        ["speed"] = 3
+      }
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 274485,
+      ["ilvl"] = 44,
+      ["name"] = "萦绕恐惧之斧",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 39,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 11.3,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 30,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 70,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "奥达曼",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/70",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "黑曜石哨兵",
+          ["npcId"] = 7023,
+          ["suggestedGroup"] = {
+            41,
+            51
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["dodge"] = 12,
+        ["parry"] = 15
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手斧",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/274485",
+      ["weapon"] = {
+        ["dps"] = 38.8,
+        ["max"] = 140,
+        ["min"] = 93,
+        ["speed"] = 3
+      }
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -10300,7 +12823,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274599",
       ["weapon"] = nil
@@ -10351,7 +12875,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274600",
       ["weapon"] = nil
@@ -10403,7 +12928,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274602",
       ["weapon"] = nil
@@ -10453,7 +12979,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "枪械",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274604",
       ["weapon"] = {
@@ -10462,69 +12989,6 @@ ns.GearCatalog = {
         ["min"] = 41,
         ["speed"] = 2.8
       }
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274605,
-      ["ilvl"] = 40,
-      ["name"] = "盐水腰带",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 33.5,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "德雷德莱斯船长",
-          ["npcId"] = 260042,
-          ["suggestedGroup"] = {
-            35,
-            42
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 33,
-        ["intellect"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 26
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 9
-        },
-        {
-          ["stat"] = "额外护甲",
-          ["value"] = 30
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274605",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -10573,7 +13037,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274608",
       ["weapon"] = nil
@@ -10625,7 +13090,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "自然抗性",
@@ -10681,7 +13147,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "法术强度",
@@ -10689,62 +13156,6 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/274610",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274611,
-      ["ilvl"] = 40,
-      ["name"] = "溺水者长袍",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "chest",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.4,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "原始元素",
-          ["npcId"] = 270887,
-          ["suggestedGroup"] = {
-            35,
-            42
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 58,
-        ["intellect"] = 11,
-        ["stamina"] = 15
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 4
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274611",
       ["weapon"] = nil
     },
     {
@@ -10794,72 +13205,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274612",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274613,
-      ["ilvl"] = 40,
-      ["name"] = "女牧师披风",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "back",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 33.1,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = "瓦尔塔卡",
-          ["npcId"] = 258924,
-          ["suggestedGroup"] = {
-            35,
-            42
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 29,
-        ["intellect"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 4
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 11
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 4
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274613",
       ["weapon"] = nil
     },
     {
@@ -10906,7 +13255,8 @@ ns.GearCatalog = {
       ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "冰霜抗性",
@@ -10914,6 +13264,65 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/274615",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "世界掉落",
+      ["armorType"] = "锁甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 274959,
+      ["ilvl"] = 39,
+      ["name"] = "法霍德号角",
+      ["quality"] = 2,
+      ["reqEstimate"] = 34,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 36,
+          ["minLevelStatus"] = "known",
+          ["name"] = "预防措施",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 95064,
+          ["questLevel"] = 39,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/95064",
+          ["zone"] = "河林",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 184,
+        ["attackPower"] = 12,
+        ["stamina"] = 13
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/274959",
       ["weapon"] = nil
     },
     {
@@ -10967,7 +13376,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274995",
       ["weapon"] = {
@@ -11029,132 +13439,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/274996",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274997,
-      ["ilvl"] = 44,
-      ["name"] = "束缚锁链",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 39,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 34,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 40,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "碎奴者格罗克斯",
-          ["npcId"] = 258966,
-          ["suggestedGroup"] = {
-            40,
-            47
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 152,
-        ["stamina"] = 15
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 12
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274997",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 274999,
-      ["ilvl"] = 45,
-      ["name"] = "施影者护腿",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 33.7,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 40,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
-          ["instanceLink"] = "npc",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "暮光指挥官扎尔莫克",
-          ["npcId"] = 258972,
-          ["suggestedGroup"] = {
-            40,
-            47
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 57,
-        ["intellect"] = 10,
-        ["stamina"] = 21
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "暗影伤害",
-          ["value"] = 13
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/274999",
       ["weapon"] = nil
     },
     {
@@ -11209,10 +13497,74 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/275000",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 275001,
+      ["ilvl"] = 45,
+      ["name"] = "裂斩之刃",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 40,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 37.2,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 40,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 3039,
+          ["instanceLink"] = "npc",
+          ["instanceName"] = "克罗多克要塞",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
+          ["keys"] = {
+            {
+              ["itemId"] = 267089,
+              ["name"] = "克罗多克大门钥匙",
+              ["temporary"] = false
+            }
+          },
+          ["kind"] = "drop",
+          ["npc"] = "驯兽师阿什卡",
+          ["npcId"] = 259281,
+          ["suggestedGroup"] = {
+            40,
+            47
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {
+        ["agility"] = 14,
+        ["spirit"] = 10,
+        ["stamina"] = 17
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手剑",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/275001",
+      ["weapon"] = {
+        ["dps"] = 39.6,
+        ["max"] = 171,
+        ["min"] = 114,
+        ["speed"] = 3.6
+      }
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -11267,7 +13619,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/275002",
       ["weapon"] = nil
@@ -11324,133 +13677,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/275003",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 275021,
-      ["ilvl"] = 44,
-      ["name"] = "囚徒裹手",
-      ["quality"] = 3,
-      ["reqEstimate"] = 39,
-      ["reqLevel"] = nil,
-      ["reqLevelStatus"] = "estimated",
-      ["setName"] = nil,
-      ["slot"] = "hands",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 38,
-          ["minLevelStatus"] = "known",
-          ["name"] = "邓斯顿脱身",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 94927,
-          ["questLevel"] = 44,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94927",
-          ["zone"] = "河林",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 40,
-        ["spirit"] = 12
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 15
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/275021",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 275023,
-      ["ilvl"] = 44,
-      ["name"] = "博尔德罗克缠腰",
-      ["quality"] = 3,
-      ["reqEstimate"] = 39,
-      ["reqLevel"] = nil,
-      ["reqLevelStatus"] = "estimated",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 38,
-          ["minLevelStatus"] = "known",
-          ["name"] = "邓斯顿脱身",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 94927,
-          ["questLevel"] = 44,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94927",
-          ["zone"] = "河林",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 56,
-        ["spirit"] = 13
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 26
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/275023",
       ["weapon"] = nil
     },
     {
@@ -11484,6 +13714,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 94927,
           ["questLevel"] = 44,
           ["questLevelStatus"] = "known",
@@ -11494,6 +13725,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/94927",
           ["zone"] = "河林",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -11503,7 +13735,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/275025",
       ["weapon"] = {
@@ -11512,68 +13745,6 @@ ns.GearCatalog = {
         ["min"] = 54,
         ["speed"] = 2.6
       }
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 275043,
-      ["ilvl"] = 45,
-      ["name"] = "血领主之环",
-      ["quality"] = 3,
-      ["reqEstimate"] = 40,
-      ["reqLevel"] = nil,
-      ["reqLevelStatus"] = "estimated",
-      ["setName"] = nil,
-      ["slot"] = "finger",
-      ["sources"] = {
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 11,
-          ["chainPosition"] = 11,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 36,
-          ["minLevelStatus"] = "known",
-          ["name"] = "血领主之环",
-          ["prerequisites"] = {
-            ["ids"] = {
-              94965
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "血领主之环",
-          ["profession"] = nil,
-          ["questId"] = 95063,
-          ["questLevel"] = 45,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95063",
-          ["zone"] = "河林",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["intellect"] = 6,
-        ["stamina"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/275043",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = nil,
@@ -11608,6 +13779,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "血领主之环",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95063,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -11618,6 +13790,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95063",
           ["zone"] = "河林",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -11627,7 +13800,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒生命回复",
@@ -11670,6 +13844,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "血领主之环",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95063,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -11680,6 +13855,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95063",
           ["zone"] = "河林",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -11691,9 +13867,70 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/275045",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = "皮甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 276105,
+      ["ilvl"] = 43,
+      ["name"] = "斥候长的眼罩",
+      ["quality"] = 2,
+      ["reqEstimate"] = 38,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 38,
+          ["minLevelStatus"] = "known",
+          ["name"] = "通缉：斥候长瓦加斯",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 95882,
+          ["questLevel"] = 43,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "固定",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/95882",
+          ["zone"] = "河林",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 95,
+        ["hit"] = 5,
+        ["spirit"] = 10,
+        ["stamina"] = 12
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/276105",
       ["weapon"] = nil
     },
     {
@@ -11729,6 +13966,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 96261,
           ["questLevel"] = 30,
           ["questLevelStatus"] = "known",
@@ -11739,13 +13977,15 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/96261",
           ["zone"] = "莫高雷",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
       ["statsSource"] = nil,
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/276895",
       ["weapon"] = nil
@@ -11781,6 +14021,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 96800,
           ["questLevel"] = 38,
           ["questLevelStatus"] = "known",
@@ -11791,6 +14032,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/96800",
           ["zone"] = "血色修道院",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -11799,7 +14041,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒生命回复",
@@ -11846,6 +14089,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "必毁无疑",
           ["profession"] = nil,
+          ["questClass"] = "圣骑士",
           ["questId"] = 78093,
           ["questLevel"] = 30,
           ["questLevelStatus"] = "known",
@@ -11856,6 +14100,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/78093",
           ["zone"] = "圣骑士",
+          ["zoneGroup"] = "职业",
           ["zoneStatus"] = "known"
         }
       },
@@ -11866,7 +14111,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "神圣伤害",
@@ -11874,6 +14120,65 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/277205",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = "板甲",
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 277235,
+      ["ilvl"] = 45,
+      ["name"] = "士兵面甲",
+      ["quality"] = 2,
+      ["reqEstimate"] = 40,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "head",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 30,
+          ["minLevelStatus"] = "known",
+          ["name"] = "盗岂有道",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 79242,
+          ["questLevel"] = 40,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/79242",
+          ["zone"] = "凄凉之地",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["armor"] = 355,
+        ["stamina"] = 10,
+        ["strength"] = 14
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "板甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/277235",
       ["weapon"] = nil
     },
     {
@@ -11909,6 +14214,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "以圣光的恩泽",
           ["profession"] = nil,
+          ["questClass"] = "圣骑士",
           ["questId"] = 79970,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -11919,6 +14225,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/79970",
           ["zone"] = "圣骑士",
+          ["zoneGroup"] = "职业",
           ["zoneStatus"] = "known"
         }
       },
@@ -11930,7 +14237,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/277236",
       ["weapon"] = nil
@@ -11966,6 +14274,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 82208,
           ["questLevel"] = 45,
           ["questLevelStatus"] = "known",
@@ -11976,6 +14285,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/82208",
           ["zone"] = "特殊",
+          ["zoneGroup"] = "其他",
           ["zoneStatus"] = "known"
         }
       },
@@ -11985,7 +14295,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "弓",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/277254",
       ["weapon"] = {
@@ -11994,70 +14305,6 @@ ns.GearCatalog = {
         ["min"] = 46,
         ["speed"] = 2.8
       }
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = "盾牌",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 277258,
-      ["ilvl"] = 45,
-      ["name"] = "阐明徽记",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "offhand",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 35,
-          ["minLevelStatus"] = "known",
-          ["name"] = "图书馆良友",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 82208,
-          ["questLevel"] = 45,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = nil,
-          ["sideStatus"] = "unknown",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/82208",
-          ["zone"] = "特殊",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 1580,
-        ["spirit"] = 12
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 11
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 4
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/277258",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = nil,
@@ -12092,6 +14339,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 97821,
           ["questLevel"] = 42,
           ["questLevelStatus"] = "known",
@@ -12102,32 +14350,34 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/97821",
           ["zone"] = "荒芜之地",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
       ["statsSource"] = nil,
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/277844",
       ["weapon"] = nil
     },
     {
-      ["appearanceSourceType"] = "任务",
+      ["appearanceSourceType"] = nil,
       ["armorType"] = nil,
       ["classes"] = {},
       ["effects"] = {},
-      ["hands"] = 1,
-      ["id"] = 279474,
-      ["ilvl"] = 55,
-      ["name"] = "尘泥短剑",
-      ["quality"] = 3,
+      ["hands"] = 0,
+      ["id"] = 277981,
+      ["ilvl"] = 44,
+      ["name"] = "食人魔之牙纪念品",
+      ["quality"] = 2,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 1,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "mainhand",
+      ["slot"] = "neck",
       ["sources"] = {
         {
           ["chainKind"] = "standalone",
@@ -12135,72 +14385,70 @@ ns.GearCatalog = {
           ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
-          ["minLevel"] = 48,
+          ["minLevel"] = 38,
           ["minLevelStatus"] = "known",
-          ["name"] = "事关重大",
+          ["name"] = "格罗姆高的攻势",
           ["prerequisites"] = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
           ["previousName"] = nil,
           ["profession"] = nil,
-          ["questId"] = 95264,
-          ["questLevel"] = 53,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95264",
-          ["zone"] = "暴风城",
-          ["zoneStatus"] = "known"
-        },
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 3,
-          ["chainPosition"] = 3,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 48,
-          ["minLevelStatus"] = "known",
-          ["name"] = "大酋长必须知情",
-          ["prerequisites"] = {
-            ["ids"] = {
-              96369
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "给福尔卡的坏消息",
-          ["profession"] = nil,
-          ["questId"] = 95483,
-          ["questLevel"] = 53,
+          ["questClass"] = nil,
+          ["questId"] = 97386,
+          ["questLevel"] = 44,
           ["questLevelStatus"] = "known",
           ["questState"] = "not_checked",
           ["reward"] = "任选",
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95483",
-          ["zone"] = "奥卡兹监狱",
+          ["url"] = "https://wuxianwow.com/quest/97386",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        },
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 38,
+          ["minLevelStatus"] = "known",
+          ["name"] = "噪音投诉",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 97405,
+          ["questLevel"] = 44,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/97405",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
-        ["agility"] = 6,
-        ["stamina"] = 10
+        ["agility"] = 5,
+        ["stamina"] = 8
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "匕首",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279474",
-      ["weapon"] = {
-        ["dps"] = 36.5,
-        ["max"] = 81,
-        ["min"] = 43,
-        ["speed"] = 1.7
-      }
+      ["url"] = "https://wuxianwow.com/item/277981",
+      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -12233,6 +14481,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95264,
           ["questLevel"] = 53,
           ["questLevelStatus"] = "known",
@@ -12243,6 +14492,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95264",
           ["zone"] = "暴风城",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         },
         {
@@ -12262,6 +14512,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "给福尔卡的坏消息",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95483,
           ["questLevel"] = 53,
           ["questLevelStatus"] = "known",
@@ -12272,6 +14523,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95483",
           ["zone"] = "奥卡兹监狱",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -12284,102 +14536,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279831",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279833,
-      ["ilvl"] = 55,
-      ["name"] = "信使扣环",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "neck",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 48,
-          ["minLevelStatus"] = "known",
-          ["name"] = "事关重大",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95264,
-          ["questLevel"] = 53,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95264",
-          ["zone"] = "暴风城",
-          ["zoneStatus"] = "known"
-        },
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 3,
-          ["chainPosition"] = 3,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 48,
-          ["minLevelStatus"] = "known",
-          ["name"] = "大酋长必须知情",
-          ["prerequisites"] = {
-            ["ids"] = {
-              96369
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "给福尔卡的坏消息",
-          ["profession"] = nil,
-          ["questId"] = 95483,
-          ["questLevel"] = 53,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95483",
-          ["zone"] = "奥卡兹监狱",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["intellect"] = 10,
-        ["spirit"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "对人形生物法术伤害",
-          ["value"] = 10
-        },
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279833",
       ["weapon"] = nil
     },
     {
@@ -12415,6 +14575,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "紧急求援",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 92458,
           ["questLevel"] = 33,
           ["questLevelStatus"] = "known",
@@ -12425,6 +14586,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/92458",
           ["zone"] = "达拉然城",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -12436,76 +14598,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279839",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "皮甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279840,
-      ["ilvl"] = 36,
-      ["name"] = "复苏便鞋",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 3,
-          ["chainPosition"] = 2,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 24,
-          ["minLevelStatus"] = "known",
-          ["name"] = "动乱之源",
-          ["prerequisites"] = {
-            ["ids"] = {
-              92432
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "紧急求援",
-          ["profession"] = nil,
-          ["questId"] = 92458,
-          ["questLevel"] = 33,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/92458",
-          ["zone"] = "达拉然城",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 78,
-        ["intellect"] = 11,
-        ["stamina"] = 5
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 11
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 4
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279840",
       ["weapon"] = nil
     },
     {
@@ -12541,6 +14637,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "喋血街头",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 96984,
           ["questLevel"] = 33,
           ["questLevelStatus"] = "known",
@@ -12551,6 +14648,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/96984",
           ["zone"] = "达拉然城",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
@@ -12562,226 +14660,11 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279842",
       ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279843,
-      ["ilvl"] = 36,
-      ["name"] = "附魔便鞋",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 3,
-          ["chainPosition"] = 2,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 24,
-          ["minLevelStatus"] = "known",
-          ["name"] = "动乱之源",
-          ["prerequisites"] = {
-            ["ids"] = {
-              92434
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "喋血街头",
-          ["profession"] = nil,
-          ["questId"] = 96984,
-          ["questLevel"] = 33,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96984",
-          ["zone"] = "达拉然城",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 36,
-        ["stamina"] = 10
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "额外护甲",
-          ["value"] = 50
-        },
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279843",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279850,
-      ["ilvl"] = 44,
-      ["name"] = "珍品点缀项链",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "neck",
-      ["sources"] = {
-        {
-          ["chainKind"] = "chain",
-          ["chainLength"] = 3,
-          ["chainPosition"] = 3,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 38,
-          ["minLevelStatus"] = "known",
-          ["name"] = "奇珍异宝",
-          ["prerequisites"] = {
-            ["ids"] = {
-              94997
-            },
-            ["status"] = "recorded"
-          },
-          ["previousName"] = "残留精华",
-          ["profession"] = nil,
-          ["questId"] = 94998,
-          ["questLevel"] = 42,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94998",
-          ["zone"] = "克罗多克要塞",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["intellect"] = 9,
-        ["spirit"] = 7
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279850",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {
-        "照脸猛砸目标，每2秒造成7点物理伤害，持续20秒。"
-      },
-      ["hands"] = 1,
-      ["id"] = 279852,
-      ["ilvl"] = 47,
-      ["name"] = "石头绑棍子",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "mainhand",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 40,
-          ["minLevelStatus"] = "known",
-          ["name"] = "莫格之眼",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 94968,
-          ["questLevel"] = 45,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94968",
-          ["zone"] = "克罗多克要塞",
-          ["zoneStatus"] = "known"
-        },
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 40,
-          ["minLevelStatus"] = "known",
-          ["name"] = "莫格之眼",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 94982,
-          ["questLevel"] = 45,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94982",
-          ["zone"] = "克罗多克要塞",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["strength"] = 4
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279852",
-      ["weapon"] = {
-        ["dps"] = 31.5,
-        ["max"] = 107,
-        ["min"] = 57,
-        ["speed"] = 2.6
-      }
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -12834,7 +14717,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "匕首",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279857",
       ["weapon"] = {
@@ -12897,70 +14781,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279863",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279878,
-      ["ilvl"] = 41,
-      ["name"] = "学徒巫师长裤",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 30,
-          ["minLevelStatus"] = "known",
-          ["name"] = "魔法之网",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95798,
-          ["questLevel"] = 40,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95798",
-          ["zone"] = "达拉然",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 52,
-        ["intellect"] = 9,
-        ["spirit"] = 17
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 8
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279878",
       ["weapon"] = nil
     },
     {
@@ -12994,6 +14818,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95798,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -13004,6 +14829,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95798",
           ["zone"] = "达拉然",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -13015,7 +14841,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279879",
       ["weapon"] = nil
@@ -13051,6 +14878,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95799,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -13061,6 +14889,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95799",
           ["zone"] = "铁炉堡",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -13072,10 +14901,79 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279881",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "任务",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 2,
+      ["id"] = 279885,
+      ["ilvl"] = 42,
+      ["name"] = "仪式小槌",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 1,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "twohand",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 30,
+          ["minLevelStatus"] = "known",
+          ["name"] = "营火旁的故事",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 96078,
+          ["questLevel"] = 40,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "部落",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/96078",
+          ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["attackPower"] = 22,
+        ["stamina"] = 15
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "双手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "对亡灵攻击强度",
+          ["value"] = 33
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/279885",
+      ["weapon"] = {
+        ["dps"] = 37.2,
+        ["max"] = 161,
+        ["min"] = 107,
+        ["speed"] = 3.6
+      }
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -13108,6 +15006,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 96078,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -13118,6 +15017,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/96078",
           ["zone"] = "荆棘谷",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -13128,7 +15028,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手斧",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279887",
       ["weapon"] = {
@@ -13137,358 +15038,6 @@ ns.GearCatalog = {
         ["min"] = 52,
         ["speed"] = 2.6
       }
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "板甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279901,
-      ["ilvl"] = 62,
-      ["name"] = "远征军腿甲",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "可消化的研究",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95790,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95790",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 566,
-        ["defense"] = 8,
-        ["stamina"] = 22,
-        ["strength"] = 18
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279901",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "板甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279902,
-      ["ilvl"] = 62,
-      ["name"] = "加固污泥护腿",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "渗漏的软泥怪精华",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 97049,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/97049",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 566,
-        ["defense"] = 8,
-        ["stamina"] = 22,
-        ["strength"] = 18
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279902",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279903,
-      ["ilvl"] = 62,
-      ["name"] = "剑龙鳞片护肩",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "shoulder",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "挖掘场的恐慌",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95924,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95924",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 274,
-        ["crit"] = 7,
-        ["stamina"] = 19
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 15
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279903",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279904,
-      ["ilvl"] = 62,
-      ["name"] = "结晶护肩",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "shoulder",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "晶化元素",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95928,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95928",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 274,
-        ["crit"] = 7,
-        ["stamina"] = 19
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 15
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279904",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "皮甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279905,
-      ["ilvl"] = 62,
-      ["name"] = "暴掠龙皮便鞋",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "挖掘场的恐慌",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95924,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95924",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 120,
-        ["defense"] = 7,
-        ["intellect"] = 11,
-        ["stamina"] = 14,
-        ["strength"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279905",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "皮甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279906,
-      ["ilvl"] = 62,
-      ["name"] = "强效皮靴",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "feet",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "晶化元素",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95928,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95928",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 120,
-        ["defense"] = 7,
-        ["intellect"] = 11,
-        ["stamina"] = 14,
-        ["strength"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/279906",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -13521,6 +15070,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95925,
           ["questLevel"] = 60,
           ["questLevelStatus"] = "known",
@@ -13531,6 +15081,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95925",
           ["zone"] = "塑造者之台",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         },
         {
@@ -13548,6 +15099,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95926,
           ["questLevel"] = 60,
           ["questLevelStatus"] = "known",
@@ -13558,6 +15110,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95926",
           ["zone"] = "塑造者之台",
+          ["zoneGroup"] = "卡利姆多",
           ["zoneStatus"] = "known"
         }
       },
@@ -13568,7 +15121,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手斧",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/279908",
       ["weapon"] = {
@@ -13577,144 +15131,6 @@ ns.GearCatalog = {
         ["min"] = 71,
         ["speed"] = 2.5
       }
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279931,
-      ["ilvl"] = 62,
-      ["name"] = "迷失研究员的兜帽",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "可消化的研究",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 95790,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "联盟",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95790",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 71,
-        ["intellect"] = 19,
-        ["stamina"] = 16
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 29
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 10
-        },
-        {
-          ["stat"] = "自然抗性",
-          ["value"] = 11
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279931",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 279932,
-      ["ilvl"] = 62,
-      ["name"] = "抗软泥罩袍",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "head",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 55,
-          ["minLevelStatus"] = "known",
-          ["name"] = "渗漏的软泥怪精华",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 97049,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/97049",
-          ["zone"] = "塑造者之台",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 71,
-        ["intellect"] = 19,
-        ["stamina"] = 16
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 29
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 10
-        },
-        {
-          ["stat"] = "自然抗性",
-          ["value"] = 11
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/279932",
-      ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "任务",
@@ -13749,6 +15165,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "听从我的呼唤",
           ["profession"] = nil,
+          ["questClass"] = "萨满祭司",
           ["questId"] = 79442,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -13759,6 +15176,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/79442",
           ["zone"] = "萨满祭司",
+          ["zoneGroup"] = "职业",
           ["zoneStatus"] = "known"
         },
         {
@@ -13778,6 +15196,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "听从我的呼唤",
           ["profession"] = nil,
+          ["questClass"] = "萨满祭司",
           ["questId"] = 96016,
           ["questLevel"] = 40,
           ["questLevelStatus"] = "known",
@@ -13788,6 +15207,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/96016",
           ["zone"] = "萨满祭司",
+          ["zoneGroup"] = "职业",
           ["zoneStatus"] = "known"
         }
       },
@@ -13798,7 +15218,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "每5秒法力回复",
@@ -13841,6 +15262,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95697,
           ["questLevel"] = 31,
           ["questLevelStatus"] = "known",
@@ -13851,6 +15273,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95697",
           ["zone"] = "挖掘场：湿地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         },
         {
@@ -13870,6 +15293,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "迷失在灌木丛中",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 95809,
           ["questLevel"] = 31,
           ["questLevelStatus"] = "known",
@@ -13880,15 +15304,75 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/95809",
           ["zone"] = "挖掘场：湿地",
+          ["zoneGroup"] = "副本",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
       ["statsSource"] = nil,
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/280766",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 281302,
+      ["ilvl"] = 44,
+      ["name"] = "雏龙鳞项链",
+      ["quality"] = 2,
+      ["reqEstimate"] = 39,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "neck",
+      ["sources"] = {
+        {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 39,
+          ["minLevelStatus"] = "known",
+          ["name"] = "雏龙最讨厌！",
+          ["prerequisites"] = {
+            ["ids"] = {},
+            ["status"] = "none_recorded"
+          },
+          ["previousName"] = nil,
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 98205,
+          ["questLevel"] = 44,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = nil,
+          ["sideStatus"] = "unknown",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/98205",
+          ["zone"] = "尘泥沼泽",
+          ["zoneGroup"] = "卡利姆多",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["spirit"] = 7,
+        ["strength"] = 7
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/281302",
       ["weapon"] = nil
     },
     {
@@ -13924,6 +15408,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "了解现状",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 98310,
           ["questLevel"] = 32,
           ["questLevelStatus"] = "known",
@@ -13934,6 +15419,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/98310",
           ["zone"] = "湿地",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -13943,7 +15429,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "额外护甲",
@@ -13951,6 +15438,65 @@ ns.GearCatalog = {
         }
       },
       ["url"] = "https://wuxianwow.com/item/281319",
+      ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = nil,
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {},
+      ["hands"] = 0,
+      ["id"] = 281320,
+      ["ilvl"] = 32,
+      ["name"] = "符文蚀刻戒指",
+      ["quality"] = 3,
+      ["reqEstimate"] = 27,
+      ["reqLevel"] = nil,
+      ["reqLevelStatus"] = "estimated",
+      ["setName"] = nil,
+      ["slot"] = "finger",
+      ["sources"] = {
+        {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 3,
+          ["confidence"] = "server",
+          ["kind"] = "quest",
+          ["minLevel"] = 24,
+          ["minLevelStatus"] = "known",
+          ["name"] = "探寻未来",
+          ["prerequisites"] = {
+            ["ids"] = {
+              98216
+            },
+            ["status"] = "recorded"
+          },
+          ["previousName"] = "了解现状",
+          ["profession"] = nil,
+          ["questClass"] = nil,
+          ["questId"] = 98310,
+          ["questLevel"] = 32,
+          ["questLevelStatus"] = "known",
+          ["questState"] = "not_checked",
+          ["reward"] = "任选",
+          ["side"] = "联盟",
+          ["sideStatus"] = "server",
+          ["temporary"] = false,
+          ["url"] = "https://wuxianwow.com/quest/98310",
+          ["zone"] = "湿地",
+          ["zoneGroup"] = "东部王国",
+          ["zoneStatus"] = "known"
+        }
+      },
+      ["stats"] = {
+        ["stamina"] = 10
+      },
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/281320",
       ["weapon"] = nil
     },
     {
@@ -13986,6 +15532,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = "了解现状",
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 98310,
           ["questLevel"] = 32,
           ["questLevelStatus"] = "known",
@@ -13996,6 +15543,7 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/98310",
           ["zone"] = "湿地",
+          ["zoneGroup"] = "东部王国",
           ["zoneStatus"] = "known"
         }
       },
@@ -14004,71 +15552,11 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/281321",
       ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "任务",
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 1,
-      ["id"] = 281587,
-      ["ilvl"] = 60,
-      ["name"] = "巨胁剥皮刃",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 1,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "mainhand",
-      ["sources"] = {
-        {
-          ["chainKind"] = "standalone",
-          ["chainLength"] = nil,
-          ["chainPosition"] = nil,
-          ["confidence"] = "server",
-          ["kind"] = "quest",
-          ["minLevel"] = 54,
-          ["minLevelStatus"] = "known",
-          ["name"] = "挠头者",
-          ["prerequisites"] = {
-            ["ids"] = {},
-            ["status"] = "none_recorded"
-          },
-          ["previousName"] = nil,
-          ["profession"] = nil,
-          ["questId"] = 92446,
-          ["questLevel"] = 60,
-          ["questLevelStatus"] = "known",
-          ["questState"] = "not_checked",
-          ["reward"] = "任选",
-          ["side"] = "部落",
-          ["sideStatus"] = "server",
-          ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/92446",
-          ["zone"] = "海加尔山",
-          ["zoneStatus"] = "known"
-        }
-      },
-      ["stats"] = {
-        ["defense"] = 3,
-        ["stamina"] = 11,
-        ["strength"] = 5
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "单手剑",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/281587",
-      ["weapon"] = {
-        ["dps"] = 39.3,
-        ["max"] = 118,
-        ["min"] = 63,
-        ["speed"] = 2.3
-      }
     },
     {
       ["appearanceSourceType"] = nil,
@@ -14076,9 +15564,9 @@ ns.GearCatalog = {
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 281635,
+      ["id"] = 281634,
       ["ilvl"] = 35,
-      ["name"] = "大慈善家的戒指",
+      ["name"] = "野外研究员指环",
       ["quality"] = 3,
       ["reqEstimate"] = 30,
       ["reqLevel"] = nil,
@@ -14101,6 +15589,7 @@ ns.GearCatalog = {
           },
           ["previousName"] = nil,
           ["profession"] = nil,
+          ["questClass"] = nil,
           ["questId"] = 79536,
           ["questLevel"] = 35,
           ["questLevelStatus"] = "known",
@@ -14111,153 +15600,20 @@ ns.GearCatalog = {
           ["temporary"] = false,
           ["url"] = "https://wuxianwow.com/quest/79536",
           ["zone"] = "特殊",
+          ["zoneGroup"] = "其他",
           ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
-        ["intellect"] = 5
+        ["agility"] = 7,
+        ["stamina"] = 7
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 10
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/281635",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 286428,
-      ["ilvl"] = 45,
-      ["name"] = "头目指环",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "finger",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.3,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 40,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "头目图夫",
-          ["npcId"] = 264773,
-          ["suggestedGroup"] = {
-            40,
-            47
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["spirit"] = 5,
-        ["stamina"] = 6
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 22
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286428",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "世界掉落",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 286429,
-      ["ilvl"] = 45,
-      ["name"] = "大肚皮腰带",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 31.5,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 40,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = "头目图夫",
-          ["npcId"] = 264773,
-          ["suggestedGroup"] = {
-            40,
-            47
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 37,
-        ["spirit"] = 9,
-        ["strength"] = 8
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 26
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 9
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286429",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/281634",
       ["weapon"] = nil
     },
     {
@@ -14313,7 +15669,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "单手锤",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286430",
       ["weapon"] = {
@@ -14369,7 +15726,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "冰霜抗性",
@@ -14378,6 +15736,61 @@ ns.GearCatalog = {
       },
       ["url"] = "https://wuxianwow.com/item/286646",
       ["weapon"] = nil
+    },
+    {
+      ["appearanceSourceType"] = "首领掉落",
+      ["armorType"] = nil,
+      ["classes"] = {},
+      ["effects"] = {
+        "灼烧目标，每3秒造成30点火焰伤害，持续9秒。"
+      },
+      ["hands"] = 1,
+      ["id"] = 286650,
+      ["ilvl"] = 40,
+      ["name"] = "炎术师的短杖",
+      ["quality"] = 3,
+      ["reqEstimate"] = nil,
+      ["reqLevel"] = 35,
+      ["reqLevelStatus"] = "known",
+      ["setName"] = nil,
+      ["slot"] = "mainhand",
+      ["sources"] = {
+        {
+          ["accessComplete"] = false,
+          ["confidence"] = "temporary",
+          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
+          ["dropChancePercent"] = 44.9,
+          ["dropChanceStatus"] = "temporary",
+          ["enterLevel"] = 35,
+          ["enterLevelStatus"] = "recorded",
+          ["instanceId"] = 2970,
+          ["instanceLink"] = "drop",
+          ["instanceName"] = "沉没之城",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
+          ["keys"] = {},
+          ["kind"] = "drop",
+          ["npc"] = "“炎术师”布拉克斯顿",
+          ["npcId"] = 260468,
+          ["suggestedGroup"] = {
+            35,
+            42
+          },
+          ["temporary"] = true
+        }
+      },
+      ["stats"] = {},
+      ["statsSource"] = "客户端公式推算",
+      ["subtype"] = "单手锤",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {},
+      ["url"] = "https://wuxianwow.com/item/286650",
+      ["weapon"] = {
+        ["dps"] = 27.5,
+        ["max"] = 86,
+        ["min"] = 46,
+        ["speed"] = 2.4
+      }
     },
     {
       ["appearanceSourceType"] = nil,
@@ -14423,7 +15836,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "unique_equipped",
+      ["uniqueText"] = "装备唯一",
       ["unmappedStats"] = {
         {
           ["stat"] = "火焰伤害",
@@ -14479,7 +15893,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对元素生物攻击强度",
@@ -14490,55 +15905,55 @@ ns.GearCatalog = {
       ["weapon"] = nil
     },
     {
-      ["appearanceSourceType"] = "首领掉落",
-      ["armorType"] = "布甲",
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "锁甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 286662,
-      ["ilvl"] = 40,
-      ["name"] = "幽邃住民的护手",
+      ["id"] = 286981,
+      ["ilvl"] = 21,
+      ["name"] = "死亡缚腕",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
+      ["reqLevel"] = 16,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "hands",
+      ["slot"] = "wrist",
       ["sources"] = {
         {
           ["accessComplete"] = false,
           ["confidence"] = "temporary",
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = 49.7,
-          ["dropChanceStatus"] = "temporary",
-          ["enterLevel"] = 35,
+          ["dropChancePercent"] = nil,
+          ["dropChanceStatus"] = "unknown",
+          ["enterLevel"] = 15,
           ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
+          ["instanceId"] = 2999,
           ["instanceLink"] = "drop",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
+          ["instanceName"] = "洛丹伦废墟",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2999",
           ["keys"] = {},
           ["kind"] = "drop",
-          ["npc"] = "乌姆布拉",
-          ["npcId"] = 264172,
+          ["npc"] = nil,
+          ["npcId"] = nil,
           ["suggestedGroup"] = {
-            35,
-            42
+            15,
+            22
           },
           ["temporary"] = true
         }
       },
       ["stats"] = {
-        ["armor"] = 36,
-        ["hit"] = 10,
-        ["spirit"] = 11,
-        ["stamina"] = 4
+        ["armor"] = 82,
+        ["spirit"] = 2,
+        ["strength"] = 5
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "锁甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/286662",
+      ["url"] = "https://wuxianwow.com/item/286981",
       ["weapon"] = nil
     },
     {
@@ -14588,7 +16003,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "盾牌",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286982",
       ["weapon"] = nil
@@ -14638,7 +16054,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286984",
       ["weapon"] = nil
@@ -14689,26 +16106,27 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286985",
       ["weapon"] = nil
     },
     {
-      ["appearanceSourceType"] = "首领掉落",
-      ["armorType"] = "布甲",
+      ["appearanceSourceType"] = "隐藏直到收集",
+      ["armorType"] = "皮甲",
       ["classes"] = {},
       ["effects"] = {},
       ["hands"] = 0,
-      ["id"] = 286987,
+      ["id"] = 286990,
       ["ilvl"] = 33,
-      ["name"] = "紫罗兰巫师的凉鞋",
+      ["name"] = "奥术残迹护腿",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
       ["reqLevel"] = 28,
       ["reqLevelStatus"] = "known",
-      ["setName"] = "紫罗兰巫师的法衣",
-      ["slot"] = "feet",
+      ["setName"] = nil,
+      ["slot"] = "legs",
       ["sources"] = {
         {
           ["accessComplete"] = false,
@@ -14740,15 +16158,20 @@ ns.GearCatalog = {
         }
       },
       ["stats"] = {
-        ["armor"] = 34,
-        ["intellect"] = 11,
-        ["stamina"] = 7
+        ["armor"] = 95,
+        ["intellect"] = 12
       },
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/286987",
+      ["subtype"] = "皮甲",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
+      ["unmappedStats"] = {
+        {
+          ["stat"] = "奥术伤害",
+          ["value"] = 17
+        }
+      },
+      ["url"] = "https://wuxianwow.com/item/286990",
       ["weapon"] = nil
     },
     {
@@ -14803,71 +16226,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286992",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "锁甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 286993,
-      ["ilvl"] = 32,
-      ["name"] = "充盈束腰",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 27,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "waist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 28,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2959,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "达拉然城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
-          ["keys"] = {
-            {
-              ["itemId"] = 277507,
-              ["name"] = "达拉然下水道钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            28,
-            35
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 126,
-        ["intellect"] = 4,
-        ["stamina"] = 9
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 6
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286993",
       ["weapon"] = nil
     },
     {
@@ -14922,189 +16284,10 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286994",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = nil,
-      ["armorType"] = nil,
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 286995,
-      ["ilvl"] = 33,
-      ["name"] = "守卫徽章",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 28,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "neck",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 28,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2959,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "达拉然城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2959",
-          ["keys"] = {
-            {
-              ["itemId"] = 277507,
-              ["name"] = "达拉然下水道钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            28,
-            35
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["stamina"] = 8
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 6
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286995",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 286997,
-      ["ilvl"] = 40,
-      ["name"] = "出渊护腿",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 35,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "legs",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            35,
-            42
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 51,
-        ["spirit"] = 17
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "法术强度",
-          ["value"] = 10
-        },
-        {
-          ["stat"] = "法术穿透",
-          ["value"] = 2
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286997",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {
-        "在水下呼吸的时间延长25%。"
-      },
-      ["hands"] = 0,
-      ["id"] = 286998,
-      ["ilvl"] = 39,
-      ["name"] = "深水草木护腕",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 34,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "wrist",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 35,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 2970,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "沉没之城",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
-          ["keys"] = {},
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            35,
-            42
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 25,
-        ["stamina"] = 4
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 20
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 7
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/286998",
       ["weapon"] = nil
     },
     {
@@ -15155,7 +16338,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/286999",
       ["weapon"] = nil
@@ -15207,7 +16391,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "对亡灵攻击强度",
@@ -15264,7 +16449,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287001",
       ["weapon"] = nil
@@ -15316,7 +16502,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287002",
       ["weapon"] = nil
@@ -15367,26 +16554,29 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287003",
       ["weapon"] = nil
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
+      ["armorType"] = nil,
       ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 287007,
-      ["ilvl"] = 44,
-      ["name"] = "撑松的软鞋",
+      ["effects"] = {
+        "瓦解目标，造成335到1005点物理伤害。"
+      },
+      ["hands"] = 2,
+      ["id"] = 287005,
+      ["ilvl"] = 42,
+      ["name"] = "肢解之剑",
       ["quality"] = 3,
       ["reqEstimate"] = nil,
-      ["reqLevel"] = 39,
+      ["reqLevel"] = 37,
       ["reqLevelStatus"] = "known",
       ["setName"] = nil,
-      ["slot"] = "feet",
+      ["slot"] = "twohand",
       ["sources"] = {
         {
           ["accessComplete"] = false,
@@ -15394,110 +16584,36 @@ ns.GearCatalog = {
           ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
           ["dropChancePercent"] = nil,
           ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 40,
+          ["enterLevel"] = 35,
           ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
+          ["instanceId"] = 2970,
           ["instanceLink"] = "drop",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
+          ["instanceName"] = "沉没之城",
+          ["instanceUrl"] = "https://wuxianwow.com/instance/2970",
+          ["keys"] = {},
           ["kind"] = "drop",
           ["npc"] = nil,
           ["npcId"] = nil,
           ["suggestedGroup"] = {
-            40,
-            47
+            35,
+            42
           },
           ["temporary"] = true
         }
       },
-      ["stats"] = {
-        ["armor"] = 44,
-        ["stamina"] = 13
-      },
+      ["stats"] = {},
       ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
-      ["unmappedStats"] = {
-        {
-          ["stat"] = "每5秒法力回复",
-          ["value"] = 4
-        },
-        {
-          ["stat"] = "治疗强度",
-          ["value"] = 14
-        },
-        {
-          ["stat"] = "法术伤害",
-          ["value"] = 5
-        }
-      },
-      ["url"] = "https://wuxianwow.com/item/287007",
-      ["weapon"] = nil
-    },
-    {
-      ["appearanceSourceType"] = "隐藏直到收集",
-      ["armorType"] = "布甲",
-      ["classes"] = {},
-      ["effects"] = {},
-      ["hands"] = 0,
-      ["id"] = 287008,
-      ["ilvl"] = 45,
-      ["name"] = "食人魔法师的护肩",
-      ["quality"] = 3,
-      ["reqEstimate"] = nil,
-      ["reqLevel"] = 40,
-      ["reqLevelStatus"] = "known",
-      ["setName"] = nil,
-      ["slot"] = "shoulder",
-      ["sources"] = {
-        {
-          ["accessComplete"] = false,
-          ["confidence"] = "temporary",
-          ["disclaimer"] = "临时掉落，来自 Spyglass，不是客户端掉落表",
-          ["dropChancePercent"] = nil,
-          ["dropChanceStatus"] = "unknown",
-          ["enterLevel"] = 40,
-          ["enterLevelStatus"] = "recorded",
-          ["instanceId"] = 3039,
-          ["instanceLink"] = "drop",
-          ["instanceName"] = "克罗多克要塞",
-          ["instanceUrl"] = "https://wuxianwow.com/instance/3039",
-          ["keys"] = {
-            {
-              ["itemId"] = 267089,
-              ["name"] = "克罗多克大门钥匙",
-              ["temporary"] = false
-            }
-          },
-          ["kind"] = "drop",
-          ["npc"] = nil,
-          ["npcId"] = nil,
-          ["suggestedGroup"] = {
-            40,
-            47
-          },
-          ["temporary"] = true
-        }
-      },
-      ["stats"] = {
-        ["armor"] = 49,
-        ["hit"] = 10,
-        ["intellect"] = 6,
-        ["stamina"] = 13
-      },
-      ["statsSource"] = "客户端公式推算",
-      ["subtype"] = "布甲",
-      ["uniqueStatus"] = "unknown",
+      ["subtype"] = "双手剑",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
-      ["url"] = "https://wuxianwow.com/item/287008",
-      ["weapon"] = nil
+      ["url"] = "https://wuxianwow.com/item/287005",
+      ["weapon"] = {
+        ["dps"] = 37.3,
+        ["max"] = 166,
+        ["min"] = 110,
+        ["speed"] = 3.7
+      }
     },
     {
       ["appearanceSourceType"] = "隐藏直到收集",
@@ -15551,7 +16667,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {
         {
           ["stat"] = "暗影抗性",
@@ -15615,7 +16732,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "皮甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287010",
       ["weapon"] = nil
@@ -15673,7 +16791,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "锁甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287011",
       ["weapon"] = nil
@@ -15730,7 +16849,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "板甲",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287012",
       ["weapon"] = nil
@@ -15780,7 +16900,8 @@ ns.GearCatalog = {
       },
       ["statsSource"] = "客户端公式推算",
       ["subtype"] = "投掷武器",
-      ["uniqueStatus"] = "unknown",
+      ["uniqueStatus"] = "none_recorded",
+      ["uniqueText"] = nil,
       ["unmappedStats"] = {},
       ["url"] = "https://wuxianwow.com/item/287068",
       ["weapon"] = {
@@ -15795,7 +16916,7 @@ ns.GearCatalog = {
     ["clientBuild"] = "1.60.1.71037",
     ["complete"] = false,
     ["dataWritten"] = "2026-11-22T23:28:42+11:00",
-    ["fetchedAt"] = "2026-11-24T03:37:43Z",
+    ["fetchedAt"] = "2026-11-24T06:35:21Z",
     ["lastRunNetworkRequests"] = 0,
     ["learnAt"] = {
       ["板甲"] = 40,
@@ -15829,7 +16950,7 @@ ns.GearCatalog = {
         }
       }
     },
-    ["requestCount"] = 486,
+    ["requestCount"] = 550,
     ["slots"] = {
       ["back"] = {
         ["complete"] = false,
@@ -15890,7 +17011,7 @@ ns.GearCatalog = {
       ["mainhand"] = {
         ["complete"] = false,
         ["detailed"] = 18,
-        ["kept"] = 18,
+        ["kept"] = 19,
         ["listed"] = 272,
         ["query"] = "单手",
         ["truncated"] = true
@@ -15906,7 +17027,7 @@ ns.GearCatalog = {
       ["offhand"] = {
         ["complete"] = false,
         ["detailed"] = 18,
-        ["kept"] = 18,
+        ["kept"] = 19,
         ["listed"] = 163,
         ["query"] = "盾牌",
         ["truncated"] = true
@@ -15934,6 +17055,14 @@ ns.GearCatalog = {
         ["listed"] = 41,
         ["query"] = "饰品",
         ["truncated"] = false
+      },
+      ["twohand"] = {
+        ["complete"] = false,
+        ["detailed"] = 18,
+        ["kept"] = 18,
+        ["listed"] = 349,
+        ["query"] = "双手",
+        ["truncated"] = true
       },
       ["waist"] = {
         ["complete"] = false,

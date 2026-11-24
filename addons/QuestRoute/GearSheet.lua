@@ -17,8 +17,11 @@ local ORDER = {
 }
 local PLAYSTYLES = { "防护", "武器", "狂暴" }
 
+local PANEL_NAME = "QuestRouteGearSheetPanel"
 local Sheet = { slot = "head" }
 ns.GearSheet = Sheet
+
+local cachedCatalog, cachedById
 
 local function Playstyle(classFile, specName, role)
     if classFile ~= "WARRIOR" then return nil end
@@ -78,10 +81,33 @@ local function Worn(inv)
     if ok and type(link) == "string" then return tonumber(link:match("item:(%d+)")) end
 end
 
+local function ReadAllWorn()
+    local gear = {}
+    for inv, id in pairs(INV) do
+        gear[id] = Worn(inv)
+    end
+    return gear
+end
+
+local function QuestProgress(questId)
+    if type(questId) ~= "number" then return nil end
+    local api = C_QuestLog
+    if type(api) ~= "table" then return nil end
+    if type(api.IsQuestFlaggedCompleted) == "function" then
+        local ok, done = pcall(api.IsQuestFlaggedCompleted, questId)
+        if ok and done == true then return "已完成" end
+    end
+    if type(api.IsOnQuest) == "function" then
+        local ok, active = pcall(api.IsOnQuest, questId)
+        if ok and active == true then return "进行中" end
+    end
+    return nil
+end
+
 local STATS = {
     { "strength", "力量" }, { "hit", "命中" }, { "crit", "爆击" }, { "stamina", "耐力" },
-    { "agility", "敏捷" }, { "dodge", "躲闪" }, { "parry", "招架" }, { "block", "格挡" },
-    { "armor", "护甲" }, { "defense", "防御" }, { "blockValue", "格挡值" }, { "attackPower", "攻强" },
+    { "agility", "敏捷" }, { "attackPower", "攻强" }, { "dodge", "躲闪" }, { "parry", "招架" },
+    { "block", "格挡" }, { "defense", "防御" }, { "blockValue", "格挡值" }, { "armor", "护甲" },
 }
 local EXTRA_LABEL = { intellect = "智力", spirit = "精神" }
 
@@ -111,13 +137,17 @@ function Sheet.StatText(item)
     end
     table.sort(extra)
     for _, text in ipairs(extra) do parts[#parts + 1] = text end
-    if #parts == 0 then return "没有记录到属性" end
+    if #parts == 0 then
+        local effects = item.effects
+        if type(effects) == "table" and type(effects[1]) == "string" and effects[1] ~= "" then
+            return "特效：" .. effects[1]
+        end
+        return "没有记录到属性"
+    end
     return table.concat(parts, "  ")
 end
 
-function Sheet.GateText(candidate)
-    local source = candidate.sources and candidate.sources[1]
-    if not source then return "来源未知" end
+local function FormatSingleSource(source)
     if source.kind == "quest" then
         local place = source.zone or "接取地图未知"
         if source.zoneStatus == "temporary" then place = place .. "（临时）" end
@@ -135,16 +165,34 @@ function Sheet.GateText(candidate)
             end
         end
         local gate = source.minLevel and ("可接 " .. source.minLevel) or "可接等级未知"
-        return string.format("%s · %s接 · %s · %s", source.name or "任务", place, chain, gate)
+        local progress = QuestProgress(source.questId)
+        local tail = progress and (" · " .. progress) or ""
+        return string.format("%s · %s接 · %s · %s%s", source.name or "任务", place, chain, gate, tail)
     end
     local boss = source.npc or "掉落者未记录"
     local temp = source.temporary and "（临时）" or ""
     return string.format("%s · %s%s", source.instanceName or "副本", boss, temp)
 end
 
+function Sheet.GateText(candidate)
+    local sources = candidate.sources
+    if type(sources) ~= "table" or #sources == 0 then return "来源未知" end
+    local parts = {}
+    local cap = math.min(#sources, 3)
+    for index = 1, cap do
+        parts[#parts + 1] = FormatSingleSource(sources[index])
+    end
+    if #sources > cap then
+        parts[#parts + 1] = string.format("另有%d个来源", #sources - cap)
+    end
+    return table.concat(parts, "；")
+end
+
 function Sheet.GateLines(candidate)
-    local source = candidate.sources and candidate.sources[1]
+    local sources = candidate.sources
+    local source = type(sources) == "table" and sources[1] or nil
     if not source then return "来源未知", "" end
+    local more = (#sources > 1) and (" · +" .. (#sources - 1) .. "来源") or ""
     if source.kind == "quest" then
         local chain = "链未知"
         if source.chainKind == "standalone" then
@@ -157,17 +205,28 @@ function Sheet.GateLines(candidate)
             end
         end
         local level = source.minLevel and ("可接" .. source.minLevel) or "可接未知"
-        return (source.name or "任务") .. " · " .. (source.zone or "地图未知"), chain .. " · " .. level
+        local progress = QuestProgress(source.questId)
+        local tag = progress and (" · " .. progress) or ""
+        return (source.name or "任务") .. " · " .. (source.zone or "地图未知"), chain .. " · " .. level .. tag .. more
     end
-    return (source.instanceName or "副本") .. " · " .. (source.npc or "首领未记录"), source.temporary and "临时" or ""
+    local base = source.temporary and "临时" or ""
+    if more ~= "" then
+        base = base ~= "" and (base .. more) or ("+" .. (#sources - 1) .. "来源")
+    end
+    return (source.instanceName or "副本") .. " · " .. (source.npc or "首领未记录"), base
 end
 
 local function CatalogItem(id)
     local catalog = ns.GearCatalog
-    if not catalog then return end
-    for _, item in ipairs(catalog.items or {}) do
-        if item.id == id then return item end
+    if type(catalog) ~= "table" then return nil end
+    if cachedCatalog ~= catalog then
+        cachedCatalog = catalog
+        cachedById = {}
+        for _, item in ipairs(catalog.items or {}) do
+            cachedById[item.id] = item
+        end
     end
+    return cachedById[id]
 end
 
 local function ItemLink(id, name)
@@ -185,6 +244,28 @@ local function SlotMeta(id)
     end
 end
 
+local function StepSlot(delta)
+    local index = 1
+    for cursor, slot in ipairs(ORDER) do
+        if slot.id == Sheet.slot then index = cursor end
+    end
+    local nextIndex = ((index - 1 + delta) % #ORDER) + 1
+    Sheet.slot = ORDER[nextIndex].id
+    Sheet.Refresh()
+end
+
+local function CyclePlaystyle()
+    local character = Character()
+    if not character or character.classFile ~= "WARRIOR" then return end
+    local current = Sheet.manualSpec or character.spec or "防护"
+    local nextIndex = 1
+    for index, name in ipairs(PLAYSTYLES) do
+        if name == current then nextIndex = index % #PLAYSTYLES + 1 end
+    end
+    Sheet.manualSpec = PLAYSTYLES[nextIndex]
+    Sheet.Refresh()
+end
+
 local function Line(parent, template, width)
     local text = parent:CreateFontString(nil, "OVERLAY", template or "GameFontHighlightSmall")
     text:SetJustifyH("LEFT")
@@ -193,95 +274,33 @@ local function Line(parent, template, width)
     return text
 end
 
-local function Bury(frame)
-    if not frame or frame == Sheet.panel then return end
-    pcall(function()
-        frame:SetAlpha(0)
-        frame:Hide()
-        frame:SetParent(nil)
-        frame.Show = function() end
-    end)
-end
-
-local function RegionText(region)
-    if type(region) ~= "table" or type(region.GetText) ~= "function" then return end
-    local ok, text = pcall(function()
-        local value = region:GetText()
-        if type(value) ~= "string" then return nil end
-        return value
-    end)
-    if ok then return text end
-end
-
-local function TextMarksGear(text)
-    local ok, matched = pcall(function()
-        if type(text) ~= "string" then return false end
-        return text == "下一部位" or text == "换玩法"
-            or text:find("前三名", 1, true) ~= nil
-            or text:find("没有从天赋", 1, true) ~= nil
-            or text:find("准入", 1, true) ~= nil
-    end)
-    return ok and matched or false
-end
-
-local function FrameSaysGear(frame)
-    if type(frame) ~= "table" or type(frame.GetRegions) ~= "function" then return false end
-    local ok, regions = pcall(function() return { frame:GetRegions() } end)
-    if not ok or not regions then return false end
-    for _, region in ipairs(regions) do
-        if TextMarksGear(RegionText(region)) then return true end
-    end
-    return false
-end
-
-local function IsGearPanel(frame)
-    if frame == Sheet.panel then return false end
-    if type(frame) ~= "table" then return false end
-    if frame.questRouteGearPanel then return true end
-    if FrameSaysGear(frame) then return true end
-    if type(frame.GetChildren) ~= "function" then return false end
-    local ok, children = pcall(function() return { frame:GetChildren() } end)
-    if not ok or not children then return false end
-    for _, child in ipairs(children) do
-        if FrameSaysGear(child) then return true end
-    end
-    return false
-end
-
-local function BuryStale()
-    local parents = { _G.UIParent, _G.PaperDollFrame, _G.CharacterFrame }
-    for _, parent in ipairs(parents) do
-        if parent and type(parent.GetChildren) == "function" then
-            local ok, children = pcall(function() return { parent:GetChildren() } end)
-            if ok and children then
-                for _, child in ipairs(children) do
-                    if IsGearPanel(child) then Bury(child) end
-                end
-            end
-        end
-    end
-    if type(EnumerateFrames) ~= "function" then return end
-    local frame = EnumerateFrames()
-    local guard = 0
-    while frame and guard < 12000 do
-        guard = guard + 1
-        local shown, named = false, true
-        pcall(function() shown = frame:IsShown() and true or false end)
-        pcall(function() named = frame:GetName() ~= nil end)
-        if shown and not named then
-            local ok, gear = pcall(IsGearPanel, frame)
-            if ok and gear then Bury(frame) end
-        end
-        frame = EnumerateFrames(frame)
+local function BindPanelHandlers(panel)
+    panel.headerBtn:SetScript("OnClick", function() CyclePlaystyle() end)
+    panel.prevSlot:SetScript("OnClick", function() StepSlot(-1) end)
+    panel.nextSlot:SetScript("OnClick", function() StepSlot(1) end)
+    for _, row in ipairs(panel.rows) do
+        row:SetScript("OnClick", function()
+            if not row.itemID then return end
+            print(string.format("|cff31cee8QuestRoute|r %s %s", ItemLink(row.itemID, row.itemName), row.detail or ""))
+        end)
     end
 end
 
 local function EnsurePanel(host)
-    if Sheet.panel then return end
     local anchor = _G.CharacterFrame or host
-    local panel = CreateFrame("Frame", nil, _G.UIParent or anchor)
-    panel.questRouteGearPanel = true
-    panel:SetSize(330, 348)
+    local existing = Sheet.panel or _G[PANEL_NAME]
+    if existing and existing.rows and existing.headerBtn and existing.prevSlot and existing.nextSlot then
+        existing:ClearAllPoints()
+        existing:SetPoint("TOPLEFT", anchor, "TOPRIGHT", 4, -30)
+        BindPanelHandlers(existing)
+        Sheet.panel = existing
+        return
+    end
+    if existing and type(existing.Hide) == "function" then
+        pcall(existing.Hide, existing)
+    end
+    local panel = CreateFrame("Frame", PANEL_NAME, _G.UIParent or anchor)
+    panel:SetSize(330, 352)
     panel:SetPoint("TOPLEFT", anchor, "TOPRIGHT", 4, -30)
     panel:SetClampedToScreen(true)
     if panel.SetFrameStrata then panel:SetFrameStrata("HIGH") end
@@ -292,26 +311,15 @@ local function EnsurePanel(host)
     background:SetPoint("TOPLEFT", 1, -1)
     background:SetPoint("BOTTOMRIGHT", -1, 1)
     background:SetColorTexture(0.05, 0.04, 0.03, 0.94)
-    panel.title = Line(panel, "GameFontNormal", 250)
-    panel.title:SetPoint("TOPLEFT", 8, -7)
-    panel.spec = CreateFrame("Button", nil, panel)
-    panel.spec:SetSize(28, 16)
-    panel.spec:SetPoint("TOPRIGHT", -6, -6)
-    panel.spec.label = Line(panel.spec, nil, 28)
-    panel.spec.label:SetAllPoints()
-    panel.spec.label:SetJustifyH("RIGHT")
-    panel.spec.label:SetText("|cffffd100换|r")
-    panel.spec:SetScript("OnClick", function()
-        local character = Character()
-        if not character or character.classFile ~= "WARRIOR" then return end
-        local current = Sheet.manualSpec or character.spec or "防护"
-        local nextIndex = 1
-        for index, name in ipairs(PLAYSTYLES) do
-            if name == current then nextIndex = index % #PLAYSTYLES + 1 end
-        end
-        Sheet.manualSpec = PLAYSTYLES[nextIndex]
-        Sheet.Refresh()
-    end)
+    panel.headerBtn = CreateFrame("Button", nil, panel)
+    panel.headerBtn:SetSize(314, 22)
+    panel.headerBtn:SetPoint("TOPLEFT", 8, -5)
+    panel.title = Line(panel.headerBtn, "GameFontNormal", 256)
+    panel.title:SetPoint("LEFT", 0, 0)
+    panel.specHint = Line(panel.headerBtn, nil, 56)
+    panel.specHint:SetPoint("RIGHT", 0, 0)
+    panel.specHint:SetJustifyH("RIGHT")
+    panel.specHint:SetText("|cffffd100[换玩法]|r")
     panel.rows = {}
     for index = 1, 3 do
         local row = CreateFrame("Button", nil, panel)
@@ -328,49 +336,46 @@ local function EnsurePanel(host)
             text:SetWordWrap(false)
             if text.SetMaxLines then text:SetMaxLines(1) end
         end
-        row.title = Line(row, "GameFontNormal", 300)
+        row.title = Line(row, "GameFontNormal", 306)
         place(row.title, -10)
-        row.stats = Line(row, nil, 300)
+        row.stats = Line(row, nil, 306)
         place(row.stats, -28)
-        row.where = Line(row, nil, 300)
+        row.where = Line(row, nil, 306)
         place(row.where, -46)
-        row.gate = Line(row, nil, 300)
+        row.gate = Line(row, nil, 306)
         place(row.gate, -64)
-        row:SetScript("OnClick", function()
-            if not row.itemID then return end
-            print(string.format("|cff31cee8QuestRoute|r %s %s", ItemLink(row.itemID, row.itemName), row.detail or ""))
-        end)
         panel.rows[index] = row
     end
     panel.note = Line(panel, nil, 306)
-    panel.note:SetPoint("TOPLEFT", 8, -32)
+    panel.note:SetPoint("TOPLEFT", 8, -36)
     panel.note:SetWordWrap(true)
+    panel.prevSlot = CreateFrame("Button", nil, panel)
+    panel.prevSlot:SetSize(90, 18)
+    panel.prevSlot:SetPoint("BOTTOMLEFT", 8, 5)
+    panel.prevSlot.label = Line(panel.prevSlot, nil, 90)
+    panel.prevSlot.label:SetAllPoints()
+    panel.prevSlot.label:SetText("< 上一部位")
     panel.nextSlot = CreateFrame("Button", nil, panel)
-    panel.nextSlot:SetSize(88, 16)
-    panel.nextSlot:SetPoint("BOTTOMLEFT", 8, 5)
-    panel.nextSlot.label = Line(panel.nextSlot, nil, 88)
+    panel.nextSlot:SetSize(90, 18)
+    panel.nextSlot:SetPoint("BOTTOMRIGHT", -8, 5)
+    panel.nextSlot.label = Line(panel.nextSlot, nil, 90)
     panel.nextSlot.label:SetAllPoints()
-    panel.nextSlot.label:SetText("下一部位")
-    panel.nextSlot:SetScript("OnClick", function()
-        local index = 1
-        for cursor, slot in ipairs(ORDER) do
-            if slot.id == Sheet.slot then index = cursor end
-        end
-        Sheet.slot = ORDER[index % #ORDER + 1].id
-        Sheet.Refresh()
-    end)
+    panel.nextSlot.label:SetJustifyH("RIGHT")
+    panel.nextSlot.label:SetText("下一部位 >")
+    BindPanelHandlers(panel)
     Sheet.panel = panel
 end
 
 function Sheet.Select(slot)
     if not SlotMeta(slot) then return end
+    if Sheet.slot == slot and Sheet.panel and Sheet.panel:IsShown() then return end
     Sheet.slot = slot
     Sheet.Refresh()
 end
 
-local function CanClick(frame)
+local function CanHook(frame, script)
     if type(frame.HasScript) ~= "function" or type(frame.HookScript) ~= "function" then return false end
-    local ok, yes = pcall(frame.HasScript, frame, "OnClick")
+    local ok, yes = pcall(frame.HasScript, frame, script)
     return ok and yes
 end
 
@@ -378,24 +383,33 @@ local function HookSlots(host, depth)
     if not host or depth > 4 or type(host.GetChildren) ~= "function" then return end
     for _, child in ipairs({ host:GetChildren() }) do
         local slot = child.GetID and INV[child:GetID()]
-        if slot and CanClick(child) then
-            child.questRouteGear = function() Sheet.Select(slot) end
-            if not child.questRouteGearHooked then
-                local hooked = pcall(child.HookScript, child, "OnClick", function(button)
-                    if button.questRouteGear then button.questRouteGear() end
+        if slot and CanHook(child, "OnEnter") then
+            child.questRouteGearSlot = function() Sheet.Select(slot) end
+            if not child.questRouteGearEnterHooked then
+                local hooked = pcall(child.HookScript, child, "OnEnter", function(button)
+                    if button.questRouteGearSlot then button.questRouteGearSlot() end
                 end)
-                child.questRouteGearHooked = hooked
+                child.questRouteGearEnterHooked = hooked
             end
         end
         HookSlots(child, depth + 1)
     end
 end
 
+local function DiffBadge(candidate)
+    if not candidate.diff or type(candidate.diff.score) ~= "number" then return "" end
+    local delta = candidate.diff.score
+    if delta > 0.05 then
+        return "  |cff40ff40+" .. NumberText(delta) .. "|r"
+    elseif delta < -0.05 then
+        return "  |cff999999" .. NumberText(delta) .. "|r"
+    end
+    return ""
+end
+
 function Sheet.Refresh()
     local host = _G.PaperDollFrame or _G.CharacterFrame
     if not host then return end
-    Sheet.sweeps = 1
-    BuryStale()
     EnsurePanel(host)
     local panel = Sheet.panel
     local slot = SlotMeta(Sheet.slot) or ORDER[1]
@@ -404,7 +418,7 @@ function Sheet.Refresh()
     local heading = slot.label .. " · 前三名"
     if not character then
         panel.title:SetText(heading)
-        panel.spec:Hide()
+        panel.specHint:Hide()
         panel.note:SetText(problem or "角色信息还不可用。")
         panel.note:Show()
         for _, row in ipairs(panel.rows) do row:Hide() end
@@ -413,11 +427,8 @@ function Sheet.Refresh()
     end
     local shownSpec = Sheet.manualSpec or character.spec or character.className
     panel.title:SetText(slot.label .. "  " .. character.level .. "  " .. shownSpec)
-    if character.classFile == "WARRIOR" then panel.spec:Show() else panel.spec:Hide() end
-    local gear = {}
-    for inv, id in pairs(INV) do
-        if id == slot.id then gear[id] = Worn(inv) end
-    end
+    if character.classFile == "WARRIOR" then panel.specHint:Show() else panel.specHint:Hide() end
+    local gear = ReadAllWorn()
     local result = ns.GetGearCandidates({
         level = character.level, class = character.className, spec = character.spec or "防护",
         faction = character.faction, gear = gear, limit = 6,
@@ -447,9 +458,9 @@ function Sheet.Refresh()
             local row = panel.rows[index]
             local score = ""
             if candidate.score then
-                score = candidate.score == math.floor(candidate.score) and ("  " .. candidate.score) or string.format("  %.1f", candidate.score)
+                score = "  " .. NumberText(candidate.score)
             end
-            local worn = gear[slot.id] == candidate.id and "  当前" or ""
+            local worn = gear[slot.id] == candidate.id and "  |cff31cee8当前|r" or DiffBadge(candidate)
             local where, gate = Sheet.GateLines(candidate)
             row.itemName = candidate.name
             row.detail = Sheet.GateText(candidate)
@@ -464,45 +475,55 @@ function Sheet.Refresh()
     panel:Show()
 end
 
+local function HostShown()
+    local host = _G.PaperDollFrame or _G.CharacterFrame
+    return host and type(host.IsShown) == "function" and host:IsShown()
+end
+
 function Sheet.Attach()
     local host = _G.PaperDollFrame or _G.CharacterFrame
     if not host or type(host.HookScript) ~= "function" then return end
-    BuryStale()
-    if not Sheet.hooked then
-        Sheet.hooked = true
-        host:HookScript("OnShow", function() Sheet.Refresh() end)
-        host:HookScript("OnHide", function() if Sheet.panel then Sheet.panel:Hide() end end)
+    if not host.questRouteGearHostHooked then
+        host.questRouteGearHostHooked = true
+        host:HookScript("OnShow", function()
+            if ns.GearSheet then ns.GearSheet.Refresh() end
+        end)
+        host:HookScript("OnHide", function()
+            if ns.GearSheet and ns.GearSheet.panel then ns.GearSheet.panel:Hide() end
+        end)
         if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.HookScript) == "function" then
-            _G.CharacterFrame:HookScript("OnHide", function() if Sheet.panel then Sheet.panel:Hide() end end)
-        end
-        HookSlots(host, 0)
-        if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.GetChildren) == "function" then
-            HookSlots(_G.CharacterFrame, 0)
+            _G.CharacterFrame:HookScript("OnHide", function()
+                if ns.GearSheet and ns.GearSheet.panel then ns.GearSheet.panel:Hide() end
+            end)
         end
     end
-    if host:IsShown() then Sheet.Refresh() end
-    Sheet.sweeps = 1
+    HookSlots(host, 0)
+    if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.GetChildren) == "function" then
+        HookSlots(_G.CharacterFrame, 0)
+    end
+    if HostShown() then Sheet.Refresh() end
 end
 
 function Sheet.Shutdown()
     if Sheet.panel then Sheet.panel:Hide() end
-    Sheet.sweeps = 0
     if Sheet.watcher then
         Sheet.watcher:UnregisterAllEvents()
         Sheet.watcher:SetScript("OnEvent", nil)
-        Sheet.watcher:SetScript("OnUpdate", nil)
     end
-    Sheet.hooked = nil
 end
 
 Sheet.watcher = CreateFrame("Frame")
 Sheet.watcher:RegisterEvent("ADDON_LOADED")
 Sheet.watcher:RegisterEvent("PLAYER_ENTERING_WORLD")
-Sheet.watcher:SetScript("OnEvent", function() Sheet.Attach() end)
-Sheet.watcher:SetScript("OnUpdate", function()
-    local window = _G.CharacterFrame or _G.PaperDollFrame
-    if Sheet.panel and window and not window:IsShown() then Sheet.panel:Hide() end
-    if not Sheet.sweeps or Sheet.sweeps <= 0 then return end
-    Sheet.sweeps = Sheet.sweeps - 1
-    BuryStale()
+Sheet.watcher:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+Sheet.watcher:RegisterEvent("PLAYER_LEVEL_UP")
+Sheet.watcher:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+Sheet.watcher:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED")
+Sheet.watcher:RegisterEvent("QUEST_TURNED_IN")
+Sheet.watcher:SetScript("OnEvent", function(_, event)
+    if event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD" then
+        Sheet.Attach()
+    elseif HostShown() then
+        Sheet.Refresh()
+    end
 end)

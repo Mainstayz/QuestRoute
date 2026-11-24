@@ -1,0 +1,148 @@
+{
+  "tool": "item_usage",
+  "arguments": {
+    "item": 274959
+  },
+  "response": {
+    "outcome": "ok",
+    "notes": [
+      {
+        "on": "disenchant",
+        "kind": "estimate",
+        "text": "分解产出是按分解规则写出的：等级段是客户端的，各段出什么在游戏服务器上；规则取自经典旧世（DisenchantForever，MIT）加《无限》实测的三处改动，各地相同；数量是规则的值；一次分解只出 outcomes 里的一样"
+      },
+      {
+        "on": "disenchant.value",
+        "kind": "estimate",
+        "text": "value：各拍卖行一次分解约值多少，按各材料的概率 × 平均数量 × 那个拍卖行当天的指导价相加；missing 是那天没在售、没算进去的材料；item_guidance 是这件物品自己在那里的指导价，可以比一比分解划不划算"
+      }
+    ],
+    "id": "item:274959",
+    "title": "法霍德号角",
+    "url": "https://wuxianwow.com/item/274959",
+    "preview_url": "https://wuxianwow.com/transmog?o=AQIBj-QQAA",
+    "kind": "item",
+    "game_link": "|cff1eff00|Hitem:274959:::::::::::::|h[法霍德号角]|h|r",
+    "game_link_note": "客户端聊天超链接转义串；聊天框会过滤「|」，要贴进游戏需用宏：/run ChatFrame1EditBox:Insert(\"…\")，宏里把 | 写成 \\124",
+    "item_id": 274959,
+    "quality": 2,
+    "quality_name": "优秀",
+    "item_kind": "装备",
+    "ilvl": 39,
+    "slot": "头部",
+    "req_level": 0,
+    "sell": 4492,
+    "sell_text": "44银 92铜",
+    "hidden": false,
+    "server": "名称、品质与属性来自游戏服务器：客户端只有这件物品的编号（客户端热修缓存，见版本页「服务器热修」）",
+    "equipment": {
+      "slot": "头部",
+      "armor_type": "锁甲",
+      "ilvl": 39,
+      "req_level": 0,
+      "armor": 184,
+      "stats": [
+        {
+          "stat": "耐力",
+          "value": 13
+        },
+        {
+          "stat": "攻击强度",
+          "value": 12
+        }
+      ],
+      "stats_source": "客户端公式推算"
+    },
+    "source_type": "世界掉落",
+    "source_note": "来源类型来自 ItemModifiedAppearance；首领掉落数据（冒险指南）在客户端中为空",
+    "quest_rewards": [
+      {
+        "quest_id": 95064,
+        "name": "预防措施",
+        "url": "https://wuxianwow.com/quest/95064",
+        "fetch_id": "quest:95064",
+        "level": 39,
+        "side": "联盟",
+        "reward": "任选"
+      }
+    ],
+    "made_by": [],
+    "used_by": [],
+    "used_by_count": 0,
+    "used_by_new_count": 0,
+    "disenchant": {
+      "disenchantable": true,
+      "bracket": "优秀护甲 · 物品等级 36–40",
+      "bracket_id": 21,
+      "bracket_items": 418,
+      "outcomes": [
+        {
+          "item_id": 11137,
+          "name": "幻象之尘",
+          "chance_pct": 75,
+          "min": 1,
+          "max": 2,
+          "url": "https://wuxianwow.com/item/11137",
+          "fetch_id": "item:11137"
+        },
+        {
+          "item_id": 11135,
+          "name": "强效秘法精华",
+          "chance_pct": 20,
+          "min": 1,
+          "max": 2,
+          "url": "https://wuxianwow.com/item/11135",
+          "fetch_id": "item:11135"
+        },
+        {
+          "item_id": 11139,
+          "name": "大块闪光碎片",
+          "chance_pct": 5,
+          "min": 1,
+          "max": 1,
+          "url": "https://wuxianwow.com/item/11139",
+          "fetch_id": "item:11139"
+        }
+      ],
+      "value": [
+        {
+          "house": "pvp-horde",
+          "label": "PvP · 部落",
+          "day": "2026-11-24",
+          "value": 1805,
+          "value_text": "18银 5铜"
+        },
+        {
+          "house": "normal-horde",
+          "label": "普通 · 部落",
+          "day": "2026-11-24",
+          "value": 2721,
+          "value_text": "27银 21铜"
+        },
+        {
+          "house": "normal-alliance",
+          "label": "普通 · 联盟",
+          "day": "2026-11-24",
+          "value": 1952,
+          "value_text": "19银 52铜"
+        },
+        {
+          "house": "pvp-alliance",
+          "label": "PvP · 联盟",
+          "day": "2026-11-21",
+          "value": 1978,
+          "value_text": "19银 78铜"
+        },
+        {
+          "house": "rp-alliance",
+          "label": "角色扮演 · 联盟",
+          "day": "2026-11-19",
+          "value": 5193,
+          "value_text": "51银 93铜"
+        }
+      ]
+    },
+    "text": "法霍德号角 · 头部 · 装等 39\n属性：184 护甲；+13 耐力，+12 攻击强度\n\n售价：44银 92铜\n来源：任务「预防措施」（任选）\n由 0 条配方制作，被 0 条配方使用。\n分解（优秀护甲 · 物品等级 36–40，一次出一样）：幻象之尘 75% ×1–2、强效秘法精华 20% ×1–2、大块闪光碎片 5% ×1\n分解约值（PvP · 部落，2026-11-24）：18银 5铜\n分解约值（普通 · 部落，2026-11-24）：27银 21铜\n分解约值（普通 · 联盟，2026-11-24）：19银 52铜\n分解约值（PvP · 联盟，2026-11-21）：19银 78铜\n分解约值（角色扮演 · 联盟，2026-11-19）：51银 93铜",
+    "matched_by": "id"
+  }
+}
