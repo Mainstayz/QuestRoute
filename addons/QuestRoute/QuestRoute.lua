@@ -117,6 +117,7 @@ function ns.StartRoute()
     RenderTaskNameplates()
     RenderRouteMaps()
     RenderMinimapRoute()
+    if ns.GearSheet then ns.GearSheet.Attach() end
 end
 
 SLASH_QUESTROUTEAPI1 = "/questrouteapi"
@@ -259,6 +260,7 @@ WB:Expose("get_gear_candidates", ns.GetGearCandidates,
     .. "没有现装时只称候选；现装不在数据集里不比较。衬衣和战袍不参与。数据覆盖和来源限制见 GEAR.md。")
 
 function ns.OnUnload()
+    if ns.GearSheet then ns.GearSheet.Shutdown() end
     HideTaskMarkers()
     if ns.settingsUI and ns.settingsUI.owner == ns then
         ns.settingsUI.applyElite, ns.settingsUI.applySwitchNotice, ns.settingsUI.applyNameplates, ns.settingsUI.applyMonsterLevel = nil, nil, nil, nil

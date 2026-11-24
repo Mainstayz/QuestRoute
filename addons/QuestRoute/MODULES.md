@@ -26,7 +26,8 @@
 | `WorldMap.lua` | 大地图/战场地图图层、矩形裁剪 | `ns.WorldMap` |
 | `Minimap.lua` | 小地图朝向、圆形裁剪和视野外下一步指示 | `ns.Minimap` |
 | `GearData.lua` | 生成的战士候选目录，只含任务奖励和已关联副本的掉落 | `ns.GearCatalog` |
-| `Gear.lua` | 等级、职业、来源和槽位约束，以及仅用于战士防护的生存启发式 | `ns.Gear`、`ns.GetGearCandidates` |
+| `Gear.lua` | 等级、职业、来源和槽位约束；战士防护按练级属性计分 | `ns.Gear`、`ns.GetGearCandidates` |
+| `GearSheet.lua` | 角色页打开时，在面板旁显示当前槽位的前三名 | `ns.GearSheet` |
 | `QuestRoute.lua` | 事件/计时驱动、命令、桥接入口、登录/热加载生命周期 | `ns.StartRoute`、`ns.OnUnload`、`ns.OnReload` |
 
 规划依赖任务数据、目标解析、权重、导航、热点和 NPC 用途索引；绘图消费同一份路线快照。地图共用图元不依赖具体地图模块，大地图与小地图各自负责几何裁剪。所有初始化依赖都排在使用者之前。

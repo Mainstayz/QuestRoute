@@ -138,9 +138,16 @@ check(has(offhand, 2) and not has(offhand, 3) and not has(offhand, 5) and not ha
 check(has(offhand, 4).appearanceSourceType == "世界掉落" and has(offhand, 4).sources[1].instanceId == 7, "dungeon drop labeled world drop is kept")
 check(has(offhand, 4).conditions.accessComplete == false and has(offhand, 4).sources[1].suggestedGroup[1] == 50, "suggested difficulty and keys do not block")
 local better = has(offhand, 2)
-check(better.unquantified[1]:find("特效", 1, true) and better.unquantified[2]:find("套装", 1, true), "set and proc stay outside the score")
-local expected = 100 * 0.02 + 20 * 2
-check(math.abs(better.score - expected) < 1e-6, "score uses only configured weights")
+local proc, setBonus, armorLeftOut = false, false, false
+for _, line in ipairs(better.unquantified) do
+    local text = tostring(line)
+    if text:find("特效", 1, true) then proc = true end
+    if text:find("套装", 1, true) then setBonus = true end
+    if text:find("护甲", 1, true) and text:find("练级不计", 1, true) then armorLeftOut = true end
+end
+check(proc and setBonus and armorLeftOut, "set, proc and armor stay outside the leveling score")
+local expected = 20 * 4
+check(math.abs(better.score - expected) < 1e-6, "default score is stamina at 4, not armor")
 check(better.conditions.weaponSkill == "not_in_dataset" and better.conditions.questState == "not_checked" and better.conditions.obtainable == "not_confirmed", "unknown conditions stay unknown")
 check(slot(result, "head").emptyReason == "no_allowed_source", "high dungeon entry is an explicit empty reason")
 check(not has(slot(result, "mainhand"), 7) and has(slot(result, "mainhand"), 8).wearable == "estimated", "req estimate is not treated as level zero")
@@ -168,7 +175,11 @@ check(slot(unknown, "offhand").current.known == false and slot(unknown, "offhand
 local shirt = run({ gear = { shirt = 1, tabard = 2, offhand = 2 } })
 check(#shirt.ignoredNonCombat == 2 and slot(shirt, "offhand").emptyReason == "no_upgrade", "shirt and tabard are ignored")
 local ranged = has(slot(result, "ranged"), 18)
-check(ranged.score == 1 * 0.3 and ranged.unquantified[1]:find("武器伤害", 1, true), "ranged damage is not scored")
+local rangedDamage = false
+for _, line in ipairs(ranged.unquantified) do
+    if tostring(line):find("武器伤害", 1, true) then rangedDamage = true end
+end
+check(ranged.score == 3 and rangedDamage, "agility scores at 3 and ranged damage stays out")
 local heavy = run({ weights = { armor = 1 } })
 check(slot(heavy, "offhand").highlight.id == 1 and slot(result, "offhand").highlight.id == 2, "weights are configurable and the default is stamina")
 local empty = run(nil, { meta = { complete = false, slots = {} }, items = {} })

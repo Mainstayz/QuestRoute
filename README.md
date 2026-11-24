@@ -63,7 +63,7 @@
 
 ## 开发与文档
 
-当前 `apiRevision=17`、`schemaVersion=1`，源码按职责拆为 20 个 Lua 文件。仓库版本的验证与安装状态统一见[开发进度](开发进度.md)，尚未完成的实机验收见[待办事项](待办事项.md)。装备候选的取数和评分见[GEAR.md](addons/QuestRoute/GEAR.md)。
+当前 `apiRevision=17`、`schemaVersion=1`，源码按职责拆为 21 个 Lua 文件。仓库版本的验证与安装状态统一见[开发进度](开发进度.md)，尚未完成的实机验收见[待办事项](待办事项.md)。装备候选的取数和评分见[GEAR.md](addons/QuestRoute/GEAR.md)。
 
 | 文档 | 用途 |
 | --- | --- |

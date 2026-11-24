@@ -1,4 +1,4 @@
--- 升级阶段的战斗装备候选。数据来自生成的 GearCatalog，评分只在战士防护上使用。
+-- 升级阶段的战斗装备候选。战士防护按练级属性计分，不用团本生存模型。
 local _, ns = ...
 
 local SLOTS = {
@@ -33,11 +33,12 @@ local STAT_LABEL = {
     intellect = "智力", spirit = "精神",
 }
 
--- 40 级防护的默认倾向：先生存，力量和攻强只表示仇恨。不是模拟最优。
+-- 练级权重。没点名的护甲、防御、格挡值、攻击强度留着以便覆盖，默认不计。武器每秒伤害只加在主手和双手上。
 local DEFAULT_WEIGHTS = {
-    stamina = 2, armor = 0.02, defense = 1.5, dodge = 1.2, parry = 1.2,
-    block = 1, blockValue = 0.05, strength = 0.4, attackPower = 0.15,
-    agility = 0.3, crit = 0.2, hit = 0.15, weaponDps = 1.5,
+    strength = 5, hit = 5, crit = 4, stamina = 4, agility = 3,
+    dodge = 2, parry = 2, block = 2,
+    attackPower = 0, armor = 0, defense = 0, blockValue = 0,
+    weaponDps = 1.5,
 }
 
 local NON_COMBAT = { shirt = true, tabard = true, ["衬衣"] = true, ["战袍"] = true }
@@ -175,26 +176,31 @@ local function UsableSources(item, query)
     return kept, rejected
 end
 
+local function Counts(weight)
+    return type(weight) == "number" and weight ~= 0
+end
+
 local function Score(item, weights)
     local terms, unquantified, total = {}, {}, 0
     local stats = item.stats or {}
     for _, key in ipairs(ORDER) do
-        if key ~= "weaponDps" and stats[key] ~= nil and weights[key] ~= nil then
+        if key ~= "weaponDps" and stats[key] ~= nil and Counts(weights[key]) then
             local points = stats[key] * weights[key]
             total = total + points
             table.insert(terms, { stat = key, label = STAT_LABEL[key], value = stats[key], weight = weights[key], points = points })
         end
     end
     for key, value in pairs(stats) do
-        if not weights[key] then
-            table.insert(unquantified, (STAT_LABEL[key] or key) .. " " .. tostring(value) .. " 没有防护权重，未计入")
+        if not Counts(weights[key]) then
+            local reason = weights[key] == 0 and "练级不计" or "未计入"
+            table.insert(unquantified, (STAT_LABEL[key] or key) .. " " .. tostring(value) .. " " .. reason)
         end
     end
     for _, row in ipairs(item.unmappedStats or {}) do
         table.insert(unquantified, tostring(row.stat) .. " 未映射，未计入")
     end
     if item.weapon and item.weapon.dps then
-        if item.hands == 1 or item.hands == 2 then
+        if (item.hands == 1 or item.hands == 2) and Counts(weights.weaponDps) then
             local points = item.weapon.dps * weights.weaponDps
             total = total + points
             table.insert(terms, { stat = "weaponDps", label = STAT_LABEL.weaponDps, value = item.weapon.dps, weight = weights.weaponDps, points = points })
@@ -215,7 +221,7 @@ local function Explain(terms, unquantified, scored)
     for _, term in ipairs(terms) do
         table.insert(parts, string.format("%s%g×%g", term.label, term.value, term.weight))
     end
-    local text = "生存启发式：" .. (#parts > 0 and table.concat(parts, " + ") or "没有可计属性")
+    local text = "练级属性：" .. (#parts > 0 and table.concat(parts, " + ") or "没有可计属性")
     if #unquantified > 0 then
         text = text .. "。" .. table.concat(unquantified, "；")
     else
@@ -503,9 +509,9 @@ function Gear.Recommend(args, catalog)
     local profile
     if query.mode == "protection" then
         profile = {
-            id = "warrior-protection", label = "战士·防护", bias = "survival", scored = true, optimum = false,
+            id = "warrior-protection", label = "战士·防护", bias = "leveling", scored = true, optimum = false,
             loadout = "1h_shield", weights = query.weights, questLevelWindow = query.window,
-            weightNote = "默认偏生存：耐力高于护甲和防御，力量与攻强只作仇恨。武器伤害只计主手。特效和套装不计入。不是 60 级模拟，也不是绝对最优。",
+            weightNote = "练级：力量和命中 5，爆击和耐力 4，敏捷 3，躲闪、招架、格挡 2。护甲、防御、格挡值和攻击强度默认不计。主手和双手另计武器每秒伤害。不是 60 级团本模拟，也不是绝对最优。",
         }
     else
         profile = {
@@ -527,7 +533,7 @@ function Gear.Recommend(args, catalog)
             mainhand = mainhand and mainhand.highlight and mainhand.highlight.id or nil,
             offhand = offhand and offhand.highlight and offhand.highlight.id or nil,
             provenUpgrade = false,
-            note = "主手和盾的分数相加只用于这一套防护启发式。双手武器会同时占两个槽，不能拿单手单独说成提升。",
+            note = "主手和盾的分数相加只用于这一套练级计分。双手武器会同时占两个槽，不能拿单手单独说成提升。",
         }
         if mainhand and mainhand.highlight and mainhand.highlight.score and offhand and offhand.highlight and offhand.highlight.score then
             pair.score = mainhand.highlight.score + offhand.highlight.score

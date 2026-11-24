@@ -26,4 +26,5 @@ WorldMap.lua
 Minimap.lua
 GearData.lua
 Gear.lua
+GearSheet.lua
 QuestRoute.lua
