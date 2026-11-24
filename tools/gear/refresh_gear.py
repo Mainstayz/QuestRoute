@@ -330,6 +330,52 @@ def instance_from_npc(record: dict):
     }
 
 
+def quest_context(quest: dict | None) -> dict:
+    if not quest:
+        return {
+            "zone": None,
+            "zoneStatus": "unknown",
+            "chainKind": "unknown",
+            "chainPosition": None,
+            "chainLength": None,
+            "previousName": None,
+        }
+    zone = quest.get("zone") if isinstance(quest.get("zone"), str) and quest.get("zone") else None
+    zone_status = "known"
+    if not zone:
+        temporary = quest.get("temporary_zone")
+        if isinstance(temporary, str) and temporary:
+            zone, zone_status = temporary, "temporary"
+        else:
+            zone_status = "unknown"
+    chain = quest.get("chain") if isinstance(quest.get("chain"), dict) else None
+    previous = quest.get("previous_quests") if isinstance(quest.get("previous_quests"), list) else None
+    previous_name = None
+    if previous and isinstance(previous[0], dict) and isinstance(previous[0].get("name"), str):
+        previous_name = previous[0]["name"]
+    position = chain.get("position") if chain else None
+    length = chain.get("length") if chain else None
+    has_length = isinstance(position, int) and isinstance(length, int) and length > 1
+    if has_length or previous:
+        kind = "chain"
+        if not has_length:
+            position, length = None, None
+    elif previous == []:
+        kind = "standalone"
+        position, length = None, None
+    else:
+        kind = "unknown"
+        position, length = None, None
+    return {
+        "zone": zone,
+        "zoneStatus": zone_status,
+        "chainKind": kind,
+        "chainPosition": position,
+        "chainLength": length,
+        "previousName": previous_name,
+    }
+
+
 def attach_sources(item: dict, quests: dict, instances: dict, npcs: dict) -> list[str]:
     detail = item.pop("_detail")
     reasons = []
@@ -344,6 +390,7 @@ def attach_sources(item: dict, quests: dict, instances: dict, npcs: dict) -> lis
             if min_status == "unknown":
                 min_level, min_status = level_status(quest.get("temporary_min_level"), temporary=True)
         faction, faction_status = side_of(reward, quest)
+        place = quest_context(quest)
         item["sources"].append(
             {
                 "kind": "quest",
@@ -362,6 +409,12 @@ def attach_sources(item: dict, quests: dict, instances: dict, npcs: dict) -> lis
                 "prerequisites": prerequisite_ids(quest),
                 "questState": "not_checked",
                 "profession": profession_category(quest),
+                "zone": place["zone"],
+                "zoneStatus": place["zoneStatus"],
+                "chainKind": place["chainKind"],
+                "chainPosition": place["chainPosition"],
+                "chainLength": place["chainLength"],
+                "previousName": place["previousName"],
             }
         )
     drops = ((detail.get("temporary_sources") or {}).get("drops")) or []

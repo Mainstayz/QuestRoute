@@ -21,6 +21,9 @@ ns.GearCatalog = {
       ["slot"] = "trinket",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 5,
+          ["chainPosition"] = 5,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 40,
@@ -32,6 +35,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "琥珀酒",
           ["profession"] = nil,
           ["questId"] = 53,
           ["questLevel"] = 44,
@@ -41,7 +45,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/53"
+          ["url"] = "https://wuxianwow.com/quest/53",
+          ["zone"] = "西部荒野",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -187,6 +193,9 @@ ns.GearCatalog = {
       ["slot"] = "waist",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 22,
@@ -196,6 +205,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 378,
           ["questLevel"] = 27,
@@ -205,7 +215,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/378"
+          ["url"] = "https://wuxianwow.com/quest/378",
+          ["zone"] = "监狱",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -237,6 +249,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -248,6 +263,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
@@ -257,9 +273,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1101"
+          ["url"] = "https://wuxianwow.com/quest/1101",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -269,6 +290,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
@@ -278,7 +300,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1102"
+          ["url"] = "https://wuxianwow.com/quest/1102",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -1031,6 +1055,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -1042,6 +1069,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
@@ -1051,9 +1079,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1101"
+          ["url"] = "https://wuxianwow.com/quest/1101",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -1063,6 +1096,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
@@ -1072,7 +1106,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1102"
+          ["url"] = "https://wuxianwow.com/quest/1102",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -1106,6 +1142,9 @@ ns.GearCatalog = {
       ["slot"] = "waist",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -1117,6 +1156,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
@@ -1126,9 +1166,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1101"
+          ["url"] = "https://wuxianwow.com/quest/1101",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -1138,6 +1183,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
@@ -1147,7 +1193,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1102"
+          ["url"] = "https://wuxianwow.com/quest/1102",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -1184,6 +1232,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 33,
@@ -1193,6 +1244,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1048,
           ["questLevel"] = 42,
@@ -1202,7 +1254,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1048"
+          ["url"] = "https://wuxianwow.com/quest/1048",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -1239,6 +1293,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 34,
@@ -1248,6 +1305,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1053,
           ["questLevel"] = 40,
@@ -1257,7 +1315,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1053"
+          ["url"] = "https://wuxianwow.com/quest/1053",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -1295,6 +1355,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 34,
@@ -1304,6 +1367,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1053,
           ["questLevel"] = 40,
@@ -1313,7 +1377,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1053"
+          ["url"] = "https://wuxianwow.com/quest/1053",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
@@ -1346,6 +1412,9 @@ ns.GearCatalog = {
       ["slot"] = "back",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 37,
@@ -1357,6 +1426,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "真言药水",
           ["profession"] = nil,
           ["questId"] = 1383,
           ["questLevel"] = 42,
@@ -1366,7 +1436,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1383"
+          ["url"] = "https://wuxianwow.com/quest/1383",
+          ["zone"] = "暮色森林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -2410,6 +2482,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 28,
@@ -2419,6 +2494,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1050,
           ["questLevel"] = 38,
@@ -2428,7 +2504,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1050"
+          ["url"] = "https://wuxianwow.com/quest/1050",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -2461,6 +2539,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 28,
@@ -2470,6 +2551,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1049,
           ["questLevel"] = 38,
@@ -2479,7 +2561,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1049"
+          ["url"] = "https://wuxianwow.com/quest/1049",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -2817,6 +2901,9 @@ ns.GearCatalog = {
       ["slot"] = "trinket",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 40,
@@ -2826,6 +2913,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = "锻造",
           ["questId"] = 2765,
           ["questLevel"] = 45,
@@ -2835,7 +2923,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2765"
+          ["url"] = "https://wuxianwow.com/quest/2765",
+          ["zone"] = "锻造",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
@@ -4716,6 +4806,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 28,
@@ -4725,6 +4818,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2948,
           ["questLevel"] = 35,
@@ -4734,7 +4828,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2948"
+          ["url"] = "https://wuxianwow.com/quest/2948",
+          ["zone"] = "铁炉堡",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -4765,6 +4861,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 28,
@@ -4776,6 +4875,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "戒指归来",
           ["profession"] = nil,
           ["questId"] = 2950,
           ["questLevel"] = 35,
@@ -4785,7 +4885,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2950"
+          ["url"] = "https://wuxianwow.com/quest/2950",
+          ["zone"] = "奥格瑞玛",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -4816,6 +4918,9 @@ ns.GearCatalog = {
       ["slot"] = "chest",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4825,6 +4930,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2841,
           ["questLevel"] = 35,
@@ -4834,9 +4940,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2841"
+          ["url"] = "https://wuxianwow.com/quest/2841",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4846,6 +4957,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2929,
           ["questLevel"] = 35,
@@ -4855,7 +4967,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2929"
+          ["url"] = "https://wuxianwow.com/quest/2929",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -4896,6 +5010,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4905,6 +5022,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2841,
           ["questLevel"] = 35,
@@ -4914,9 +5032,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2841"
+          ["url"] = "https://wuxianwow.com/quest/2841",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4926,6 +5049,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2929,
           ["questLevel"] = 35,
@@ -4935,7 +5059,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2929"
+          ["url"] = "https://wuxianwow.com/quest/2929",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -4968,6 +5094,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4977,6 +5106,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2841,
           ["questLevel"] = 35,
@@ -4986,9 +5116,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2841"
+          ["url"] = "https://wuxianwow.com/quest/2841",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 25,
@@ -4998,6 +5133,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 2929,
           ["questLevel"] = 35,
@@ -5007,7 +5143,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/2929"
+          ["url"] = "https://wuxianwow.com/quest/2929",
+          ["zone"] = "诺莫瑞根",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -5855,6 +5993,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 33,
@@ -5864,6 +6005,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1048,
           ["questLevel"] = 42,
@@ -5873,7 +6015,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1048"
+          ["url"] = "https://wuxianwow.com/quest/1048",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -6669,6 +6813,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 37,
@@ -6678,6 +6825,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3341,
           ["questLevel"] = 42,
@@ -6687,9 +6835,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3341"
+          ["url"] = "https://wuxianwow.com/quest/3341",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 39,
@@ -6699,6 +6852,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3636,
           ["questLevel"] = 42,
@@ -6708,7 +6862,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3636"
+          ["url"] = "https://wuxianwow.com/quest/3636",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -6743,6 +6899,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 37,
@@ -6752,6 +6911,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3341,
           ["questLevel"] = 42,
@@ -6761,9 +6921,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3341"
+          ["url"] = "https://wuxianwow.com/quest/3341",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 39,
@@ -6773,6 +6938,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3636,
           ["questLevel"] = 42,
@@ -6782,7 +6948,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3636"
+          ["url"] = "https://wuxianwow.com/quest/3636",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -6814,6 +6982,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 28,
@@ -6823,6 +6994,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1049,
           ["questLevel"] = 38,
@@ -6832,7 +7004,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1049"
+          ["url"] = "https://wuxianwow.com/quest/1049",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -6873,6 +7047,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -6882,6 +7059,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 7541,
           ["questLevel"] = 40,
@@ -6891,7 +7069,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/7541"
+          ["url"] = "https://wuxianwow.com/quest/7541",
+          ["zone"] = "尘泥沼泽",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7106,6 +7286,9 @@ ns.GearCatalog = {
       ["slot"] = "wrist",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 18,
@@ -7117,6 +7300,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "寻找塞尔瑞德",
           ["profession"] = nil,
           ["questId"] = 1200,
           ["questLevel"] = 27,
@@ -7126,9 +7310,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1200"
+          ["url"] = "https://wuxianwow.com/quest/1200",
+          ["zone"] = "黑暗深渊",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 18,
@@ -7138,6 +7327,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 6561,
           ["questLevel"] = 27,
@@ -7147,7 +7337,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/6561"
+          ["url"] = "https://wuxianwow.com/quest/6561",
+          ["zone"] = "黑暗深渊",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7179,6 +7371,9 @@ ns.GearCatalog = {
       ["slot"] = "chest",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 21,
@@ -7188,6 +7383,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 6922,
           ["questLevel"] = 30,
@@ -7197,7 +7393,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/6922"
+          ["url"] = "https://wuxianwow.com/quest/6922",
+          ["zone"] = "灰谷",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7230,6 +7428,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 37,
@@ -7239,6 +7440,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3341,
           ["questLevel"] = 42,
@@ -7248,9 +7450,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3341"
+          ["url"] = "https://wuxianwow.com/quest/3341",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 39,
@@ -7260,6 +7467,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 3636,
           ["questLevel"] = 42,
@@ -7269,7 +7477,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/3636"
+          ["url"] = "https://wuxianwow.com/quest/3636",
+          ["zone"] = "剃刀高地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7465,6 +7675,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7476,6 +7689,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "四处侦察",
           ["profession"] = nil,
           ["questId"] = 93128,
           ["questLevel"] = 42,
@@ -7485,7 +7699,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93128"
+          ["url"] = "https://wuxianwow.com/quest/93128",
+          ["zone"] = "凄凉之地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7522,6 +7738,9 @@ ns.GearCatalog = {
       ["slot"] = "back",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7531,6 +7750,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 93574,
           ["questLevel"] = 45,
@@ -7540,7 +7760,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93574"
+          ["url"] = "https://wuxianwow.com/quest/93574",
+          ["zone"] = "辛德拉",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7573,6 +7795,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7582,6 +7807,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 93574,
           ["questLevel"] = 45,
@@ -7591,7 +7817,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93574"
+          ["url"] = "https://wuxianwow.com/quest/93574",
+          ["zone"] = "辛德拉",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7624,6 +7852,9 @@ ns.GearCatalog = {
       ["slot"] = "head",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7633,6 +7864,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 93574,
           ["questLevel"] = 45,
@@ -7642,7 +7874,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93574"
+          ["url"] = "https://wuxianwow.com/quest/93574",
+          ["zone"] = "辛德拉",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7675,6 +7909,9 @@ ns.GearCatalog = {
       ["slot"] = "wrist",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7686,6 +7923,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "林中传言",
           ["profession"] = nil,
           ["questId"] = 93404,
           ["questLevel"] = 49,
@@ -7695,7 +7933,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93404"
+          ["url"] = "https://wuxianwow.com/quest/93404",
+          ["zone"] = "玛拉顿",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -7728,6 +7968,9 @@ ns.GearCatalog = {
       ["slot"] = "waist",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -7739,6 +7982,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "林中传言",
           ["profession"] = nil,
           ["questId"] = 93404,
           ["questLevel"] = 49,
@@ -7748,7 +7992,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/93404"
+          ["url"] = "https://wuxianwow.com/quest/93404",
+          ["zone"] = "玛拉顿",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -9231,6 +9477,9 @@ ns.GearCatalog = {
       ["slot"] = "ranged",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -9242,6 +9491,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "亨里格的日记",
           ["profession"] = nil,
           ["questId"] = 1101,
           ["questLevel"] = 34,
@@ -9251,9 +9501,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1101"
+          ["url"] = "https://wuxianwow.com/quest/1101",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 29,
@@ -9263,6 +9518,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 1102,
           ["questLevel"] = 34,
@@ -9272,7 +9528,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/1102"
+          ["url"] = "https://wuxianwow.com/quest/1102",
+          ["zone"] = "剃刀沼泽",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11088,6 +11346,9 @@ ns.GearCatalog = {
       ["slot"] = "hands",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 38,
@@ -11097,6 +11358,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 94927,
           ["questLevel"] = 44,
@@ -11106,7 +11368,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94927"
+          ["url"] = "https://wuxianwow.com/quest/94927",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11142,6 +11406,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 38,
@@ -11151,6 +11418,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 94927,
           ["questLevel"] = 44,
@@ -11160,7 +11428,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94927"
+          ["url"] = "https://wuxianwow.com/quest/94927",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11200,6 +11470,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 38,
@@ -11209,6 +11482,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 94927,
           ["questLevel"] = 44,
@@ -11218,7 +11492,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94927"
+          ["url"] = "https://wuxianwow.com/quest/94927",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11254,6 +11530,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 11,
+          ["chainPosition"] = 11,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 36,
@@ -11265,6 +11544,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "血领主之环",
           ["profession"] = nil,
           ["questId"] = 95063,
           ["questLevel"] = 45,
@@ -11274,7 +11554,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95063"
+          ["url"] = "https://wuxianwow.com/quest/95063",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11310,6 +11592,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 11,
+          ["chainPosition"] = 11,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 36,
@@ -11321,6 +11606,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "血领主之环",
           ["profession"] = nil,
           ["questId"] = 95063,
           ["questLevel"] = 45,
@@ -11330,7 +11616,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95063"
+          ["url"] = "https://wuxianwow.com/quest/95063",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11366,6 +11654,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 11,
+          ["chainPosition"] = 11,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 36,
@@ -11377,6 +11668,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "血领主之环",
           ["profession"] = nil,
           ["questId"] = 95063,
           ["questLevel"] = 45,
@@ -11386,7 +11678,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95063"
+          ["url"] = "https://wuxianwow.com/quest/95063",
+          ["zone"] = "河林",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11421,6 +11715,9 @@ ns.GearCatalog = {
       ["slot"] = "trinket",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 23,
@@ -11430,6 +11727,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 96261,
           ["questLevel"] = 30,
@@ -11439,7 +11737,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96261"
+          ["url"] = "https://wuxianwow.com/quest/96261",
+          ["zone"] = "莫高雷",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
@@ -11467,6 +11767,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -11476,6 +11779,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 96800,
           ["questLevel"] = 38,
@@ -11485,7 +11789,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96800"
+          ["url"] = "https://wuxianwow.com/quest/96800",
+          ["zone"] = "血色修道院",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11524,6 +11830,9 @@ ns.GearCatalog = {
       ["slot"] = "back",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 22,
@@ -11535,6 +11844,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "必毁无疑",
           ["profession"] = nil,
           ["questId"] = 78093,
           ["questLevel"] = 30,
@@ -11544,7 +11854,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/78093"
+          ["url"] = "https://wuxianwow.com/quest/78093",
+          ["zone"] = "圣骑士",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11581,6 +11893,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 4,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -11592,6 +11907,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "以圣光的恩泽",
           ["profession"] = nil,
           ["questId"] = 79970,
           ["questLevel"] = 40,
@@ -11601,7 +11917,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/79970"
+          ["url"] = "https://wuxianwow.com/quest/79970",
+          ["zone"] = "圣骑士",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11634,6 +11952,9 @@ ns.GearCatalog = {
       ["slot"] = "ranged",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -11643,6 +11964,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 82208,
           ["questLevel"] = 45,
@@ -11652,7 +11974,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/82208"
+          ["url"] = "https://wuxianwow.com/quest/82208",
+          ["zone"] = "特殊",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11688,6 +12012,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 35,
@@ -11697,6 +12024,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 82208,
           ["questLevel"] = 45,
@@ -11706,7 +12034,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/82208"
+          ["url"] = "https://wuxianwow.com/quest/82208",
+          ["zone"] = "特殊",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11748,6 +12078,9 @@ ns.GearCatalog = {
       ["slot"] = "trinket",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 37,
@@ -11757,6 +12090,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 97821,
           ["questLevel"] = 42,
@@ -11766,7 +12100,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/97821"
+          ["url"] = "https://wuxianwow.com/quest/97821",
+          ["zone"] = "荒芜之地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
@@ -11794,6 +12130,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11803,6 +12142,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95264,
           ["questLevel"] = 53,
@@ -11812,9 +12152,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95264"
+          ["url"] = "https://wuxianwow.com/quest/95264",
+          ["zone"] = "暴风城",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11826,6 +12171,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "给福尔卡的坏消息",
           ["profession"] = nil,
           ["questId"] = 95483,
           ["questLevel"] = 53,
@@ -11835,7 +12181,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95483"
+          ["url"] = "https://wuxianwow.com/quest/95483",
+          ["zone"] = "奥卡兹监狱",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11871,6 +12219,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11880,6 +12231,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95264,
           ["questLevel"] = 53,
@@ -11889,9 +12241,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95264"
+          ["url"] = "https://wuxianwow.com/quest/95264",
+          ["zone"] = "暴风城",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11903,6 +12260,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "给福尔卡的坏消息",
           ["profession"] = nil,
           ["questId"] = 95483,
           ["questLevel"] = 53,
@@ -11912,7 +12270,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95483"
+          ["url"] = "https://wuxianwow.com/quest/95483",
+          ["zone"] = "奥卡兹监狱",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -11946,6 +12306,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11955,6 +12318,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95264,
           ["questLevel"] = 53,
@@ -11964,9 +12328,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95264"
+          ["url"] = "https://wuxianwow.com/quest/95264",
+          ["zone"] = "暴风城",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 48,
@@ -11978,6 +12347,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "给福尔卡的坏消息",
           ["profession"] = nil,
           ["questId"] = 95483,
           ["questLevel"] = 53,
@@ -11987,7 +12357,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95483"
+          ["url"] = "https://wuxianwow.com/quest/95483",
+          ["zone"] = "奥卡兹监狱",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12027,6 +12399,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -12038,6 +12413,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "紧急求援",
           ["profession"] = nil,
           ["questId"] = 92458,
           ["questLevel"] = 33,
@@ -12047,7 +12423,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/92458"
+          ["url"] = "https://wuxianwow.com/quest/92458",
+          ["zone"] = "达拉然城",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12080,6 +12458,9 @@ ns.GearCatalog = {
       ["slot"] = "feet",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -12091,6 +12472,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "紧急求援",
           ["profession"] = nil,
           ["questId"] = 92458,
           ["questLevel"] = 33,
@@ -12100,7 +12482,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/92458"
+          ["url"] = "https://wuxianwow.com/quest/92458",
+          ["zone"] = "达拉然城",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12141,6 +12525,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -12152,6 +12539,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "喋血街头",
           ["profession"] = nil,
           ["questId"] = 96984,
           ["questLevel"] = 33,
@@ -12161,7 +12549,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96984"
+          ["url"] = "https://wuxianwow.com/quest/96984",
+          ["zone"] = "达拉然城",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12194,6 +12584,9 @@ ns.GearCatalog = {
       ["slot"] = "feet",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -12205,6 +12598,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "喋血街头",
           ["profession"] = nil,
           ["questId"] = 96984,
           ["questLevel"] = 33,
@@ -12214,7 +12608,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96984"
+          ["url"] = "https://wuxianwow.com/quest/96984",
+          ["zone"] = "达拉然城",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12254,6 +12650,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 3,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 38,
@@ -12265,6 +12664,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "残留精华",
           ["profession"] = nil,
           ["questId"] = 94998,
           ["questLevel"] = 42,
@@ -12274,7 +12674,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94998"
+          ["url"] = "https://wuxianwow.com/quest/94998",
+          ["zone"] = "克罗多克要塞",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12312,6 +12714,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 40,
@@ -12321,6 +12726,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 94968,
           ["questLevel"] = 45,
@@ -12330,9 +12736,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94968"
+          ["url"] = "https://wuxianwow.com/quest/94968",
+          ["zone"] = "克罗多克要塞",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 40,
@@ -12342,6 +12753,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 94982,
           ["questLevel"] = 45,
@@ -12351,7 +12763,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/94982"
+          ["url"] = "https://wuxianwow.com/quest/94982",
+          ["zone"] = "克罗多克要塞",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12505,6 +12919,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -12514,6 +12931,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95798,
           ["questLevel"] = 40,
@@ -12523,7 +12941,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95798"
+          ["url"] = "https://wuxianwow.com/quest/95798",
+          ["zone"] = "达拉然",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12560,6 +12980,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -12569,6 +12992,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95798,
           ["questLevel"] = 40,
@@ -12578,7 +13002,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95798"
+          ["url"] = "https://wuxianwow.com/quest/95798",
+          ["zone"] = "达拉然",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12611,6 +13037,9 @@ ns.GearCatalog = {
       ["slot"] = "chest",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -12620,6 +13049,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95799,
           ["questLevel"] = 40,
@@ -12629,7 +13059,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95799"
+          ["url"] = "https://wuxianwow.com/quest/95799",
+          ["zone"] = "铁炉堡",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12662,6 +13094,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -12671,6 +13106,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 96078,
           ["questLevel"] = 40,
@@ -12680,7 +13116,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96078"
+          ["url"] = "https://wuxianwow.com/quest/96078",
+          ["zone"] = "荆棘谷",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12717,6 +13155,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12726,6 +13167,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95790,
           ["questLevel"] = 60,
@@ -12735,7 +13177,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95790"
+          ["url"] = "https://wuxianwow.com/quest/95790",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12768,6 +13212,9 @@ ns.GearCatalog = {
       ["slot"] = "legs",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12777,6 +13224,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 97049,
           ["questLevel"] = 60,
@@ -12786,7 +13234,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/97049"
+          ["url"] = "https://wuxianwow.com/quest/97049",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12819,6 +13269,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12828,6 +13281,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95924,
           ["questLevel"] = 60,
@@ -12837,7 +13291,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95924"
+          ["url"] = "https://wuxianwow.com/quest/95924",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12874,6 +13330,9 @@ ns.GearCatalog = {
       ["slot"] = "shoulder",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12883,6 +13342,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95928,
           ["questLevel"] = 60,
@@ -12892,7 +13352,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95928"
+          ["url"] = "https://wuxianwow.com/quest/95928",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12929,6 +13391,9 @@ ns.GearCatalog = {
       ["slot"] = "feet",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12938,6 +13403,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95924,
           ["questLevel"] = 60,
@@ -12947,7 +13413,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95924"
+          ["url"] = "https://wuxianwow.com/quest/95924",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -12981,6 +13449,9 @@ ns.GearCatalog = {
       ["slot"] = "feet",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -12990,6 +13461,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95928,
           ["questLevel"] = 60,
@@ -12999,7 +13471,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95928"
+          ["url"] = "https://wuxianwow.com/quest/95928",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13033,6 +13507,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -13042,6 +13519,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95925,
           ["questLevel"] = 60,
@@ -13051,9 +13529,14 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95925"
+          ["url"] = "https://wuxianwow.com/quest/95925",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -13063,6 +13546,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95926,
           ["questLevel"] = 60,
@@ -13072,7 +13556,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95926"
+          ["url"] = "https://wuxianwow.com/quest/95926",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13109,6 +13595,9 @@ ns.GearCatalog = {
       ["slot"] = "head",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -13118,6 +13607,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95790,
           ["questLevel"] = 60,
@@ -13127,7 +13617,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95790"
+          ["url"] = "https://wuxianwow.com/quest/95790",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13172,6 +13664,9 @@ ns.GearCatalog = {
       ["slot"] = "head",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 55,
@@ -13181,6 +13676,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 97049,
           ["questLevel"] = 60,
@@ -13190,7 +13686,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/97049"
+          ["url"] = "https://wuxianwow.com/quest/97049",
+          ["zone"] = "塑造者之台",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13235,6 +13733,9 @@ ns.GearCatalog = {
       ["slot"] = "offhand",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 5,
+          ["chainPosition"] = 5,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -13246,6 +13747,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "听从我的呼唤",
           ["profession"] = nil,
           ["questId"] = 79442,
           ["questLevel"] = 40,
@@ -13255,9 +13757,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/79442"
+          ["url"] = "https://wuxianwow.com/quest/79442",
+          ["zone"] = "萨满祭司",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 5,
+          ["chainPosition"] = 5,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 30,
@@ -13269,6 +13776,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "听从我的呼唤",
           ["profession"] = nil,
           ["questId"] = 96016,
           ["questLevel"] = 40,
@@ -13278,7 +13786,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/96016"
+          ["url"] = "https://wuxianwow.com/quest/96016",
+          ["zone"] = "萨满祭司",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13317,6 +13827,9 @@ ns.GearCatalog = {
       ["slot"] = "trinket",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -13326,6 +13839,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 95697,
           ["questLevel"] = 31,
@@ -13335,9 +13849,14 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95697"
+          ["url"] = "https://wuxianwow.com/quest/95697",
+          ["zone"] = "挖掘场：湿地",
+          ["zoneStatus"] = "known"
         },
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 2,
+          ["chainPosition"] = 2,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -13349,6 +13868,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "迷失在灌木丛中",
           ["profession"] = nil,
           ["questId"] = 95809,
           ["questLevel"] = 31,
@@ -13358,7 +13878,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/95809"
+          ["url"] = "https://wuxianwow.com/quest/95809",
+          ["zone"] = "挖掘场：湿地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {},
@@ -13386,6 +13908,9 @@ ns.GearCatalog = {
       ["slot"] = "back",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -13397,6 +13922,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "了解现状",
           ["profession"] = nil,
           ["questId"] = 98310,
           ["questLevel"] = 32,
@@ -13406,7 +13932,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/98310"
+          ["url"] = "https://wuxianwow.com/quest/98310",
+          ["zone"] = "湿地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13442,6 +13970,9 @@ ns.GearCatalog = {
       ["slot"] = "neck",
       ["sources"] = {
         {
+          ["chainKind"] = "chain",
+          ["chainLength"] = 4,
+          ["chainPosition"] = 3,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 24,
@@ -13453,6 +13984,7 @@ ns.GearCatalog = {
             },
             ["status"] = "recorded"
           },
+          ["previousName"] = "了解现状",
           ["profession"] = nil,
           ["questId"] = 98310,
           ["questLevel"] = 32,
@@ -13462,7 +13994,9 @@ ns.GearCatalog = {
           ["side"] = "联盟",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/98310"
+          ["url"] = "https://wuxianwow.com/quest/98310",
+          ["zone"] = "湿地",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13492,6 +14026,9 @@ ns.GearCatalog = {
       ["slot"] = "mainhand",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 54,
@@ -13501,6 +14038,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 92446,
           ["questLevel"] = 60,
@@ -13510,7 +14048,9 @@ ns.GearCatalog = {
           ["side"] = "部落",
           ["sideStatus"] = "server",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/92446"
+          ["url"] = "https://wuxianwow.com/quest/92446",
+          ["zone"] = "海加尔山",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -13547,6 +14087,9 @@ ns.GearCatalog = {
       ["slot"] = "finger",
       ["sources"] = {
         {
+          ["chainKind"] = "standalone",
+          ["chainLength"] = nil,
+          ["chainPosition"] = nil,
           ["confidence"] = "server",
           ["kind"] = "quest",
           ["minLevel"] = 20,
@@ -13556,6 +14099,7 @@ ns.GearCatalog = {
             ["ids"] = {},
             ["status"] = "none_recorded"
           },
+          ["previousName"] = nil,
           ["profession"] = nil,
           ["questId"] = 79536,
           ["questLevel"] = 35,
@@ -13565,7 +14109,9 @@ ns.GearCatalog = {
           ["side"] = nil,
           ["sideStatus"] = "unknown",
           ["temporary"] = false,
-          ["url"] = "https://wuxianwow.com/quest/79536"
+          ["url"] = "https://wuxianwow.com/quest/79536",
+          ["zone"] = "特殊",
+          ["zoneStatus"] = "known"
         }
       },
       ["stats"] = {
@@ -15249,7 +15795,7 @@ ns.GearCatalog = {
     ["clientBuild"] = "1.60.1.71037",
     ["complete"] = false,
     ["dataWritten"] = "2026-11-22T23:28:42+11:00",
-    ["fetchedAt"] = "2026-11-24T01:48:30Z",
+    ["fetchedAt"] = "2026-11-24T03:37:43Z",
     ["lastRunNetworkRequests"] = 0,
     ["learnAt"] = {
       ["板甲"] = 40,

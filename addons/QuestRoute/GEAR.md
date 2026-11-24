@@ -78,7 +78,7 @@ local result = WoWBridgeNS.QuestRoute.GetGearCandidates({
 
 ### 来源字段
 
-任务来源有 `questId`、`name`、`url`、`questLevel`、`minLevel`、`side`、`reward`、`prerequisites`、`questState`。等级或阵营缺失时状态是 `unknown`，不会当成 0 级或双方可接。`prerequisites.status=none_recorded` 只表示记录里没写前置。`sideStatus=temporary` 或 `minLevelStatus=temporary` 时，`confidence=temporary`。
+任务来源有 `questId`、`name`、`url`、`questLevel`、`minLevel`、`side`、`reward`、`prerequisites`、`questState`、`zone`、`chainKind`。等级或阵营缺失时状态是 `unknown`，不会当成 0 级或双方可接。`prerequisites.status=none_recorded` 只表示记录里没写前置。`zone` 是任务记录里的区域，没有时 `zoneStatus=unknown`。`chainKind` 为 `standalone`（记录里没有前置）、`chain`（有任务链或前置）或 `unknown`。有步数时带 `chainPosition`、`chainLength` 和 `previousName`。`sideStatus=temporary` 或 `minLevelStatus=temporary` 时，`confidence=temporary`。
 
 掉落来源有 `npc`、`instanceId`、`instanceName`、`instanceUrl`、`dropChancePercent`、`enterLevel`、`suggestedGroup`、`keys`。掉率缺失是 `unknown`，不是 0。`enterLevel` 是副本准入，高于角色才排除。`suggestedGroup` 是集合石建议，不排除。钥匙单独列出，不排除。`temporary=true`，并带 `disclaimer`。
 
@@ -166,6 +166,6 @@ python tests/verify_associations.py
 
 ## 角色面板
 
-打开角色信息（装备那一页）时，面板右侧列出当前部位的前三名。点装备槽切换部位，也可以点「下一部位」。每一名下面写任务可接等级或副本准入；第一名门槛不合适就看第二、第三名。点某一名会在聊天框打出名称和门槛。
+打开角色装备页时，名单贴在角色窗口右侧。每一名四行：名字和分数、属性、地点、补充。掉落写副本和首领，临时来源再标「临时」，不写副本准入。没有首领时写「首领未记录」。任务写名称和区域，再写独立或任务链第几步、可接等级。点某一名，聊天框出现可点击的物品链接和完整来源。点装备槽或「下一部位」换槽。
 
 战士会读当前专精。读不到时先按防护，点专精那一行可以改成武器或狂暴。防护按上面的练级属性排前三名。武器和狂暴没有这套分数，只按装等列候选。其他职业没有这套权重，面板只说明原因。衬衣和战袍没有排行。

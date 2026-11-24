@@ -277,6 +277,15 @@ check(sawHorde and not sawAlliance, "horde sword keeps only the horde quest")
 check(find(horde, 6802) and not find(alliance, 6802), "omen sword stays horde-only")
 check(not find(alliance, 279831) and not find(alliance, 279908) and not find(horde, 279831) and not find(horde, 279908), "low wear requirements do not bypass high quest levels")
 check(alliance.profile.id == "warrior-protection" and alliance.profile.optimum == false, "real example does not claim an optimum")
+local sawPlace = false
+for _, item in ipairs(ns.GearCatalog.items) do
+    for _, source in ipairs(item.sources or {}) do
+        if source.kind == "quest" and source.zone and (source.chainKind == "standalone" or source.chainKind == "chain") then
+            sawPlace = true
+        end
+    end
+end
+check(sawPlace, "quest sources keep the pickup zone and whether they are a chain")
 for _, row in ipairs(alliance.slots) do
     check(row.coverage.complete == false, "slot coverage stays incomplete: "..row.slot)
 end
@@ -314,6 +323,36 @@ def load(runtime, *names):
     return namespace
 
 
+SHEET = r'''
+local ns = ...
+local checks = 0
+local function check(ok, message)
+    assert(ok, message)
+    checks = checks + 1
+end
+local chain = ns.GearSheet.GateText({ sources = {{
+    kind = "quest", name = "琥珀酒", zone = "西部荒野", zoneStatus = "known",
+    chainKind = "chain", chainPosition = 2, chainLength = 3, previousName = "雷酒", minLevel = 40,
+}}})
+check(chain:find("琥珀酒", 1, true) and chain:find("西部荒野接", 1, true) and chain:find("任务链 第2/3步", 1, true) and chain:find("前置 雷酒", 1, true) and chain:find("可接 40", 1, true), "quest chain names the map and the previous quest")
+local alone = ns.GearSheet.GateText({ sources = {{ kind = "quest", name = "侏儒的手艺", zone = "铁炉堡", chainKind = "standalone", minLevel = 28 }}})
+check(alone:find("独立任务", 1, true) and alone:find("铁炉堡接", 1, true), "a quest with no previous step stays standalone")
+local unknown = ns.GearSheet.GateText({ sources = {{ kind = "quest", name = "未知", chainKind = "unknown" }}})
+check(unknown:find("接取地图未知", 1, true) and unknown:find("是否任务链未知", 1, true) and unknown:find("可接等级未知", 1, true), "missing quest place is not called standalone")
+local drop = ns.GearSheet.GateText({ sources = {{ kind = "drop", instanceName = "血色修道院", npc = "莫格莱尼", enterLevel = 39, temporary = true }}})
+check(drop == "血色修道院 · 莫格莱尼（临时）" and not drop:find("准入", 1, true), "dungeon line names the boss and skips the enter level")
+local missing = ns.GearSheet.GateText({ sources = {{ kind = "drop", instanceName = "血色修道院", temporary = true }}})
+check(missing:find("掉落者未记录", 1, true) and not missing:find("准入", 1, true), "a drop without a boss does not invent one or an enter level")
+local stats = ns.GearSheet.StatText({ stats = { strength = 11, stamina = 6, armor = 1287, intellect = 3 }, hands = 1, weapon = { dps = 12.5 } })
+check(stats:find("力量11", 1, true) and stats:find("耐力6", 1, true) and stats:find("护甲1287", 1, true) and stats:find("智力3", 1, true) and stats:find("每秒伤害12.5", 1, true), "the row lists the item stats")
+local where, gate = ns.GearSheet.GateLines({ sources = {{ kind = "drop", instanceName = "血色修道院", npc = "莫格莱尼", enterLevel = 39, temporary = true }}})
+check(where == "血色修道院 · 莫格莱尼" and gate == "临时" and not where:find("准入", 1, true), "panel dungeon line names the place and not the enter level")
+local questWhere, questGate = ns.GearSheet.GateLines({ sources = {{ kind = "quest", name = "琥珀酒", zone = "西部荒野", chainKind = "chain", chainPosition = 2, chainLength = 3, minLevel = 40 }}})
+check(questWhere == "琥珀酒 · 西部荒野" and questGate == "链2/3 · 可接40", "panel quest line stays on two short rows")
+return checks
+'''
+
+
 def main() -> None:
     runtime = LuaRuntime(unpack_returned_tuples=True)
     namespace = load(runtime, "Gear.lua")
@@ -327,7 +366,12 @@ def main() -> None:
         loaded,
     )
     EXAMPLE.write_text(json.dumps(to_py(preview), ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"PASS: {fixture_checks + real_checks} gear checks; example={EXAMPLE}")
+    sheet = LuaRuntime(unpack_returned_tuples=True)
+    sheet.execute(
+        "function CreateFrame() local f = {} function f:RegisterEvent() end function f:SetScript() end return f end"
+    )
+    sheet_checks = sheet.execute(SHEET, load(sheet, "GearSheet.lua"))
+    print(f"PASS: {fixture_checks + real_checks + sheet_checks} gear checks; example={EXAMPLE}")
 
 
 if __name__ == "__main__":

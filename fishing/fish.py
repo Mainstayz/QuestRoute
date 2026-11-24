@@ -2,7 +2,7 @@
 
 监听默认播放设备上的声音。启动时视为未钓鱼，立刻把游戏切到前台，
 用真实按键按下 1，再回到 RETURN_EXE 指定的程序。抛竿 5 秒后才把水花当成咬钩，
-按 F 收竿，等 1 到 2 秒再按 1。连续 60 秒没有咬钩水花，就再按一次 1。
+按 F 收竿，等 1 到 2 秒再按 1。连续 30 秒没有咬钩水花，就再按一次 1。
 
     python fish.py
     python fish.py --monitor
@@ -29,8 +29,8 @@ try:
 except ImportError:
     sys.exit("缺少 pyaudiowpatch。请在本目录执行: python -m pip install -r requirements.txt")
 
-# 连续这么久没有水花，就当作初始状态并重新抛竿。
-SILENCE_SEC = 60
+# 超过这么久还没有咬钩，多半是漏听了，重新抛竿。
+SILENCE_SEC = 30
 # 抛竿之后这么多秒，才开始把水花当成咬钩。
 IGNORE_SEC = 5.0
 RECAST_MIN = 1.0
@@ -259,7 +259,7 @@ def self_check():
     assert session.update(1, 0.4) is None
     assert session.update(1.1, 0) == "heard"
     assert session.mode == "arming"
-    assert session.update(59, 0) is None  # 距 1.1 的水花还不到 60 秒
+    assert session.update(1.1 + SILENCE_SEC - 1, 0) is None
     cast_at = 1.1 + SILENCE_SEC
     assert session.update(cast_at, 0) == "cast"
     assert session.mode == "fishing"
@@ -580,7 +580,7 @@ def act(session, items, action, dry):
         print(f"{pause:.1f} 秒后重新抛竿")
         if not wait(pause):
             return False
-        text = "60 秒没有水花，重新抛竿" if action == "cast" else "重试抛竿"
+        text = f"{SILENCE_SEC:.0f} 秒没有水花，重新抛竿" if action == "cast" else "重试抛竿"
         throw_line(session, items, dry, text)
         return True
     if action == "loot":
@@ -664,7 +664,7 @@ def run(threshold, dry):
         else:
             print(
                 f"启动即视为未钓鱼，立刻把游戏切到前台按 1，然后回到 {RETURN_EXE}。抛竿 {IGNORE_SEC:.0f} 秒后才认咬钩，"
-                "然后按 F，1 到 2 秒后再按 1。60 秒没有水花会再按 1。Ctrl+F12 结束。"
+                f"然后按 F，1 到 2 秒后再按 1。{SILENCE_SEC:.0f} 秒没有水花会再按 1。Ctrl+F12 结束。"
             )
             found = find_wow()
             if found:

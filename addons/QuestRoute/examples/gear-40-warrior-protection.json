@@ -7,7 +7,7 @@
     "legal": "https://wuxianwow.com/legal",
     "url": "https://wuxianwow.com",
     "clientBuild": "1.60.1.71037",
-    "fetchedAt": "2026-11-24T01:48:30Z"
+    "fetchedAt": "2026-11-24T03:37:43Z"
   },
   "claim": "启发式候选，不是模拟绝对最优。",
   "slots": [
@@ -804,21 +804,24 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/1050",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "血色修道院",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/1050",
+              "questState": "not_checked",
               "questLevel": 38,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 1050,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 28,
               "name": "泰坦神话",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "固定"
@@ -966,22 +969,28 @@
         "reqLevelStatus": "estimated",
         "sources": [
           {
-            "url": "https://wuxianwow.com/quest/79970",
             "temporary": false,
             "questLevelStatus": "known",
+            "zone": "圣骑士",
+            "confidence": "server",
+            "chainKind": "chain",
+            "minLevelStatus": "known",
+            "previousName": "以圣光的恩泽",
+            "zoneStatus": "known",
+            "url": "https://wuxianwow.com/quest/79970",
+            "questState": "not_checked",
             "questLevel": 40,
+            "chainPosition": 4,
+            "chainLength": 4,
+            "questId": 79970,
             "prerequisites": {
               "status": "recorded",
               "ids": [
                 79963
               ]
             },
-            "confidence": "server",
-            "questId": 79970,
-            "questState": "not_checked",
-            "minLevelStatus": "known",
-            "side": "联盟",
             "minLevel": 35,
+            "side": "联盟",
             "name": "证道者艾奥纳斯",
             "kind": "quest",
             "sideStatus": "server",
@@ -1045,22 +1054,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/79970",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "圣骑士",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "以圣光的恩泽",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/79970",
+              "questState": "not_checked",
               "questLevel": 40,
+              "chainPosition": 4,
+              "chainLength": 4,
+              "questId": 79970,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   79963
                 ]
               },
-              "confidence": "server",
-              "questId": 79970,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 35,
+              "side": "联盟",
               "name": "证道者艾奥纳斯",
               "kind": "quest",
               "sideStatus": "server",
@@ -1447,18 +1462,21 @@
         "reqLevelStatus": "known",
         "sources": [
           {
-            "url": "https://wuxianwow.com/quest/93574",
             "temporary": false,
             "questLevelStatus": "known",
+            "zone": "辛德拉",
+            "confidence": "server",
+            "chainKind": "standalone",
+            "minLevelStatus": "known",
+            "zoneStatus": "known",
+            "url": "https://wuxianwow.com/quest/93574",
+            "questState": "not_checked",
             "questLevel": 45,
             "prerequisites": {
               "status": "none_recorded",
               "ids": {}
             },
-            "confidence": "server",
             "questId": 93574,
-            "questState": "not_checked",
-            "minLevelStatus": "known",
             "minLevel": 35,
             "name": "食尸者的甲壳",
             "kind": "quest",
@@ -1523,18 +1541,21 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/93574",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "辛德拉",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/93574",
+              "questState": "not_checked",
               "questLevel": 45,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 93574,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
               "minLevel": 35,
               "name": "食尸者的甲壳",
               "kind": "quest",
@@ -1662,22 +1683,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/78093",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "圣骑士",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "必毁无疑",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/78093",
+              "questState": "not_checked",
               "questLevel": 30,
+              "chainPosition": 3,
+              "chainLength": 3,
+              "questId": 78093,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   78092
                 ]
               },
-              "confidence": "server",
-              "questId": 78093,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 22,
+              "side": "联盟",
               "name": "向德尔格伦复命",
               "kind": "quest",
               "sideStatus": "server",
@@ -3629,22 +3656,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/1101",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "剃刀沼泽",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "亨里格的日记",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/1101",
+              "questState": "not_checked",
               "questLevel": 34,
+              "chainPosition": 2,
+              "chainLength": 2,
+              "questId": 1101,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   1100
                 ]
               },
-              "confidence": "server",
-              "questId": 1101,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 29,
+              "side": "联盟",
               "name": "卡尔加·刺肋",
               "kind": "quest",
               "sideStatus": "server",
@@ -4185,21 +4218,24 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/2929",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "诺莫瑞根",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/2929",
+              "questState": "not_checked",
               "questLevel": 35,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 2929,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 25,
               "name": "大叛徒",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "任选"
@@ -5113,21 +5149,24 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/2948",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "铁炉堡",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/2948",
+              "questState": "not_checked",
               "questLevel": 35,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 2948,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 28,
               "name": "侏儒的手艺",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "固定"
@@ -5172,21 +5211,24 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/96800",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "血色修道院",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/96800",
+              "questState": "not_checked",
               "questLevel": 38,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 96800,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 30,
               "name": "逾期未付！",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "任选"
@@ -5547,21 +5589,24 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/2948",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "铁炉堡",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/2948",
+              "questState": "not_checked",
               "questLevel": 35,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 2948,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 28,
               "name": "侏儒的手艺",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "固定"
@@ -5606,21 +5651,24 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/96800",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "血色修道院",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/96800",
+              "questState": "not_checked",
               "questLevel": 38,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 96800,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 30,
               "name": "逾期未付！",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "任选"
@@ -5749,22 +5797,28 @@
         "reqLevelStatus": "estimated",
         "sources": [
           {
-            "url": "https://wuxianwow.com/quest/53",
             "temporary": false,
             "questLevelStatus": "known",
+            "zone": "西部荒野",
+            "confidence": "server",
+            "chainKind": "chain",
+            "minLevelStatus": "known",
+            "previousName": "琥珀酒",
+            "zoneStatus": "known",
+            "url": "https://wuxianwow.com/quest/53",
+            "questState": "not_checked",
             "questLevel": 44,
+            "chainPosition": 5,
+            "chainLength": 5,
+            "questId": 53,
             "prerequisites": {
               "status": "recorded",
               "ids": [
                 51
               ]
             },
-            "confidence": "server",
-            "questId": 53,
-            "questState": "not_checked",
-            "minLevelStatus": "known",
-            "side": "联盟",
             "minLevel": 40,
+            "side": "联盟",
             "name": "琥珀酒",
             "kind": "quest",
             "sideStatus": "server",
@@ -5806,22 +5860,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/53",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "西部荒野",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "琥珀酒",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/53",
+              "questState": "not_checked",
               "questLevel": 44,
+              "chainPosition": 5,
+              "chainLength": 5,
+              "questId": 53,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   51
                 ]
               },
-              "confidence": "server",
-              "questId": 53,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 40,
+              "side": "联盟",
               "name": "琥珀酒",
               "kind": "quest",
               "sideStatus": "server",
@@ -5916,18 +5976,21 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/97821",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "荒芜之地",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/97821",
+              "questState": "not_checked",
               "questLevel": 42,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 97821,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
               "minLevel": 37,
               "name": "幻象之镜",
               "kind": "quest",
@@ -6023,22 +6086,28 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/95809",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "挖掘场：湿地",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "迷失在灌木丛中",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/95809",
+              "questState": "not_checked",
               "questLevel": 31,
+              "chainPosition": 2,
+              "chainLength": 2,
+              "questId": 95809,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   95647
                 ]
               },
-              "confidence": "server",
-              "questId": 95809,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 24,
+              "side": "联盟",
               "name": "心之编织",
               "kind": "quest",
               "sideStatus": "server",
@@ -6155,22 +6224,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/53",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "西部荒野",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "琥珀酒",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/53",
+              "questState": "not_checked",
               "questLevel": 44,
+              "chainPosition": 5,
+              "chainLength": 5,
+              "questId": 53,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   51
                 ]
               },
-              "confidence": "server",
-              "questId": 53,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 40,
+              "side": "联盟",
               "name": "琥珀酒",
               "kind": "quest",
               "sideStatus": "server",
@@ -6266,18 +6341,21 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/97821",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "荒芜之地",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/97821",
+              "questState": "not_checked",
               "questLevel": 42,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 97821,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
               "minLevel": 37,
               "name": "幻象之镜",
               "kind": "quest",
@@ -6373,22 +6451,28 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/95809",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "挖掘场：湿地",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "迷失在灌木丛中",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/95809",
+              "questState": "not_checked",
               "questLevel": 31,
+              "chainPosition": 2,
+              "chainLength": 2,
+              "questId": 95809,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   95647
                 ]
               },
-              "confidence": "server",
-              "questId": 95809,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 24,
+              "side": "联盟",
               "name": "心之编织",
               "kind": "quest",
               "sideStatus": "server",
@@ -6633,21 +6717,24 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/94927",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "河林",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/94927",
+              "questState": "not_checked",
               "questLevel": 44,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 94927,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 38,
               "name": "邓斯顿脱身",
+              "side": "联盟",
               "kind": "quest",
               "sideStatus": "server",
               "reward": "任选"
@@ -7201,22 +7288,28 @@
           "reqLevelStatus": "estimated",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/1101",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "剃刀沼泽",
+              "confidence": "server",
+              "chainKind": "chain",
+              "minLevelStatus": "known",
+              "previousName": "亨里格的日记",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/1101",
+              "questState": "not_checked",
               "questLevel": 34,
+              "chainPosition": 2,
+              "chainLength": 2,
+              "questId": 1101,
               "prerequisites": {
                 "status": "recorded",
                 "ids": [
                   1100
                 ]
               },
-              "confidence": "server",
-              "questId": 1101,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
-              "side": "联盟",
               "minLevel": 29,
+              "side": "联盟",
               "name": "卡尔加·刺肋",
               "kind": "quest",
               "sideStatus": "server",
@@ -7639,18 +7732,21 @@
           "reqLevelStatus": "known",
           "sources": [
             {
-              "url": "https://wuxianwow.com/quest/82208",
               "temporary": false,
               "questLevelStatus": "known",
+              "zone": "特殊",
+              "confidence": "server",
+              "chainKind": "standalone",
+              "minLevelStatus": "known",
+              "zoneStatus": "known",
+              "url": "https://wuxianwow.com/quest/82208",
+              "questState": "not_checked",
               "questLevel": 45,
               "prerequisites": {
                 "status": "none_recorded",
                 "ids": {}
               },
-              "confidence": "server",
               "questId": 82208,
-              "questState": "not_checked",
-              "minLevelStatus": "known",
               "minLevel": 35,
               "name": "图书馆良友",
               "kind": "quest",

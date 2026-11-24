@@ -5,7 +5,7 @@
     "legal": "https://wuxianwow.com/legal",
     "clientBuild": "1.60.1.71037",
     "dataWritten": "2026-11-22T23:28:42+11:00",
-    "fetchedAt": "2026-11-24T01:48:30Z",
+    "fetchedAt": "2026-11-24T03:37:43Z",
     "mcp": "https://wuxianwow.com/mcp",
     "requestCount": 486,
     "lastRunNetworkRequests": 0,
@@ -212,7 +212,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "西部荒野",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 5,
+          "chainLength": 5,
+          "previousName": "琥珀酒"
         }
       ]
     },
@@ -378,7 +384,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "监狱",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -435,7 +447,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "亨里格的日记"
         },
         {
           "kind": "quest",
@@ -456,7 +474,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1226,7 +1250,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "亨里格的日记"
         },
         {
           "kind": "quest",
@@ -1247,7 +1277,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1304,7 +1340,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "亨里格的日记"
         },
         {
           "kind": "quest",
@@ -1325,7 +1367,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1380,7 +1428,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1434,7 +1488,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1487,7 +1547,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -1538,7 +1604,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "暮色森林",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "真言药水"
         }
       ]
     },
@@ -2600,7 +2672,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -2651,7 +2729,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -3004,7 +3088,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": "锻造"
+          "profession": "锻造",
+          "zone": "锻造",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -4906,7 +4996,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "铁炉堡",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -4957,7 +5053,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "奥格瑞玛",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "戒指归来"
         }
       ]
     },
@@ -5016,7 +5118,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -5037,7 +5145,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -5088,7 +5202,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -5109,7 +5229,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -5164,7 +5290,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -5185,7 +5317,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "诺莫瑞根",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -6045,7 +6183,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -6863,7 +7007,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -6884,7 +7034,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -6934,7 +7090,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -6955,7 +7117,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7014,7 +7182,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7064,7 +7238,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "尘泥沼泽",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7299,7 +7479,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "黑暗深渊",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "寻找塞尔瑞德"
         },
         {
           "kind": "quest",
@@ -7320,7 +7506,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "黑暗深渊",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7371,7 +7563,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "灰谷",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7424,7 +7622,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -7445,7 +7649,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀高地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7663,7 +7873,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "凄凉之地",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "四处侦察"
         }
       ]
     },
@@ -7714,7 +7930,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "辛德拉",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7765,7 +7987,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "辛德拉",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7816,7 +8044,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "辛德拉",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -7869,7 +8103,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "玛拉顿",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 4,
+          "previousName": "林中传言"
         }
       ]
     },
@@ -7922,7 +8162,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "玛拉顿",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 4,
+          "previousName": "林中传言"
         }
       ]
     },
@@ -9428,7 +9674,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "亨里格的日记"
         },
         {
           "kind": "quest",
@@ -9449,7 +9701,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "剃刀沼泽",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11283,7 +11541,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11341,7 +11605,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11395,7 +11665,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11451,7 +11727,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 11,
+          "chainLength": 11,
+          "previousName": "血领主之环"
         }
       ]
     },
@@ -11507,7 +11789,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 11,
+          "chainLength": 11,
+          "previousName": "血领主之环"
         }
       ]
     },
@@ -11560,7 +11848,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "河林",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 11,
+          "chainLength": 11,
+          "previousName": "血领主之环"
         }
       ]
     },
@@ -11608,7 +11902,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "莫高雷",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11665,7 +11965,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "血色修道院",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11722,7 +12028,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "圣骑士",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 3,
+          "previousName": "必毁无疑"
         }
       ]
     },
@@ -11775,7 +12087,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "圣骑士",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 4,
+          "chainLength": 4,
+          "previousName": "以圣光的恩泽"
         }
       ]
     },
@@ -11829,7 +12147,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "特殊",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11887,7 +12211,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "特殊",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11935,7 +12265,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "荒芜之地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -11989,7 +12325,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "暴风城",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -12012,7 +12354,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "奥卡兹监狱",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 3,
+          "previousName": "给福尔卡的坏消息"
         }
       ]
     },
@@ -12064,7 +12412,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "暴风城",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -12087,7 +12441,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "奥卡兹监狱",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 3,
+          "previousName": "给福尔卡的坏消息"
         }
       ]
     },
@@ -12145,7 +12505,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "暴风城",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -12168,7 +12534,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "奥卡兹监狱",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 3,
+          "previousName": "给福尔卡的坏消息"
         }
       ]
     },
@@ -12221,7 +12593,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然城",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 3,
+          "previousName": "紧急求援"
         }
       ]
     },
@@ -12282,7 +12660,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然城",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 3,
+          "previousName": "紧急求援"
         }
       ]
     },
@@ -12335,7 +12719,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然城",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 3,
+          "previousName": "喋血街头"
         }
       ]
     },
@@ -12395,7 +12785,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然城",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 3,
+          "previousName": "喋血街头"
         }
       ]
     },
@@ -12451,7 +12847,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "克罗多克要塞",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 3,
+          "previousName": "残留精华"
         }
       ]
     },
@@ -12506,7 +12908,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "克罗多克要塞",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -12527,7 +12935,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "克罗多克要塞",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12701,7 +13115,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12752,7 +13172,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "达拉然",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12803,7 +13229,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "铁炉堡",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12858,7 +13290,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "荆棘谷",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12909,7 +13347,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -12960,7 +13404,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13015,7 +13465,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13070,7 +13526,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13122,7 +13584,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13174,7 +13642,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13229,7 +13703,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -13250,7 +13730,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13313,7 +13799,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13376,7 +13868,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "塑造者之台",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13433,7 +13931,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "萨满祭司",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 5,
+          "chainLength": 5,
+          "previousName": "听从我的呼唤"
         },
         {
           "kind": "quest",
@@ -13456,7 +13960,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "萨满祭司",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 5,
+          "chainLength": 5,
+          "previousName": "听从我的呼唤"
         }
       ]
     },
@@ -13504,7 +14014,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "挖掘场：湿地",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         },
         {
           "kind": "quest",
@@ -13527,7 +14043,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "挖掘场：湿地",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 2,
+          "chainLength": 2,
+          "previousName": "迷失在灌木丛中"
         }
       ]
     },
@@ -13583,7 +14105,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "湿地",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 4,
+          "previousName": "了解现状"
         }
       ]
     },
@@ -13633,7 +14161,13 @@
             ]
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "湿地",
+          "zoneStatus": "known",
+          "chainKind": "chain",
+          "chainPosition": 3,
+          "chainLength": 4,
+          "previousName": "了解现状"
         }
       ]
     },
@@ -13688,7 +14222,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "海加尔山",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
@@ -13741,7 +14281,13 @@
             "ids": []
           },
           "questState": "not_checked",
-          "profession": null
+          "profession": null,
+          "zone": "特殊",
+          "zoneStatus": "known",
+          "chainKind": "standalone",
+          "chainPosition": null,
+          "chainLength": null,
+          "previousName": null
         }
       ]
     },
