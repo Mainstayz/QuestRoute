@@ -434,7 +434,57 @@ local function ShowRowTooltip(row)
     GameTooltip:Show()
 end
 
+local function HideRowTooltip(panel)
+    if not _G.GameTooltip or type(_G.GameTooltip.GetOwner) ~= "function" then return end
+    local ok, owner = pcall(_G.GameTooltip.GetOwner, _G.GameTooltip)
+    if not ok or not owner or not panel or not panel.rows then return end
+    for _, row in ipairs(panel.rows) do
+        if owner == row then
+            pcall(_G.GameTooltip.Hide, _G.GameTooltip)
+            return
+        end
+    end
+end
+
+local function HidePanel(sheet)
+    local target = sheet or Sheet
+    local panel = (target and target.panel) or _G[PANEL_NAME]
+    if panel then
+        HideRowTooltip(panel)
+        if type(panel.Hide) == "function" then
+            pcall(panel.Hide, panel)
+        end
+    end
+end
+
+local function FrameVisible(frame)
+    if not frame then return false end
+    if type(frame.IsVisible) == "function" then
+        local ok, visible = pcall(frame.IsVisible, frame)
+        if ok then return visible == true end
+    end
+    if type(frame.IsShown) == "function" then
+        local ok, shown = pcall(frame.IsShown, frame)
+        if ok then return shown == true end
+    end
+    return false
+end
+
+local function HostVisible()
+    local paperDoll = _G.PaperDollFrame
+    local charFrame = _G.CharacterFrame
+    if paperDoll then
+        if not FrameVisible(paperDoll) then return false end
+        if charFrame and not FrameVisible(charFrame) then return false end
+        return true
+    end
+    return FrameVisible(charFrame)
+end
+
 local function BindPanelHandlers(panel)
+    if type(panel.SetScript) == "function" then
+        panel:SetScript("OnHide", function(self) HideRowTooltip(self) end)
+    end
     panel.headerBtn:SetScript("OnClick", function() CyclePlaystyle() end)
     panel.prevSlot:SetScript("OnClick", function() StepSlot(-1) end)
     panel.nextSlot:SetScript("OnClick", function() StepSlot(1) end)
@@ -452,10 +502,18 @@ end
 
 local function EnsurePanel(host)
     local anchor = _G.CharacterFrame or host
+    local parent = host or _G.UIParent
     local existing = Sheet.panel or _G[PANEL_NAME]
     if existing and existing.rows and existing.headerBtn and existing.prevSlot and existing.nextSlot then
+        if parent and type(existing.SetParent) == "function" then
+            local ok, currentParent = type(existing.GetParent) == "function" and pcall(existing.GetParent, existing) or false
+            if not ok or currentParent ~= parent then
+                pcall(existing.SetParent, existing, parent)
+            end
+        end
         existing:ClearAllPoints()
         existing:SetPoint("TOPLEFT", anchor, "TOPRIGHT", 4, -30)
+        if existing.SetFrameStrata then existing:SetFrameStrata("HIGH") end
         BindPanelHandlers(existing)
         Sheet.panel = existing
         return
@@ -463,7 +521,7 @@ local function EnsurePanel(host)
     if existing and type(existing.Hide) == "function" then
         pcall(existing.Hide, existing)
     end
-    local panel = CreateFrame("Frame", PANEL_NAME, _G.UIParent or anchor)
+    local panel = CreateFrame("Frame", PANEL_NAME, parent)
     panel:SetSize(330, 352)
     panel:SetPoint("TOPLEFT", anchor, "TOPRIGHT", 4, -30)
     panel:SetClampedToScreen(true)
@@ -532,7 +590,11 @@ end
 
 function Sheet.Select(slot)
     if not SlotMeta(slot) then return end
-    if Sheet.slot == slot and Sheet.panel and Sheet.panel:IsShown() then return end
+    if not HostVisible() then
+        HidePanel(Sheet)
+        return
+    end
+    if Sheet.slot == slot and Sheet.panel and FrameVisible(Sheet.panel) then return end
     Sheet.slot = slot
     Sheet.Refresh()
 end
@@ -590,7 +652,10 @@ end
 
 function Sheet.Refresh()
     local host = _G.PaperDollFrame or _G.CharacterFrame
-    if not host then return end
+    if not host or not HostVisible() then
+        HidePanel(Sheet)
+        return
+    end
     EnsurePanel(host)
     local panel = Sheet.panel
     local slot = SlotMeta(Sheet.slot) or ORDER[1]
@@ -669,43 +734,54 @@ function Sheet.Refresh()
     panel:Show()
 end
 
-local function HostShown()
-    local host = _G.PaperDollFrame or _G.CharacterFrame
-    return host and type(host.IsShown) == "function" and host:IsShown()
+local function SyncVisibility()
+    local current = CurrentSheet()
+    if not current then return end
+    if HostVisible() then
+        current.Refresh()
+    else
+        HidePanel(current)
+    end
+end
+
+local function HookHost(frame)
+    if not frame or type(frame.HookScript) ~= "function" then return end
+    if not frame.questRouteGearShowHooked then
+        if pcall(frame.HookScript, frame, "OnShow", SyncVisibility) then
+            frame.questRouteGearShowHooked = true
+        end
+    end
+    if not frame.questRouteGearHideHooked then
+        if pcall(frame.HookScript, frame, "OnHide", function()
+            local current = CurrentSheet()
+            if current then HidePanel(current) end
+        end) then
+            frame.questRouteGearHideHooked = true
+        end
+    end
 end
 
 function Sheet.Attach()
-    local host = _G.PaperDollFrame or _G.CharacterFrame
+    local paperDoll = _G.PaperDollFrame
+    local charFrame = _G.CharacterFrame
+    local host = paperDoll or charFrame
     if not host or type(host.HookScript) ~= "function" then return end
-    if not host.questRouteGearHostHooked then
-        host.questRouteGearHostHooked = true
-        host:HookScript("OnShow", function()
-            local current = CurrentSheet()
-            if current then current.Refresh() end
-        end)
-        host:HookScript("OnHide", function()
-            local current = CurrentSheet()
-            if current and current.panel then current.panel:Hide() end
-        end)
-        if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.HookScript) == "function" then
-            _G.CharacterFrame:HookScript("OnHide", function()
-                local current = CurrentSheet()
-                if current and current.panel then current.panel:Hide() end
-            end)
-        end
+    HookHost(paperDoll)
+    if charFrame and charFrame ~= paperDoll then
+        HookHost(charFrame)
     end
     if HookStandardSlots() == 0 then
         HookSlots(host, 0)
-        if host ~= _G.CharacterFrame and _G.CharacterFrame and type(_G.CharacterFrame.GetChildren) == "function" then
-            HookSlots(_G.CharacterFrame, 0)
+        if charFrame and charFrame ~= host and type(charFrame.GetChildren) == "function" then
+            HookSlots(charFrame, 0)
         end
     end
-    if HostShown() then Sheet.Refresh() end
+    SyncVisibility()
 end
 
 function Sheet.Shutdown()
     Sheet.InvalidateCache()
-    if Sheet.panel then Sheet.panel:Hide() end
+    HidePanel(Sheet)
     if Sheet.watcher then
         Sheet.watcher:UnregisterAllEvents()
         Sheet.watcher:SetScript("OnEvent", nil)
@@ -727,6 +803,10 @@ Sheet.watcher:SetScript("OnEvent", function(_, event)
         Sheet.Attach()
     else
         Sheet.InvalidateCache()
-        if HostShown() then Sheet.Refresh() end
+        if HostVisible() then
+            Sheet.Refresh()
+        else
+            HidePanel(Sheet)
+        end
     end
 end)

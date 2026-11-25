@@ -552,6 +552,136 @@ return checks
 '''
 
 
+SHEET_LIFECYCLE = r'''
+local ns = ...
+local checks = 0
+local function check(ok, message)
+    assert(ok, message)
+    checks = checks + 1
+end
+
+-- 模拟真实 WoW 框体层级：父框架隐藏时，子框架 IsShown() 仍可为 true，但 IsVisible() 为 false
+local function makeFrame(name, parent)
+    local f = { _name = name, _parent = parent, _shown = false, _scripts = {}, _hooks = {} }
+    function f:GetParent() return self._parent end
+    function f:SetParent(p) self._parent = p end
+    function f:IsShown() return self._shown == true end
+    function f:IsVisible()
+        if not self._shown then return false end
+        if self._parent and self._parent.IsVisible then return self._parent:IsVisible() end
+        return true
+    end
+    function f:Fire(event, ...)
+        if self._scripts[event] then self._scripts[event](self, ...) end
+        for _, fn in ipairs(self._hooks[event] or {}) do fn(self, ...) end
+    end
+    function f:Show()
+        local was = self._shown
+        self._shown = true
+        if not was then self:Fire("OnShow") end
+    end
+    function f:Hide()
+        local was = self._shown
+        self._shown = false
+        if was then self:Fire("OnHide") end
+    end
+    function f:HasScript() return true end
+    function f:SetScript(event, fn) self._scripts[event] = fn end
+    function f:HookScript(event, fn)
+        self._hooks[event] = self._hooks[event] or {}
+        self._hooks[event][#self._hooks[event] + 1] = fn
+    end
+    function f:RegisterEvent() end
+    function f:UnregisterAllEvents() end
+    function f:SetSize() end
+    function f:SetPoint() end
+    function f:ClearAllPoints() end
+    function f:SetClampedToScreen() end
+    function f:SetFrameStrata() end
+    function f:GetChildren() return end
+    function f:CreateTexture()
+        return { SetAllPoints = function() end, SetColorTexture = function() end, SetPoint = function() end, SetSize = function() end }
+    end
+    function f:CreateFontString()
+        return {
+            SetAllPoints = function() end, SetJustifyH = function() end, SetWordWrap = function() end,
+            SetWidth = function() end, SetPoint = function() end, ClearAllPoints = function() end,
+            SetHeight = function() end, SetMaxLines = function() end, SetText = function() end,
+            Show = function() end, Hide = function() end,
+        }
+    end
+    if name then _G[name] = f end
+    return f
+end
+
+function CreateFrame(_, name, parent)
+    local f = makeFrame(name, parent)
+    f._shown = true
+    return f
+end
+
+local tooltipOwner = nil
+local tooltipShown = false
+GameTooltip = {
+    GetOwner = function() return tooltipOwner end,
+    Hide = function() tooltipShown = false; tooltipOwner = nil end,
+}
+
+local charFrame = makeFrame("CharacterFrame", nil)
+local paperDoll = makeFrame("PaperDollFrame", charFrame)
+local headSlot = makeFrame("CharacterHeadSlot", paperDoll)
+
+-- 加载后重新挂接（模拟 PLAYER_ENTERING_WORLD）
+ns.GearSheet.Attach()
+check(ns.GearSheet.panel == nil, "panel is not created while CharacterFrame is closed")
+
+-- 1. 首次打开角色面板（角色页）-> 立刻弹出，且挂在 PaperDollFrame 下
+charFrame:Show()
+paperDoll:Show()
+check(ns.GearSheet.panel ~= nil and ns.GearSheet.panel:IsVisible(), "panel shows when CharacterFrame and PaperDollFrame open")
+check(ns.GearSheet.panel:GetParent() == paperDoll, "panel is parented to PaperDollFrame so it cannot linger")
+
+-- 2. 模拟行 tooltip 打开，然后按 C/ESC 关闭 CharacterFrame（PaperDollFrame._shown 保持 true，但 IsVisible 为 false）
+tooltipOwner = ns.GearSheet.panel.rows[1]
+tooltipShown = true
+charFrame:Hide()
+check(paperDoll:IsShown() == true and paperDoll:IsVisible() == false, "closing CharacterFrame leaves PaperDollFrame shown=true visible=false")
+check(not ns.GearSheet.panel:IsShown() and not ns.GearSheet.panel:IsVisible(), "panel hides immediately when CharacterFrame closes")
+check(not tooltipShown, "row GameTooltip is also hidden when panel hides")
+
+-- 3. 角色面板关闭期间触发任务/换装事件 -> 绝不能凭空弹出残留
+ns.GearSheet.watcher._scripts.OnEvent(ns.GearSheet.watcher, "QUEST_TURNED_IN")
+ns.GearSheet.watcher._scripts.OnEvent(ns.GearSheet.watcher, "PLAYER_EQUIPMENT_CHANGED")
+check(not ns.GearSheet.panel:IsShown() and not ns.GearSheet.panel:IsVisible(), "events while CharacterFrame is closed do not pop up panel")
+
+-- 4. 再次按 C 打开 CharacterFrame（只触发 CharacterFrame:OnShow，不触发 PaperDollFrame:OnShow）-> 立刻正确弹出
+charFrame:Show()
+check(ns.GearSheet.panel:IsShown() and ns.GearSheet.panel:IsVisible(), "reopening CharacterFrame restores panel even when PaperDollFrame OnShow does not re-fire")
+
+-- 5. 切到声望标签页（PaperDollFrame 隐藏，CharacterFrame 仍打开）-> 立刻隐藏
+paperDoll:Hide()
+check(not ns.GearSheet.panel:IsShown() and not ns.GearSheet.panel:IsVisible(), "switching away from PaperDollFrame tab hides panel")
+ns.GearSheet.watcher._scripts.OnEvent(ns.GearSheet.watcher, "QUEST_ACCEPTED")
+check(not ns.GearSheet.panel:IsShown(), "events on Reputation/Skill tab do not pop up panel")
+
+-- 6. 在声望页关闭再重开 CharacterFrame -> 保持隐藏，不误弹
+charFrame:Hide()
+charFrame:Show()
+check(not ns.GearSheet.panel:IsShown() and not ns.GearSheet.panel:IsVisible(), "reopening CharacterFrame on non-PaperDoll tab keeps panel hidden")
+
+-- 7. 切回角色页 -> 立刻弹出
+paperDoll:Show()
+check(ns.GearSheet.panel:IsShown() and ns.GearSheet.panel:IsVisible(), "switching back to PaperDollFrame tab shows panel again")
+
+-- 8. 宿主不可见时即使意外触发装备槽 OnEnter 也不会把面板拉出来
+charFrame:Hide()
+headSlot:Fire("OnEnter")
+check(not ns.GearSheet.panel:IsShown() and not ns.GearSheet.panel:IsVisible(), "slot OnEnter while host is hidden cannot resurrect panel")
+
+return checks
+'''
+
+
 def main() -> None:
     runtime = LuaRuntime(unpack_returned_tuples=True)
     namespace = load(runtime, "Gear.lua")
@@ -570,7 +700,12 @@ def main() -> None:
         "function CreateFrame() local f = {} function f:RegisterEvent() end function f:SetScript() end return f end"
     )
     sheet_checks = sheet.execute(SHEET, load(sheet, "GearSheet.lua"))
-    print(f"PASS: {fixture_checks + real_checks + sheet_checks} gear checks; example={EXAMPLE}")
+    lifecycle = LuaRuntime(unpack_returned_tuples=True)
+    lifecycle.execute(
+        "function CreateFrame() local f = { _scripts = {} } function f:RegisterEvent() end function f:SetScript(e, fn) self._scripts[e] = fn end return f end"
+    )
+    lifecycle_checks = lifecycle.execute(SHEET_LIFECYCLE, load(lifecycle, "GearSheet.lua"))
+    print(f"PASS: {fixture_checks + real_checks + sheet_checks + lifecycle_checks} gear checks; example={EXAMPLE}")
 
 
 if __name__ == "__main__":
