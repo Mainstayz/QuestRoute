@@ -1,6 +1,7 @@
 -- 只搜索局部任务的短计划；预测的接取/完成状态不写回角色或正式任务目标。
 local _, ns = ...
 local DistanceSquared, IsFinite = ns.Util.DistanceSquared, ns.Util.IsFinite
+local weightBounds = ns.Priority.weightBounds
 -- shortcut: 只搜索当前地图的六步局部计划，真实长链收益不足时再扩大前瞻。
 local rules = { depth = 6, width = 4, maxQuests = 18, maxFirstActions = 6, maxActions = 4,
     nearbyRadius = 400, areaRadius = 200, detour = 150, workCost = 180, interactionCost = 25,
@@ -70,7 +71,8 @@ local function Models(data, candidates, origin, baseline)
             end
             local _, starterDistance = Nearest(quest.starters, origin)
             if starterDistance then model.distance = math.min(model.distance, starterDistance) end
-            model.weight = IsFinite(quest.rewardWeight) and math.max(0.4, math.min(1.25, quest.rewardWeight)) or 1
+            model.weight = IsFinite(quest.rewardWeight)
+                and math.max(weightBounds.minimum, math.min(weightBounds.maximum, quest.rewardWeight)) or 1
             byID[id] = model
             models[#models + 1] = model
         end

@@ -14,7 +14,7 @@ function ns.SetQuestSkip(args)
     local skipped = args.skipped ~= false
     settings.skipped[args.questID] = skipped or nil
     RebuildRoute(skipped and "quest_skipped" or "quest_restored")
-    return { ok = true, questID = args.questID, skipped = skipped, count = ns.route.plan.count }
+    return { ok = true, questID = args.questID, skipped = skipped, count = ns.route.plan and ns.route.plan.count or 0 }
 end
 
 local function CopyProgressData(value)
@@ -89,9 +89,10 @@ function ns.ChangeQuestSpot(args)
     ns.route.pendingSpotChange = { questID = step.questID, objectiveKey = step.objectiveKey, world = best.world, expiresAt = avoid.expiresAt }
     local called, updated = pcall(RebuildRoute, "spot_changed")
     ns.route = original
-    if not called or not updated.ok then
-        return not called and Failed("target_unavailable", "热点刷新未成功，原路线保留。") or updated
+    if not called or not updated then
+        return Failed("target_unavailable", "热点刷新未成功，原路线保留。")
     end
+    if not updated.ok then return updated end
     for key in pairs(original) do if draft[key] == nil then original[key] = nil end end
     for key, value in pairs(draft) do original[key] = value end
     WB:Emit("route.spot_changed", { questID = step.questID, objectiveKey = step.objectiveKey,
@@ -108,13 +109,15 @@ function ns.ClearSpotAvoidances(args)
     local kept = {}
     for _, avoid in ipairs(ns.route.spotAvoidances) do if args.questID and avoid.questID ~= args.questID then kept[#kept + 1] = avoid end end
     ns.route.spotAvoidances = kept
-    return RebuildRoute("manual")
+    RebuildRoute("manual")
+    return ns.GetPlan({})
 end
 
 function ns.ResetQuestSkips(args)
     if args ~= nil and type(args) ~= "table" then return InvalidArguments("args must be an object") end
     RouteSettings().skipped = {}
-    return RebuildRoute("skips_reset")
+    RebuildRoute("skips_reset")
+    return ns.GetPlan({})
 end
 
 function ns.SetRouteOptions(args)
@@ -142,5 +145,6 @@ function ns.SetRouteOptions(args)
     if args.includeEliteQuests ~= nil then settings.includeEliteQuests = args.includeEliteQuests end
     if args.switchNotice ~= nil then settings.switchNotice = args.switchNotice end
     if args.moveThreshold ~= nil then settings.moveThreshold = args.moveThreshold end
-    return RebuildRoute("options_changed")
+    RebuildRoute("options_changed")
+    return ns.GetPlan({})
 end

@@ -2,7 +2,7 @@
 
 《魔兽世界：无限》当前任务路线与数据插件，在原生 M 地图、小地图绘制导航，并提供任务怪姓名板提示。安装、旧配置迁移和快速上手见根 [README](../../README.md)。
 
-当前 `apiRevision=17`、`schemaVersion=1`，23 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。装备候选与任务价值分析均不改变地图路线，装备规则见 [GEAR.md](GEAR.md)。
+当前 `apiRevision=18`、`schemaVersion=1`，23 个 Lua 文件按 `QuestRoute.toc` 顺序加载。统一标识为 `QuestRouteDB`、`WoWBridgeNS.QuestRoute`、工坊 `addon="QuestRoute"`；命令 `/questroute` 和 `/questrouteapi`，不提供旧名称的运行时别名。装备候选与任务价值分析均不改变地图路线，装备规则见 [GEAR.md](GEAR.md)。
 
 [开发进度](../../开发进度.md)记录最近验证与部署状态，[待办事项](../../待办事项.md)记录尚未完成的实机验收。[技术说明](../../docs/技术说明.md)解释数据、坐标与规划边界，[MODULES.md](MODULES.md)说明源码职责。
 
@@ -88,6 +88,7 @@ end
 - 分页结果用 `total/count/hasMore/nextOffset`；最后一页省略 `nextOffset`。分页期间日志可能变化，需要一致列表时优先一次读完。
 - ID 为正整数；地图参数必须为当前客户端有效地图。可选或不可访问的字段省略，不填虚构值。
 - 无效参数返回 `{ "ok": false, "error": { "code": "invalid_arguments", "message": "..." } }`。
+- 路线重建失败（位置或任务数据读取抛错）时保留上一次成功计划，`get_plan`/`replan` 正常返回旧路线；从未成功过时返回 `ok=false`、`error.code="plan_unavailable"`，5 秒后自动重试，不虚构空计划。
 - 原生任务状态与进度优先，第三方关系和静态位置分别标注来源、版本与精度。直线距离不表示道路可通行。
 
 ## 任务数据接口

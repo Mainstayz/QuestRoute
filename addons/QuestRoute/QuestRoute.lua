@@ -7,6 +7,21 @@ local ConfigureRoutePin, WB = ns.MapPins.Configure, ns.WB
 local HideTaskMarkers, RenderTaskNameplates = ns.Nameplates.Hide, ns.Nameplates.Render
 local RenderRouteMaps, RenderMinimapRoute = ns.WorldMap.Render, ns.Minimap.Render
 
+-- 两图与备选/机会图元共用同一遍历；回调不得在中途增删视图。
+local function ForEachPin(callback)
+    for _, view in ipairs(ns.route.views) do
+        for _, pin in pairs(view.pins) do callback(pin) end
+        for _, pin in pairs(view.alternatives or {}) do callback(pin) end
+        for _, pin in pairs(view.opportunities or {}) do callback(pin) end
+    end
+    local view = ns.route.minimapView
+    if view then
+        for _, pin in pairs(view.pins) do callback(pin) end
+        for _, pin in pairs(view.alternatives or {}) do callback(pin) end
+        for _, pin in pairs(view.opportunities or {}) do callback(pin) end
+    end
+end
+
 local function RouteTick(_, elapsed)
     ns.route.elapsed = (ns.route.elapsed or 0) + elapsed
     if ns.route.elapsed < 0.1 then return end
@@ -31,6 +46,10 @@ local function RouteTick(_, elapsed)
     if ns.route.nextAssociationCheck and now >= ns.route.nextAssociationCheck then RebuildRoute("association_data_refresh") end
     if ns.route.nextSpotCheck and now >= ns.route.nextSpotCheck then RebuildRoute("spot_avoidance_expired") end
     if ns.route.nextMapNoticeAt and now >= ns.route.nextMapNoticeAt then RebuildRoute("map_notice_retry") end
+    if ns.route.nextRebuildRetry and now >= ns.route.nextRebuildRetry then
+        ns.route.nextRebuildRetry = nil
+        RebuildRoute("rebuild_retry")
+    end
     if now >= (ns.route.nextNameplateCheck or 0) then
         ns.route.nextNameplateCheck = now + 0.5
         RenderTaskNameplates()
@@ -42,17 +61,20 @@ local function RouteTick(_, elapsed)
         local current = ns.route.playerLocation.world
         local distance = DistanceSquared(current, ns.route.lastOrigin)
         local threshold = RouteSettings().moveThreshold
+        local plan = ns.route.plan
         if ns.Discovery.ObserveUnits() then
             RebuildRoute("pickup_unit_changed")
-        elseif ns.route.playerLocation.coordinateMapID ~= ns.route.plan.mapID then
+        elseif not plan then
+            -- 首次重建失败时没有可比对的快照；重试节奏由 nextRebuildRetry 驱动。
+        elseif ns.route.playerLocation.coordinateMapID ~= plan.mapID then
             RebuildRoute("player_map_changed")
-        elseif context.character.level ~= ns.route.plan.levelPriority.referenceLevel then
+        elseif context.character.level ~= plan.levelPriority.referenceLevel then
             RebuildRoute("player_level_changed")
         elseif current and (not ns.route.lastOrigin or not distance or distance >= threshold * threshold) then
             RebuildRoute("player_moved")
         else
-            local previous = ns.route.plan.navigation
-            if UpdateNavigation(ns.route.plan, context.location, now, previous) then
+            local previous = plan.navigation
+            if UpdateNavigation(plan, context.location, now, previous) then
                 RebuildRoute(previous and previous.phase == "unavailable" and "player_position_recovered" or "work_protection_ended")
             end
         end
@@ -78,16 +100,7 @@ function ns.StartRoute()
     ns.Discovery.ObserveUnits()
     RebuildRoute("startup")
     -- 复用图元时也更新回调，保证热加载后悬停说明使用本轮逻辑。
-    for _, view in ipairs(ns.route.views) do
-        for _, pin in pairs(view.pins) do ConfigureRoutePin(pin) end
-        for _, pin in pairs(view.alternatives or {}) do ConfigureRoutePin(pin) end
-        for _, pin in pairs(view.opportunities or {}) do ConfigureRoutePin(pin) end
-    end
-    if ns.route.minimapView then
-        for _, pin in pairs(ns.route.minimapView.pins) do ConfigureRoutePin(pin) end
-        for _, pin in pairs(ns.route.minimapView.alternatives or {}) do ConfigureRoutePin(pin) end
-        for _, pin in pairs(ns.route.minimapView.opportunities or {}) do ConfigureRoutePin(pin) end
-    end
+    ForEachPin(ConfigureRoutePin)
     local driver = ns.route.driver or CreateFrame("Frame")
     ns.route.driver = driver
     driver:UnregisterAllEvents()
@@ -170,6 +183,7 @@ end
 local function PrintWhy()
     local plan = ns.GetPlan({})
     local labels, prefix = ns.Planner.exclusionLabels, "|cff31cee8QuestRoute|r "
+    if not plan.ok then print(prefix .. (plan.error and plan.error.message or "路线暂时不可用。")); return end
     print(prefix .. plan.count .. " 步路线；" .. #plan.excluded .. " 个任务未上路线。")
     PrintStepScores(plan)
     for index, item in ipairs(plan.excluded) do
@@ -255,6 +269,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
             or InvalidArguments("用法：/questroute nameplates on/off")
     else
         local plan = ns.GetPlan({})
+        if not plan.ok then print("|cff31cee8QuestRoute|r " .. (plan.error and plan.error.message or "路线暂时不可用。")); return end
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
         print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID]")
@@ -264,42 +279,29 @@ SlashCmdList["QUESTROUTE"] = function(text)
 end
 
 WB:Expose("get_quests", ns.GetQuests,
-    "只读获取当前角色所有已接取任务（含折叠分类、隐藏任务和已完成待交任务）。"
-    .. "args: offset>=0（默认0），limit=1..100（默认100），includeObjectives=true/false（默认true）。"
-    .. "返回角色、total、reportedTotal、logComplete、count、hasMore、nextOffset 和 quests；"
-    .. "每项含 questID/title/category/status 及 objectives 目标进度。"
-    .. "不包含已交付任务历史或尚未接取任务。")
+    "只读列出角色已接任务（含折叠分类、隐藏任务和完成待交，不含历史和未接）。args: offset>=0（默认0）、limit=1..100（默认100）、includeObjectives=true/false（默认true）。字段与分页见插件 README get_quests。")
 WB:Expose("get_player_context", ns.GetPlayerContext,
     "只读获取原生玩家等级、经验、地图位置和世界坐标。args:{}。不可用的位置给出reason；不读取生命/能量。")
 WB:Expose("get_quest_pois", ns.GetQuestPOIs,
-    "只读查询已接任务原生POI。args:可选mapID（只查该图）、questID、offset>=0、limit=1..100（默认50）。"
-    .. "未给mapID时扫描艾泽拉斯地图树，去除同任务同位置的投影重复，保留coordinateMapID/reportedMapID和projectionCount；不保证副本覆盖。")
+    "只读查询已接任务原生POI（投影去重、稳定排序后分页）。args: 可选mapID（只查该图）、questID、offset>=0、limit=1..100（默认50）。coordinateMapID 与 reportedMapID 语义见 README get_quest_pois。")
 WB:Expose("get_quest_details", ns.GetQuestDetails,
-    "原生任务状态、目标和POI为主，QuestieDB元数据/接交关系/任务链独立补充。args:questID必填，"
-    .. "allowDatabase=true/false（默认true），includePOIs=true/false（默认true），offset/limit对数据库references分页（默认50/max100）。不推断逐目标序号对应或击杀行为。")
+    "原生任务状态、目标和POI为主，QuestieDB 元数据/接交关系/任务链独立分页补充。args: questID，allowDatabase/includePOIs=true/false（默认true），offset/limit 只分页 references。不推断逐目标序号对应。细节见 README get_quest_details。")
 WB:Expose("get_database_entity", ns.GetDatabaseEntity,
-    "只读查询QuestieDB实体。args:kind=npc/object/item、id，offset/limit（默认50/max100）。"
-    .. "NPC/物件返回locations，物品返回掉落/容器/商人relations；坐标统一0..1，保留AreaID和百分比原值；副本哨兵/无效地图明确不可导航。数据库缺失时available=false。")
+    "只读查询 QuestieDB 实体：npc/object 返回 locations，item 返回直接掉落/容器/商人 relations。args: kind=npc/object/item、id、offset/limit（默认50/max100）。坐标与可用性语义见 README get_database_entity。")
 WB:Expose("get_quest_targets", ns.GetQuestTargets,
-    "只读解析未完成目标位置：官方进度为准，任务内按客户端格式与数据库完整名称精确唯一匹配后补QuestieDB静态点；未知回原生POI。"
-    .. "args:questID必填，mapID可选，allowDatabase默认true，offset/limit默认0/50最大100；targets分页，objectives含完成状态与映射依据。")
-WB:Expose("get_plan", ns.GetPlan, "获取当前地图任务关联、接取、升级与交付路线。discovery含附近/目的地相关任务和启动物品机会；decision含有限前瞻预测及采用原因；未接目标只在预测中，实际接取后重排。steps.action新增pick_up/start_item，pickupCount给接取步数，activeQuestCount仅统计日志任务。已完成任务按原生位置每项一交付步，不因副本/精英/专业类型排除，手动跳过/失败/外图仍排除；turnInCount和completionPendingCount给交付及等待确认数。navigation给travel/working/turn_in/completion_pending/idle/unavailable，每0.5秒更新，到点不代表交付成功。保留难度/奖励、热点、归组及稳定；自由选点时同组其他步骤计入加成，steps[].workFactor/remainingWork给剩余工作量修正；当前地图无步骤时nextMapHint给最近外图任务提示，excluded[].otherMapID/otherMapName给外图任务所在地图。args:{}。")
+    "只读解析未完目标位置：官方进度为准，任务内精确唯一匹配后补 QuestieDB 静态点，未知回原生POI。args: questID、可选mapID、allowDatabase（默认true）、offset/limit。语义见 README get_quest_targets。")
+WB:Expose("get_plan", ns.GetPlan, "当前地图任务路线快照：steps/excluded/groups、discovery 关联机会、decision 前瞻、navigation 状态、选项与规则。读取失败时 ok=false 并保留上一次成功路线。完整字段见插件 README get_plan。args:{}。")
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")
-WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项。args:可选moveThreshold=10..5000（默认100码）、maxMonsterLevelOffset=0..5整数（默认2，仅限制任务怪物高出角色的等级）；minPickupLevel=0..60整数（默认15，0关闭，仅过滤低于阈值的未接任务）；enabled同时控制地图/标识、nameplatesEnabled单独控制任务姓名板（默认true）、includeEliteQuests允许未完成精英任务参与规划（默认false）、switchNotice控制1号自动变化/本图做完时的屏幕与聊天提示（默认true），后四项为boolean。按角色保存，立即重排；已完成交付不受怪物等级限制。")
-WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args:questID可选默认1号；objectiveKey可选需questID。hotspotID可选需同时带questID/objectiveKey，取get_plan.steps[].hotspots[].id以指定备选；省略选其他最近热点。旧点150码内避开600秒，无备选保留路线/跳过。")
+WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项，按角色保存并立即重排。args: moveThreshold=10..5000（默认100）、maxMonsterLevelOffset=0..5（默认2，只限怪物等级差）、minPickupLevel=0..60（默认15，0关闭，只滤未接任务）、enabled、nameplatesEnabled、includeEliteQuests、switchNotice（后四项 boolean）。范围与默认见 README set_route_options。")
+WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args: questID（默认1号）、objectiveKey（需questID）、hotspotID（需前两项，取自 get_plan steps[].hotspots[].id）；省略 hotspotID 选其他最近热点。旧点按规则临时避让，细节见 README change_quest_spot。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")
 WB:Expose("get_gear_candidates", ns.GetGearCandidates,
-    "只读查询升级路线里的战斗装备候选。args:level=1..60，class，spec，faction=联盟/部落，可选gear、weights、questLevelWindow、limit=1..100、race。"
-    .. "只对战士防护打生存/仇恨启发式分数，其他战士玩法只给未评分候选，其他职业直接拒绝。不使用60级模拟，不把特效和套装算进分数。"
-    .. "没有现装时只称候选；现装不在数据集里不比较。衬衣和战袍不参与。数据覆盖和来源限制见 GEAR.md。")
+    "只读战斗装备候选与现装差异（当前仅战士防护评分，其他职业直接拒绝）。args: level=1..60、class、spec、faction=联盟/部落，可选 gear、weights、questLevelWindow、limit=1..100、race。数据覆盖和来源限制见 GEAR.md。")
 WB:Expose("analyze_quests", ns.AnalyzeQuests,
-    "只读分析角色当前任务日志价值，判断哪些任务值得保留或可考虑放弃；绝不自动放弃任务。"
-    .. "结合任务链后续与终点奖励、装备与现装对比、经验占比、跨图距离、区域聚集度、完成进度与重接成本给出五档建议"
-    .. "（keep_priority/keep/hold_or_drop/recommend_drop/uncertain）。副本与精英仅作中性标签不自动判弃；奖励缓存未就绪时标待确认并触发异步加载。"
-    .. "args:可选questID、verdict、includeChain(默认true)、includeGear(默认true)、requestLoad(默认true)、gear、offset、limit。")
+    "只读任务日志价值分析，五档建议（keep_priority/keep/hold_or_drop/recommend_drop/uncertain），绝不自动放弃任务。args: questID、verdict、includeChain、includeGear、requestLoad、gear、offset、limit。输出见 README analyze_quests。")
 
 function ns.OnUnload()
     if ns.GearSheet then ns.GearSheet.Shutdown() end
@@ -315,24 +317,15 @@ function ns.OnUnload()
     ns.route.running = false
     if ns.route.driver then ns.route.driver:UnregisterAllEvents(); ns.route.driver:SetScript("OnUpdate", nil); ns.route.driver:SetScript("OnEvent", nil) end
     if ns.loginFrame then ns.loginFrame:UnregisterAllEvents() end
-    for _, view in ipairs(ns.route.views) do
+    ForEachPin(function(pin) pin:Hide(); pin.step, pin.hotspot = nil, nil end)
+    local function HideView(view)
         view.overlay:Hide()
         view.sequence, view.renderedSequence = nil, nil
-        for _, pin in pairs(view.pins) do pin:Hide(); pin.step = nil end
-        for _, pin in pairs(view.alternatives or {}) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
-        for _, pin in pairs(view.opportunities or {}) do pin:Hide(); pin.step = nil end
         for _, line in pairs(view.lines) do line:Hide() end
         for _, leader in pairs(view.leaders or {}) do leader:Hide() end
     end
-    if ns.route.minimapView then
-        local view = ns.route.minimapView
-        view.overlay:Hide()
-        for _, pin in pairs(view.pins) do pin:Hide(); pin.step = nil end
-        for _, pin in pairs(view.alternatives or {}) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
-        for _, pin in pairs(view.opportunities or {}) do pin:Hide(); pin.step = nil end
-        for _, line in pairs(view.lines) do line:Hide() end
-        for _, leader in pairs(view.leaders or {}) do leader:Hide() end
-    end
+    for _, view in ipairs(ns.route.views) do HideView(view) end
+    if ns.route.minimapView then HideView(ns.route.minimapView) end
 end
 
 function ns.OnReload()

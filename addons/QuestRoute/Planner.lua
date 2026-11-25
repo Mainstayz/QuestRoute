@@ -7,6 +7,7 @@ local RouteSettings, RouteExclusion = ns.RouteOptions.Get, ns.RouteOptions.Exclu
 local GetDatabase = ns.Database.Get
 local ReadObjectiveIdentities, ReadObjectiveLocations = ns.Objectives.ReadIdentities, ns.Objectives.ReadLocations
 local ReadLevelingData, RewardReference, ApplyLevelingPriority = ns.Priority.Read, ns.Priority.Reference, ns.Priority.Apply
+local difficultyBands, weightBounds = ns.Priority.difficultyBands, ns.Priority.weightBounds
 local routeRules, navigationLabels = Navigation.rules, Navigation.labels
 local temporaryLocationReasons, temporaryObjectiveReasons = Navigation.temporaryLocationReasons, Navigation.temporaryObjectiveReasons
 local TrackProgress, TargetProgress, NavigationForStep, UpdateNavigation = Navigation.TrackProgress, Navigation.TargetProgress, Navigation.ForStep, Navigation.Update
@@ -24,6 +25,13 @@ local exclusionLabels = {
     no_native_poi = "暂无任务位置", outside_current_map = "目标在其他地图",
     player_position_unavailable = "等待玩家位置", world_position_unavailable = "等待位置数据", player_map_unavailable = "等待玩家地图",
 }
+
+-- 快照里的难度权重直接来自 Priority 的客户端难度分档，避免两处改值漂移。
+local difficultyWeights = {}
+for code = 0, 4 do local band = difficultyBands[code]; difficultyWeights[band.name] = band.weight end
+
+-- 单次重建失败后的统一重试间隔；失败不逐帧重试，也不打断既有路线。
+local rebuildRetrySeconds = 5
 
 -- 格宽取邻域半径的两倍，避免浮点舍入把边界内的点隔开两格；网格只在本轮规划内复用。
 local function GroupGrid(remaining)
@@ -253,7 +261,7 @@ local function AssociationSummary(items, selected)
     return summary
 end
 
-local function RebuildRoute(reason)
+local function BuildPlan(reason)
     local settings = RouteSettings()
     local context = ns.GetPlayerContext({})
     local origin = context.location
@@ -626,10 +634,10 @@ local function RebuildRoute(reason)
         navigationRules = { arrivalRadius = routeRules.arrivalRadius, departureRadius = routeRules.departureRadius,
             progressRadius = routeRules.progressRadius, progressWindow = routeRules.progressWindow, idleTimeout = routeRules.idleTimeout },
         mapID = mapID, mapName = origin.mapName,
-        levelPriority = { referenceLevel = context.character.level, perLevelBonus = 0, maxWeight = 1.25,
+        levelPriority = { referenceLevel = context.character.level, perLevelBonus = 0, maxWeight = weightBounds.maximum,
             method = "client_difficulty_and_reward" },
         levelingPriority = { source = "client", reference = rewardReference,
-            difficultyWeights = { trivial = 0.4, easy = 1.25, fair = 1, difficult = 0.65, impossible = 0.4 },
+            difficultyWeights = difficultyWeights,
             rewardThresholds = { veryLowRatio = 0.25, lowRatio = 0.5, veryLowLevelFraction = 0.005, lowLevelFraction = 0.01 },
             pendingRewardCount = pendingRewards, rewardRetrySeconds = 5, unknownWeight = 1,
             turnInMinimumExperienceWeight = 0.85, maxLevelOffset = settings.maxMonsterLevelOffset,
@@ -660,14 +668,42 @@ local function RebuildRoute(reason)
     return ns.route.plan
 end
 
+local function PlanUnavailable()
+    return { ok = false, error = { code = "plan_unavailable",
+        message = "路线暂时不可用：位置或任务数据读取失败，已保留原路线并稍后自动重试。" } }
+end
+
+-- 单次读取抛错（客户端 API 或第三方数据）不能刷屏或清空路线：保留旧计划与计时，稍后统一重试。
+-- BuildPlan 返回 ok=false 表是有意的"不换路线"结果（如热点已失效），按结果透传，不算故障。
+local lastRebuildNoticeAt
+local function RebuildRoute(reason)
+    local ok, plan = pcall(BuildPlan, reason)
+    if not ok then
+        ns.route.dirty, ns.route.pendingReason = false, nil
+        local now = GetTime()
+        ns.route.nextRebuildRetry = now + rebuildRetrySeconds
+        if not lastRebuildNoticeAt or now - lastRebuildNoticeAt >= rebuildRetrySeconds then
+            lastRebuildNoticeAt = now
+            print("|cff31cee8QuestRoute|r 路线重建暂时失败，已保留原路线，" .. rebuildRetrySeconds .. " 秒后自动重试。")
+        end
+        return nil
+    end
+    if plan and plan.ok then ns.route.nextRebuildRetry = nil end
+    return plan
+end
+
 function ns.GetPlan(args)
     if args ~= nil and type(args) ~= "table" then return InvalidArguments("args must be an object") end
-    return ns.route.plan or RebuildRoute("requested")
+    local plan = ns.route.plan or RebuildRoute("requested")
+    if plan then return plan end
+    return PlanUnavailable()
 end
 
 function ns.Replan(args)
     if args ~= nil and type(args) ~= "table" then return InvalidArguments("args must be an object") end
-    return RebuildRoute("manual")
+    local plan = RebuildRoute("manual")
+    if plan then return plan end
+    return PlanUnavailable()
 end
 
 ns.Planner = { Rebuild = RebuildRoute, exclusionLabels = exclusionLabels }

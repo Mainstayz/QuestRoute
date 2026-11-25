@@ -12,8 +12,11 @@ ns.WB = WoWBridge and WoWBridge.Bind and WoWBridge.Bind(addonName) or {
         callback(nil, "unavailable")
     end,
 }
-ns.apiRevision = 17
+ns.apiRevision = 18
 -- 状态只保存在这里；各模块动态读取 ns.route，使换热点的草稿可跨模块生效。
+-- 字段归属：调度（elapsed/dirty/due/pendingReason、next*Check/nextRebuildRetry）、规划（plan/sequence/lastOrigin/playerLocation）、
+-- 导航（progress/workSession/suspendedObjectiveSession/lastNavigationEvent）、热点（hotspotCache*/spotAvoidances/pendingSpotChange）、
+-- 界面（views/minimapView/hoveredPin/driver/settingsUI）、任务价值（valuePendingQuestIDs/valueSheet*）、关联（activeQuestIDs/associationQuestIDs）。
 ns.route = ns.route or { views = {}, sequence = 0 }
 
 local function InvalidArguments(message)

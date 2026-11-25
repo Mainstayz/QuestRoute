@@ -417,6 +417,26 @@ check(plan.count==2 and plan.steps[1].questID==101 and plan.steps[2].questID==10
 check(QuestRouteDB.routes['FixtureRealm:FixturePlayer'].skipped[102],'skip saved per character')
 api.SetQuestSkip({questID=102,skipped=false})
 check(api.GetPlan({}).count==3,'restore skipped quest')
+-- Rebuild fault isolation: a throwing client read must not wipe the route, spam retries, or fabricate a plan.
+do
+    local original=UnitLevel
+    local before=api.GetPlan({})
+    local now=GetTime()
+    UnitLevel=function() error('fixture profile read failure') end
+    local failed=api.Replan({})
+    check(failed.ok==false and failed.error.code=='plan_unavailable','failed rebuild reports plan_unavailable')
+    check(api.route.nextRebuildRetry and api.route.nextRebuildRetry>=now+5,'failed rebuild schedules one delayed retry')
+    check(api.GetPlan({})==before,'failed rebuild retains the previous plan object')
+    api.route.plan=nil
+    local empty=api.GetPlan({})
+    check(empty.ok==false and empty.error.code=='plan_unavailable','first rebuild failure fabricates no plan')
+    UnitLevel=original
+    api.route.nextRebuildRetry=nil
+    local recovered=api.Replan({})
+    check(recovered.ok and recovered.sequence>before.sequence,'rebuild recovers after the fault clears')
+    api.SetRouteOptions({})
+    check(api.GetPlan({}).ok,'option update still returns the live plan after recovery')
+end
 -- Tick without the map: movement below threshold does not trigger replanning.
 Fixture.loggedIn=true
 Fixture.time=100
@@ -2047,14 +2067,20 @@ do
         targetEntities.npc[400+i]={name=name,spawns={[17]=spawns}}
         tasks[#tasks+1]=routeRow(200+i,450,{objectives={goal('monster',name,0,6)}})
     end
-    local distanceIndex,rawDistance
+    local buildPlan
     for i=1,100 do
         local name,value=debug.getupvalue(api.Planner.Rebuild,i)
+        if name=='BuildPlan' then buildPlan=value;break end
+    end
+    check(buildPlan~=nil,'planner rebuild exposes the build step for the performance regression check')
+    local distanceIndex,rawDistance
+    for i=1,100 do
+        local name,value=debug.getupvalue(buildPlan,i)
         if name=='DistanceSquared' then distanceIndex,rawDistance=i,value;break end
     end
     check(distanceIndex~=nil,'planner distance counter is attached for the performance regression check')
     local calls=0
-    debug.setupvalue(api.Planner.Rebuild,distanceIndex,function(a,b) calls=calls+1;return rawDistance(a,b) end)
+    debug.setupvalue(buildPlan,distanceIndex,function(a,b) calls=calls+1;return rawDistance(a,b) end)
     local ok,grouped,onCalls,plain,offCalls=pcall(function()
         groupRules.groupBonus=defaultGroupBonus
         local grouped=scenario(tasks);local onCalls=calls
@@ -2062,7 +2088,7 @@ do
         local plain=scenario(tasks)
         return grouped,onCalls,plain,calls
     end)
-    debug.setupvalue(api.Planner.Rebuild,distanceIndex,rawDistance)
+    debug.setupvalue(buildPlan,distanceIndex,rawDistance)
     Fixture.worldScale,FixtureDB.Quest.objectives=oldScale,oldObjectives
     groupRules.groupBonus=defaultGroupBonus
     check(ok,'large hotspot fixture rebuilds successfully')
@@ -2359,7 +2385,7 @@ return passed
 
 LEGACY_RELOAD_CHECKS = r'''
 local api=WoWBridgeNS.QuestRoute
-assert(api.apiRevision==17 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
+assert(api.apiRevision==18 and api.route.plan.stability and api.route.plan.navigation,'legacy namespace gains new policy fields')
 assert(api.route.progress and api.route.plan.groups,'legacy namespace without progress and groups upgrades')
 assert(api.route.plan.steps[1].questID==202,'skipped legacy first never resurrected on source reload')
 assert(api.route.driver==FixtureHotload.driver,'legacy upgrade still reuses driver')
@@ -2386,7 +2412,7 @@ return 10
 
 LOAD_CHECKS = r'''
 local api=...
-assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==17,'manifest publishes the shared r17 namespace')
+assert(WoWBridgeNS.QuestRoute==api and api.apiRevision==18,'manifest publishes the shared r18 namespace')
 local endpoints={
     get_quests='GetQuests',get_player_context='GetPlayerContext',get_quest_pois='GetQuestPOIs',
     get_quest_details='GetQuestDetails',get_database_entity='GetDatabaseEntity',get_quest_targets='GetQuestTargets',

@@ -1,6 +1,6 @@
 # QuestRoute · Agent 开发约定
 
-《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 顺序加载 23 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=17`、`schemaVersion=1`。
+《魔兽世界：无限》地图规划与任务数据插件。源码在 `addons/QuestRoute/`，`QuestRoute.toc` 顺序加载 23 个 Lua 文件，入口 `QuestRoute.lua` 最后执行。当前 `apiRevision=18`、`schemaVersion=1`。
 
 统一标识：Title/目录 `QuestRoute`，SavedVariables `QuestRouteDB`，Lua 命名空间 `WoWBridgeNS.QuestRoute`，工坊 `call` 的 `addon="QuestRoute"`。命令 `/questroute`（`SlashCmdList.QUESTROUTE`）和 `/questrouteapi`（`SlashCmdList.QUESTROUTEAPI`），无旧名运行时别名。
 

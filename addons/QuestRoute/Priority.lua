@@ -6,6 +6,8 @@ local difficultyBands = {
     [2] = { name = "fair", weight = 1 }, [3] = { name = "difficult", weight = 0.65 },
     [4] = { name = "impossible", weight = 0.4 },
 }
+-- 排序权重的总界限：取难度分档的最低/最高值，Decision 的预测 clamp 与 Planner 快照共用，避免多处改值漂移。
+local weightBounds = { minimum = 0.4, maximum = 1.25 }
 local priorityLabels = {
     easy_with_reward = "难度较低，已有经验奖励", easy_experience_unknown = "难度较低，奖励经验未知",
     appropriate = "难度适中", difficulty_unknown = "难度未知，按距离安排",
@@ -139,4 +141,4 @@ local function WorkFactor(quest, objectiveKey)
 end
 
 ns.Priority = { Read = ReadLevelingData, Reference = RewardReference, Apply = ApplyLevelingPriority, labels = priorityLabels,
-    WorkFactor = WorkFactor, workBands = workBands }
+    WorkFactor = WorkFactor, workBands = workBands, difficultyBands = difficultyBands, weightBounds = weightBounds }
