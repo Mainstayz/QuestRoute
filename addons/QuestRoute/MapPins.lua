@@ -26,6 +26,8 @@ local function ConfigureRoutePin(pin)
             else ns.SetQuestSkip({ questID = self.step.questID }) end
             ns.route.hoveredPin = nil
             GameTooltip:Hide()
+            if ns.WorldMap and ns.WorldMap.Render then ns.WorldMap.Render() end
+            if ns.Minimap and ns.Minimap.Render then ns.Minimap.Render() end
         end
     end)
     pin:SetScript("OnEnter", function(self)
@@ -182,7 +184,6 @@ end
 
 local function RenderAlternativePins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
     view.alternatives = view.alternatives or {}
-    for _, pin in pairs(view.alternatives) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
     local circular, serial = origin ~= nil, 0
     for _, step in ipairs(plan.steps) do
         for slot = 2, #(step.hotspots or {}) do
@@ -218,6 +219,9 @@ local function RenderAlternativePins(view, plan, placed, width, height, scale, m
                 pin:Show()
             end
         end
+    end
+    for index, pin in pairs(view.alternatives) do
+        if index > serial then pin:Hide(); pin.step, pin.hotspot = nil, nil end
     end
 end
 
@@ -278,7 +282,6 @@ end
 
 local function RenderOpportunityPins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
     view.opportunities = view.opportunities or {}
-    for _, pin in pairs(view.opportunities) do pin:Hide(); pin.step, pin.group = nil, nil end
     local circular, serial = origin ~= nil, 0
     for _, group in ipairs(GroupOpportunities(plan, mapID, ns.Discovery.rejectionLabels)) do
         local point, position = group.point
@@ -319,6 +322,9 @@ local function RenderOpportunityPins(view, plan, placed, width, height, scale, m
             pin.text:SetText(GroupLabel(group))
             pin:Show()
         end
+    end
+    for index, pin in pairs(view.opportunities) do
+        if index > serial then pin:Hide(); pin.step, pin.group = nil, nil end
     end
 end
 

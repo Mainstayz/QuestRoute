@@ -1809,6 +1809,22 @@ check(result.count==1 and result.steps[1].questID==201 and result.steps[1].targe
     'bad DB record leaves the native route usable')
 check(not result.decision.recommendation and result.pickupCount==0,'bad record cannot invent a pickup')
 '''),
+    ("Map pins: periodic ticks never flash-hide active pins and right-click skip redraws immediately", r'''
+record(301,300,{objectives={}}); Fixture.log={}
+local result=plan(); setupMaps(); ns.WorldMap.Render(); ns.Minimap.Render()
+local worldPin=ns.route.views[1].opportunities[1]
+local miniPin=ns.route.minimapView.opportunities[1]
+check(worldPin and worldPin:IsVisible() and miniPin and miniPin:IsVisible(),'advisory pins render on both maps')
+local worldHideCount,miniHideCount=0,0
+local realWorldHide,realMiniHide=worldPin.Hide,miniPin.Hide
+function worldPin:Hide() worldHideCount=worldHideCount+1; return realWorldHide(self) end
+function miniPin:Hide() miniHideCount=miniHideCount+1; return realMiniHide(self) end
+for _=1,5 do ns.WorldMap.Render(); ns.Minimap.Render() end
+check(worldHideCount==0 and miniHideCount==0,'periodic map ticks never Hide active pins and break RightButtonUp clicks')
+worldPin:GetScript('OnClick')(worldPin)
+check(ns.RouteOptions.Get().skipped[301],'right-click skips the quest')
+check(not worldPin:IsVisible() and not miniPin:IsVisible(),'right-click skip hides both map pins on the same frame without waiting for the next tick')
+'''),
 )
 
 

@@ -317,7 +317,7 @@ function ns.OnUnload()
     if ns.loginFrame then ns.loginFrame:UnregisterAllEvents() end
     for _, view in ipairs(ns.route.views) do
         view.overlay:Hide()
-        view.sequence = nil
+        view.sequence, view.renderedSequence = nil, nil
         for _, pin in pairs(view.pins) do pin:Hide(); pin.step = nil end
         for _, pin in pairs(view.alternatives or {}) do pin:Hide(); pin.step, pin.hotspot = nil, nil end
         for _, pin in pairs(view.opportunities or {}) do pin:Hide(); pin.step = nil end

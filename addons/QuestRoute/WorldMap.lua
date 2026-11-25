@@ -31,12 +31,49 @@ local function NewMapView(map, canvas)
     return view
 end
 
+local function RenderLine(view, index, previous, position, width, height, scale)
+    local line = view.lines[index]
+    local ax, ay, bx, by
+    if previous and position then ax, ay, bx, by = ClipSegment(previous.x, previous.y, position.x, position.y) end
+    if ax then
+        if not line then
+            line = view.overlay:CreateLine(nil, "ARTWORK")
+            line:SetColorTexture(0.1, 0.85, 1, 0.8)
+            view.lines[index] = line
+        end
+        line:SetThickness(2 / scale)
+        line:SetStartPoint("TOPLEFT", view.overlay, ax * width, -ay * height)
+        line:SetEndPoint("TOPLEFT", view.overlay, bx * width, -by * height)
+        line:Show()
+    elseif line then line:Hide() end
+end
+
 local function RenderMap(view, plan, player)
-    if not view.map:IsShown() or not plan.enabled then view.overlay:Hide(); return end
+    if not view.map:IsShown() or not plan.enabled then
+        view.overlay:Hide()
+        view.renderedSequence = nil
+        return
+    end
     local mapID = view.map.GetMapID and view.map:GetMapID()
     local width, height = view.canvas:GetWidth(), view.canvas:GetHeight()
     if not IsID(mapID) or mapID ~= plan.mapID or not IsFinite(width) or not IsFinite(height) or width <= 0 or height <= 0 then
-        view.overlay:Hide(); return
+        view.overlay:Hide()
+        view.renderedSequence = nil
+        return
+    end
+    local scale = view.canvas:GetScale()
+    if not IsFinite(scale) or scale <= 0 then scale = 1 end
+    local opportunitiesRef = plan.discovery and plan.discovery.opportunities
+    local staticDirty = view.renderedSequence ~= plan.sequence or view.renderedMapID ~= mapID
+        or view.renderedWidth ~= width or view.renderedHeight ~= height or view.renderedScale ~= scale
+        or view.opportunitiesRef ~= opportunitiesRef
+        or (view.overlay.IsShown and not view.overlay:IsShown())
+    local previous = player and ProjectWorld(player.world, mapID)
+    if not staticDirty then
+        if #plan.steps > 0 then
+            RenderLine(view, 1, previous, view.positions and view.positions[1], width, height, scale)
+        end
+        return
     end
     if view.sequence ~= plan.sequence or view.mapID ~= mapID then
         view.positions, view.alternativePositions = {}, {}
@@ -45,9 +82,6 @@ local function RenderMap(view, plan, player)
     end
     view.overlay:SetFrameLevel(view.canvas:GetFrameLevel() + 3000)
     view.overlay:Show()
-    local scale = view.canvas:GetScale()
-    if not IsFinite(scale) or scale <= 0 then scale = 1 end
-    local previous = player and ProjectWorld(player.world, mapID)
     local placed = {}
     for _, leader in pairs(view.leaders or {}) do leader:Hide() end
     for index, step in ipairs(plan.steps) do
@@ -66,27 +100,17 @@ local function RenderMap(view, plan, player)
             PinLeader(view, index, "TOPLEFT", x / scale, -y / scale, px / scale, -py / scale, scale)
             SetRoutePinAppearance(pin, step, index)
             pin:Show()
-        elseif pin then pin:Hide() end
-        local line = view.lines[index]
-        local ax, ay, bx, by
-        if previous and position then ax, ay, bx, by = ClipSegment(previous.x, previous.y, position.x, position.y) end
-        if ax then
-            if not line then
-                line = view.overlay:CreateLine(nil, "ARTWORK")
-                line:SetColorTexture(0.1, 0.85, 1, 0.8)
-                view.lines[index] = line
-            end
-            line:SetThickness(2 / scale)
-            line:SetStartPoint("TOPLEFT", view.overlay, ax * width, -ay * height)
-            line:SetEndPoint("TOPLEFT", view.overlay, bx * width, -by * height)
-            line:Show()
-        elseif line then line:Hide() end
+        elseif pin then pin:Hide(); pin.step = nil end
+        RenderLine(view, index, previous, position, width, height, scale)
         previous = position
     end
-    for i, pin in pairs(view.pins) do if i > #plan.steps then pin:Hide() end end
+    for i, pin in pairs(view.pins) do if i > #plan.steps then pin:Hide(); pin.step = nil end end
     for i, line in pairs(view.lines) do if i > #plan.steps then line:Hide() end end
     RenderAlternativePins(view, plan, placed, width, height, scale, mapID)
     Pins.RenderOpportunities(view, plan, placed, width, height, scale, mapID)
+    view.renderedSequence, view.renderedMapID = plan.sequence, mapID
+    view.renderedWidth, view.renderedHeight, view.renderedScale = width, height, scale
+    view.opportunitiesRef = opportunitiesRef
 end
 
 local function RenderRouteMaps()

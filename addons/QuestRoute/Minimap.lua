@@ -49,10 +49,8 @@ local function RenderMinimapRoute()
     end
     view.overlay:SetFrameLevel(Minimap:GetFrameLevel() + 5)
     view.overlay:Show()
-    for _, pin in pairs(view.pins) do pin:Hide() end
-    for _, line in pairs(view.lines) do line:Hide() end
     for _, leader in pairs(view.leaders or {}) do leader:Hide() end
-    local placed = {}
+    local placed, shownPins, shownLines = {}, {}, {}
     local previous = { x = 0, y = 0 }
     for index, step in ipairs(plan.steps) do
         local position = MinimapPosition(step.world, player.world, radius, cosine, sine)
@@ -72,6 +70,7 @@ local function RenderMinimapRoute()
                 PinLeader(view, index, "CENTER", x * width / 2, y * height / 2, px, py, 1)
                 SetRoutePinAppearance(pin, step, index)
                 pin:Show()
+                shownPins[index] = true
             end
         end
         -- 裁剪实际端点，不连接边缘方向标记，以免画出不真实的后续路线。
@@ -91,11 +90,14 @@ local function RenderMinimapRoute()
                     line:SetStartPoint("CENTER", view.overlay, ax * width / 2, ay * height / 2)
                     line:SetEndPoint("CENTER", view.overlay, bx * width / 2, by * height / 2)
                     line:Show()
+                    shownLines[index] = true
                 end
             end
         end
         previous = position
     end
+    for index, pin in pairs(view.pins) do if not shownPins[index] then pin:Hide(); pin.step = nil end end
+    for index, line in pairs(view.lines) do if not shownLines[index] then line:Hide() end end
     RenderAlternativePins(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
     Pins.RenderOpportunities(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
 end
