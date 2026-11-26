@@ -33,6 +33,36 @@ for code = 0, 4 do local band = difficultyBands[code]; difficultyWeights[band.na
 -- 单次重建失败后的统一重试间隔；失败不逐帧重试，也不打断既有路线。
 local rebuildRetrySeconds = 5
 
+-- 耗时只做观测：夹具或客户端缺少 debugprofilestop 时返回 nil，计时代码自身绝不抛错（否则会被误判为重建失败）。
+local function ProfileClock()
+    if type(debugprofilestop) ~= "function" then return nil end
+    local ok, value = pcall(debugprofilestop)
+    if ok and Util.IsFinite(value) then return value end
+end
+
+-- 重建计数写在 ns.route.stats（不进入 plan，也不触碰 sequence），静默路径与失败路径同样计数。
+-- total = 实际执行 BuildPlan 的次数（含失败尝试；被失败退避拦截的不计，记入 suppressed）。
+-- total = ok + failed + declined；quiet 是 ok 的子集（路线内容未变、沿用旧计划）；
+-- declined 是 BuildPlan 有意返回的 ok=false（如所选热点已失效），不算故障。
+local function RecordRebuild(reason, started, outcome, quiet)
+    local stats = ns.route.stats
+    if not stats then return end
+    stats.total = (stats.total or 0) + 1
+    stats[outcome] = (stats[outcome] or 0) + 1
+    if quiet then stats.quiet = (stats.quiet or 0) + 1 end
+    stats.byReason = stats.byReason or {}
+    local key = tostring(reason or "unknown")
+    stats.byReason[key] = (stats.byReason[key] or 0) + 1
+    stats.lastAt = GetTime()
+    local finished = started and ProfileClock()
+    if finished and finished >= started then
+        stats.lastMs = finished - started
+        if not stats.maxMs or stats.lastMs > stats.maxMs then stats.maxMs = stats.lastMs end
+    else
+        stats.lastMs = nil
+    end
+end
+
 -- 格宽取邻域半径的两倍，避免浮点舍入把边界内的点隔开两格；网格只在本轮规划内复用。
 local function GroupGrid(remaining)
     if routeRules.groupBonus == 0 then return end
@@ -757,8 +787,10 @@ end
 -- BuildPlan 返回 ok=false 表是有意的"不换路线"结果（如热点已失效），按结果透传，不算故障。
 local lastRebuildNoticeAt
 local function RebuildRoute(reason)
+    local sequence, started = ns.route.sequence, ProfileClock()
     local ok, plan = pcall(BuildPlan, reason)
     if not ok then
+        RecordRebuild(reason, started, "failed")
         ns.route.dirty, ns.route.pendingReason = false, nil
         local now = GetTime()
         ns.route.nextRebuildRetry = now + rebuildRetrySeconds
@@ -768,7 +800,12 @@ local function RebuildRoute(reason)
         end
         return nil
     end
-    if plan and plan.ok then ns.route.nextRebuildRetry = nil end
+    if plan and plan.ok then
+        RecordRebuild(reason, started, "ok", ns.route.sequence == sequence)
+        ns.route.nextRebuildRetry = nil
+    else
+        RecordRebuild(reason, started, "declined")
+    end
     return plan
 end
 

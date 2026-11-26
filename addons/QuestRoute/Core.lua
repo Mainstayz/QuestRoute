@@ -16,8 +16,10 @@ ns.apiRevision = 18
 -- 状态只保存在这里；各模块动态读取 ns.route，使换热点的草稿可跨模块生效。
 -- 字段归属：调度（elapsed/dirty/due/pendingReason、next*Check/nextRebuildRetry）、规划（plan/sequence/lastOrigin/playerLocation）、
 -- 导航（progress/workSession/suspendedObjectiveSession/lastNavigationEvent）、热点（hotspotCache*/spotAvoidances/pendingSpotChange）、
--- 界面（views/minimapView/hoveredPin/driver/settingsUI）、任务价值（valuePendingQuestIDs/valueSheet*）、关联（activeQuestIDs/associationQuestIDs）。
+-- 界面（views/minimapView/hoveredPin/driver/settingsUI）、任务价值（valuePendingQuestIDs/valueSheet*）、关联（activeQuestIDs/associationQuestIDs）、
+-- 观测（stats：重建次数与耗时，只由 Planner.Rebuild 写入，/questroute perf 只读；不进入 plan 对象）。
 ns.route = ns.route or { views = {}, sequence = 0 }
+ns.route.stats = ns.route.stats or { total = 0, ok = 0, failed = 0, declined = 0, quiet = 0, suppressed = 0, byReason = {} }
 
 local function InvalidArguments(message)
     return { ok = false, error = { code = "invalid_arguments", message = message } }

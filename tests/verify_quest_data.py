@@ -2344,6 +2344,71 @@ api.Util.Notify('fallback line');check(#printed==2 and printed[2]=='fallback lin
 UIErrorsFrame={AddMessage=function() error('frame rejected message') end}
 api.Util.Notify('fallback after error');check(#printed==3 and printed[3]=='fallback after error','failing error frame keeps exactly one chat message')
 UIErrorsFrame,print=oldFrame,oldPrint
+-- perf: rebuild counters (ns.route.stats), cached 947 child-map list and failure back-off.
+do
+    local oldPrint,oldProfile,oldScan,savedThreshold=print,debugprofilestop,C_QuestLog.GetQuestsOnMap,api.GetPlan({}).moveThreshold
+    local printed,failScan,failAttempts={},false,0
+    print=function(text) printed[#printed+1]=text end
+    C_QuestLog.GetQuestsOnMap=function(id)
+        if failScan then failAttempts=failAttempts+1;error('fixture scan failure') end
+        return oldScan(id)
+    end
+    api.SetRouteOptions({moveThreshold=100})
+    api.route.nextRebuildRetry=nil
+    local stats=api.route.stats
+    local function resetStats()
+        for key in pairs(stats) do stats[key]=nil end
+        stats.total,stats.ok,stats.failed,stats.declined,stats.quiet,stats.suppressed,stats.byReason=0,0,0,0,0,0,{}
+    end
+    -- G1: counters. Timer stub: every debugprofilestop call advances by clock step, so elapsed is deterministic.
+    local clock,step=0,2
+    debugprofilestop=function() clock=clock+step;return clock end
+    check(stats==api.route.stats and type(stats.byReason)=='table','perf: stats live on ns.route with a per-reason table')
+    resetStats()
+    debugprofilestop=nil
+    local rows={routeRow(201,500),routeRow(202,900)}
+    local plan=scenario(rows)
+    check(stats.total==1 and stats.ok==1 and stats.quiet==0 and stats.lastMs==nil and stats.maxMs==nil and plan.ok,'perf: missing debugprofilestop records no timing and never fails the rebuild')
+    check(stats.lastAt==GetTime(),'perf: lastAt records the rebuild time')
+    debugprofilestop=function() clock=clock+step;return clock end
+    api.Replan({})
+    check(stats.lastMs>0 and stats.lastMs%2==0 and stats.maxMs==stats.lastMs,'perf: stub clock yields last and max elapsed')
+    step=50;api.Replan({})
+    local biggest=stats.lastMs
+    check(biggest>=50 and biggest%50==0 and stats.maxMs==biggest,'perf: slower rebuild raises the maximum')
+    step=1;api.Replan({})
+    check(stats.lastMs>0 and stats.lastMs<biggest and stats.maxMs==biggest,'perf: faster rebuild updates last but keeps the maximum')
+    api.SetRouteOptions({})
+    api.SetQuestSkip({questID=201})
+    api.SetQuestSkip({questID=201,skipped=false})
+    -- Unchanged route on a cache-refresh reason: counted as quiet and keeps the same plan and sequence.
+    local sequence=api.route.sequence
+    local driver=api.route.driver
+    api.route.nextRewardCheck=Fixture.time-1
+    Fixture.time=Fixture.time+0.6;driver:GetScript('OnUpdate')(driver,.2)
+    check(api.route.sequence==sequence and stats.quiet==1 and stats.byReason.reward_cache_refresh==1,'perf: unchanged cache refresh counts as quiet without a new plan')
+    step=7;failScan=true
+    local failed=api.Replan({})
+    failScan=false
+    check(failed.ok==false and stats.failed==1 and stats.lastMs==7 and stats.maxMs==biggest,'perf: failed rebuild is counted and timed')
+    check(api.route.sequence==sequence,'perf: failed rebuild never advances the sequence')
+    api.route.nextRebuildRetry=nil
+    check(stats.total==9 and stats.ok==8 and stats.failed==1 and stats.declined==0 and stats.quiet==1,'perf: total equals ok plus failed plus declined')
+    local expectedReasons={manual=5,options_changed=1,quest_skipped=1,quest_restored=1,reward_cache_refresh=1}
+    local reasonTotal,reasonsMatch=0,true
+    for reason,count in pairs(stats.byReason) do reasonTotal=reasonTotal+count;if expectedReasons[reason]~=count then reasonsMatch=false end end
+    check(reasonsMatch and reasonTotal==9,'perf: per-reason counts match the triggers used')
+    check(api.GetPlan({}).stats==nil and api.route.plan.stats==nil,'perf: stats never enter the plan contract')
+    sequence=api.route.sequence;printed={}
+    SlashCmdList['QUESTROUTE']('perf')
+    local perfText=table.concat(printed,'\n')
+    check(perfText:find('9',1,true) and perfText:find('manual×5',1,true) and #printed==2,'perf: /questroute perf prints totals and top reasons')
+    check(api.route.sequence==sequence and stats.total==9,'perf: reading stats never rebuilds or advances the sequence')
+    -- Leave the fixture as the following checks expect.
+    print,debugprofilestop,C_QuestLog.GetQuestsOnMap=oldPrint,oldProfile,oldScan
+    api.route.nextRebuildRetry=nil;resetStats()
+    api.SetRouteOptions({moveThreshold=savedThreshold})
+end
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
 scenario({routeRow(201,500),routeRow(202,680)},500)

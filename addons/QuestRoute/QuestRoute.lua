@@ -217,6 +217,25 @@ local function PrintWhy()
     end
 end
 
+-- 只读显示 ns.route.stats（重建次数、静默命中、耗时）；不重建、不改 sequence，也不影响 plan。
+local function PrintPerf()
+    local stats, prefix = ns.route.stats, "|cff31cee8QuestRoute|r "
+    if not stats or ((stats.total or 0) == 0 and (stats.suppressed or 0) == 0) then print(prefix .. "尚无重建记录。"); return end
+    print(prefix .. string.format("重建 %d 次：成功 %d（路线未变 %d）· 失败 %d · 未采用 %d · 退避拦截 %d。",
+        stats.total or 0, stats.ok or 0, stats.quiet or 0, stats.failed or 0, stats.declined or 0, stats.suppressed or 0))
+    local reasons = {}
+    for reason, count in pairs(stats.byReason or {}) do reasons[#reasons + 1] = { reason = reason, count = count } end
+    table.sort(reasons, function(a, b)
+        if a.count ~= b.count then return a.count > b.count end
+        return a.reason < b.reason
+    end)
+    local top = {}
+    for index = 1, math.min(#reasons, 4) do top[index] = reasons[index].reason .. "×" .. reasons[index].count end
+    local function Milliseconds(value) return value and string.format("%.1f ms", value) or "无计时" end
+    print("最近 " .. Milliseconds(stats.lastMs) .. " · 最大 " .. Milliseconds(stats.maxMs)
+        .. (#top > 0 and (" · 原因：" .. table.concat(top, "、")) or ""))
+end
+
 local function PrintAudit(arg)
     if not ns.AnalyzeQuests or not ns.QuestValue then
         print("|cff31cee8QuestRoute|r 任务价值分析模块未加载。")
@@ -245,6 +264,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
     local result
     if command == "why" then PrintWhy(); return
     elseif command == "audit" then PrintAudit(value); return
+    elseif command == "perf" then PrintPerf(); return
     elseif command == "notice" then
         result = (value == "on" or value == "off") and ns.SetRouteOptions({ switchNotice = value == "on" })
             or InvalidArguments("用法：/questroute notice on/off")
@@ -272,7 +292,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
         if not plan.ok then print("|cff31cee8QuestRoute|r " .. (plan.error and plan.error.message or "路线暂时不可用。")); return end
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
-        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID]")
+        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID] · perf")
         return
     end
     if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
