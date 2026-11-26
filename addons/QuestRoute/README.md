@@ -226,7 +226,7 @@ get_unit_tasks 返回 state/needed、可读 npcID、tasks、neededCount/knownGoa
 WoWBridge 事件由工坊 `events` 读取，addon 为 QuestRoute：
 
 - `api.ready`：API 已就绪，含 schemaVersion/apiRevision。
-- `route.updated`：路线重建，含 sequence/mapID/count/questCount/pickupCount/reason。
+- `route.updated`：路线内容变化（步骤、排除原因、待加载计数、奖励权重或关联清单），含 sequence/mapID/count/questCount/pickupCount/reason。内容没变时不发送，因此背包、技能和未改变步骤的走动不会点亮帧码。等缓存的复查若路线没变，还会把下一次推迟到 30 秒。
 - `route.navigation_changed`：当前目标、阶段或保护语义变化，含 questID/objectiveKey、phase/reason/protected/stale/distance/mapID；不逐帧发送位置。
 - `route.spot_changed`：成功手动换点的任务、目标、地图与到期信息。
 - `route.association`：一行关联建议已显示，含 questID/action/applied。

@@ -211,6 +211,70 @@ end
 local noticePrefixes = { clearly_better_candidate = "已改为：", previous_target_changed = "下一站：", continue_nearby_group = "下一站：" }
 local quietNoticeReasons = { startup = true, manual = true, quest_skipped = true, quest_restored = true,
     skips_reset = true, options_changed = true, spot_changed = true }
+-- 这些重建是在等缓存。路线没变时不发 route.updated，并把下一次复查推到 30 秒，避免每 5 秒空转一次。
+local quietRefreshReasons = { location_data_refresh = true, objective_data_refresh = true, reward_cache_refresh = true,
+    association_data_refresh = true, QUEST_DATA_LOAD_RESULT = true, association_index_ready = true }
+
+local function WeightKey(step)
+    local weight = step.priorityWeight
+    if type(weight) ~= "number" then return "" end
+    return string.format("%.2f", weight)
+end
+
+local function WorldKey(world)
+    if type(world) ~= "table" or type(world.x) ~= "number" or type(world.y) ~= "number" then return "" end
+    return string.format("%s:%.1f:%.1f", tostring(world.continentID or ""), world.x, world.y)
+end
+
+local function ListKey(items, first, second, third)
+    local parts = {}
+    for _, item in ipairs(items or {}) do
+        parts[#parts + 1] = tostring(item[first] or "") .. ":" .. tostring(item[second] or "")
+            .. ":" .. tostring(third and item[third] or "")
+    end
+    table.sort(parts)
+    return table.concat(parts, ",")
+end
+
+local function StepsSame(previous, plan)
+    if previous.mapID ~= plan.mapID or (previous.pendingLocationCount or 0) ~= (plan.pendingLocationCount or 0)
+        or (previous.pendingObjectiveCount or 0) ~= (plan.pendingObjectiveCount or 0) then return false end
+    local oldRewards = previous.levelingPriority and previous.levelingPriority.pendingRewardCount or 0
+    local newRewards = plan.levelingPriority and plan.levelingPriority.pendingRewardCount or 0
+    if oldRewards ~= newRewards then return false end
+    local oldHint = previous.nextMapHint and previous.nextMapHint.mapID or nil
+    local newHint = plan.nextMapHint and plan.nextMapHint.mapID or nil
+    if oldHint ~= newHint or #previous.steps ~= #plan.steps or #(previous.excluded or {}) ~= #(plan.excluded or {}) then return false end
+    for index, step in ipairs(plan.steps) do
+        local old = previous.steps[index]
+        local oldReason = old.priority and old.priority.reason
+        local newReason = step.priority and step.priority.reason
+        if old.questID ~= step.questID or old.action ~= step.action or old.objectiveKey ~= step.objectiveKey
+            or old.status ~= step.status or (old.objectiveRevision or 0) ~= (step.objectiveRevision or 0)
+            or oldReason ~= newReason or WeightKey(old) ~= WeightKey(step)
+            or WorldKey(old.world) ~= WorldKey(step.world) then return false end
+    end
+    for index, item in ipairs(plan.excluded or {}) do
+        local old = previous.excluded[index]
+        if old.questID ~= item.questID or old.reason ~= item.reason then return false end
+    end
+    return true
+end
+
+local function RouteSame(previous, plan)
+    if not StepsSame(previous, plan) then return false end
+    local oldDiscovery, newDiscovery = previous.discovery or {}, plan.discovery or {}
+    if (oldDiscovery.pendingCount or 0) ~= (newDiscovery.pendingCount or 0)
+        or (oldDiscovery.pendingLocationCount or 0) ~= (newDiscovery.pendingLocationCount or 0)
+        or (oldDiscovery.building == true) ~= (newDiscovery.building == true) then return false end
+    if ListKey(oldDiscovery.opportunities, "questID", "action") ~= ListKey(newDiscovery.opportunities, "questID", "action")
+        or ListKey(oldDiscovery.blocked, "questID", "reason") ~= ListKey(newDiscovery.blocked, "questID", "reason")
+        or ListKey(oldDiscovery.carriedItems, "questID", "itemID", "action") ~= ListKey(newDiscovery.carriedItems, "questID", "itemID", "action")
+        or ListKey(oldDiscovery.announcedOpportunities, "questID", "action") ~= ListKey(newDiscovery.announcedOpportunities, "questID", "action") then
+        return false
+    end
+    return true
+end
 
 local function NotifyChange(previousPlan, plan, reason, stability, settings, now)
     local first, previousFirst = plan.steps[1], previousPlan and previousPlan.steps[1]
@@ -613,8 +677,7 @@ local function BuildPlan(reason)
             end
         end
     end
-    ns.route.sequence = ns.route.sequence + 1
-    ns.route.plan = {
+    local plan = {
         ok = true, schemaVersion = 1, apiRevision = ns.apiRevision, sequence = ns.route.sequence,
         policy = "stable_grouped_precedence_lookahead", scope = "current_player_map_active_and_available_quests",
         discovery = { available = discovery.available, source = "QuestieDB", reason = discovery.reason,
@@ -652,6 +715,20 @@ local function BuildPlan(reason)
         maxMonsterLevelOffset = settings.maxMonsterLevelOffset, minPickupLevel = settings.minPickupLevel,
         totalStraightDistance = pathLength, reason = reason, plannedAt = now,
     }
+    if previousPlan and previousPlan.ok and quietRefreshReasons[reason] and RouteSame(previousPlan, plan) then
+        local later = now + 30
+        if ns.route.nextRewardCheck and ns.route.nextRewardCheck < later then ns.route.nextRewardCheck = later end
+        if ns.route.nextLocationCheck and ns.route.nextLocationCheck < later then ns.route.nextLocationCheck = later end
+        if ns.route.nextObjectiveCheck and ns.route.nextObjectiveCheck < later then ns.route.nextObjectiveCheck = later end
+        if ns.route.nextAssociationCheck and ns.route.nextAssociationCheck < later then ns.route.nextAssociationCheck = later end
+        Decision.Notify(plan, previousPlan, settings, now)
+        ns.route.pendingSpotChange = nil
+        ns.route.dirty, ns.route.pendingReason = false, nil
+        return previousPlan
+    end
+    ns.route.sequence = ns.route.sequence + 1
+    plan.sequence = ns.route.sequence
+    ns.route.plan = plan
     UpdateNavigation(ns.route.plan, origin, now, previousNavigation, reason == "manual" or ns.route.pendingSpotChange ~= nil)
     if #steps > 0 or not nextMapHint or not previousPlan or previousPlan.mapID ~= mapID
         or quietNoticeReasons[reason] or not settings.switchNotice then ns.route.nextMapNoticeAt = nil end
@@ -663,8 +740,11 @@ local function BuildPlan(reason)
     ns.route.pendingSpotChange = nil
     ns.route.playerLocation, ns.route.lastOrigin = origin, origin.world
     ns.route.dirty, ns.route.pendingReason = false, nil
-    WB:Emit("route.updated", { sequence = ns.route.sequence, mapID = mapID, count = #steps, questCount = routeQuestCount,
-        pickupCount = pickupCount, reason = reason })
+    -- 帧码只在路线内容变化时出现。背包、技能、走动后步骤未变时不送事件，避免左上角色块反复重画。
+    if not (previousPlan and previousPlan.ok and StepsSame(previousPlan, plan)) then
+        WB:Emit("route.updated", { sequence = ns.route.sequence, mapID = mapID, count = #steps, questCount = routeQuestCount,
+            pickupCount = pickupCount, reason = reason })
+    end
     return ns.route.plan
 end
 

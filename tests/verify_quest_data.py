@@ -1220,6 +1220,38 @@ check(plan.count==1 and plan.reason=='location_data_refresh' and plan.navigation
 check(plan.pendingLocationCount==0 and api.route.nextLocationCheck==nil,'native location retry stops after recovery')
 plan=samplePosition(nil,10)
 check(plan.pendingLocationCount==0,'restored native location remains stable')
+rows={routeRow(201,500)}
+plan=scenario(rows,400);rows[1].noPOI=true;plan=autoPlan()
+local unchangedSequence,published,previousEmit=plan.sequence,0,api.WB.Emit
+api.WB.Emit=function(self,topic,data)
+    if topic=='route.updated' then published=published+1 end
+    return previousEmit(self,topic,data)
+end
+plan=samplePosition(nil,5)
+check(plan.sequence==unchangedSequence and plan.count==0 and published==0,'missing POI retry does not emit when the route is unchanged')
+check(api.route.nextLocationCheck>=GetTime()+29,'unchanged location retry backs off to 30 seconds')
+rows[1].noPOI=false;syncPOIs();Fixture.time=api.route.nextLocationCheck;plan=samplePosition(nil,0)
+check(plan.sequence==unchangedSequence+1 and plan.count==1 and plan.reason=='location_data_refresh' and published==1,'backed-off location retry still publishes when the POI returns')
+api.WB.Emit=previousEmit
+local savedThreshold=api.GetPlan({}).moveThreshold
+api.SetRouteOptions({moveThreshold=100})
+rows={routeRow(201,800)}
+plan=scenario(rows,400)
+local still,movedEvents,moveEmit=plan.sequence,0,api.WB.Emit
+api.WB.Emit=function(self,topic,data)
+    if topic=='route.updated' then movedEvents=movedEvents+1 end
+    return moveEmit(self,topic,data)
+end
+plan=samplePosition(500)
+check(plan.sequence==still+1 and plan.reason=='player_moved' and plan.steps[1].questID==201 and movedEvents==0,'moving with the same steps does not send a frame')
+local bagDriver=api.route.driver
+bagDriver:GetScript('OnEvent')(bagDriver,'BAG_UPDATE_DELAYED')
+bagDriver:GetScript('OnEvent')(bagDriver,'SKILL_LINES_CHANGED')
+Fixture.time=Fixture.time+0.6
+bagDriver:GetScript('OnUpdate')(bagDriver,.2)
+check(movedEvents==0,'bag and skill events with the same route do not send a frame')
+api.WB.Emit=moveEmit
+api.SetRouteOptions({moveThreshold=savedThreshold})
 rows={routeRow(201,500,{map=102})};plan=scenario(rows)
 check(plan.navigation.phase=='idle' and plan.pendingLocationCount==0 and api.route.nextLocationCheck==nil,'legitimate foreign-only route has no pointless missing-data retry')
 -- Readiness and native POI updates can arrive on separate events: preserve uncertainty explicitly.
