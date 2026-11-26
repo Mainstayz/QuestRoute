@@ -8,7 +8,7 @@
 
 ## 地图与设置
 
-路线只安排玩家当前地图的有效任务；QuestieDB 补充附近接取、目的地漏接、直接前置和物品启动关系，有限前瞻有明确收益时可先安排接取或前置。未接任务的工作目标只进入预测，实际接取后才加入正式路线。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供三个复选框（精英任务、屏幕提示、任务怪姓名板）及“怪物最多高出角色几级”“接取建议最低任务等级”两个滑条。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启。战斗等级范围只查任务怪/材料来源怪的已知等级上限，不按任务标注等级过滤；另有未接任务的最低等级过滤，minPickupLevel为0..60整数、默认15，0关闭，等于阈值或等级未知时保留，已接任务不受此下限影响。maxMonsterLevelOffset为0..5整数、默认2：0只允许不高于角色的怪，1允许高1级。超出设置的来源不安排，普通路线/关联前瞻/换热点共用；同一材料可选择较低等级来源，改设置或升级后立即重评。整项官方完成后的交付不受类型和等级限制，手动跳过和失败仍优先。
+路线只安排玩家当前地图的有效任务；QuestieDB 补充附近接取、目的地漏接、直接前置和物品启动关系，有限前瞻有明确收益时可先安排接取或前置。未接任务的工作目标只进入预测，实际接取后才加入正式路线。进行中默认过滤副本、精英、专业；原生 **选项 → 插件 → QuestRoute** 提供四个复选框（精英任务、屏幕提示、任务怪姓名板、任务联想）及“怪物最多高出角色几级”“接取建议最低任务等级”两个滑条。精英开关可单独放开未完成精英任务，屏幕提示和姓名板默认开启；**任务联想默认关闭**（见下文「任务关联与前瞻」）。战斗等级范围只查任务怪/材料来源怪的已知等级上限，不按任务标注等级过滤；另有未接任务的最低等级过滤，minPickupLevel为0..60整数、默认15，0关闭，等于阈值或等级未知时保留，已接任务不受此下限影响。maxMonsterLevelOffset为0..5整数、默认2：0只允许不高于角色的怪，1允许高1级。超出设置的来源不安排，普通路线/关联前瞻/换热点共用；同一材料可选择较低等级来源，改设置或升级后立即重评。整项官方完成后的交付不受类型和等级限制，手动跳过和失败仍优先。
 
 - 青色编号和直线为路线，橙色 1 号是下一步；可交任务用金色 `N?`，已完成待确认用 `N~`。NPC 已确认提供或背包物品启动用 `N!`，数据库推算的接取待确认用 `N~!`；未采用的建议对应独立黄色 `!` / `~!`，取物来源也用 `~!`，不计入路线步数。实际对话未提供或客户端确认 NPC 不可交互时保留灰色 `×` 参考，不再安排该接取点。
 - 每个可靠未完目标各一步，一个主热点和最多两个紫色 `Nb/Nc` 备选。备选不增加路线步数或里程。
@@ -31,7 +31,7 @@
 
 姓名板功能默认启用，玩家自行开启敌方姓名板（默认 `V`）。黄色“! 击杀 2/6 · 材料 1/5”表示仍有已确认用途，关联当前路线目标时为橙色。覆盖所有有效未跳过任务，击杀够数但材料仍缺时继续提示；未知、身份受限或无可靠用途时隐藏，不将其判成确定无关。
 
-原生设置页的默认值：精英关闭，屏幕提示与任务怪姓名板开启，怪物等级滑条为2，接取建议最低任务等级为15；修改后立即重排。跳过记录、移动阈值、总显示、姓名板、精英、怪物等级与接取等级选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
+原生设置页的默认值：精英关闭，屏幕提示与任务怪姓名板开启，任务联想关闭，怪物等级滑条为2，接取建议最低任务等级为15；修改后立即重排。设置页控件只在登录期注册，新增的“启用任务联想”复选框需重载界面（`/reload`）后才显示，也可直接用 `/questroute association on` 调整。跳过记录、移动阈值、总显示、姓名板、精英、任务联想、怪物等级与接取等级选项按服务器/角色保存在 `QuestRouteDB.routes`，正常退出或重载时由客户端写盘。工作计时与地点避让仅存本次 UI 内存。
 
 ## 命令
 
@@ -50,6 +50,7 @@
 | `/questroute resetspots [ID/all]` | 清全部或指定任务的临时地点避让，省略等同 all |
 | `/questroute nameplates on`、`/questroute nameplates off` | 单独控制任务姓名板提示 |
 | `/questroute notice on`、`/questroute notice off` | 同时开关屏幕与聊天框提示（默认开）；每条 Toast 在聊天框保留同一份文字供回看 |
+| `/questroute association on`、`/questroute association off` | 开关任务联想（可接任务发现与前瞻，默认关）；立即重排，关闭时释放关联索引 |
 | `/questroute monsterlevel 0..5` | 设置怪物最多高出角色几级（默认2），0为同级及以下；只查怪物等级，立即重排 |
 | `/questroute minlevel 0..60` | 接取建议最低任务等级（默认15），0关闭；只影响未接任务，立即重排 |
 | `/questroute why` | 前三步距离与权重、排除原因、附近/目的地相关任务与启动物品机会；索引构建进度和本图做完后的下一图提示 |
@@ -168,7 +169,7 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 | count / questCount | 目标/交付/接取步骤数、全部步骤的去重任务数 |
 | activeQuestCount / pickupCount | 日志内有效任务数、接取/物品启动步骤数 |
 | objectiveStepCount / nativeStepCount | 细目标与原生步骤数；含接取时 stepUnit 为 `unfinished_objective_quest_or_pickup`，否则为 `unfinished_objective_or_quest` |
-| discovery / decision | 关联机会与索引状态、有限前瞻预测和是否采用；预测不表示实际已接或已完成 |
+| discovery / decision | 关联机会与索引状态、有限前瞻预测和是否采用；预测不表示实际已接或已完成。任务联想关闭时两者仍存在但为空/不可用（`reason="association_disabled"`） |
 | turnInCount / completionPendingCount | 可交与完成待确认步骤数 |
 | steps / excluded | 有序步骤与被排除任务及原因 |
 | groups / groupRadius | 固定中心分组，半径 200 码 |
@@ -177,7 +178,7 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 | objectiveResolution / pendingObjectiveCount / objectiveRetrySeconds | 细目标采用/回退与暂缺重试 |
 | pendingLocationCount / locationRetrySeconds | 原生位置暂缺重试 |
 | hotspotRules / spotRules / avoidedSpots | 热点、临时避让规则与记录 |
-| enabled / moveThreshold / includeEliteQuests / switchNotice / nameplates | 当前选项和姓名板解析摘要 |
+| enabled / moveThreshold / includeEliteQuests / switchNotice / associationEnabled / nameplates | 当前选项和姓名板解析摘要；`associationEnabled` 为任务联想开关（boolean，默认 false） |
 | nextMapHint | 仅当前地图无步骤、有外图任务、玩家世界坐标可用且无等待恢复的位置/目标数据时存在：`questID/title/mapID/mapName`，只是提示，不跨图规划 |
 
 steps 保留 index/questID/title/level/status/action、stepKey/displayTitle/questStepCount、targetMapID、地图/world 坐标、source/precision、segmentDistance、priorityWeight/weightedDistance（含自由选点时的有界任务群加成）、workFactor/remainingWork（剩余数量对权重的 0.9~1.1 修正，缺数据为 1）、priority、groupIndex/groupSize/groupQuestCount、objectiveRevision/objectivesAvailable 和 navigation。action 为 quest_area/turn_in/completion_pending/pick_up/start_item，表示步骤类型；接取另有 certainty（estimated/confirmed）、可选 itemID 和 opportunityReason；navigation.phase 表示当前执行状态。细目标另带 objectiveKey/objective、entityKind/entityID/relation、locationVersion、targetMode/targetReason；显示标题与计数不改变任务原始标题。
@@ -193,6 +194,8 @@ navigation.phase 为 travel/working/turn_in/completion_pending/pick_up/start_ite
 navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时180秒。状态每0.5秒更新；超时释放强保护，自动切换仍需改善30%且减少50加权码。turn_in 只证实日志可交，deliveryLocationConfirmed=false，locationPrecision=quest_poi。完整规则见[技术说明](../../docs/技术说明.md)。
 
 ### 任务关联与前瞻
+
+**任务联想开关**：本节全部能力（关联索引、沿途/附近/目的地可接任务发现、前瞻、接取/取物建议与地图接取机会图元）受按角色保存的 `associationEnabled`（boolean）控制，**默认关闭**。可在设置页“启用任务联想（可接任务发现与前瞻）”（需重载界面后显示）、`/questroute association on|off` 或 `set_route_options` 开启，切换立即重排；旧存档缺字段或为非 boolean 时按 false 处理，因此升级后现有用户的任务联想会被关闭，需手动重新开启。关闭时：不构建也不推进关联索引并释放缓存，重新开启须重建索引，完成前有一段延迟（`discovery.building=true`），完成后触发 `association_index_ready` 重建；`plan.discovery` 为占位结果（`available=false`、`reason="association_disabled"`、`building=false`，机会/受阻/持书/已提示等列表为空，`pendingCount/pendingLocationCount=0`），`plan.decision.available=false` 且同一 reason；`pickupCount=0`，路线中没有 `pick_up/start_item` 步骤，`stability.reason` 也不会是 `related_quest_plan`；不发 `RequestLoadQuestByID` 预加载，对话与单位观察不产生 `pickup_unit_changed`，不再发 `route.association`；地图上的接取机会图元（黄 `!`、`~!`、灰 `×`）为空；已提示机会、对话和单位观察状态在关闭时清空，重新开启不会复现旧提示；`/questroute why` 只打印“任务联想已关闭（/questroute association on 开启）”。**不受影响**：`nextMapHint`（关闭后不再等待关联索引，可能比开启时更早出现）、进行中任务的刷新点/交付/热点/备选热点图元、`switchNotice` 管的“已改为/下一站/可前往”通知、姓名板与 `get_unit_tasks`、任务价值面板与 `analyze_quests`。以下各段描述的是开关开启后的行为。
 
 关联知识全部来自 QuestieDB，按其数据有效设计；客户端只读校验角色等级、种族/职业、任务历史、当前进度、背包与实际交互可接列表。未接的重复、战场/PvP、节日/安其拉筹备活动、捐献类、纯ASCII英文标题和低于minPickupLevel的任务不进入接取建议、两图标记或前瞻，旧提示同步清除；已接任务仍正常导航和交付。对应 `discovery.blocked[].reason` 为repeatable、battleground、holiday、donation、unlocalized、quest_below_minimum。重复性采用原生 `IsRepeatableQuest=true` 或 QuestieDB `specialFlags` 的 REPEATABLE 位，补齐本客户端原生 false 的漏报；战场结合原生PvP类型41与数据库战场分类/AreaID，节日按数据库明确分类，捐献按中文标题“捐献/贡献”前缀。英文只过滤纯ASCII标题，中文夹英文缩写保留；标题或等级未知不当成英文/低级。捐献毛料原生等级为60且非重复，因此单独按捐献类排除。对话确认可接时绑定具体 NPC 和交互时的位置（source=client、precision=interaction_position）；其他接取点仍标注静态位置。完整对话列表未提供任务或近距离存活接取 NPC 明确不可交互时，该 NPC 接取点停止参与可执行候选，discovery.blocked 给出 unknown 和 npc_not_offering/npc_not_interactable 及 point/action；地图保留灰色 × 和原因。未知/不完整列表及单项详情不用于否定其他任务。`preQuestGroup` 按 AND、`preQuestSingle` 按 OR，完成目标仍需交付才满足前置。缺字段/不可读条件保留未知；未覆盖的 `triggerEnd` 探索/事件条件不能据普通目标预测完整交付，跳过/失败等被过滤的已接任务也不参与预测。
 
@@ -211,7 +214,7 @@ navigationRules 为进入120/退出180码、进度300码/90秒、无进度超时
 | `replan` / `Replan` | `{}`；主动重排，绕过当前保持和旧组延续 |
 | `set_quest_skip` / `SetQuestSkip` | `{questID,skipped?}`；默认 true，false 恢复，不放弃任务 |
 | `reset_quest_skips` / `ResetQuestSkips` | `{}`；清当前角色全部任务跳过 |
-| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,maxMonsterLevelOffset?,minPickupLevel?,enabled?,nameplatesEnabled?,includeEliteQuests?,switchNotice?}`；maxMonsterLevelOffset为0..5整数、默认2，只限制怪物等级差；minPickupLevel为0..60整数、默认15，0关闭，仅过滤未接任务的标注等级下限；后四项boolean。立即重排并按角色保存 |
+| `set_route_options` / `SetRouteOptions` | `{moveThreshold?,maxMonsterLevelOffset?,minPickupLevel?,enabled?,nameplatesEnabled?,includeEliteQuests?,switchNotice?,associationEnabled?}`；maxMonsterLevelOffset为0..5整数、默认2，只限制怪物等级差；minPickupLevel为0..60整数、默认15，0关闭，仅过滤未接任务的标注等级下限；后五项boolean，其中 associationEnabled（任务联想）默认false，非boolean整体拒绝、同次调用的其他字段也不写入。立即重排并按角色保存 |
 | `change_quest_spot` / `ChangeQuestSpot` | `{questID?,objectiveKey?,hotspotID?}`；省略取1号，key需questID，hotspotID需同时带questID/key，来自当前 hotspots[].id |
 | `clear_spot_avoidances` / `ClearSpotAvoidances` | `{questID?}`；省略清全部，返回重排计划，不改任务跳过 |
 | `get_unit_tasks` / `GetUnitTasks` | `{unit?}`；默认 target，仅接受 target/mouseover/nameplateN，只读当前单位任务用途 |
@@ -230,7 +233,7 @@ WoWBridge 事件由工坊 `events` 读取，addon 为 QuestRoute：
 - `route.updated`：路线内容变化（步骤、排除原因、待加载计数、奖励权重或关联清单），含 sequence/mapID/count/questCount/pickupCount/reason。内容没变时不发送，因此背包、技能和未改变步骤的走动不会点亮帧码。等缓存的复查若路线没变，还会把下一次推迟到 30 秒。
 - `route.navigation_changed`：当前目标、阶段或保护语义变化，含 questID/objectiveKey、phase/reason/protected/stale/distance/mapID；不逐帧发送位置。
 - `route.spot_changed`：成功手动换点的任务、目标、地图与到期信息。
-- `route.association`：一行关联建议已显示，含 questID/action/applied。
+- `route.association`：一行关联建议已显示，含 questID/action/applied；任务联想关闭时不发。
 
 修改 Lua 后热加载整个插件，模块会捕获其他模块的函数引用，不能仅加载单文件。新增目录、文件或 `.toc` 变更须完整重启。原生设置回调只注册一次，热加载只更新分发函数，避免追加监听；新增设置项时按项判断是否已注册（不能只看 category），并在 `ui.registered` 上防止重复注册分类。详细开发约定见 [AGENTS.md](AGENTS.md)。
 

@@ -17,11 +17,11 @@
 | `Navigation.lua` | 逐目标进度历史、工作会话、状态转换及保护规则 | `ns.Navigation` |
 | `Hotspots.lua` | 密度热点、几何缓存、主备摘要、临时避让与清理 | `ns.Hotspots` |
 | `Nameplates.lua` | NPC 用途索引、单位任务查询、姓名板图元与清理 | `ns.Nameplates` |
-| `Discovery.lua` | QuestieDB 分批索引、角色接取资格、附近/沿途/目的地关联和启动物品发现 | `ns.Discovery` |
+| `Discovery.lua` | QuestieDB 分批索引、角色接取资格、附近/沿途/目的地关联和启动物品发现；`Pump/ObserveUnits/ObserveInteraction` 受 `associationEnabled` 门控（关闭时释放索引、不观察），`Disabled()` 提供关闭时的占位结果 | `ns.Discovery` |
 | `Decision.lua` | 局部依赖图宏动作束搜索、共享工作收益、独立基线比较和关联轻提示 | `ns.Decision` |
-| `Planner.lua` | 候选选择（含任务群加成和前瞻）、当前目标保持、归组、接取插入、提示、路线快照及重建容错（失败保留旧计划、5 秒重试） | `ns.Planner` |
+| `Planner.lua` | 候选选择（含任务群加成和前瞻）、当前目标保持、归组、接取插入、提示、路线快照及重建容错（失败保留旧计划、5 秒重试）；任务联想关闭时不调用 `Discovery.Collect`，改用占位结果 | `ns.Planner` |
 | `RouteActions.lua` | 跳过/恢复、换热点草稿提交、清避让、更新选项 | 既有 `ns.SetQuestSkip` 等公开 API |
-| `Settings.lua` | 原生设置页和单次原生回调分发 | `ns.RegisterSettings` |
+| `Settings.lua` | 原生设置页（四个复选框含任务联想开关、两个滑条）和单次原生回调分发 | `ns.RegisterSettings` |
 | `MapPins.lua` | 两图共用投影、编号、悬停/点击、防重叠、同地点接取建议合并和备选图元 | `ns.MapPins` |
 | `WorldMap.lua` | 大地图/战场地图图层、矩形裁剪 | `ns.WorldMap` |
 | `Minimap.lua` | 小地图朝向、圆形裁剪和视野外下一步指示 | `ns.Minimap` |
