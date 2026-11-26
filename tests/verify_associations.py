@@ -2065,6 +2065,25 @@ check(ns.Discovery.ObserveUnits()==true and ns.route.pickupChecks[2410],'assoc-s
 gossip(2410,{{questID=97287}})
 check(ns.route.gossip and ns.route.gossip.offered[97287],'assoc-switch: reopened ObserveInteraction records the dialogue')
 '''),
+    ("assoc-switch: closing forgets the dialogue and unit observations", r'''
+record(97287,100,{name='精明的谈判',startedBy={[1]={2410}}}); place('npc',2410,100)
+FixtureDB.Npc.questStarts=function(id) if id==2410 then return {97287} end end
+Fixture.units.target={id=2410}
+UnitIsInInteractRange=function() return true end
+UnitIsInteractable=function() return false end
+UnitIsDeadOrGhost=function() return false end
+Fixture.loggedIn=true; ns.StartRoute()
+check(ns.RouteOptions.Get().associationEnabled==true,'assoc-switch: precondition the fixture starts with the switch open')
+ns.Discovery.ObserveUnits()
+check(ns.route.pickupChecks and ns.route.pickupChecks[2410] and ns.route.pickupChecks[2410].reason=='npc_not_interactable','assoc-switch: precondition an open switch records the unit restriction')
+gossip(2410,{{questID=97287}})
+check(ns.route.gossip and ns.route.gossip.offered[97287] and ns.route.pickupChecks and ns.route.pickupChecks[2410].offered[97287],
+    'assoc-switch: precondition an open switch records the dialogue')
+ns.SetRouteOptions({associationEnabled=false})
+check(ns.route.pickupChecks==nil and ns.route.gossip==nil,'assoc-switch: closing drops the stored unit and dialogue observations')
+ns.SetRouteOptions({associationEnabled=true})
+check(ns.route.pickupChecks==nil and ns.route.gossip==nil,'assoc-switch: reopening does not bring the old observations back')
+'''),
 )
 
 
