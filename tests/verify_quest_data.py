@@ -2640,6 +2640,178 @@ do
     api.StartRoute()
     check(api.route.running,'perf: route restarts after the location cache scenarios')
 end
+-- perf G4 allow-list: during back-off only the allow-listed player/system reasons may start a rebuild; automatic ones stay silent.
+-- Failure injection and clock advance match the G4 block above (GetQuestsOnMap throws; Fixture.time drives the driver).
+do
+    local oldPrint,oldScan,savedThreshold=print,C_QuestLog.GetQuestsOnMap,api.GetPlan({}).moveThreshold
+    local failScan,scanCalls=false,0
+    print=function() end
+    C_QuestLog.GetQuestsOnMap=function(id)
+        if failScan then scanCalls=scanCalls+1;error('fixture scan failure') end
+        return oldScan(id)
+    end
+    api.SetRouteOptions({moveThreshold=100})
+    local stats=api.route.stats
+    local driver=api.route.driver
+    local function tick(seconds) Fixture.time=Fixture.time+seconds;driver:GetScript('OnUpdate')(driver,seconds) end
+    local function resetStats()
+        for key in pairs(stats) do stats[key]=nil end
+        stats.total,stats.ok,stats.failed,stats.declined,stats.quiet,stats.suppressed,stats.byReason=0,0,0,0,0,0,{}
+    end
+    -- One failing manual rebuild puts the route into back-off; the clock does not move, so GetTime()<nextRebuildRetry holds.
+    local function enterBackoff()
+        failScan=true;api.route.nextRebuildRetry=nil
+        api.Replan({})
+        return api.route.nextRebuildRetry
+    end
+    local function probe(reason,action)
+        local retry=enterBackoff()
+        local before={total=stats.total,failed=stats.failed,suppressed=stats.suppressed,reason=stats.byReason[reason] or 0,scan=scanCalls}
+        action()
+        return {armed=retry~=nil and GetTime()<retry,
+            attempted=stats.total==before.total+1 and stats.failed==before.failed+1
+                and (stats.byReason[reason] or 0)==before.reason+1 and scanCalls==before.scan+1,
+            quiet=stats.suppressed==before.suppressed}
+    end
+    local rows={routeRow(201,500),routeRow(202,900)}
+    scenario(rows);Fixture.playerX=0
+    api.route.nextRebuildRetry=nil
+    tick(0.6)
+    local keptPlan,keptSequence=api.route.plan,api.route.sequence
+    -- Reverse check: movement, due timers and a coalesced game event are all held back inside the back-off window.
+    for _,key in ipairs({'nextRewardCheck','nextLocationCheck','nextObjectiveCheck','nextAssociationCheck'}) do
+        api.route[key]=Fixture.time-1
+    end
+    resetStats()
+    local retry=enterBackoff()
+    local total,suppressed,scan=stats.total,stats.suppressed,scanCalls
+    check(retry~=nil and GetTime()<retry and stats.failed==1,'perf: allow-list setup starts inside a failed back-off window')
+    Fixture.playerX=0.3
+    tick(0.6)
+    check(stats.total==total and scanCalls==scan and stats.suppressed>suppressed,'perf: back-off blocks player_moved and due timers without any BuildPlan attempt')
+    suppressed=stats.suppressed
+    driver:GetScript('OnEvent')(driver,'QUEST_LOG_UPDATE')
+    tick(0.7)
+    check(stats.total==total and scanCalls==scan and stats.suppressed>suppressed and api.route.dirty and GetTime()<api.route.nextRebuildRetry,
+        'perf: back-off blocks a QUEST_LOG_UPDATE rebuild without any BuildPlan attempt and keeps its dirty intent')
+    check(stats.byReason.player_moved==nil and stats.byReason.quest_update==nil and stats.byReason.reward_data_refresh==nil,'perf: no automatic reason is recorded as an attempt during back-off')
+    -- Allow-list: each player/system reason starts exactly one attempt at once, without counting as suppressed.
+    local cases={
+        {'manual',function() api.Replan({}) end},
+        {'manual',function() api.ClearSpotAvoidances({}) end},
+        {'quest_skipped',function() api.SetQuestSkip({questID=201}) end},
+        {'quest_restored',function() api.SetQuestSkip({questID=201,skipped=false}) end},
+        {'skips_reset',function() api.ResetQuestSkips({}) end},
+        {'options_changed',function() api.SetRouteOptions({}) end},
+        {'requested',function() api.route.plan=nil;api.GetPlan({}) end},
+        {'startup',function() api.route.running=false;api.StartRoute() end},
+    }
+    for index,case in ipairs(cases) do
+        local reason=case[1]
+        local result=probe(reason,case[2])
+        api.route.plan=api.route.plan or keptPlan
+        check(result.armed,'perf: back-off is active before '..reason..' case '..index)
+        check(result.attempted,'perf: back-off still lets '..reason..' start one rebuild attempt at once (case '..index..')')
+        check(result.quiet,'perf: '..reason..' is not counted as suppressed during back-off (case '..index..')')
+    end
+    check(api.route.running and api.route.sequence==keptSequence and api.route.plan==keptPlan,'perf: failed allow-listed attempts keep the old plan and sequence')
+    -- spot_changed: a real same-goal spot change reaches RebuildRoute("spot_changed") inside the back-off window.
+    failScan=false;api.route.nextRebuildRetry=nil
+    local savedKilled,savedDB=QUEST_MONSTERS_KILLED,{npc=FixtureDB.Npc,object=FixtureDB.Object,item=FixtureDB.Item,objectives=FixtureDB.Quest.objectives,support=FixtureDB.Support.Get}
+    QUEST_MONSTERS_KILLED='%2$d/%3$d 消灭%1$s'
+    FixtureDB.Npc=targetModule('npc');FixtureDB.Object=targetModule('object');FixtureDB.Item=targetModule('item')
+    FixtureDB.Quest.objectives=function() return targetGroups end
+    FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+    targetsScenario({goal('monster','野猪',0,6)},{[1]={{11,nil,0}}},{npc={[11]={name='野猪',spawns={[17]={{50,0},{80,0}}}}},item={},object={}},nil,400)
+    local spotPlan=api.route.plan
+    check(spotPlan and spotPlan.steps[1] and spotPlan.steps[1].targetMode=='objective_locations' and spotPlan.steps[1].action=='quest_area','perf: spot scenario offers a changeable DB spot')
+    local spotResult
+    local spot=probe('spot_changed',function() spotResult=api.ChangeQuestSpot({questID=201}) end)
+    check(spot.armed,'perf: back-off is active before spot_changed')
+    check(spot.attempted and spotResult and not spotResult.ok,'perf: back-off still lets spot_changed start one rebuild attempt at once')
+    check(spot.quiet and api.route.plan==spotPlan and #api.route.spotAvoidances==0,'perf: spot_changed is not suppressed and its failed draft leaves the plan and avoidances alone')
+    -- Leave the fixture as the following checks expect.
+    QUEST_MONSTERS_KILLED=savedKilled
+    FixtureDB.Npc,FixtureDB.Object,FixtureDB.Item,FixtureDB.Quest.objectives,FixtureDB.Support.Get=savedDB.npc,savedDB.object,savedDB.item,savedDB.objectives,savedDB.support
+    failScan=false
+    print,C_QuestLog.GetQuestsOnMap=oldPrint,oldScan
+    api.route.nextRebuildRetry=nil;resetStats()
+    api.SetRouteOptions({moveThreshold=savedThreshold})
+    api.StartRoute()
+    check(api.route.running,'perf: route is running after the allow-list scenarios')
+end
+-- perf G3 regression: a second pass over the same scenario hits the location cache and must reproduce the first plan exactly.
+do
+    local saved={support=FixtureDB.Support.Get,worldPos=C_Map.GetWorldPosFromMapPos,scale=Fixture.worldScale,killed=QUEST_MONSTERS_KILLED,needed=QUEST_ITEMS_NEEDED,
+        npc=FixtureDB.Npc,object=FixtureDB.Object,item=FixtureDB.Item,objectives=FixtureDB.Quest.objectives}
+    FixtureDB.Npc=targetModule('npc');FixtureDB.Object=targetModule('object');FixtureDB.Item=targetModule('item')
+    FixtureDB.Quest.objectives=function() return targetGroups end
+    QUEST_MONSTERS_KILLED='%2$d/%3$d 消灭%1$s';QUEST_ITEMS_NEEDED='%2$d/%3$d %1$s'
+    FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+    Fixture.worldScale=1000
+    Fixture.keepLocationCache=true
+    -- Spawns sit at x>=.5 while the player stands at .4, so this counts DB spawn conversions only.
+    local spawnConversions=0
+    C_Map.GetWorldPosFromMapPos=function(map,pos)
+        if pos.x>=.5 then spawnConversions=spawnConversions+1 end
+        return saved.worldPos(map,pos)
+    end
+    local function sig(p)
+        local parts={}
+        for _,s in ipairs(p.steps) do
+            local spots={}
+            for _,h in ipairs(s.hotspots or {}) do spots[#spots+1]=tostring(h.id)..'='..tostring(h.pointCount) end
+            parts[#parts+1]=table.concat({s.questID,tostring(s.objectiveKey),tostring(s.entityID),tostring(s.targetMapID),
+                tostring(s.world and s.world.x),tostring(s.world and s.world.y),tostring(s.targetMode),table.concat(spots,',')},':')
+        end
+        for _,e in ipairs(p.excluded) do
+            parts[#parts+1]=table.concat({'x',e.questID,tostring(e.reason),tostring(e.otherMapID),tostring(e.otherMapName),tostring(e.otherDistance)},':')
+        end
+        local h=p.nextMapHint
+        parts[#parts+1]=h and table.concat({'h',h.questID,h.mapID,tostring(h.mapName)},':') or 'h:none'
+        local r=p.objectiveResolution and p.objectiveResolution[1]
+        parts[#parts+1]=table.concat({p.count,p.pendingObjectiveCount or 0,p.pendingLocationCount or 0,tostring(r and r.mode),tostring(r and r.reason)},':')
+        return table.concat(parts,'|')
+    end
+    -- Cold pass fills the cache, the hit pass and a third pass must be identical and add no spawn conversions.
+    local function twice(name)
+        api.Objectives.ResetLocationCache();spawnConversions=0
+        local first=api.Replan({});local cold=spawnConversions
+        local size=api.Objectives.LocationCacheSize()
+        spawnConversions=0
+        local second=api.Replan({});local hit=spawnConversions
+        local third=api.Replan({})
+        check(cold>=1 and size>=1,'perf: '..name..' cold pass converts DB spawns and fills the cache')
+        check(hit==0 and api.Objectives.LocationCacheSize()==size,'perf: '..name..' second pass is served from the cache')
+        check(sig(first)==sig(second) and sig(second)==sig(third) and first.count==second.count and first.count==third.count,
+            'perf: '..name..' cached passes reproduce steps, excluded, nextMapHint and count')
+        return first,second
+    end
+    -- 1) Only a foreign-map DB point: excluded as another map, nextMapHint and otherMap* must survive the cache hit.
+    targetsScenario({goal('monster','野猪',0,6)},{[1]={{11,nil,0}}},{npc={[11]={name='野猪',area=18,x=500}},object={},item={}},{noPOI=true},400)
+    local foreign,foreignHit=twice('foreign-map scenario')
+    check(foreign.count==0 and foreign.nextMapHint and foreign.nextMapHint.mapID==102 and foreign.excluded[1].otherMapID==102
+        and foreign.excluded[1].otherMapName=='Map 102' and type(foreign.excluded[1].otherDistance)=='number','perf: foreign-map scenario is not vacuous (hint and otherMap fields present)')
+    check(foreignHit.nextMapHint.mapID==102 and foreignHit.excluded[1].otherMapName=='Map 102' and foreignHit.excluded[1].otherDistance==foreign.excluded[1].otherDistance,
+        'perf: foreign-map hint and otherDistance survive the cache hit')
+    -- 2) Hotspot route with several clusters plus a second native-POI quest in the same plan.
+    targetsScenario({goal('monster','野猪',0,6)},{[1]={{11,nil,0}}},{npc={[11]={name='野猪',spawns={[17]={{50,0},{60,0},{65,0},{66,0},{90,0},{95,0}}}}},item={},object={}},nil,400)
+    rows[#rows+1]=routeRow(202,405);syncPOIs()
+    local multi=twice('hotspot route')
+    local dbStep;for _,s in ipairs(multi.steps) do if s.objectiveKey=='npc:11' then dbStep=s end end
+    check(multi.count==2 and dbStep and dbStep.targetMode=='objective_locations' and dbStep.hotspots and #dbStep.hotspots>=1,'perf: hotspot scenario is not vacuous (two steps, DB hotspots present)')
+    -- 3) Item goal resolved through two dropping NPCs.
+    targetsScenario({goal('item','材料',0,6)},{[3]={{101,nil,0}}},{npc={[31]={name='来源甲',spawns={[17]={{50,0},{52,0}}}},[32]={name='来源乙',spawns={[17]={{90,0}}}}},object={},item={[101]={name='材料',npcs={31,32}}}},nil,400)
+    local items=twice('item-source scenario')
+    check(items.count>=1 and items.steps[1].targetMode=='objective_locations' and items.steps[1].objectiveKey=='item:101','perf: item-source scenario is not vacuous (DB item route present)')
+    -- Restore the fixture for the checks that follow.
+    Fixture.keepLocationCache=nil;Fixture.worldScale=saved.scale;QUEST_MONSTERS_KILLED,QUEST_ITEMS_NEEDED=saved.killed,saved.needed
+    FixtureDB.Support.Get=saved.support;C_Map.GetWorldPosFromMapPos=saved.worldPos
+    FixtureDB.Npc,FixtureDB.Object,FixtureDB.Item,FixtureDB.Quest.objectives=saved.npc,saved.object,saved.item,saved.objectives
+    api.Objectives.ResetLocationCache()
+    api.StartRoute()
+    check(api.route.running,'perf: route is running after the cache-hit regression scenarios')
+end
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
 scenario({routeRow(201,500),routeRow(202,680)},500)
