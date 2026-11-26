@@ -38,7 +38,7 @@
 
 - 跨文件只共享必要的函数、规则及标签，放在对应 `ns.*` 模块表；文件内部的实现继续使用 `local`。外部调用沿用原有 `ns.GetPlan` 等公开函数，模块表属于内部实现。
 - 路线运行状态只存于 `ns.route`。跨文件函数直接读取 `ns.route`，不要在文件顶层用 `local route = ns.route` 保存引用。换热点期间 `RouteActions` 会将它暂时切换成草稿，调用规划及导航/热点模块，失败恢复原表，成功提交回原表。
-- 单次路线重建失败（客户端读取或第三方数据抛错）保留旧计划与计时，5 秒后由 `ns.route.nextRebuildRetry` 统一重试，不逐帧重试；`get_plan`/`replan` 在从未成功时返回 `plan_unavailable`，不虚构空计划。
+- 单次路线重建失败（客户端读取或第三方数据抛错）保留旧计划与计时，5 秒后由 `ns.route.nextRebuildRetry` 统一重试，不逐帧重试；重试前 `Planner.Rebuild` 拦截所有自动触发 reason，只放行重试、启动、手动操作类 reason；重建次数与耗时计入 `ns.route.stats`（不进入 plan，`/questroute perf` 只读）；`get_plan`/`replan` 在从未成功时返回 `plan_unavailable`，不虚构空计划。
 - 任务状态和进度继续来自客户端；数据库连接按调用动态发现，QuestieDB 未安装不影响原生功能。
 - `Settings.lua` 保留原生设置页和单个追加式回调，热加载只更换当前实例的分发函数。驱动框体及图元池按原规则复用，卸载清理仍集中于入口。
 
