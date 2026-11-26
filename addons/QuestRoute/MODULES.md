@@ -11,7 +11,7 @@
 | `Core.lua` | 命名空间、WoWBridge 空壳、共用验证/分页/坐标/距离格式化/屏幕提示工具、路线状态初始化 | `ns.Util`、`ns.WB`、`ns.route` |
 | `Database.lua` | 动态发现 QuestieDB、AreaID 映射、实体坐标和任务补充 | `ns.Database` |
 | `QuestData.lua` | 原生任务日志、玩家上下文、POI 去重、客户端优先的任务详情 | `ns.QuestData` |
-| `Objectives.lua` | 官方进度与数据库实体精确匹配、未完目标地点与原生回退 | `ns.Objectives` |
+| `Objectives.lua` | 官方进度与数据库实体精确匹配、未完目标地点与原生回退；刷新点展开结果跨次缓存（绑定 db 对象与版本，上限 256 实体，OnUnload 清空，含临时失败不缓存） | `ns.Objectives` |
 | `RouteOptions.lua` | 按角色取配置、默认值、规划与姓名板共用的任务过滤 | `ns.RouteOptions` |
 | `Priority.lua` | 难度/奖励读取、经验参照、剩余工作量系数与直线距离权重 | `ns.Priority` |
 | `Navigation.lua` | 逐目标进度历史、工作会话、状态转换及保护规则 | `ns.Navigation` |

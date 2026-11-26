@@ -139,7 +139,7 @@ references 的 role 为 `quest_start/quest_turn_in/objective_reference`，kind �
 
 - item 返回直接掉落、容器或商人 `relations`，按单条关系分页，不递归容器。
 - npc/object 返回扁平 `locations`，不可导航记录也参与分页。`total` 为全部位置数，`usableLocationTotal` 为有可用地图坐标的数量；`locationAvailability` 为 available/missing/unusable。
-- 位置保留 AreaID、spawnIndex、originalX/originalY（0..100）、可选 phase，统一提供 0..1 x/y、coordinateMapID、地图名与可选 world。
+- 位置保留 AreaID、spawnIndex、originalX/originalY（0..100）、可选 phase，统一提供 0..1 x/y、coordinateMapID、地图名与可选 world。路线重建内部按 db 对象与版本跨次缓存完整的展开结果（上限 256 个实体，卸载/重载清空，含临时失败的结果不缓存），不改变 `get_database_entity` 与任何返回字段。
 - 副本 `(-1,-1)` 标为 `instance_only`，缺映射、无效坐标和客户端不支持地图分别给原因；合法 `(0,0)` 保留。available 不保证实体在场或当前相位可见。
 
 数据库缺失返回 `ok=true,available=false,reason="not_loaded"`，实体不存在为 `entity_not_found`，读取异常为 `ok=false,error.code="database_error"`。
