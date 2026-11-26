@@ -33,6 +33,15 @@ for code = 0, 4 do local band = difficultyBands[code]; difficultyWeights[band.na
 -- 单次重建失败后的统一重试间隔；失败不逐帧重试，也不打断既有路线。
 local rebuildRetrySeconds = 5
 
+-- 失败退避：nextRebuildRetry 到点之前，自动触发源（四类复查计时器、spot_avoidance_expired、map_notice_retry、
+-- player_moved/player_map_changed/player_level_changed/player_position_recovered/work_protection_ended、
+-- pickup_unit_changed、association_index_ready、quest_update 与各游戏事件合并出的重建）一律不再启动 BuildPlan，
+-- 避免玩家持续移动时每 0.5 秒重复失败。被拦截的触发不丢意图：dirty 与各复查计时器保持不动，
+-- 到点后由 rebuild_retry（或同一 tick 内先到的触发）统一重做；重试成功才清 nextRebuildRetry。
+-- 放行集合是玩家或系统明确要求的重建：重试本身、启动、手动 Replan/API 读取、跳过/恢复/重置、设置变更、换热点。
+local manualRebuildReasons = { rebuild_retry = true, startup = true, manual = true, requested = true,
+    quest_skipped = true, quest_restored = true, skips_reset = true, options_changed = true, spot_changed = true }
+
 -- 耗时只做观测：夹具或客户端缺少 debugprofilestop 时返回 nil，计时代码自身绝不抛错（否则会被误判为重建失败）。
 local function ProfileClock()
     if type(debugprofilestop) ~= "function" then return nil end
@@ -787,6 +796,12 @@ end
 -- BuildPlan 返回 ok=false 表是有意的"不换路线"结果（如热点已失效），按结果透传，不算故障。
 local lastRebuildNoticeAt
 local function RebuildRoute(reason)
+    local retryAt = ns.route.nextRebuildRetry
+    if retryAt and not manualRebuildReasons[reason] and GetTime() < retryAt then
+        local stats = ns.route.stats
+        if stats then stats.suppressed = (stats.suppressed or 0) + 1 end
+        return nil
+    end
     local sequence, started = ns.route.sequence, ProfileClock()
     local ok, plan = pcall(BuildPlan, reason)
     if not ok then

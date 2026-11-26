@@ -2438,6 +2438,65 @@ do
     api.StartRoute()
     check(api.route.running,'perf: route restarts after the unload scenarios')
 end
+-- perf G4: after a failed rebuild, automatic triggers stay silent until the retry; manual actions still rebuild.
+do
+    local oldPrint,oldScan,savedThreshold=print,C_QuestLog.GetQuestsOnMap,api.GetPlan({}).moveThreshold
+    local failScan,failAttempts=false,0
+    print=function() end
+    C_QuestLog.GetQuestsOnMap=function(id)
+        if failScan then failAttempts=failAttempts+1;error('fixture scan failure') end
+        return oldScan(id)
+    end
+    api.SetRouteOptions({moveThreshold=100})
+    local stats=api.route.stats
+    local function resetStats()
+        for key in pairs(stats) do stats[key]=nil end
+        stats.total,stats.ok,stats.failed,stats.declined,stats.quiet,stats.suppressed,stats.byReason=0,0,0,0,0,0,{}
+    end
+    local rows={routeRow(201,500),routeRow(202,900)}
+    scenario(rows);Fixture.playerX=0
+    api.route.nextRebuildRetry=nil
+    local driver=api.route.driver
+    local function tick(seconds)
+        Fixture.time=Fixture.time+seconds;driver:GetScript('OnUpdate')(driver,seconds)
+    end
+    tick(0.6)
+    local kept,keptSequence=api.route.plan,api.route.sequence
+    for _,key in ipairs({'nextRewardCheck','nextLocationCheck','nextObjectiveCheck','nextAssociationCheck','nextSpotCheck','nextMapNoticeAt'}) do
+        api.route[key]=Fixture.time-1
+    end
+    resetStats()
+    failScan,failAttempts=true,0
+    Fixture.playerX=0.3
+    local started=Fixture.time
+    for index=1,100 do
+        if index%20==0 then driver:GetScript('OnEvent')(driver,'QUEST_LOG_UPDATE') end
+        tick(0.1)
+    end
+    check(failAttempts<=3 and stats.total==failAttempts,'perf: ten failing seconds start at most three rebuild attempts')
+    check(failAttempts>=2 and stats.failed==failAttempts and stats.ok==0,'perf: retry still fires on schedule while failing')
+    check(stats.suppressed>0 and Fixture.time-started>=9.99,'perf: automatic triggers were suppressed during back-off')
+    check(api.route.plan==kept and api.route.sequence==keptSequence,'perf: failing period keeps the old plan and sequence')
+    -- A manual action is never held back by the back-off.
+    local beforeManual=failAttempts
+    api.SetRouteOptions({})
+    check(failAttempts==beforeManual+1 and api.route.nextRebuildRetry>=Fixture.time+5,'perf: manual action rebuilds immediately during back-off')
+    -- Cause fixed: an event still waits for the scheduled retry, then the pending intent is rebuilt.
+    failScan=false
+    driver:GetScript('OnEvent')(driver,'QUEST_LOG_UPDATE')
+    local totalBefore=stats.total
+    tick(0.7)
+    check(stats.total==totalBefore and api.route.dirty and api.route.sequence==keptSequence,'perf: event rebuild waits for the retry and keeps its dirty intent')
+    for _=1,60 do if api.route.nextRebuildRetry then tick(0.1) end end
+    check(api.route.nextRebuildRetry==nil and not api.route.dirty and api.route.sequence>keptSequence,'perf: successful retry resumes normal rebuilding and clears the back-off')
+    local sequence=api.route.sequence
+    Fixture.playerX=0.6;tick(0.6)
+    check(api.route.sequence>sequence and api.route.plan.reason=='player_moved','perf: movement triggers rebuilds again after recovery')
+    -- Leave the fixture as the following checks expect.
+    print,C_QuestLog.GetQuestsOnMap=oldPrint,oldScan
+    api.route.nextRebuildRetry=nil;resetStats()
+    api.SetRouteOptions({moveThreshold=savedThreshold})
+end
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
 scenario({routeRow(201,500),routeRow(202,680)},500)
