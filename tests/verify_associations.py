@@ -92,6 +92,14 @@ FixtureDB.Item={
 for _,field in ipairs({'npcDrops','objectDrops','itemDrops','vendors'}) do
     FixtureDB.Item[field]=function(id) return (Fixture.items[id] or {})[field] or {} end
 end
+-- The association switch ships off; these scenarios exercise the feature itself, so every character record
+-- the addon creates through QuestRouteDB.routes starts with it on (the fixture only pre-fills the save table;
+-- production RouteOptions is untouched).
+QuestRouteDB={routes=setmetatable({},{__index=function(routes,key)
+    local settings={skipped={},moveThreshold=100,enabled=true,associationEnabled=true}
+    rawset(routes,key,settings)
+    return settings
+end})}
 '''
 
 HELPERS = r'''

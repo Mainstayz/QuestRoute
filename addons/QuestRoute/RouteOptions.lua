@@ -28,6 +28,8 @@ local function RouteSettings()
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end
     if settings.includeEliteQuests == nil then settings.includeEliteQuests = false end
     if settings.switchNotice == nil then settings.switchNotice = true end
+    -- 任务联想默认关闭：缺字段与非 boolean 脏值一律纠正为 false，升级后需玩家手动开启。
+    if type(settings.associationEnabled) ~= "boolean" then settings.associationEnabled = false end
     local offset = settings.maxMonsterLevelOffset
     if not IsFinite(offset) or offset % 1 ~= 0 or offset < 0 or offset > 5 then settings.maxMonsterLevelOffset = 2 end
     local minimum = settings.minPickupLevel

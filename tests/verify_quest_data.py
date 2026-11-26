@@ -460,7 +460,7 @@ do
     api.loginFrame:GetScript('OnEvent')(api.loginFrame,'ADDON_LOADED','Blizzard_Settings')
     local ui=api.settingsUI
     check(ui and ui.category.registered and ui.category.name=='QuestRoute','late native Settings load registers QuestRoute addon page')
-    check(#Settings.categories==1 and Settings.checkboxCount==3 and Settings.sliderCount==2 and Settings.registeredCount==1,
+    check(#Settings.categories==1 and Settings.checkboxCount==4 and Settings.sliderCount==2 and Settings.registeredCount==1,
         'settings page contains three checkboxes and two numeric level sliders')
     check(ui.pickupLevelSetting:GetValue()==15 and ui.pickupLevelSetting.options.minimum==0
         and ui.pickupLevelSetting.options.maximum==60 and ui.pickupLevelSetting.options.step==1,'pickup slider exposes the validated 0..60 range and default15')

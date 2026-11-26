@@ -14,6 +14,11 @@ function ns.RegisterSettings()
     ui.applyElite = function(value) ns.SetRouteOptions({ includeEliteQuests = value }) end
     ui.applySwitchNotice = function(value) ns.SetRouteOptions({ switchNotice = value }) end
     ui.applyNameplates = function(value) ns.SetRouteOptions({ nameplatesEnabled = value }) end
+    ui.applyAssociation = function(value)
+        if not ns.route.plan or ns.route.plan.associationEnabled ~= value then
+            ns.SetRouteOptions({ associationEnabled = value })
+        end
+    end
     ui.applyMonsterLevel = function(value)
         if not ns.route.plan or ns.route.plan.maxMonsterLevelOffset ~= value then
             ns.SetRouteOptions({ maxMonsterLevelOffset = value })
@@ -47,6 +52,10 @@ function ns.RegisterSettings()
         "开启后，你自行打开的敌方姓名板上会标出相关任务怪（当前目标为橙色）。\n"
         .. "关闭不影响地图路线，也不会自动打开姓名板。\n此设置仅对当前角色生效。",
         "applyNameplates")
+    AddCheckbox("association", "associationEnabled", "启用任务联想（可接任务发现与前瞻）", false,
+        "开启后，程序会建立任务关联索引，在地图上标出沿途/附近可接的任务，并把顺路接取纳入路线前瞻。\n"
+        .. "默认关闭；关闭时不建索引、不显示接取机会，已接任务的路线、交付与外图提示不受影响。\n此设置仅对当前角色生效，切换后立即重排。",
+        "applyAssociation")
     if not ui.monsterLevelSetting and type(Settings.CreateSliderOptions) == "function" and type(Settings.CreateSlider) == "function" then
         ui.monsterLevelSetting = Settings.RegisterAddOnSetting(ui.category, "QuestRoute_maxMonsterLevelOffset",
             "maxMonsterLevelOffset", RouteSettings(), "number", "怪物最多高出角色几级", 2)

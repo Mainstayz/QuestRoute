@@ -10,6 +10,21 @@ local holidaySorts = { [-404] = true, [-402] = true, [-378] = true, [-376] = tru
     [-41] = true, [-22] = true, [-21] = true }
 local cache, indexDB, questIDs
 
+-- 任务联想开关：只有字段明确为 false 时才算关闭。每次直接读角色存档（唯一权威来源），不缓存镜像：
+-- 成本只是 UnitName/GetRealmName 与几次表读取，远小于 Pump 自身对数据库的读取，也避免镜像在
+-- 重建抛错、设置页直写存档或草稿路线下过期。
+local function AssociationOff()
+    return ns.RouteOptions.Get().associationEnabled == false
+end
+
+-- 关闭时 Planner 用这个占位代替 Collect：字段与 Collect 同名同型，下游（Decision/MapPins/WorldMap/Navigation）无需感知开关。
+-- 与 Collect 的“不可用”返回一样不带 pendingQuestIDs，使 associationQuestIDs 为 nil（不再监听任务数据回灌）。
+local function Disabled()
+    return { available = false, building = false, scanned = 0, total = 0, reason = "association_disabled",
+        quests = {}, opportunities = {}, announcedOpportunities = {}, carriedItems = {}, blocked = {}, completed = {},
+        itemGate = { required = 0, unknown = 0 }, pendingCount = 0, pendingLocationCount = 0 }
+end
+
 local function Call(fn, ...)
     if type(fn) ~= "function" then return end
     local ok, a, b, c = pcall(fn, ...)
@@ -60,6 +75,7 @@ local pickupStateEvents = { PLAYER_ENTERING_WORLD = true, ZONE_CHANGED_NEW_AREA 
     UPDATE_FACTION = true, SKILL_LINES_CHANGED = true, SPELLS_CHANGED = true }
 
 local function ObserveInteraction(event)
+    if AssociationOff() then return end
     if pickupStateEvents[event] then
         ns.route.pickupChecks, ns.route.gossip = nil, nil
         return
@@ -113,6 +129,7 @@ local function ObserveInteraction(event)
 end
 
 local function ObserveUnits()
+    if AssociationOff() then return false end
     local db = Table(Call(GetDatabase))
     local npc, changed = db and Table(db.Npc), false
     if not npc or type(UnitIsInteractable) ~= "function" or type(UnitIsInInteractRange) ~= "function" then return false end
@@ -425,6 +442,8 @@ local function Store(state, record)
 end
 
 local function Pump()
+    -- 关闭时释放索引与 ID 列表；再次开启由 Initialize 重建。
+    if AssociationOff() then cache, indexDB, questIDs = nil, nil, nil; return false end
     local state = cache
     if not state then return false end
     if not state.queue then
@@ -1073,4 +1092,4 @@ local function Collect(context, active, candidates, settings)
 end
 
 ns.Discovery = { Collect = Collect, Pump = Pump, ObserveInteraction = ObserveInteraction,
-    ObserveUnits = ObserveUnits, rejectionLabels = rejectionLabels }
+    ObserveUnits = ObserveUnits, Disabled = Disabled, rejectionLabels = rejectionLabels }

@@ -556,7 +556,14 @@ local function BuildPlan(reason)
     elseif ns.route.pendingSpotChange then
         return { ok = false, error = { code = "target_changed", message = "所选热点已不可用，原路线保留。" } }
     end
-    local discovery = Discovery.Collect(context, active, remaining, settings)
+    -- 任务联想只在字段明确为 false 时关闭（缺字段的内部调用按开启）；关闭时不调用 Collect，
+    -- 并清掉旧提示与对话观察，避免重新开启后复现过期的内容。
+    local associationOff = settings.associationEnabled == false
+    if associationOff then
+        ns.route.announcedOpportunities, ns.route.associationNotice = nil, nil
+        ns.route.pickupChecks, ns.route.gossip = nil, nil
+    end
+    local discovery = associationOff and Discovery.Disabled() or Discovery.Collect(context, active, remaining, settings)
     ns.route.associationQuestIDs = discovery.pendingQuestIDs
     ns.route.nextAssociationCheck = (discovery.pendingCount or 0) > 0 and now + 5 or nil
     local baseline = firstIndex and { questID = remaining[firstIndex].quest.questID,
@@ -745,7 +752,7 @@ local function BuildPlan(reason)
             pendingRewardCount = pendingRewards, rewardRetrySeconds = 5, unknownWeight = 1,
             turnInMinimumExperienceWeight = 0.85, maxLevelOffset = settings.maxMonsterLevelOffset,
             workFactorBands = ns.Priority.workBands, groupBonus = routeRules.groupBonus, groupBonusCap = routeRules.groupBonusCap },
-        nextMapHint = nextMapHint, switchNotice = settings.switchNotice,
+        nextMapHint = nextMapHint, switchNotice = settings.switchNotice, associationEnabled = settings.associationEnabled,
         origin = origin, count = #steps, questCount = routeQuestCount, activeQuestCount = eligibleQuestCount, pickupCount = pickupCount,
         objectiveStepCount = objectiveStepCount, nativeStepCount = nativeStepCount,
         turnInCount = turnInCount, completionPendingCount = completionPendingCount,

@@ -193,7 +193,9 @@ local function PrintWhy()
         print("[" .. item.questID .. "] " .. (item.title or "?") .. " — " .. why)
     end
     local discovery = plan.discovery
-    if discovery then
+    if plan.associationEnabled == false then
+        print("任务联想已关闭（/questroute association on 开启）")
+    elseif discovery then
         if discovery.building then print("任务关联索引建立中：" .. (discovery.scanned or 0) .. "/" .. (discovery.total or 0)) end
         for _, field in ipairs({ "opportunities", "announcedOpportunities", "carriedItems" }) do
             for index, item in ipairs(discovery[field] or {}) do
@@ -268,6 +270,9 @@ SlashCmdList["QUESTROUTE"] = function(text)
     elseif command == "notice" then
         result = (value == "on" or value == "off") and ns.SetRouteOptions({ switchNotice = value == "on" })
             or InvalidArguments("用法：/questroute notice on/off")
+    elseif command == "association" then
+        result = (value == "on" or value == "off") and ns.SetRouteOptions({ associationEnabled = value == "on" })
+            or InvalidArguments("用法：/questroute association on/off")
     elseif command == "skip" then result = ns.SetQuestSkip({ questID = tonumber(value) })
     elseif command == "unskip" then
         result = value == "all" and ns.ResetQuestSkips({}) or ns.SetQuestSkip({ questID = tonumber(value), skipped = false })
@@ -292,7 +297,7 @@ SlashCmdList["QUESTROUTE"] = function(text)
         if not plan.ok then print("|cff31cee8QuestRoute|r " .. (plan.error and plan.error.message or "路线暂时不可用。")); return end
         print("|cff31cee8QuestRoute|r " .. plan.count .. " 个目标/交付点（" .. plan.questCount .. " 个任务），移动 " .. plan.moveThreshold .. " 码重排。")
         print("/questroute skip ID · unskip ID/all · distance 100 · replan · on/off")
-        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID] · perf")
+        print("Shift+右键换地点 · nextspot [ID] · resetspots [ID/all] · nameplates on/off · notice on/off · association on/off · monsterlevel 0..5 · minlevel 0..60 · why · audit [all|ID] · perf")
         return
     end
     if result.ok then print("|cff31cee8QuestRoute|r " .. (command == "nextspot" and "已换地点，旧点附近避开10分钟。" or "已更新路线。")) else print(result.error.message) end
@@ -314,7 +319,7 @@ WB:Expose("get_plan", ns.GetPlan, "当前地图任务路线快照：steps/exclud
 WB:Expose("replan", ns.Replan, "主动按当前位置重新选1号并归组，绕过目标保持。采用原生难度/奖励校准的直线距离，不放弃或选择任务。args:{}。")
 WB:Expose("set_quest_skip", ns.SetQuestSkip, "标注自己的路线跳过任务，不放弃任务。args:questID，skipped默认true；false恢复。按角色保存。")
 WB:Expose("reset_quest_skips", ns.ResetQuestSkips, "恢复当前角色所有手动跳过的任务。args:{}。")
-WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项，按角色保存并立即重排。args: moveThreshold=10..5000（默认100）、maxMonsterLevelOffset=0..5（默认2，只限怪物等级差）、minPickupLevel=0..60（默认15，0关闭，只滤未接任务）、enabled、nameplatesEnabled、includeEliteQuests、switchNotice（后四项 boolean）。范围与默认见 README set_route_options。")
+WB:Expose("set_route_options", ns.SetRouteOptions, "自己的路线选项，按角色保存并立即重排。args: moveThreshold=10..5000（默认100）、maxMonsterLevelOffset=0..5（默认2，只限怪物等级差）、minPickupLevel=0..60（默认15，0关闭，只滤未接任务）、enabled、nameplatesEnabled、includeEliteQuests、switchNotice、associationEnabled（后五项 boolean；associationEnabled 任务联想默认 false）。范围与默认见 README set_route_options。")
 WB:Expose("change_quest_spot", ns.ChangeQuestSpot, "换同一未完目标的本图热点。args: questID（默认1号）、objectiveKey（需questID）、hotspotID（需前两项，取自 get_plan steps[].hotspots[].id）；省略 hotspotID 选其他最近热点。旧点按规则临时避让，细节见 README change_quest_spot。")
 WB:Expose("clear_spot_avoidances", ns.ClearSpotAvoidances, "清理本UI临时地点避让并主动重排；args:可选questID，不给则清全部。不改变任务跳过。")
 WB:Expose("get_unit_tasks", ns.GetUnitTasks, "只读当前可访问单位的任务用途。args:unit=target/mouseover/nameplateN，默认target。官方进度+唯一核验数据库身份/直接NPC掉落，needed优先；未知/无已知匹配不等于确定无关。战斗身份不可访问时unknown，不延用旧ID。")
@@ -333,7 +338,7 @@ function ns.OnUnload()
     HideTaskMarkers()
     if ns.settingsUI and ns.settingsUI.owner == ns then
         ns.settingsUI.applyElite, ns.settingsUI.applySwitchNotice, ns.settingsUI.applyNameplates, ns.settingsUI.applyMonsterLevel = nil, nil, nil, nil
-        ns.settingsUI.applyPickupLevel = nil
+        ns.settingsUI.applyPickupLevel, ns.settingsUI.applyAssociation = nil, nil
     end
     if ns.route.hoveredPin then ns.route.hoveredPin = nil; GameTooltip:Hide() end
     ns.route.running = false
