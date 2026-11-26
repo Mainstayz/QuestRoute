@@ -211,6 +211,32 @@ local function plan()
     check(result.ok,'indexed plan succeeds')
     return result
 end
+-- assoc-switch scenarios call this to get the shipped default (off) instead of the fixture's pre-filled on.
+local function useShippedAssociationDefault() QuestRouteDB.routes={} end
+local function stepKeys(result)
+    local out={}
+    for _,step in ipairs(result.steps) do out[#out+1]=step.questID..':'..step.action end
+    return table.concat(out,',')
+end
+local function visibleOpportunityPins()
+    local views,count={},0
+    for _,view in ipairs(ns.route.views or {}) do views[#views+1]=view end
+    if ns.route.minimapView then views[#views+1]=ns.route.minimapView end
+    for _,view in ipairs(views) do
+        for _,pin in pairs(view.opportunities or {}) do if pin:IsVisible() then count=count+1 end end
+    end
+    return count
+end
+local function watchEmits()
+    local seen,real={},ns.WB.Emit
+    ns.WB.Emit=function(self,topic,...) seen[#seen+1]=topic; return real(self,topic,...) end
+    return seen
+end
+local function countOf(list,value)
+    local count=0
+    for _,item in ipairs(list) do if item==value then count=count+1 end end
+    return count
+end
 '''
 
 CASES = (
@@ -1832,6 +1858,212 @@ check(worldHideCount==0 and miniHideCount==0,'periodic map ticks never Hide acti
 worldPin:GetScript('OnClick')(worldPin)
 check(ns.RouteOptions.Get().skipped[301],'right-click skips the quest')
 check(not worldPin:IsVisible() and not miniPin:IsVisible(),'right-click skip hides both map pins on the same frame without waiting for the next tick')
+'''),
+    ("assoc-switch: shipped default is off, per character, and opening it builds the index", r'''
+useShippedAssociationDefault()
+record(201); record(301,100); Fixture.log={201}
+local result=plan()
+check(ns.RouteOptions.Get().associationEnabled==false and result.associationEnabled==false,
+    'assoc-switch: a new character record starts with association off and the plan reports it')
+check(result.pickupCount==0 and #result.discovery.opportunities==0 and not result.discovery.available
+    and result.discovery.reason=='association_disabled' and not action(result.steps,301,'pick_up'),
+    'assoc-switch: with the shipped default a nearby giver is neither indexed nor routed')
+local oldName=UnitName; UnitName=function() return 'OtherCharacter' end
+check(ns.RouteOptions.Get().associationEnabled==false,'assoc-switch: another character also starts off')
+ns.RouteOptions.Get().associationEnabled=true; UnitName=oldName
+check(ns.RouteOptions.Get().associationEnabled==false,'assoc-switch: characters do not share the switch')
+local opened=ns.SetRouteOptions({associationEnabled=true})
+check(opened.associationEnabled==true and opened.discovery.available and opened.discovery.building,
+    'assoc-switch: turning it on starts a fresh index build')
+result=plan()
+check(result.associationEnabled==true and result.pickupCount==1 and result.steps[1].action=='pick_up','assoc-switch: once built the same fixture offers the pickup')
+'''),
+    ("assoc-switch: closed switch removes every association output of an otherwise identical fixture", r'''
+Fixture.time=0
+record(201); record(301,100); record(302,100); record(303,100); Fixture.log={201}
+local requests=0
+HaveQuestData=function(id) return id~=302 end
+C_QuestLog.RequestLoadQuestByID=function() requests=requests+1 end
+setupMaps(); ns.Util.Notify=function() end
+local emits=watchEmits()
+-- Reference: the same index, but both related quests are manually skipped, i.e. no pickup exists for the route.
+ns.RouteOptions.Get().skipped[301],ns.RouteOptions.Get().skipped[302],ns.RouteOptions.Get().skipped[303]=true,true,true
+local reference=plan()
+check(reference.pickupCount==0 and reference.count==1,'assoc-switch: reference route has no available related quests')
+local referenceKeys=stepKeys(reference)
+ns.RouteOptions.Get().skipped[301],ns.RouteOptions.Get().skipped[302],ns.RouteOptions.Get().skipped[303]=nil,nil,nil
+requests=0
+local on=plan()
+check(action(on.discovery.opportunities,301,'pick_up') and on.pickupCount==1 and on.steps[1].action=='pick_up' and on.decision.applied,
+    'assoc-switch: control fixture offers and applies a pickup while open')
+check(on.discovery.pendingCount==1 and requests>=1 and ns.route.associationQuestIDs and ns.route.nextAssociationCheck,
+    'assoc-switch: control fixture requests uncached metadata and arms the retry while open')
+ns.RouteOptions.Get().switchNotice=true; ns.route.lastNotice=nil; ns.route.associationNotice=nil
+ns.Planner.Rebuild('QUEST_LOG_UPDATE')
+check(countOf(emits,'route.association')>=1,'assoc-switch: control fixture emits route.association while open')
+ns.WorldMap.Render(); ns.Minimap.Render()
+check(visibleOpportunityPins()>0,'assoc-switch: control fixture draws pickup markers while open')
+requests=0; for index=#emits,1,-1 do emits[index]=nil end
+local off=ns.SetRouteOptions({associationEnabled=false})
+check(off.ok and off.associationEnabled==false and off.reason=='options_changed','assoc-switch: closing applies through options_changed')
+check(#off.discovery.opportunities==0 and #off.discovery.blocked==0 and #off.discovery.carriedItems==0
+    and #off.discovery.announcedOpportunities==0 and off.discovery.opportunityTotal==0 and off.discovery.blockedTotal==0,
+    'assoc-switch: closed discovery lists are empty')
+check(off.discovery.available==false and off.discovery.building==false and off.discovery.reason=='association_disabled'
+    and off.discovery.pendingCount==0 and off.discovery.pendingLocationCount==0 and off.discovery.itemGate.required==0,
+    'assoc-switch: closed discovery is inactive, not building and has nothing pending')
+check(off.decision.available==false and off.decision.reason=='association_disabled' and not off.decision.recommendation and not off.decision.applied,
+    'assoc-switch: closed decision is unavailable with the disabled reason')
+check(off.pickupCount==0 and not action(off.steps,301,'pick_up') and not action(off.steps,301,'start_item'),'assoc-switch: closed route has no pickup steps')
+check(stepKeys(off)==referenceKeys,'assoc-switch: closed steps equal the route of a fixture without related quests')
+check(ns.route.associationQuestIDs==nil and ns.route.nextAssociationCheck==nil,'assoc-switch: closed switch clears the metadata listener and the retry timer')
+check(ns.Discovery.Pump()==false,'assoc-switch: closed Pump never reports progress')
+Fixture.loggedIn=true; ns.StartRoute()
+local driver=ns.route.driver
+ns.RouteOptions.Get().switchNotice=true; ns.route.lastNotice=nil
+for tick=1,6 do
+    Fixture.time=Fixture.time+6; Fixture.playerX=tick*.0002
+    driver:GetScript('OnEvent')(driver,'QUEST_LOG_UPDATE')
+    driver:GetScript('OnUpdate')(driver,.2)
+    ns.Planner.Rebuild('BAG_UPDATE_DELAYED')
+end
+ns.WorldMap.Render(); ns.Minimap.Render()
+check(requests==0,'assoc-switch: closed switch never calls RequestLoadQuestByID')
+check(countOf(emits,'route.association')==0,'assoc-switch: closed switch never emits route.association')
+check(visibleOpportunityPins()==0,'assoc-switch: closed switch draws no pickup markers')
+check(ns.GetPlan({}).pickupCount==0 and ns.route.nextAssociationCheck==nil,'assoc-switch: closed switch stays quiet through ticks and events')
+'''),
+    ("assoc-switch: closing releases the half-built index and reopening restarts and finishes it", r'''
+Fixture.time=0
+for id=301,430 do record(id,100,{objectives={}}) end
+Fixture.log={}
+ns.RouteOptions.Get().switchNotice=false
+Fixture.loggedIn=true; ns.StartRoute()
+local driver=ns.route.driver
+local first=ns.Replan({})
+check(first.discovery.building and first.discovery.scanned==0 and first.discovery.total>=130,'assoc-switch: control index starts empty while open')
+check(ns.Discovery.Pump()==false and ns.route.plan.discovery.scanned>0 and ns.route.plan.discovery.scanned<ns.route.plan.discovery.total,
+    'assoc-switch: control Pump advances a partial index while open')
+local off=ns.SetRouteOptions({associationEnabled=false})
+check(off.discovery.building==false and off.discovery.scanned==0,'assoc-switch: closing hides the partial build')
+local progressed=false
+for _=1,60 do if ns.Discovery.Pump() then progressed=true end end
+check(not progressed,'assoc-switch: closed Pump never completes the old build')
+local reopened=ns.SetRouteOptions({associationEnabled=true})
+check(reopened.discovery.building and reopened.discovery.scanned==0,'assoc-switch: reopening rebuilds from zero because the cache was released')
+local reasons={}
+for _=1,200 do
+    Fixture.time=Fixture.time+.2; driver:GetScript('OnUpdate')(driver,.2)
+    reasons[ns.route.plan.reason]=true
+    if not ns.route.plan.discovery.building then break end
+end
+local done=ns.GetPlan({})
+check(reasons.association_index_ready and done.discovery.available and not done.discovery.building and done.discovery.scanned==done.discovery.total,
+    'assoc-switch: reopened index finishes through association_index_ready')
+check(#done.discovery.opportunities>0 and done.discovery.opportunityTotal>0,'assoc-switch: opportunities return after the rebuilt index')
+'''),
+    ("assoc-switch: closing forgets announcements so reopening cannot replay them", r'''
+record(301,100,{objectives={}}); record(302,200,{objectives={}})
+local result=plan(); setupMaps()
+ns.Util.Notify=function() end
+ns.RouteOptions.Get().switchNotice=true; result.reason='player_moved'
+ns.Decision.Notify(result,nil,ns.RouteOptions.Get(),30)
+check(ns.route.announcedOpportunities.items['301:pick_up:0'] and ns.route.associationNotice,'assoc-switch: control notice remembers its pickup while open')
+Fixture.playerX=.5; Fixture.time=100
+result=ns.Planner.Rebuild('player_moved'); ns.WorldMap.Render(); ns.Minimap.Render()
+check(#result.discovery.announcedOpportunities==1 and visibleOpportunityPins()>0,'assoc-switch: control history stays visible away from the giver while open')
+local off=ns.SetRouteOptions({associationEnabled=false}); ns.WorldMap.Render(); ns.Minimap.Render()
+check(ns.route.announcedOpportunities==nil and ns.route.associationNotice==nil and #off.discovery.announcedOpportunities==0,
+    'assoc-switch: closing clears the announcement history and last association notice')
+check(visibleOpportunityPins()==0,'assoc-switch: closing hides the remembered markers at once')
+local on=ns.SetRouteOptions({associationEnabled=true}); if on.discovery.building then finishIndex() end
+on=ns.Replan({})
+check(on.discovery.available and not on.discovery.building and #on.discovery.announcedOpportunities==0
+    and ns.route.announcedOpportunities==nil and ns.route.associationNotice==nil,'assoc-switch: reopening does not bring back the old notice')
+ns.WorldMap.Render(); ns.Minimap.Render()
+check(visibleOpportunityPins()==0,'assoc-switch: reopened maps show no stale marker')
+'''),
+    ("assoc-switch: switching during rebuild back-off still attempts one immediate rebuild", r'''
+record(201); Fixture.log={201}; Fixture.pois={[101]={NewPOI(101,.1,201)}}
+local planned=plan()
+check(planned.associationEnabled==true,'assoc-switch: control plan starts with association open')
+local scan,failScan,scanCalls=C_QuestLog.GetQuestsOnMap,false,0
+C_QuestLog.GetQuestsOnMap=function(id)
+    scanCalls=scanCalls+1
+    if failScan then error('fixture scan failure') end
+    return scan(id)
+end
+local realPrint=print; print=function() end
+failScan=true; ns.route.nextRebuildRetry=nil
+ns.Replan({})
+local retry=ns.route.nextRebuildRetry
+check(retry and GetTime()<retry,'assoc-switch: a failing manual rebuild arms the back-off')
+local base,sequence=scanCalls,ns.route.sequence
+ns.Planner.Rebuild('player_moved')
+check(scanCalls==base,'assoc-switch: control automatic reason is held back by the back-off')
+ns.SetRouteOptions({associationEnabled=false})
+check(scanCalls==base+1 and ns.route.sequence==sequence and ns.RouteOptions.Get().associationEnabled==false,
+    'assoc-switch: the switch gets one immediate attempt inside the back-off and keeps the old plan on failure')
+failScan=false
+check(ns.route.nextRebuildRetry and GetTime()<ns.route.nextRebuildRetry,'assoc-switch: the retry window is still open')
+local result=ns.SetRouteOptions({associationEnabled=false})
+check(result.associationEnabled==false and ns.route.sequence==sequence+1 and ns.route.nextRebuildRetry==nil
+    and result.discovery.reason=='association_disabled','assoc-switch: the next switch inside the window rebuilds at once and clears the back-off')
+print=realPrint; C_QuestLog.GetQuestsOnMap=scan
+'''),
+    ("assoc-switch: closed switch leaves the map hint, analysis and unit tasks alone", r'''
+FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+record(202,100,{objectives={[1]={{502,nil,0}}}}); Fixture.locations.npc[502]={[18]={{10,0}}}
+Fixture.log={202}
+local open=ns.Replan({})
+check(open.count==0 and open.discovery.building and not open.nextMapHint,'assoc-switch: control hint waits for the index while open')
+local closed=ns.SetRouteOptions({associationEnabled=false})
+check(closed.count==0 and closed.nextMapHint and closed.nextMapHint.mapID==102 and not closed.discovery.building,
+    'assoc-switch: closed switch never blocks the next-map hint on the index')
+local analysis=ns.AnalyzeQuests({})
+check(analysis.ok,'assoc-switch: quest value analysis still succeeds while closed')
+local printed={}; local realPrint=print; print=function(text) printed[#printed+1]=text end
+SlashCmdList.QUESTROUTE('why'); print=realPrint
+local why=table.concat(printed,'\n')
+check(why:find('任务联想已关闭',1,true) and why:find('/questroute association on',1,true)
+    and why:find('当前地图已无可做任务',1,true) and not why:find('任务关联索引建立中',1,true),
+    'assoc-switch: why reports the switch and still prints the next-map hint')
+'''),
+    ("assoc-switch: nameplates and unit tasks give the same answer open and closed", r'''
+record(201); Fixture.log={201}
+Fixture.units={target={id=501},nameplate1={id=501}}
+local plate=CreateFrame('Frame'); plate.UnitFrame={unit='nameplate1'}; Fixture.plates={plate}
+Fixture.loggedIn=true; ns.StartRoute()
+local on=plan(); ns.Nameplates.Render()
+local openUnit=ns.GetUnitTasks({unit='target'})
+check(openUnit.ok and openUnit.npcID==501 and openUnit.needed and ns.route.nameplateView.markers[plate]:IsVisible(),
+    'assoc-switch: control unit task and nameplate resolve while open')
+local off=ns.SetRouteOptions({associationEnabled=false}); ns.Nameplates.Render()
+local closedUnit=ns.GetUnitTasks({unit='target'})
+check(closedUnit.ok and closedUnit.npcID==openUnit.npcID and closedUnit.state==openUnit.state and closedUnit.needed==openUnit.needed
+    and closedUnit.neededCount==openUnit.neededCount and closedUnit.label==openUnit.label,'assoc-switch: closed switch keeps get_unit_tasks unchanged')
+check(ns.route.nameplateView.markers[plate]:IsVisible() and off.nameplates.enabled==on.nameplates.enabled
+    and off.nameplates.unresolvedQuestCount==on.nameplates.unresolvedQuestCount,'assoc-switch: closed switch keeps nameplate markers and their plan block unchanged')
+'''),
+    ("assoc-switch: closed switch ignores NPC and dialogue observations and reopens them", r'''
+record(97287,100,{name='精明的谈判',startedBy={[1]={2410}}}); place('npc',2410,100)
+FixtureDB.Npc.questStarts=function(id) if id==2410 then return {97287} end end
+Fixture.units.target={id=2410}
+UnitIsInInteractRange=function() return true end
+UnitIsInteractable=function() return false end
+UnitIsDeadOrGhost=function() return false end
+ns.SetRouteOptions({associationEnabled=false})
+check(ns.Discovery.ObserveUnits()==false and ns.route.pickupChecks==nil,'assoc-switch: closed ObserveUnits records nothing and reports no change')
+Fixture.loggedIn=true; ns.StartRoute()
+local sequence=ns.GetPlan({}).sequence
+Fixture.time=1; ns.route.driver:GetScript('OnUpdate')(ns.route.driver,.2)
+check(ns.GetPlan({}).reason~='pickup_unit_changed' and ns.route.pickupChecks==nil,'assoc-switch: the driver tick cannot raise pickup_unit_changed while closed')
+gossip(2410,{{questID=97287}})
+check(ns.route.gossip==nil and ns.route.pickupChecks==nil,'assoc-switch: closed ObserveInteraction records no dialogue')
+ns.SetRouteOptions({associationEnabled=true})
+check(ns.Discovery.ObserveUnits()==true and ns.route.pickupChecks[2410],'assoc-switch: reopened ObserveUnits records the restriction')
+gossip(2410,{{questID=97287}})
+check(ns.route.gossip and ns.route.gossip.offered[97287],'assoc-switch: reopened ObserveInteraction records the dialogue')
 '''),
 )
 

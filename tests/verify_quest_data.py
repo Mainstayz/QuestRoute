@@ -497,6 +497,81 @@ do
     check(ui.eliteSetting:GetValue()==true,'public option updates same native setting storage')
     ui.eliteSetting:SetValue(ui.eliteSetting.defaultValue)
     check(not api.GetPlan({}).includeEliteQuests,'native default reset restores elite exclusion')
+    local assocKey='FixtureRealm:FixturePlayer'
+    check(ui.associationSetting and ui.associationSetting:GetValue()==false and ui.associationSetting.defaultValue==false,
+        'assoc-switch: native association checkbox exists and starts unchecked')
+    check(ui.associationSetting.name:find('任务联想',1,true) and ui.associationSetting.tooltip:find('默认关闭',1,true),
+        'assoc-switch: checkbox label names the task association feature and its tooltip states the default')
+    local assocBefore=api.GetPlan({}).sequence
+    ui.associationSetting:SetValue(true)
+    check(api.GetPlan({}).associationEnabled==true and api.GetPlan({}).sequence==assocBefore+1
+        and QuestRouteDB.routes[assocKey].associationEnabled==true,'assoc-switch: checking the box enables association with exactly one rebuild')
+    ui.associationSetting.callbacks[1](ui.associationSetting,true)
+    check(api.GetPlan({}).sequence==assocBefore+1,'assoc-switch: a repeated native notification cannot rebuild twice')
+    ui.associationSetting:SetValue(ui.associationSetting.defaultValue)
+    check(api.GetPlan({}).associationEnabled==false and api.GetPlan({}).sequence==assocBefore+2,'assoc-switch: native default reset turns association off with one rebuild')
+end
+-- assoc-switch: defaults, migration, validation and commands of the task-association switch.
+do
+    local key='FixtureRealm:FixturePlayer'
+    local saved=QuestRouteDB.routes[key]
+    local options=api.RouteOptions.Get
+    local plan=api.GetPlan({})
+    check(plan.associationEnabled==false and saved.associationEnabled==false,'assoc-switch: a fresh character defaults to association off and get_plan reports it')
+    check(plan.discovery and plan.discovery.available==false and plan.discovery.reason=='association_disabled'
+        and plan.decision and plan.decision.available==false and plan.decision.reason=='association_disabled',
+        'assoc-switch: plan keeps its discovery and decision fields but both are inactive while off')
+    for _,dirty in ipairs({'yes',1,0,{},'true'}) do
+        saved.associationEnabled=dirty
+        check(options().associationEnabled==false and saved.associationEnabled==false,'assoc-switch: dirty saved value '..tostring(dirty)..' is corrected to false')
+    end
+    saved.associationEnabled=nil
+    check(options().associationEnabled==false and saved.associationEnabled==false,'assoc-switch: an old save without the field reads as false')
+    saved.associationEnabled=true
+    check(options().associationEnabled==true,'assoc-switch: a saved true is kept by migration')
+    saved.associationEnabled=false
+    local playerName=UnitName
+    UnitName=function() return 'AssocOther' end
+    check(options().associationEnabled==false,'assoc-switch: another character starts with association off')
+    options().associationEnabled=true
+    UnitName=playerName
+    check(options().associationEnabled==false,'assoc-switch: another character cannot change this character')
+    QuestRouteDB.routes['FixtureRealm:AssocOther']=nil
+    local before,enabledBefore=api.GetPlan({}).sequence,options().enabled
+    for _,bad in ipairs({'yes',1,0,{},'true'}) do
+        local rejected=api.SetRouteOptions({associationEnabled=bad,enabled=not enabledBefore})
+        check(not rejected.ok and options().enabled==enabledBefore and options().associationEnabled==false
+            and api.GetPlan({}).sequence==before,'assoc-switch: invalid value '..tostring(bad)..' rejects the call atomically')
+    end
+    local turnedOn=api.SetRouteOptions({associationEnabled=true})
+    check(turnedOn.ok and turnedOn.associationEnabled==true and turnedOn.sequence==before+1 and turnedOn.reason=='options_changed'
+        and options().associationEnabled==true,'assoc-switch: a valid value is saved and rebuilds exactly once through options_changed')
+    local printed,realPrint={},print
+    print=function(text) printed[#printed+1]=text end
+    before=api.GetPlan({}).sequence
+    SlashCmdList.QUESTROUTE('association off')
+    check(options().associationEnabled==false and api.GetPlan({}).associationEnabled==false and api.GetPlan({}).sequence==before+1,
+        'assoc-switch: slash association off changes the setting and replans once')
+    SlashCmdList.QUESTROUTE('association on')
+    check(options().associationEnabled==true and api.GetPlan({}).associationEnabled==true and api.GetPlan({}).sequence==before+2,
+        'assoc-switch: slash association on changes the setting and replans once')
+    printed={}
+    for _,bad in ipairs({'association maybe','association','association ON'}) do
+        SlashCmdList.QUESTROUTE(bad)
+    end
+    local usage=0
+    for _,line in ipairs(printed) do if line:find('/questroute association on/off',1,true) then usage=usage+1 end end
+    check(usage==3 and options().associationEnabled==true and api.GetPlan({}).sequence==before+2,
+        'assoc-switch: an invalid slash argument prints the usage and changes nothing')
+    printed={}
+    SlashCmdList.QUESTROUTE('')
+    check(table.concat(printed,'\n'):find('association on/off',1,true),'assoc-switch: the help line lists the association command')
+    printed={}
+    SlashCmdList.QUESTROUTE('association off'); printed={}
+    SlashCmdList.QUESTROUTE('why')
+    check(table.concat(printed,'\n'):find('任务联想已关闭',1,true),'assoc-switch: why says association is off and how to enable it')
+    print=realPrint
+    check(options().associationEnabled==false,'assoc-switch: switch is left off for the following checks')
 end
 local driver=api.route.driver
 local tick=driver:GetScript('OnUpdate')
@@ -534,6 +609,22 @@ local started=api.GetPlan({}).sequence
 api.StartRoute()
 check(api.GetPlan({}).sequence==started,'initialization idempotent')
 check(#Settings.categories==1 and Settings.registeredCount==1 and #api.settingsUI.eliteSetting.callbacks==1,'route restarts never duplicate native settings category or callback')
+do
+    local ui=api.settingsUI
+    check(type(ui.applyAssociation)=='function' and #ui.associationSetting.callbacks==1,'assoc-switch: the association dispatcher is live after a reload and registered once')
+    api.OnUnload()
+    check(ui.applyAssociation==nil,'assoc-switch: unload clears the association dispatcher')
+    local before=api.GetPlan({}).sequence
+    ui.associationSetting:SetValue(true)
+    check(api.GetPlan({}).sequence==before and QuestRouteDB.routes['FixtureRealm:FixturePlayer'].associationEnabled==true,
+        'assoc-switch: an unloaded namespace has no live checkbox callback')
+    api.OnReload()
+    check(type(ui.applyAssociation)=='function' and #ui.associationSetting.callbacks==1 and Settings.checkboxCount==4,
+        'assoc-switch: reload restores one dispatcher without a duplicate native callback')
+    before=api.GetPlan({}).sequence
+    ui.associationSetting:SetValue(false)
+    check(api.GetPlan({}).associationEnabled==false and api.GetPlan({}).sequence==before+1,'assoc-switch: the restored dispatcher rebuilds exactly once')
+end
 -- Regression: a foreign target can project inside the current map (including extremely nearby points).
 Fixture.playerX=0;Fixture.playerMapID=101;Fixture.time=200
 C_QuestLog.GetNumQuestLogEntries=function() return 10,10 end
@@ -2949,6 +3040,8 @@ if api.settingsUI then
         and #api.settingsUI.eliteSetting.callbacks==1 and #api.settingsUI.monsterLevelSetting.callbacks==1
         and #api.settingsUI.pickupLevelSetting.callbacks==1
         and Settings.sliderCount==2,'exactly one native settings category and callback per control after reload')
+    assert(#api.settingsUI.associationSetting.callbacks==1 and Settings.checkboxCount==4,
+        'assoc-switch: exactly one native association checkbox and callback after reload')
 end
 return 4
 '''
