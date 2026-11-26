@@ -218,6 +218,17 @@ FixtureDB = {
     GetProvenance=function() return 'FixtureOwner' end,
 }
 LibQuestieDB=FixtureDB
+-- Legacy scenarios rewrite fixture database rows in place under one db identity, which production data never does.
+-- GetDatabase() calls RequireContract on every read, so the fixture drops the cross-rebuild spawn cache there unless
+-- a perf: check sets Fixture.keepLocationCache (those checks exercise the cache itself).
+do
+    local requireContract=FixtureDB.RequireContract
+    FixtureDB.RequireContract=function(...)
+        local ns=WoWBridgeNS and WoWBridgeNS.QuestRoute
+        if not Fixture.keepLocationCache and ns and ns.Objectives and ns.Objectives.ResetLocationCache then ns.Objectives.ResetLocationCache() end
+        return requireContract(...)
+    end
+end
 function NewPOI(map,x,questID)
     return {questID=questID or 1,mapID=map,x=x,y=0,numObjectives=1,inProgress=true,isQuestStart=false}
 end
@@ -2496,6 +2507,138 @@ do
     print,C_QuestLog.GetQuestsOnMap=oldPrint,oldScan
     api.route.nextRebuildRetry=nil;resetStats()
     api.SetRouteOptions({moveThreshold=savedThreshold})
+end
+-- perf G3: DB spawn expansion is cached across rebuilds without changing any plan content.
+do
+    local saved={npc=FixtureDB.Npc,object=FixtureDB.Object,item=FixtureDB.Item,objectives=FixtureDB.Quest.objectives,
+        support=FixtureDB.Support.Get,mapInfo=C_Map.GetMapInfo,worldPos=C_Map.GetWorldPosFromMapPos,
+        monsters=QUEST_MONSTERS_KILLED,scale=Fixture.worldScale,metadata=Fixture.metadataVersion}
+    FixtureDB.Npc=targetModule('npc');FixtureDB.Object=targetModule('object');FixtureDB.Item=targetModule('item')
+    FixtureDB.Quest.objectives=function() return targetGroups end
+    FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+    QUEST_MONSTERS_KILLED='%2$d/%3$d 消灭%1$s'
+    Fixture.worldScale=1000
+    Fixture.keepLocationCache=true
+    local calls={map=0,world=0,spawn=0}
+    local failWorld,failMap=false,false
+    -- Spawn conversions are told apart from the player's own position by x: spawns sit at .5/.6/.7, the player at .4.
+    C_Map.GetMapInfo=function(id) calls.map=calls.map+1;if failMap and id==102 then return nil end;return saved.mapInfo(id) end
+    C_Map.GetWorldPosFromMapPos=function(map,pos)
+        calls.world=calls.world+1
+        if pos.x>=.5 then calls.spawn=calls.spawn+1 end
+        if failWorld and map==101 and pos.x==.5 then return nil end
+        return saved.worldPos(map,pos)
+    end
+    local function sig(p)
+        local parts={}
+        for _,s in ipairs(p.steps) do
+            parts[#parts+1]=table.concat({s.questID,s.objectiveKey or '-',s.entityID or '-',s.targetMapID,s.world.x,s.world.y,s.targetMode,s.hotspots and #s.hotspots or 0},':')
+        end
+        for _,e in ipairs(p.excluded) do
+            parts[#parts+1]=table.concat({'x',e.questID,e.reason,tostring(e.otherMapID),tostring(e.otherMapName),tostring(e.otherDistance)},':')
+        end
+        local h=p.nextMapHint
+        parts[#parts+1]=h and table.concat({'h',h.questID,h.mapID,tostring(h.mapName)},':') or 'h:none'
+        parts[#parts+1]=table.concat({p.count,p.pendingObjectiveCount or 0,p.pendingLocationCount or 0},':')
+        return table.concat(parts,'|')
+    end
+    local function zero() calls.map,calls.world,calls.spawn=0,0,0 end
+    local three={npc={[11]={name='野猪',spawns={[17]={{50,0},{60,0},{70,0}}}}},object={},item={}}
+    local goalList,groupList={goal('monster','野猪',0,6)},{[1]={{11,nil,0}}}
+    -- 1) Same DB-point goal, three consecutive rebuilds.
+    targetsScenario(goalList,groupList,three,nil,400)
+    api.Objectives.ResetLocationCache();zero()
+    local first=api.Replan({});local firstMap,firstSpawn=calls.map,calls.spawn
+    zero()
+    local second=api.Replan({});local secondMap,secondSpawn=calls.map,calls.spawn
+    zero()
+    local third=api.Replan({});local thirdMap,thirdSpawn=calls.map,calls.spawn
+    check(first.steps[1] and first.steps[1].targetMode=='objective_locations' and first.steps[1].objectiveKey=='npc:11','perf: cache scenario routes through the DB spawn points')
+    check(firstSpawn==3 and firstMap-secondMap==3,'perf: first rebuild converts and describes each of the three spawns once')
+    check(secondSpawn==0 and thirdSpawn==0 and secondMap==thirdMap,'perf: rebuilds two and three add no spawn conversions and no spawn map lookups')
+    check(sig(first)==sig(second) and sig(second)==sig(third),'perf: steps, excluded and nextMapHint are identical across cached rebuilds')
+    check(api.Objectives.LocationCacheSize()==1,'perf: one entity key is cached for the repeated target')
+    -- 2) Temporary failures are never cached, and the next rebuild recovers the points.
+    local single={npc={[11]={name='野猪',spawns={[17]={{50,0}}}}},object={},item={}}
+    targetsScenario(goalList,groupList,single,{map=102},400)
+    api.Objectives.ResetLocationCache()
+    failWorld=true;zero()
+    local lost=api.Replan({})
+    check(lost.count==0 and lost.objectiveResolution[1].reason=='world_position_unavailable' and lost.pendingObjectiveCount==1,'perf: unconvertible spawn reproduces the temporary failure')
+    check(api.Objectives.LocationCacheSize()==0,'perf: a result with a missing world position is not cached')
+    zero();api.Replan({})
+    check(calls.spawn==1 and api.Objectives.LocationCacheSize()==0,'perf: the failing spawn is retried on the next rebuild instead of served from cache')
+    failWorld=false
+    local recovered=api.Replan({})
+    check(recovered.count==1 and recovered.steps[1].objectiveKey=='npc:11' and recovered.pendingObjectiveCount==0
+        and recovered.objectiveResolution[1].mode=='objective_locations','perf: recovery after a temporary world failure restores the point and clears pending counts')
+    check(api.Objectives.LocationCacheSize()==1,'perf: the recovered complete result is cached')
+    local foreignDB={npc={[11]={name='野猪',area=18,x=500}},object={},item={}}
+    targetsScenario(goalList,groupList,foreignDB,{noPOI=true},400)
+    api.Objectives.ResetLocationCache()
+    failMap=true
+    local noMap=api.Replan({})
+    check(noMap.objectiveResolution[1].reason=='objective_locations_unavailable' and api.Objectives.LocationCacheSize()==0,'perf: a map lookup that returns nil is a temporary failure and is not cached')
+    failMap=false
+    local mapBack=api.Replan({})
+    check(mapBack.objectiveResolution[1].mode=='objective_locations' and mapBack.excluded[1].otherMapName=='Map 102' and api.Objectives.LocationCacheSize()==1,'perf: map lookup recovery restores the foreign point and then caches it')
+    -- 3) The cache has a fixed capacity.
+    api.Objectives.ResetLocationCache()
+    local maxSize,dropped,previous,limit=0,false,0,nil
+    for i=1,300 do
+        local name='批量'..i
+        targetsScenario({goal('monster',name,0,6)},{[1]={{2000+i,nil,0}}},{npc={[2000+i]={name=name,x=500}},object={},item={}},nil,400)
+        local size
+        size,limit=api.Objectives.LocationCacheSize()
+        if size>maxSize then maxSize=size end
+        if size<previous then dropped=true end
+        previous=size
+    end
+    check(limit==256 and maxSize<=limit,'perf: cache never holds more than the 256-entity limit')
+    check(maxSize==limit and dropped and previous>=1,'perf: a full cache is cleared and keeps working instead of growing')
+    -- 4) Foreign-only DB points keep feeding nextMapHint and otherMap* after cache hits.
+    targetsScenario(goalList,groupList,foreignDB,{noPOI=true},400)
+    api.Objectives.ResetLocationCache();zero()
+    local away1=api.Replan({});local awaySpawn1=calls.spawn
+    zero()
+    local away2=api.Replan({});local awaySpawn2=calls.spawn
+    local away3=api.Replan({})
+    local item=away1.excluded[1]
+    check(away1.count==0 and away1.objectiveResolution[1].mode=='objective_locations' and item and item.reason=='outside_current_map','perf: foreign-only DB point is excluded as outside the current map without any native POI')
+    check(item.otherMapID==102 and item.otherMapName=='Map 102' and type(item.otherDistance)=='number' and away1.nextMapHint and away1.nextMapHint.mapID==102 and away1.nextMapHint.mapName=='Map 102','perf: first rebuild reports the foreign map and next-map hint')
+    check(awaySpawn1>=1 and awaySpawn2==0 and api.Objectives.LocationCacheSize()==1,'perf: foreign spawn is cached after the first rebuild')
+    check(sig(away1)==sig(away2) and sig(away2)==sig(away3) and away3.nextMapHint.mapID==102
+        and away3.excluded[1].otherMapID==102 and away3.excluded[1].otherDistance==item.otherDistance,'perf: next-map hint and otherMap fields are unchanged on cache hits')
+    -- 5) OnUnload clears the cache.
+    api.OnUnload()
+    check(api.Objectives.LocationCacheSize()==0,'perf: unload empties the location cache')
+    zero()
+    local reloaded=api.Replan({})
+    check(calls.spawn>=1 and calls.map>=1 and sig(reloaded)==sig(away1),'perf: first rebuild after unload converts spawns again with identical results')
+    -- 6) A different database object or version invalidates the cache.
+    local live=LibQuestieDB
+    local copy={};for key,value in pairs(live) do copy[key]=value end
+    LibQuestieDB=copy;zero()
+    api.Replan({})
+    check(calls.spawn>=1 and api.Objectives.LocationCacheSize()==1,'perf: a rebuilt database object does not reuse the old cache')
+    zero();api.Replan({})
+    check(calls.spawn==0,'perf: the new database object is cached once it has been read')
+    LibQuestieDB=live;zero()
+    api.Replan({})
+    check(calls.spawn>=1,'perf: switching back to the previous database object invalidates again')
+    Fixture.metadataVersion='perf-version';zero()
+    api.Replan({})
+    check(calls.spawn>=1,'perf: a new database version invalidates the cache')
+    zero();api.Replan({})
+    check(calls.spawn==0,'perf: the same database version is cached afterwards')
+    -- Restore the fixture for the checks that follow.
+    Fixture.keepLocationCache=nil;Fixture.metadataVersion=saved.metadata;Fixture.worldScale=saved.scale
+    FixtureDB.Npc,FixtureDB.Object,FixtureDB.Item,FixtureDB.Quest.objectives=saved.npc,saved.object,saved.item,saved.objectives
+    FixtureDB.Support.Get=saved.support;C_Map.GetMapInfo,C_Map.GetWorldPosFromMapPos=saved.mapInfo,saved.worldPos
+    QUEST_MONSTERS_KILLED=saved.monsters
+    api.Objectives.ResetLocationCache()
+    api.StartRoute()
+    check(api.route.running,'perf: route restarts after the location cache scenarios')
 end
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000

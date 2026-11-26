@@ -325,6 +325,7 @@ WB:Expose("analyze_quests", ns.AnalyzeQuests,
 
 function ns.OnUnload()
     if ns.QuestData and ns.QuestData.ResetCache then ns.QuestData.ResetCache() end
+    if ns.Objectives and ns.Objectives.ResetLocationCache then ns.Objectives.ResetLocationCache() end
     if ns.GearSheet then ns.GearSheet.Shutdown() end
     if ns.QuestValueSheet then ns.QuestValueSheet.Shutdown() end
     ns.route.valuePendingQuestIDs = nil

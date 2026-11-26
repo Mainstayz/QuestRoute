@@ -89,6 +89,61 @@ local function ReadObjectiveIdentities(db, info, quest)
         objectives = {}, points = {}, mappingComplete = false, message = tostring(result) }
 end
 
+-- 刷新点展开结果的跨次缓存（key=kind:id，值=ReadLocations 返回的完整、未过滤的 locations，含外图点）。
+-- 绑定数据库身份：db 对象或 info.version 变化即整体作废；固定容量，满后整体清空再写入；
+-- OnUnload 通过 ResetLocationCache 清空。缓存内的 location/world 表只读，下游只读取字段。
+local locationCacheLimit = 256
+
+local function NewLocationCache(db, version)
+    return { db = db, version = version, entries = {}, count = 0 }
+end
+
+local sharedLocationCache = NewLocationCache()
+
+local function SharedLocationCache(db, info)
+    if not db then return NewLocationCache() end
+    local version = type(info) == "table" and info.version or nil
+    if sharedLocationCache.db ~= db or sharedLocationCache.version ~= version then
+        sharedLocationCache = NewLocationCache(db, version)
+    end
+    return sharedLocationCache
+end
+
+local function ResetLocationCache()
+    sharedLocationCache = NewLocationCache()
+end
+
+-- 仅供测试/诊断：当前共享缓存的条目数与容量。
+local function LocationCacheSize()
+    return sharedLocationCache.count, locationCacheLimit
+end
+
+-- 只缓存「完整」结果：凡是稍后可能自行恢复的失败一律不缓存。
+-- 判据（对应 Database.ReadLocations 的逐点分支）：
+--   available 但 world 为 nil：C_Map.GetWorldPosFromMapPos 暂不可用，不缓存；
+--   reason=unsupported_map：C_Map.GetMapInfo 暂返回 nil，不缓存；
+--   reason=map_mapping_missing：区域→地图映射暂缺，保守不缓存；
+--   空结果：spawns 暂缺，保守不缓存。
+-- 其余（available 且有 world，或 instance_only/invalid_coordinates/map_suppressed 这类由静态数据决定的不可用）可缓存。
+local function CacheableLocations(locations)
+    if type(locations) ~= "table" or #locations == 0 then return false end
+    for _, location in ipairs(locations) do
+        if location.available then
+            if not location.world then return false end
+        elseif location.reason == "unsupported_map" or location.reason == "map_mapping_missing" then
+            return false
+        end
+    end
+    return true
+end
+
+local function StoreLocations(cache, key, locations)
+    if not CacheableLocations(locations) then return end
+    if cache.count >= locationCacheLimit then cache.entries, cache.count = {}, 0 end
+    cache.entries[key] = locations
+    cache.count = cache.count + 1
+end
+
 local function ResolveObjectiveLocations(db, info, quest, cache, identities, playerLevel)
     local result = identities or ReadObjectiveIdentities(db, info, quest)
     local combatLevels = {}
@@ -126,12 +181,12 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities, pla
             local pointCount, seen = 0, {}
             for _, source in ipairs(sources) do
                 local key = source.kind .. ":" .. source.id
-                local locations = cache[key]
+                local locations = cache.entries[key]
                 if not locations then
                     local entity = source.kind == "npc" and db.Npc or db.Object
                     if not entity or not entity.Exists(source.id) then return Fallback("source_entity_missing") end
                     locations = ReadLocations(db, entity, source.id)
-                    cache[key] = locations
+                    StoreLocations(cache, key, locations)
                 end
                 if #locations > 1200 then return Fallback("too_many_spawn_locations") end
                 for _, location in ipairs(locations) do
@@ -163,7 +218,7 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities, pla
 end
 
 local function ReadObjectiveLocations(db, info, quest, cache, identities, playerLevel)
-    local ok, result = pcall(ResolveObjectiveLocations, db, info, quest, cache or {}, identities, playerLevel)
+    local ok, result = pcall(ResolveObjectiveLocations, db, info, quest, cache or NewLocationCache(), identities, playerLevel)
     if ok then return result end
     return { mode = "native_poi", reason = "database_read_error", source = "QuestieDB",
         objectives = {}, points = {}, message = tostring(result) }
@@ -216,4 +271,5 @@ function ns.GetQuestTargets(args)
     return AddPage(result, points, page, "targets")
 end
 
-ns.Objectives = { ReadIdentities = ReadObjectiveIdentities, ReadLocations = ReadObjectiveLocations }
+ns.Objectives = { ReadIdentities = ReadObjectiveIdentities, ReadLocations = ReadObjectiveLocations,
+    SharedLocationCache = SharedLocationCache, ResetLocationCache = ResetLocationCache, LocationCacheSize = LocationCacheSize }

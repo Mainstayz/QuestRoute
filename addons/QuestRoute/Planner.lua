@@ -376,7 +376,8 @@ local function BuildPlan(reason)
     local pois = CollectPOIs({}, active)
     local db, dbInfo = GetDatabase()
     local byQuest, excluded, remaining = {}, {}, {}
-    local objectiveResolution, locationCache = {}, {}
+    -- 刷新点展开结果跨次缓存（绑定 db 身份，见 Objectives.SharedLocationCache）；不再每次重建新建。
+    local objectiveResolution, locationCache = {}, ns.Objectives.SharedLocationCache(db, dbInfo)
     local pendingLocations, pendingObjectives = 0, 0
     for _, poi in ipairs(pois) do
         byQuest[poi.questID] = byQuest[poi.questID] or {}
