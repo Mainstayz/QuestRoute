@@ -185,20 +185,37 @@ local function SamePOI(a, b)
         and a.reportedMapID == b.reportedMapID and a.x == b.x and a.y == b.y
 end
 
-local function CollectPOIs(args, active)
+-- 947 下的子地图列表在一个会话内不变：缓存排序后的 mapID 数组，避免每次重建都重新枚举。
+-- 空结果或 nil 不缓存（客户端暂未就绪时下一次还能拿到真列表）；OnUnload 通过 ResetCache 清空。
+-- 数组只在本文件内只读遍历，不返回给调用方，外部不可修改。
+local mapTreeCache
+
+local function ResetCache()
+    mapTreeCache = nil
+end
+
+local function MapTreeIDs()
+    if mapTreeCache then return mapTreeCache end
     local maps, seenMaps = {}, {}
+    for _, info in ipairs(C_Map.GetMapChildrenInfo(947, nil, true) or {}) do
+        if IsID(info.mapID) and not seenMaps[info.mapID] then
+            maps[#maps + 1] = info.mapID
+            seenMaps[info.mapID] = true
+        end
+    end
+    table.sort(maps)
+    if #maps > 0 then mapTreeCache = maps end
+    return maps
+end
+
+local function CollectPOIs(args, active)
+    local maps
     local scope = { kind = "single_map", mapID = args.mapID }
     if args.mapID then
-        maps[1] = args.mapID
+        maps = { args.mapID }
     else
         scope = { kind = "map_tree", rootMapID = 947, includesAllInstanceMaps = false }
-        for _, info in ipairs(C_Map.GetMapChildrenInfo(947, nil, true) or {}) do
-            if IsID(info.mapID) and not seenMaps[info.mapID] then
-                maps[#maps + 1] = info.mapID
-                seenMaps[info.mapID] = true
-            end
-        end
-        table.sort(maps)
+        maps = MapTreeIDs()
     end
     local raw, points, byQuest, rawCount, unusableCount = {}, {}, {}, 0, 0
     for _, queryMapID in ipairs(maps) do
@@ -313,4 +330,4 @@ function ns.GetQuestDetails(args)
     }
 end
 
-ns.QuestData = { ReadQuest = ReadQuest, ActiveQuestIndex = ActiveQuestIndex, CollectPOIs = CollectPOIs }
+ns.QuestData = { ReadQuest = ReadQuest, ActiveQuestIndex = ActiveQuestIndex, CollectPOIs = CollectPOIs, ResetCache = ResetCache }

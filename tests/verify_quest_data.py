@@ -2409,6 +2409,35 @@ do
     api.route.nextRebuildRetry=nil;resetStats()
     api.SetRouteOptions({moveThreshold=savedThreshold})
 end
+-- perf G2: the 947 child-map list is queried once per load and never cached while empty.
+do
+    local rows
+    local mapCalls,mapQuery=0,C_Map.GetMapChildrenInfo
+    C_Map.GetMapChildrenInfo=function(...) mapCalls=mapCalls+1;return mapQuery(...) end
+    Fixture.mapOrder={101,102,103}
+    api.OnUnload()
+    for _=1,5 do api.Replan({}) end
+    check(mapCalls<=1,'perf: five consecutive replans query the child-map list at most once')
+    rows={routeRow(201,500)};scenario(rows)
+    check(api.GetQuestPOIs({limit=100}).mapScope.scannedMaps==3 and mapCalls==1,'perf: cached list still scans every child map')
+    Fixture.mapOrder={102}
+    check(api.GetQuestPOIs({limit=100}).total==1 and mapCalls==1,'perf: cache hit does not re-read the map tree')
+    api.OnUnload()
+    local afterUnload=api.GetQuestPOIs({limit=100})
+    check(mapCalls==2 and afterUnload.mapScope.scannedMaps==1 and afterUnload.total==0,'perf: unload clears the cache so a reload sees the new map list')
+    api.OnUnload()
+    Fixture.mapOrder={}
+    check(api.GetQuestPOIs({limit=100}).total==0 and mapCalls==3,'perf: empty map list is queried')
+    Fixture.mapOrder={101,102,103}
+    local recovered=api.GetQuestPOIs({limit=100})
+    check(mapCalls==4 and recovered.total==1 and recovered.mapScope.scannedMaps==3,'perf: empty list is never cached, so the next non-empty list is used')
+    api.GetQuestPOIs({limit=100})
+    check(mapCalls==4,'perf: non-empty list is cached afterwards')
+    C_Map.GetMapChildrenInfo=mapQuery
+    Fixture.mapOrder={101,102,103}
+    api.StartRoute()
+    check(api.route.running,'perf: route restarts after the unload scenarios')
+end
 -- Prepare real two-map frame pools for the Python harness to re-execute source on same namespace.
 Fixture.worldScale=1000
 scenario({routeRow(201,500),routeRow(202,680)},500)

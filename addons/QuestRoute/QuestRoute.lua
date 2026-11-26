@@ -324,6 +324,7 @@ WB:Expose("analyze_quests", ns.AnalyzeQuests,
     "只读任务日志价值分析，五档建议（keep_priority/keep/hold_or_drop/recommend_drop/uncertain），绝不自动放弃任务。args: questID、verdict、includeChain、includeGear、requestLoad、gear、offset、limit。输出见 README analyze_quests。")
 
 function ns.OnUnload()
+    if ns.QuestData and ns.QuestData.ResetCache then ns.QuestData.ResetCache() end
     if ns.GearSheet then ns.GearSheet.Shutdown() end
     if ns.QuestValueSheet then ns.QuestValueSheet.Shutdown() end
     ns.route.valuePendingQuestIDs = nil
