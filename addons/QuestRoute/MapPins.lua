@@ -3,10 +3,21 @@ local _, ns = ...
 local IsFinite, Accessible, FormatDistance = ns.Util.IsFinite, ns.Util.Accessible, ns.Util.FormatDistance
 local tooltipPhases = { travel = "赶路中", working = "在此完成目标", unavailable = "等待位置更新" }
 
+local reusableVec
 local function ProjectWorld(world, mapID)
     if not world then return nil end
+    local vec
+    if reusableVec and type(reusableVec.SetXY) == "function" then
+        reusableVec:SetXY(world.x, world.y)
+        vec = reusableVec
+    else
+        vec = CreateVector2D(world.x, world.y)
+        if vec and type(vec.SetXY) == "function" then
+            reusableVec = vec
+        end
+    end
     local ok, actualMap, point = pcall(C_Map.GetMapPosFromWorldPos,
-        world.continentID, CreateVector2D(world.x, world.y), mapID)
+        world.continentID, vec, mapID)
     if ok and actualMap == mapID and point and IsFinite(point.x) and IsFinite(point.y) then
         return { x = point.x, y = point.y }
     end
@@ -282,8 +293,15 @@ end
 
 local function RenderOpportunityPins(view, plan, placed, width, height, scale, mapID, origin, radius, cosine, sine)
     view.opportunities = view.opportunities or {}
+    local opportunitiesRef = plan.discovery and plan.discovery.opportunities
+    if view.groupedSeq ~= plan.sequence or view.groupedMapID ~= mapID
+        or view.groupedDiscovery ~= plan.discovery or view.groupedOpportunitiesRef ~= opportunitiesRef then
+        view.groupedOpportunities = GroupOpportunities(plan, mapID, ns.Discovery.rejectionLabels)
+        view.groupedSeq, view.groupedMapID = plan.sequence, mapID
+        view.groupedDiscovery, view.groupedOpportunitiesRef = plan.discovery, opportunitiesRef
+    end
     local circular, serial = origin ~= nil, 0
-    for _, group in ipairs(GroupOpportunities(plan, mapID, ns.Discovery.rejectionLabels)) do
+    for _, group in ipairs(view.groupedOpportunities or {}) do
         local point, position = group.point
         if circular then position = MinimapPosition(point.world, origin, radius, cosine, sine)
         else position = ProjectWorld(point.world, mapID) end
@@ -299,15 +317,18 @@ local function RenderOpportunityPins(view, plan, placed, width, height, scale, m
             if not pin then pin = NewRoutePin(view); pin:SetSize(20, 20); view.opportunities[serial] = pin end
             pin.step, pin.group, pin.opportunity, pin.onEdge, pin.carried = group.items[1], group, true, onEdge, group.carried
             local merged = #group.items > 1
-            pin:SetSize(merged and 24 or 20, merged and 24 or 20)
-            pin.text:SetFontObject(merged and "GameFontNormalSmall" or "GameFontNormal")
-            pin.text:ClearAllPoints()
-            if merged then
-                -- 数量文字用小字体对象、不限字串宽度，避免被截成“…”（客户端字号下限约 14，不再缩小）。
-                pin.text:SetPoint("CENTER", pin, "CENTER", 0, 0)
-                pin.text:SetWidth(40)
-            else pin.text:SetWidth(0); pin.text:SetAllPoints(pin) end
-            pin.text:SetTextColor(1, 1, 1)
+            if pin.mergedState ~= merged then
+                pin.mergedState = merged
+                pin:SetSize(merged and 24 or 20, merged and 24 or 20)
+                pin.text:SetFontObject(merged and "GameFontNormalSmall" or "GameFontNormal")
+                pin.text:ClearAllPoints()
+                if merged then
+                    -- 数量文字用小字体对象、不限字串宽度，避免被截成“…”（客户端字号下限约 14，不再缩小）。
+                    pin.text:SetPoint("CENTER", pin, "CENTER", 0, 0)
+                    pin.text:SetWidth(40)
+                else pin.text:SetWidth(0); pin.text:SetAllPoints(pin) end
+                pin.text:SetTextColor(1, 1, 1)
+            end
             pin:SetScale(1 / scale)
             local x, y = position.x * width * scale, position.y * height * scale
             if circular then x, y = position.x * width / 2, position.y * height / 2 end

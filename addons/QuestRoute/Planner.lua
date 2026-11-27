@@ -2,7 +2,7 @@
 local _, ns = ...
 local Util, QuestData, Navigation, Hotspots = ns.Util, ns.QuestData, ns.Navigation, ns.Hotspots
 local InvalidArguments, IsID, DistanceSquared, RouteStepKey = Util.InvalidArguments, Util.IsID, Util.DistanceSquared, Util.RouteStepKey
-local ReadQuest, ActiveQuestIndex, CollectPOIs = QuestData.ReadQuest, QuestData.ActiveQuestIndex, QuestData.CollectPOIs
+local ReadQuest, ActiveQuestIndex, CollectPlanPOIs = QuestData.ReadQuest, QuestData.ActiveQuestIndex, QuestData.CollectPlanPOIs
 local RouteSettings, RouteExclusion = ns.RouteOptions.Get, ns.RouteOptions.Exclusion
 local GetDatabase = ns.Database.Get
 local ReadObjectiveIdentities, ReadObjectiveLocations = ns.Objectives.ReadIdentities, ns.Objectives.ReadLocations
@@ -99,10 +99,13 @@ local function GroupWeight(remaining, candidate, point, grid)
         local column = grid[x + dx]
         if column then
             for dy = -1, 1 do
-                for _, entry in ipairs(column[y + dy] or {}) do
-                    if entry.candidate ~= candidate and not nearby[entry.candidate] then
-                        local distance = DistanceSquared(point.world, entry.world)
-                        if distance and distance <= radius then nearby[entry.candidate] = true end
+                local cell = column[y + dy]
+                if cell then
+                    for _, entry in ipairs(cell) do
+                        if entry.candidate ~= candidate and not nearby[entry.candidate] then
+                            local distance = DistanceSquared(point.world, entry.world)
+                            if distance and distance <= radius then nearby[entry.candidate] = true end
+                        end
                     end
                 end
             end
@@ -364,6 +367,12 @@ local function AssociationSummary(items, selected)
     return summary
 end
 
+local fullScanReasons = {
+    startup = true, manual = true, requested = true, rebuild_retry = true, location_data_refresh = true,
+    QUEST_LOG_UPDATE = true, QUEST_ACCEPTED = true, QUEST_TURNED_IN = true, QUEST_REMOVED = true,
+    PLAYER_ENTERING_WORLD = true, ZONE_CHANGED_NEW_AREA = true, quest_update = true,
+}
+
 local function BuildPlan(reason)
     local settings = RouteSettings()
     local context = ns.GetPlayerContext({})
@@ -373,19 +382,15 @@ local function BuildPlan(reason)
     local active = ActiveQuestIndex()
     PruneSpotAvoidances(active, mapID, now)
     local mobIndex = { byNPC = {}, unresolvedQuestCount = 0, observedAt = now }
-    local pois = CollectPOIs({}, active)
     local db, dbInfo = GetDatabase()
-    local byQuest, excluded, remaining = {}, {}, {}
+    local excluded, remaining = {}, {}
     -- 刷新点展开结果跨次缓存（绑定 db 身份，见 Objectives.SharedLocationCache）；不再每次重建新建。
     local objectiveResolution, locationCache = {}, ns.Objectives.SharedLocationCache(db, dbInfo)
     local pendingLocations, pendingObjectives = 0, 0
-    for _, poi in ipairs(pois) do
-        byQuest[poi.questID] = byQuest[poi.questID] or {}
-        byQuest[poi.questID][#byQuest[poi.questID] + 1] = poi
-    end
     local ids = {}
     for id in pairs(active) do ids[#ids + 1] = id end
     table.sort(ids)
+    local prepared, nativeNeeded, nativeStatuses = {}, {}, {}
     for _, id in ipairs(ids) do
         local entry = active[id]
         local quest = ReadQuest(entry.info, entry.category, false)
@@ -393,8 +398,7 @@ local function BuildPlan(reason)
         quest.objectivesLoaded = objectivesOK and type(objectives) == "table"
         quest.objectives = quest.objectivesLoaded and objectives or {}
         local why, source = RouteExclusion(quest, db, settings)
-        local options, allLocalPoints, hasLocalPoint, avoidedCount = {}, {}, false, 0
-        local resolved, foreign
+        local resolved
         if not why then
             local identities = ReadObjectiveIdentities(db, dbInfo, quest)
             AddNPCGoals(mobIndex, db, quest, identities)
@@ -405,6 +409,19 @@ local function BuildPlan(reason)
             quest.preserveObjectiveHistory = temporaryObjectiveReasons[resolved.reason]
             objectiveResolution[#objectiveResolution + 1] = { questID = id, mode = resolved.mode, reason = resolved.reason,
                 remainingCount = resolved.remainingCount, pointCount = #resolved.points, version = resolved.version }
+            if resolved.mode ~= "objective_locations" then
+                nativeNeeded[id] = true
+                nativeStatuses[id] = quest.status
+            end
+        end
+        prepared[#prepared + 1] = { id = id, quest = quest, why = why, source = source, resolved = resolved }
+    end
+    local byQuest = CollectPlanPOIs(active, mapID, nativeNeeded, nativeStatuses, fullScanReasons[reason] == true)
+    for _, prep in ipairs(prepared) do
+        local id, quest, why, source, resolved = prep.id, prep.quest, prep.why, prep.source, prep.resolved
+        local options, allLocalPoints, hasLocalPoint, avoidedCount = {}, {}, false, 0
+        local foreign
+        if not why then
             local sourcePoints = resolved.mode == "objective_locations" and resolved.points or byQuest[id] or {}
             if resolved.mode ~= "objective_locations" and resolved.unsafeSourcesExcluded then
                 sourcePoints = {}

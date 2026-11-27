@@ -204,10 +204,12 @@ local function EnsureReverseState(db)
     return reverseIndexState
 end
 
-local function StepReverseIndex(state, maxQuests)
+local function StepReverseIndex(state, maxQuests, budgetMs)
     if not state or state.done then return true end
     local db, ids, reverse = state.db, state.ids, state.map
     local limit = maxQuests and math.min(#ids, state.cursor + maxQuests - 1) or #ids
+    local started = (budgetMs and type(debugprofilestop) == "function") and debugprofilestop() or nil
+    local lastProcessed = state.cursor - 1
     for i = state.cursor, limit do
         local qid = ids[i]
         if IsID(qid) then
@@ -222,18 +224,25 @@ local function StepReverseIndex(state, maxQuests)
                 for _, pre in ipairs(preGroup) do AddReverseEdge(reverse, pre, qid) end
             end
         end
+        lastProcessed = i
+        if started and (i - state.cursor) % 16 == 15 and i < limit then
+            if debugprofilestop() - started >= budgetMs then break end
+        end
     end
-    state.cursor = limit + 1
+    state.cursor = lastProcessed + 1
     if state.cursor > #ids then state.done = true end
     return state.done
 end
 
-local function PumpReverseIndex(maxQuests)
+local function PumpReverseIndex(maxQuests, budgetMs)
+    if reverseIndexState and reverseIndexState.done and reverseIndexState.db == rawget(_G, "LibQuestieDB") then
+        return false
+    end
     local db = GetDatabase()
     if not db then return false end
     local state = EnsureReverseState(db)
     if not state or state.done then return false end
-    return StepReverseIndex(state, maxQuests or 128)
+    return StepReverseIndex(state, maxQuests or 128, budgetMs)
 end
 
 local function GetReverseNextIndex(db)
@@ -300,6 +309,7 @@ local function BuildGearEvaluation(profile, allowGear)
         questLevelWindow = 20,
         wearLevelWindow = 15,
         includePickupInfo = false,
+        includeExplanation = false,
         limit = 100,
     })
     if not res or not res.ok then return eval end
@@ -767,7 +777,45 @@ local function TraceChain(questID, db, reverseNext, profile, gearEval, preloadSt
     }
 end
 
-local function ReadReacceptInfo(questID, db, hasPrevious)
+local function CachedReadLocations(db, dbInfo, entity, kind, id, localCache)
+    if ns.Objectives and type(ns.Objectives.SharedLocationCache) == "function" then
+        local cache = ns.Objectives.SharedLocationCache(db, dbInfo)
+        local key = kind .. ":" .. id
+        local cached = cache.entries[key]
+        if not cached then
+            cached = ReadLocations(db, entity, id)
+            if type(cached) == "table" and #cached > 0 then
+                local cacheable = true
+                for _, loc in ipairs(cached) do
+                    if loc.available and not loc.world then cacheable = false; break end
+                    if not loc.available and (loc.reason == "unsupported_map" or loc.reason == "map_mapping_missing") then
+                        cacheable = false; break
+                    end
+                end
+                if cacheable then
+                    if cache.count >= 256 then cache.entries, cache.count = {}, 0 end
+                    cache.entries[key] = cached
+                    cache.count = cache.count + 1
+                end
+            end
+        end
+        local usable = 0
+        for _, loc in ipairs(cached or {}) do
+            if loc.available then usable = usable + 1 end
+        end
+        return cached, usable
+    end
+    local key = kind .. ":" .. id
+    local entry = localCache and localCache[key]
+    if entry then return entry.locs, entry.usable end
+    local locs, usable = ReadLocations(db, entity, id)
+    if localCache and type(locs) == "table" then
+        localCache[key] = { locs = locs, usable = usable }
+    end
+    return locs, usable
+end
+
+local function ReadReacceptInfo(questID, db, hasPrevious, dbInfo, locCache)
     if not db or type(db.Quest) ~= "table" or not SafeCall(db.Quest.Exists, questID) then
         return { cost = "unknown", label = "重接方式未知" }
     end
@@ -784,7 +832,7 @@ local function ReadReacceptInfo(questID, db, hasPrevious)
     local hasUsableNpc = false
     for _, npcID in ipairs(npcs) do
         if IsID(npcID) and db.Npc and SafeCall(db.Npc.Exists, npcID) then
-            local locs, usable = ReadLocations(db, db.Npc, npcID)
+            local locs, usable = CachedReadLocations(db, dbInfo, db.Npc, "npc", npcID, locCache)
             if usable > 0 then
                 hasUsableNpc = true
                 instanceOnly = false
@@ -896,7 +944,7 @@ local function ComputeProgress(quest, db)
     }
 end
 
-local function QuestGeography(quest, poisByQuest, db, playerLoc)
+local function QuestGeography(quest, poisByQuest, db, playerLoc, dbInfo, locCache)
     local playerMapID = playerLoc and playerLoc.coordinateMapID or nil
     local playerWorld = playerLoc and playerLoc.world or nil
     local best = nil
@@ -941,11 +989,11 @@ local function QuestGeography(quest, poisByQuest, db, playerLoc)
 
     -- 无原生 POI 时，用 QuestieDB 交付/目标 NPC 位置作参考（不用于精确导航，仅作远近判断）
     if not best and db and db.Quest and SafeCall(db.Quest.Exists, quest.questID) then
-        local function ScanEntities(ids, entity)
+        local function ScanEntities(ids, entity, kind)
             if type(ids) ~= "table" or not entity then return end
             for _, id in ipairs(ids) do
                 if IsID(id) and SafeCall(entity.Exists, id) then
-                    local locs = ReadLocations(db, entity, id)
+                    local locs = CachedReadLocations(db, dbInfo, entity, kind, id, locCache)
                     for _, loc in ipairs(locs or {}) do
                         if loc.available then
                             ConsiderPoint(loc.coordinateMapID, loc.world, "QuestieDB")
@@ -957,15 +1005,15 @@ local function QuestGeography(quest, poisByQuest, db, playerLoc)
         end
         local finishedBy = SafeCall(db.Quest.finishedBy, quest.questID)
         if type(finishedBy) == "table" then
-            ScanEntities(finishedBy[1], db.Npc)
-            if not best then ScanEntities(finishedBy[2], db.Object) end
+            ScanEntities(finishedBy[1], db.Npc, "npc")
+            if not best then ScanEntities(finishedBy[2], db.Object, "object") end
         end
         if not best then
             local dbObjs = SafeCall(db.Quest.objectives, quest.questID)
             if type(dbObjs) == "table" then
                 local npcIds = {}
                 for _, row in ipairs(dbObjs[1] or {}) do if type(row) == "table" then npcIds[#npcIds + 1] = row[1] end end
-                ScanEntities(npcIds, db.Npc)
+                ScanEntities(npcIds, db.Npc, "npc")
             end
         end
     end
@@ -1522,19 +1570,27 @@ local function Analyze(args)
     local reverseNext = (includeChain and db) and GetReverseNextIndex(db) or nil
     local gearEval = BuildGearEvaluation(profile, includeGear)
 
-    local activeByID = {}
-    for _, q in ipairs(questList.quests or {}) do activeByID[q.questID] = true end
-    local pois = CollectPOIs({}, activeByID)
+    local activeByID, statuses = {}, {}
+    for _, q in ipairs(questList.quests or {}) do
+        activeByID[q.questID] = true
+        statuses[q.questID] = q.status
+    end
     local poisByQuest = {}
-    for _, poi in ipairs(pois or {}) do
-        local list = poisByQuest[poi.questID]
-        if not list then list = {}; poisByQuest[poi.questID] = list end
-        list[#list + 1] = poi
+    if ns.QuestData and type(ns.QuestData.CollectPlanPOIs) == "function" then
+        local mapID = profile.location and profile.location.coordinateMapID or nil
+        poisByQuest = ns.QuestData.CollectPlanPOIs(activeByID, mapID, activeByID, statuses, false)
+    else
+        local pois = CollectPOIs({}, activeByID)
+        for _, poi in ipairs(pois or {}) do
+            local list = poisByQuest[poi.questID]
+            if not list then list = {}; poisByQuest[poi.questID] = list end
+            list[#list + 1] = poi
+        end
     end
 
     local preloadState = { enabled = requestLoad, requested = {}, count = 0 }
     local noPreload = { enabled = false, requested = {}, count = 0 }
-    local npcLevelCache = {}
+    local npcLevelCache, locCache = {}, {}
     local rawEntries = {}
     local clusterCounts = {}
     local xpSamples = {}
@@ -1548,7 +1604,7 @@ local function Analyze(args)
         if reward.ready and reward.xp and reward.xp > 0 and (diff.code == 1 or diff.code == 2) then
             xpSamples[#xpSamples + 1] = reward.xp
         end
-        local geo = QuestGeography(q, poisByQuest, db, profile.location)
+        local geo = QuestGeography(q, poisByQuest, db, profile.location, dbInfo, locCache)
         local clusterKey = geo.mapID and ("map:" .. geo.mapID) or ("cat:" .. tostring(q.category or "?"))
         clusterCounts[clusterKey] = (clusterCounts[clusterKey] or 0) + 1
         if isTarget then
@@ -1560,7 +1616,7 @@ local function Analyze(args)
             }
             local progress = ComputeProgress(q, db)
             local flags = BuildQuestFlags(q, db, profile, settings, npcLevelCache)
-            local reaccept = ReadReacceptInfo(q.questID, db, chain.hasPrevious)
+            local reaccept = ReadReacceptInfo(q.questID, db, chain.hasPrevious, dbInfo, locCache)
             rawEntries[#rawEntries + 1] = {
                 quest = q, difficulty = diff, reward = reward, chain = chain,
                 progress = progress, geography = geo, flags = flags, reaccept = reaccept,

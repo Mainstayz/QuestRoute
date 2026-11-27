@@ -189,9 +189,11 @@ end
 -- 空结果或 nil 不缓存（客户端暂未就绪时下一次还能拿到真列表）；OnUnload 通过 ResetCache 清空。
 -- 数组只在本文件内只读遍历，不返回给调用方，外部不可修改。
 local mapTreeCache
+local poiMapHints, noNativePOICache = {}, {}
 
 local function ResetCache()
     mapTreeCache = nil
+    poiMapHints, noNativePOICache = {}, {}
 end
 
 local function MapTreeIDs()
@@ -213,6 +215,9 @@ local function CollectPOIs(args, active)
     local scope = { kind = "single_map", mapID = args.mapID }
     if args.mapID then
         maps = { args.mapID }
+    elseif args.mapIDs then
+        scope = { kind = "map_subset", mapCount = #args.mapIDs }
+        maps = args.mapIDs
     else
         scope = { kind = "map_tree", rootMapID = 947, includesAllInstanceMaps = false }
         maps = MapTreeIDs()
@@ -330,4 +335,99 @@ function ns.GetQuestDetails(args)
     }
 end
 
-ns.QuestData = { ReadQuest = ReadQuest, ActiveQuestIndex = ActiveQuestIndex, CollectPOIs = CollectPOIs, ResetCache = ResetCache }
+local function RecordPOIs(list, byQuest)
+    for _, poi in ipairs(list) do
+        local qid = poi.questID
+        local bucket = byQuest[qid]
+        if not bucket then
+            bucket = {}
+            byQuest[qid] = bucket
+        end
+        bucket[#bucket + 1] = poi
+        if IsID(poi.reportedMapID) then
+            local hints = poiMapHints[qid]
+            if not hints then
+                hints = {}
+                poiMapHints[qid] = hints
+            end
+            hints[poi.reportedMapID] = true
+            noNativePOICache[qid] = nil
+        end
+    end
+end
+
+-- 路线规划优先扫描当前地图与该任务已知的外图位置，仅在缺失且需重扫时回退全地图树。
+local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowFullScan)
+    for qid in pairs(poiMapHints) do
+        if not active[qid] then poiMapHints[qid] = nil end
+    end
+    for qid in pairs(noNativePOICache) do
+        if not active[qid] then noNativePOICache[qid] = nil end
+    end
+    local scanned, byQuest = {}, {}
+    if IsID(currentMapID) then
+        scanned[currentMapID] = true
+        RecordPOIs(CollectPOIs({ mapID = currentMapID }, active), byQuest)
+    end
+    local unresolved = {}
+    for qid in pairs(neededIDs or {}) do
+        local hasLocal = false
+        for _, poi in ipairs(byQuest[qid] or {}) do
+            if poi.reportedMapID == currentMapID then
+                hasLocal = true
+                break
+            end
+        end
+        if not hasLocal then unresolved[qid] = true end
+    end
+    if next(unresolved) then
+        local hintMapSet, hintMaps = {}, {}
+        for qid in pairs(unresolved) do
+            local hints = poiMapHints[qid]
+            if hints then
+                for mid in pairs(hints) do
+                    if not scanned[mid] then
+                        hints[mid] = nil
+                        if not hintMapSet[mid] then
+                            hintMapSet[mid] = true
+                            hintMaps[#hintMaps + 1] = mid
+                        end
+                    end
+                end
+            end
+        end
+        if #hintMaps > 0 then
+            table.sort(hintMaps)
+            for _, mid in ipairs(hintMaps) do scanned[mid] = true end
+            RecordPOIs(CollectPOIs({ mapIDs = hintMaps }, unresolved), byQuest)
+        end
+        local stillMissing, needsFull = {}, false
+        for qid in pairs(unresolved) do
+            if not byQuest[qid] then
+                stillMissing[qid] = true
+                local statusKey = (statuses and statuses[qid]) or true
+                if allowFullScan or noNativePOICache[qid] ~= statusKey then
+                    needsFull = true
+                end
+            end
+        end
+        if needsFull then
+            local remainingMaps = {}
+            for _, mid in ipairs(MapTreeIDs()) do
+                if not scanned[mid] then remainingMaps[#remainingMaps + 1] = mid end
+            end
+            if #remainingMaps > 0 then
+                RecordPOIs(CollectPOIs({ mapIDs = remainingMaps }, stillMissing), byQuest)
+            end
+            for qid in pairs(stillMissing) do
+                if not byQuest[qid] then
+                    noNativePOICache[qid] = (statuses and statuses[qid]) or true
+                end
+            end
+        end
+    end
+    return byQuest
+end
+
+ns.QuestData = { ReadQuest = ReadQuest, ActiveQuestIndex = ActiveQuestIndex, CollectPOIs = CollectPOIs,
+    CollectPlanPOIs = CollectPlanPOIs, ResetCache = ResetCache }

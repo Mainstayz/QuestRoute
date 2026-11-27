@@ -103,11 +103,53 @@ function ns.GetUnitTasks(args)
     return result
 end
 
+-- 轻量级姓名板检查：仅在确认需求时构造标签，避免每个无关姓名板分配完整任务结果表。
+local function InspectUnitForMarker(unit)
+    local index = ns.route.mobIndex
+    if not index or ns.route.dirty then return false end
+    local exists = UnitRead(UnitExists, unit)
+    if exists ~= true then return false end
+    local player = UnitRead(UnitIsPlayer, unit)
+    local attack = UnitRead(UnitCanAttack, "player", unit)
+    local dead = UnitRead(UnitIsDeadOrGhost, unit)
+    if player == nil or attack == nil or dead == nil or player or not attack or dead then return false end
+    local id = UnitRead(UnitCreatureID, unit)
+    if not IsID(id) then return false end
+    local goals = index.byNPC and index.byNPC[id]
+    if not goals then return false end
+    local current = ns.route.plan and ns.route.plan.steps[1]
+    local currentTarget, label1, label2, pendingCount = false, nil, nil, 0
+    for _, task in ipairs(goals) do
+        if task.finished == false then
+            pendingCount = pendingCount + 1
+            if current and task.questID == current.questID and task.objectiveKey == current.objectiveKey then
+                currentTarget = true
+            end
+            if pendingCount <= 2 then
+                local count = IsFinite(task.numFulfilled) and IsFinite(task.numRequired)
+                    and (" " .. task.numFulfilled .. "/" .. task.numRequired) or ""
+                local piece = (task.relation == "kill" and "击杀" or "材料") .. count
+                if pendingCount == 1 then label1 = piece else label2 = piece end
+            end
+        end
+    end
+    if pendingCount == 0 then return false end
+    local label = pendingCount == 1 and label1
+        or pendingCount == 2 and (label1 .. " · " .. label2)
+        or (label1 .. " · " .. label2 .. " +" .. (pendingCount - 2))
+    return true, label, currentTarget, id
+end
+
 ns.route.nameplateView = ns.route.nameplateView or { markers = {} }
+
+local function HideMarker(marker)
+    marker:Hide()
+    marker.unit, marker.info, marker.lastLabel, marker.lastCurrent = nil, nil, nil, nil
+end
 
 local function HideTaskMarkers(unit)
     for _, marker in pairs(ns.route.nameplateView.markers) do
-        if not unit or marker.unit == unit then marker:Hide(); marker.unit, marker.info = nil, nil end
+        if not unit or marker.unit == unit then HideMarker(marker) end
     end
 end
 
@@ -120,36 +162,80 @@ local function PlateAllowed(plate)
     return true
 end
 
-local function RenderTaskNameplates()
-    HideTaskMarkers()
+local function PlateUnit(plate)
+    local frame = Accessible(plate.UnitFrame)
+    local unit = Accessible(plate.namePlateUnitToken) or frame and Accessible(frame.unit)
+    if type(unit) == "string" and unit:match("^nameplate%d+$") then return unit end
+end
+
+local function UpdatePlateMarker(plate, unit)
+    local needed, label, currentTarget, npcID = InspectUnitForMarker(unit)
+    local marker = ns.route.nameplateView.markers[plate]
+    if needed then
+        if not marker then
+            marker = CreateFrame("Frame", nil, plate)
+            marker:SetSize(180, 18)
+            marker:EnableMouse(false)
+            marker:SetPoint("BOTTOM", plate, "TOP", 0, 2)
+            marker.text = marker:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            marker.text:SetAllPoints(marker)
+            ns.route.nameplateView.markers[plate] = marker
+        end
+        marker.unit = unit
+        marker.info = { needed = true, label = label, currentTarget = currentTarget, npcID = npcID }
+        if marker.lastLabel ~= label then
+            marker.lastLabel = label
+            marker.text:SetText("! " .. label)
+        end
+        if marker.lastCurrent ~= currentTarget then
+            marker.lastCurrent = currentTarget
+            marker.text:SetTextColor(1, currentTarget and 0.55 or 0.85, currentTarget and 0.1 or 0.25)
+        end
+        if not marker.IsShown or not marker:IsShown() then marker:Show() end
+    elseif marker then
+        HideMarker(marker)
+    end
+end
+
+local function RenderUnit(unit)
+    if type(unit) ~= "string" or not unit:match("^nameplate%d+$") then return end
     local settings = RouteSettings()
     if not ns.route.running or not settings.enabled or settings.nameplatesEnabled == false or ns.route.dirty
-        or not C_NamePlate or type(C_NamePlate.GetNamePlates) ~= "function" then return end
+        or not C_NamePlate then return end
+    if type(C_NamePlate.GetNamePlateForUnit) == "function" then
+        local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
+        if ok and PlateAllowed(plate) then UpdatePlateMarker(plate, unit) end
+        return
+    end
+    if type(C_NamePlate.GetNamePlates) ~= "function" then return end
     for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
-        if PlateAllowed(plate) then
-            local frame = Accessible(plate.UnitFrame)
-            local unit = Accessible(plate.namePlateUnitToken) or frame and Accessible(frame.unit)
-            if type(unit) == "string" and unit:match("^nameplate%d+$") then
-                local info = ns.GetUnitTasks({ unit = unit })
-                if info.needed then
-                    local marker = ns.route.nameplateView.markers[plate]
-                    if not marker then
-                        marker = CreateFrame("Frame", nil, plate)
-                        marker:SetSize(180, 18)
-                        marker:EnableMouse(false)
-                        marker:SetPoint("BOTTOM", plate, "TOP", 0, 2)
-                        marker.text = marker:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-                        marker.text:SetAllPoints(marker)
-                        ns.route.nameplateView.markers[plate] = marker
-                    end
-                    marker.unit, marker.info = unit, info
-                    marker.text:SetText("! " .. info.label)
-                    marker.text:SetTextColor(1, info.currentTarget and 0.55 or 0.85, info.currentTarget and 0.1 or 0.25)
-                    marker:Show()
-                end
-            end
+        if PlateAllowed(plate) and PlateUnit(plate) == unit then
+            UpdatePlateMarker(plate, unit)
+            return
         end
     end
 end
 
-ns.Nameplates = { AddGoals = AddNPCGoals, Hide = HideTaskMarkers, Render = RenderTaskNameplates }
+local function RenderTaskNameplates()
+    local settings = RouteSettings()
+    if not ns.route.running or not settings.enabled or settings.nameplatesEnabled == false or ns.route.dirty
+        or not C_NamePlate or type(C_NamePlate.GetNamePlates) ~= "function" then
+        HideTaskMarkers()
+        return
+    end
+    local seenPlates = {}
+    for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
+        if PlateAllowed(plate) then
+            local unit = PlateUnit(plate)
+            if unit then
+                seenPlates[plate] = true
+                UpdatePlateMarker(plate, unit)
+            end
+        end
+    end
+    for plate, marker in pairs(ns.route.nameplateView.markers) do
+        if not seenPlates[plate] then HideMarker(marker) end
+    end
+end
+
+ns.Nameplates = { AddGoals = AddNPCGoals, Hide = HideTaskMarkers, Render = RenderTaskNameplates, RenderUnit = RenderUnit }

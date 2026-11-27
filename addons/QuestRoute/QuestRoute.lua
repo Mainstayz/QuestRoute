@@ -4,8 +4,13 @@ local _, ns = ...
 local InvalidArguments, DistanceSquared, IsFinite = ns.Util.InvalidArguments, ns.Util.DistanceSquared, ns.Util.IsFinite
 local RouteSettings, RebuildRoute, UpdateNavigation = ns.RouteOptions.Get, ns.Planner.Rebuild, ns.Navigation.Update
 local ConfigureRoutePin, WB = ns.MapPins.Configure, ns.WB
-local HideTaskMarkers, RenderTaskNameplates = ns.Nameplates.Hide, ns.Nameplates.Render
+local HideTaskMarkers, RenderTaskNameplates, RenderUnitNameplate = ns.Nameplates.Hide, ns.Nameplates.Render, ns.Nameplates.RenderUnit
 local RenderRouteMaps, RenderMinimapRoute = ns.WorldMap.Render, ns.Minimap.Render
+local associationOnlyEvents = {
+    BAG_UPDATE_DELAYED = true, UPDATE_FACTION = true, SKILL_LINES_CHANGED = true, SPELLS_CHANGED = true,
+    GOSSIP_SHOW = true, GOSSIP_CLOSED = true, GOSSIP_OPTIONS_REFRESHED = true,
+    QUEST_GREETING = true, QUEST_DETAIL = true, QUEST_FINISHED = true,
+}
 
 -- 两图与备选/机会图元共用同一遍历；回调不得在中途增删视图。
 local function ForEachPin(callback)
@@ -30,15 +35,26 @@ local function RouteTick(_, elapsed)
     if ns.Discovery.Pump() then
         ns.route.dirty, ns.route.due, ns.route.pendingReason = true, now, "association_index_ready"
     elseif ns.QuestValue and type(ns.QuestValue.PumpIndex) == "function" then
-        ns.QuestValue.PumpIndex(96)
+        ns.QuestValue.PumpIndex(48, 2)
     end
     if ns.route.dirty and now >= (ns.route.due or 0) then
+        local previousSequence = ns.route.sequence
         RebuildRoute(ns.route.pendingReason or "quest_update")
-        if ns.QuestValueSheet then ns.QuestValueSheet.RefreshIfShown() end
+        RenderTaskNameplates()
+        ns.route.nextNameplateCheck = now + 0.5
+        if ns.QuestValueSheet then
+            if ns.route.sequence ~= previousSequence and type(ns.QuestValueSheet.Invalidate) == "function" then
+                ns.QuestValueSheet.Invalidate()
+            end
+            ns.QuestValueSheet.RefreshIfShown()
+        end
     end
     if ns.route.valueSheetDirty and now >= (ns.route.valueSheetDue or 0) then
         ns.route.valueSheetDirty = false
-        if ns.QuestValueSheet then ns.QuestValueSheet.RefreshIfShown() end
+        if ns.QuestValueSheet then
+            if type(ns.QuestValueSheet.Invalidate) == "function" then ns.QuestValueSheet.Invalidate() end
+            ns.QuestValueSheet.RefreshIfShown()
+        end
     end
     if ns.route.nextRewardCheck and now >= ns.route.nextRewardCheck then RebuildRoute("reward_cache_refresh") end
     if ns.route.nextLocationCheck and now >= ns.route.nextLocationCheck then RebuildRoute("location_data_refresh") end
@@ -56,7 +72,7 @@ local function RouteTick(_, elapsed)
     end
     if now >= (ns.route.nextPositionCheck or 0) then
         ns.route.nextPositionCheck = now + 0.5
-        local context = ns.GetPlayerContext({})
+        local context = ns.GetPlayerContext()
         ns.route.playerLocation = context.location
         local current = ns.route.playerLocation.world
         local distance = DistanceSquared(current, ns.route.lastOrigin)
@@ -125,16 +141,20 @@ function ns.StartRoute()
     driver:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     driver:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     driver:SetScript("OnEvent", function(_, event, questID)
-        if event == "NAME_PLATE_UNIT_ADDED" then RenderTaskNameplates(); return end
+        if event == "NAME_PLATE_UNIT_ADDED" then RenderUnitNameplate(questID); return end
         if event == "NAME_PLATE_UNIT_REMOVED" then HideTaskMarkers(questID); return end
-        if event == "QUEST_DATA_LOAD_RESULT" and ns.route.valuePendingQuestIDs and ns.route.valuePendingQuestIDs[questID] then
-            if not ns.route.valueSheetDirty then ns.route.valueSheetDue = GetTime() + 0.4 end
-            ns.route.valueSheetDirty = true
+        if event == "QUEST_DATA_LOAD_RESULT" then
+            if ns.route.valuePendingQuestIDs and ns.route.valuePendingQuestIDs[questID] then
+                if not ns.route.valueSheetDirty then ns.route.valueSheetDue = GetTime() + 0.4 end
+                ns.route.valueSheetDirty = true
+            end
+            if not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
+                or (ns.route.associationQuestIDs and ns.route.associationQuestIDs[questID])) then return end
+        elseif associationOnlyEvents[event] and RouteSettings().associationEnabled == false then
+            return
         end
         ns.Discovery.ObserveInteraction(event)
         HideTaskMarkers()
-        if event == "QUEST_DATA_LOAD_RESULT" and not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
-            or (ns.route.associationQuestIDs and ns.route.associationQuestIDs[questID])) then return end
         if not ns.route.dirty then ns.route.due = GetTime() + 0.5 end
         ns.route.dirty, ns.route.pendingReason = true, event
     end)

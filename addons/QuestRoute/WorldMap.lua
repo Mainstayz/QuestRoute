@@ -68,13 +68,19 @@ local function RenderMap(view, plan, player)
         or view.renderedWidth ~= width or view.renderedHeight ~= height or view.renderedScale ~= scale
         or view.opportunitiesRef ~= opportunitiesRef
         or (view.overlay.IsShown and not view.overlay:IsShown())
-    local previous = player and ProjectWorld(player.world, mapID)
+    local playerWorld = player and player.world
     if not staticDirty then
         if #plan.steps > 0 then
-            RenderLine(view, 1, previous, view.positions and view.positions[1], width, height, scale)
+            local px, py, pc = playerWorld and playerWorld.x, playerWorld and playerWorld.y, playerWorld and playerWorld.continentID
+            if view.renderedPlayerX ~= px or view.renderedPlayerY ~= py or view.renderedPlayerContinent ~= pc then
+                local previous = playerWorld and ProjectWorld(playerWorld, mapID)
+                RenderLine(view, 1, previous, view.positions and view.positions[1], width, height, scale)
+                view.renderedPlayerX, view.renderedPlayerY, view.renderedPlayerContinent = px, py, pc
+            end
         end
         return
     end
+    local previous = playerWorld and ProjectWorld(playerWorld, mapID)
     if view.sequence ~= plan.sequence or view.mapID ~= mapID then
         view.positions, view.alternativePositions = {}, {}
         for index, step in ipairs(plan.steps) do view.positions[index] = ProjectWorld(step.world, mapID) end
@@ -111,22 +117,26 @@ local function RenderMap(view, plan, player)
     view.renderedSequence, view.renderedMapID = plan.sequence, mapID
     view.renderedWidth, view.renderedHeight, view.renderedScale = width, height, scale
     view.opportunitiesRef = opportunitiesRef
+    view.renderedPlayerX = playerWorld and playerWorld.x
+    view.renderedPlayerY = playerWorld and playerWorld.y
+    view.renderedPlayerContinent = playerWorld and playerWorld.continentID
+end
+
+local function RenderFrame(map, plan)
+    if not map or not map.GetCanvas or not map.GetMapID then return end
+    local canvas = map:GetCanvas()
+    if not canvas then return end
+    local found
+    for _, view in ipairs(ns.route.views) do if view.map == map and view.canvas == canvas then found = view; break end end
+    if not found then found = NewMapView(map, canvas) end
+    RenderMap(found, plan, ns.route.playerLocation)
 end
 
 local function RenderRouteMaps()
     local plan = ns.route.plan
     if not plan then return end
-    for _, map in pairs({ WorldMapFrame = WorldMapFrame, BattlefieldMapFrame = BattlefieldMapFrame }) do
-        if map and map.GetCanvas and map.GetMapID then
-            local canvas = map:GetCanvas()
-            if canvas then
-                local found
-                for _, view in ipairs(ns.route.views) do if view.map == map and view.canvas == canvas then found = view; break end end
-                if not found then found = NewMapView(map, canvas) end
-                RenderMap(found, plan, ns.route.playerLocation)
-            end
-        end
-    end
+    RenderFrame(WorldMapFrame, plan)
+    RenderFrame(BattlefieldMapFrame, plan)
 end
 
 ns.WorldMap = { Render = RenderRouteMaps }

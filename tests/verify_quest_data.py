@@ -2731,6 +2731,67 @@ do
     api.StartRoute()
     check(api.route.running,'perf: route restarts after the location cache scenarios')
 end
+-- perf runtime regressions: hint-first POI scans, minimap dirty skip, incremental nameplates, gated events.
+do
+    local savedScan,savedOrder,savedThreshold=C_QuestLog.GetQuestsOnMap,Fixture.mapOrder,api.GetPlan({}).moveThreshold
+    local savedPlates,savedUnits=Fixture.plates,Fixture.units
+    local savedMinimap=Minimap
+    local scanCalls=0
+    C_QuestLog.GetQuestsOnMap=function(id) scanCalls=scanCalls+1;return savedScan(id) end
+    Fixture.mapOrder={101,102,103,104,105,106}
+    api.OnUnload();api.StartRoute()
+    api.SetRouteOptions({moveThreshold=100,associationEnabled=false})
+    -- 1) CollectPlanPOIs: local + foreign + no_native_poi avoids rescanning full map tree on movement.
+    scenario({routeRow(201,500),routeRow(202,700,{map=102}),routeRow(203,900,{noPOI=true})},400)
+    scanCalls=0
+    samplePosition(550)
+    check(scanCalls<=2,'perf: moving with local, foreign and no-POI quests scans only current and hint maps ('..scanCalls..')')
+    check(api.GetPlan({}).excluded[1] or #api.GetPlan({}).steps==1,'perf: hint-first scan preserves local steps and exclusions')
+    -- 2) Minimap.Render skips redundant SetPoint/ClearAllPoints when clean, updates on move or sequence change.
+    Minimap=CreateFrame('Minimap');Minimap:SetSize(200,200);Minimap:Show()
+    C_Minimap=C_Minimap or {GetViewRadius=function() return 100 end,IsRotateMinimapIgnored=function() return false end}
+    C_CVar=C_CVar or {GetCVarBool=function() return false end}
+    GetPlayerFacing=GetPlayerFacing or function() return 0 end
+    api.Minimap.Render()
+    local miniPin=api.route.minimapView and api.route.minimapView.pins[1]
+    check(miniPin~=nil,'perf: minimap pin created before dirty-check assertion')
+    local clearCount=0
+    local origClear=miniPin.ClearAllPoints
+    miniPin.ClearAllPoints=function(self,...) clearCount=clearCount+1;return origClear(self,...) end
+    api.Minimap.Render()
+    check(clearCount==0,'perf: clean consecutive Minimap.Render skips redundant layout work')
+    Fixture.playerX=0.52;api.route.playerLocation=api.GetPlayerContext({}).location
+    api.Minimap.Render()
+    check(clearCount==1,'perf: player position update invalidates minimap cache')
+    miniPin.ClearAllPoints=origClear
+    -- 3) NAME_PLATE_UNIT_ADDED updates only the added unit without hiding other visible markers.
+    local savedMobIndex=api.route.mobIndex
+    api.route.mobIndex={byNPC={[11]={{questID=201,objectiveKey='npc:11',relation='kill',finished=false,numFulfilled=0,numRequired=6}}},unresolvedQuestCount=0}
+    local plate1,plate2=CreateFrame('Frame'),CreateFrame('Frame')
+    plate1.UnitFrame={unit='nameplate1'};plate2.UnitFrame={unit='nameplate2'}
+    Fixture.plates={plate1,plate2}
+    Fixture.units={nameplate1={id=11},nameplate2={id=11}}
+    api.Nameplates.Render()
+    local m1,m2=api.route.nameplateView.markers[plate1],api.route.nameplateView.markers[plate2]
+    check(m1 and m1:IsVisible() and m2 and m2:IsVisible(),'perf: both nameplate markers start visible')
+    local m1Hid=false
+    local origHide=m1.Hide
+    m1.Hide=function(self) m1Hid=true;return origHide(self) end
+    api.route.driver:GetScript('OnEvent')(api.route.driver,'NAME_PLATE_UNIT_ADDED','nameplate2')
+    check(not m1Hid and m1:IsVisible() and m2:IsVisible(),'perf: NAME_PLATE_UNIT_ADDED leaves other markers untouched')
+    m1.Hide=origHide
+    -- 4) Association-only events stay gated when associationEnabled == false, preserving dirty state and markers.
+    api.route.dirty=false
+    api.route.driver:GetScript('OnEvent')(api.route.driver,'BAG_UPDATE_DELAYED')
+    api.route.driver:GetScript('OnEvent')(api.route.driver,'GOSSIP_SHOW')
+    check(not api.route.dirty and m1:IsVisible(),'perf: association-only events do not dirty route or clear markers when closed')
+    -- Restore fixture state.
+    api.route.mobIndex=savedMobIndex
+    C_QuestLog.GetQuestsOnMap,Fixture.mapOrder=savedScan,savedOrder
+    Fixture.plates,Fixture.units=savedPlates,savedUnits
+    Minimap=savedMinimap
+    api.SetRouteOptions({moveThreshold=savedThreshold})
+end
 -- perf G4 allow-list: during back-off only the allow-listed player/system reasons may start a rebuild; automatic ones stay silent.
 -- Failure injection and clock advance match the G4 block above (GetQuestsOnMap throws; Fixture.time drives the driver).
 do

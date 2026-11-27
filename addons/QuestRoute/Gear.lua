@@ -173,6 +173,10 @@ local function NormalizeQuery(args)
     if includePickup ~= nil and type(includePickup) ~= "boolean" then
         return nil, Invalid("includePickupInfo 必须是布尔值")
     end
+    local includeExplanation = args.includeExplanation
+    if includeExplanation ~= nil and type(includeExplanation) ~= "boolean" then
+        return nil, Invalid("includeExplanation 必须是布尔值")
+    end
     local limit = args.limit
     if limit == nil then limit = 8 end
     if type(limit) ~= "number" or limit ~= math.floor(limit) or limit < 1 or limit > 100 then
@@ -189,11 +193,13 @@ local function NormalizeQuery(args)
     local hasQuestLogCheck = type(C_QuestLog) == "table" and type(C_QuestLog.IsQuestFlaggedCompleted) == "function"
     local shouldExcludeCompleted = excludeCompleted ~= false and hasQuestLogCheck
     local shouldIncludePickup = includePickup ~= false
+    local shouldIncludeExplanation = includeExplanation ~= false
     return {
         level = level, wearLevel = math.min(60, level + wearWindow),
         className = className, spec = spec, faction = faction,
         window = window, wearWindow = wearWindow, limit = limit,
         excludeCompleted = shouldExcludeCompleted, includePickup = shouldIncludePickup,
+        includeExplanation = shouldIncludeExplanation,
         mode = mode, profileDef = profileDef, weights = weights, race = args.race,
     }
 end
@@ -264,7 +270,38 @@ local function FormatCoords(x, y)
     return string.format("(%d,%d)", math.floor(x + 0.5), math.floor(y + 0.5))
 end
 
-local function PickStarterEntity(db, ids, entity, kind)
+local function ReadCachedLocations(db, entity, kind, id, locCache)
+    if ns.Objectives and type(ns.Objectives.SharedLocationCache) == "function" then
+        local cache = ns.Objectives.SharedLocationCache(db)
+        local key = kind .. ":" .. id
+        local cached = cache.entries[key]
+        if not cached then
+            cached = ns.Database.ReadLocations(db, entity, id)
+            if type(cached) == "table" and #cached > 0 then
+                local cacheable = true
+                for _, loc in ipairs(cached) do
+                    if loc.available and not loc.world then cacheable = false; break end
+                    if not loc.available and (loc.reason == "unsupported_map" or loc.reason == "map_mapping_missing") then
+                        cacheable = false; break
+                    end
+                end
+                if cacheable then
+                    if cache.count >= 256 then cache.entries, cache.count = {}, 0 end
+                    cache.entries[key] = cached
+                    cache.count = cache.count + 1
+                end
+            end
+        end
+        return cached
+    end
+    local key = kind .. ":" .. id
+    if locCache and locCache[key] then return locCache[key] end
+    local locs = ns.Database.ReadLocations(db, entity, id)
+    if locCache and type(locs) == "table" then locCache[key] = locs end
+    return locs
+end
+
+local function PickStarterEntity(db, ids, entity, kind, locCache)
     if type(ids) ~= "table" or not entity or type(entity.Exists) ~= "function" then return nil end
     local fallback
     for _, id in ipairs(ids) do
@@ -277,7 +314,7 @@ local function PickStarterEntity(db, ids, entity, kind)
             }
             if kind == "npc" or kind == "object" then
                 if ns.Database and type(ns.Database.ReadLocations) == "function" then
-                    local locs = ns.Database.ReadLocations(db, entity, id)
+                    local locs = ReadCachedLocations(db, entity, kind, id, locCache)
                     for _, loc in ipairs(locs or {}) do
                         if loc.available then
                             info.mapID = loc.coordinateMapID
@@ -293,7 +330,7 @@ local function PickStarterEntity(db, ids, entity, kind)
             elseif kind == "item" and db.Item then
                 local npcDrops = SafeCall(db.Item.npcDrops, id)
                 if type(npcDrops) == "table" and #npcDrops > 0 and db.Npc then
-                    local dropLoc = PickStarterEntity(db, npcDrops, db.Npc, "npc")
+                    local dropLoc = PickStarterEntity(db, npcDrops, db.Npc, "npc", locCache)
                     if dropLoc then
                         info.mapID = dropLoc.mapID
                         info.mapName = dropLoc.mapName
@@ -399,22 +436,30 @@ local function FormatPickupText(pickup)
     return nil
 end
 
-local function ResolveQuestPickup(source)
+local function ResolveQuestPickup(source, pickupCache, locCache)
     if type(source) ~= "table" or source.kind ~= "quest" then return nil end
     local questId = source.questId
     if type(questId) ~= "number" or questId <= 0 then return nil end
+    if pickupCache and pickupCache[questId] ~= nil then
+        local cached = pickupCache[questId]
+        return cached ~= false and cached or nil
+    end
+    local function Remember(value)
+        if pickupCache then pickupCache[questId] = value or false end
+        return value
+    end
     local hasQuestLog = type(C_QuestLog) == "table" and type(C_QuestLog.IsQuestFlaggedCompleted) == "function"
     local db = ns.Database and type(ns.Database.Get) == "function" and ns.Database.Get() or nil
-    if not hasQuestLog and not db then return nil end
+    if not hasQuestLog and not db then return Remember(nil) end
     if IsQuestCompleted(questId) then
         local p = { status = "completed", questId = questId, questName = source.name }
         p.text = FormatPickupText(p)
-        return p
+        return Remember(p)
     end
     if IsQuestActive(questId) then
         local p = { status = "in_progress", questId = questId, questName = source.name }
         p.text = FormatPickupText(p)
-        return p
+        return Remember(p)
     end
     local fallbackPreIds = source.prerequisites and source.prerequisites.ids or nil
     local entryId, status = questId, "available"
@@ -446,14 +491,14 @@ local function ResolveQuestPickup(source)
     if status ~= "prereq_in_progress" and db and db.Quest and SafeCall(db.Quest.Exists, entryId) == true then
         local startedBy = SafeCall(db.Quest.startedBy, entryId)
         if type(startedBy) == "table" then
-            starter = PickStarterEntity(db, startedBy[1], db.Npc, "npc")
-                or PickStarterEntity(db, startedBy[2], db.Object, "object")
-                or PickStarterEntity(db, startedBy[3], db.Item, "item")
+            starter = PickStarterEntity(db, startedBy[1], db.Npc, "npc", locCache)
+                or PickStarterEntity(db, startedBy[2], db.Object, "object", locCache)
+                or PickStarterEntity(db, startedBy[3], db.Item, "item", locCache)
         end
     end
 
     if not starter and status == "available" and not source.zone then
-        return nil
+        return Remember(nil)
     end
 
     local pickup = {
@@ -473,8 +518,8 @@ local function ResolveQuestPickup(source)
     }
     pickup.text = FormatPickupText(pickup)
     -- 既无 QuestieDB 接取人，也没有明确前置/进行中状态时，避免凭静态 zone 伪造接取人信息
-    if not starter and status == "available" then return nil end
-    return pickup
+    if not starter and status == "available" then return Remember(nil) end
+    return Remember(pickup)
 end
 
 local function SourceAllowed(source, query)
@@ -519,23 +564,35 @@ local function UsableSources(item, query)
     for _, source in ipairs(item.sources or {}) do
         local ok, reason = SourceAllowed(source, query)
         if ok then
-            if query.includePickup and source.kind == "quest" then
-                local pickup = ResolveQuestPickup(source)
-                if pickup then
-                    local enriched = ShallowCopy(source)
-                    enriched.pickup = pickup
-                    table.insert(kept, enriched)
-                else
-                    table.insert(kept, source)
-                end
-            else
-                table.insert(kept, source)
-            end
+            table.insert(kept, source)
         else
             rejected[reason] = (rejected[reason] or 0) + 1
         end
     end
     return kept, rejected
+end
+
+local function EnrichCandidatePickups(candidate, pickupCache, locCache, enrichedSet)
+    if not candidate or (enrichedSet and enrichedSet[candidate]) then return end
+    if enrichedSet then enrichedSet[candidate] = true end
+    local sources = candidate.sources
+    if type(sources) ~= "table" then return end
+    local updated
+    for i, source in ipairs(sources) do
+        if source.kind == "quest" and not source.pickup then
+            local pickup = ResolveQuestPickup(source, pickupCache, locCache)
+            if pickup then
+                if not updated then
+                    updated = {}
+                    for j = 1, #sources do updated[j] = sources[j] end
+                end
+                local enriched = ShallowCopy(source)
+                enriched.pickup = pickup
+                updated[i] = enriched
+            end
+        end
+    end
+    if updated then candidate.sources = updated end
 end
 
 local function Counts(weight)
@@ -647,7 +704,8 @@ local function Candidate(item, sources, query, current, reservedIds)
         ilvl = item.ilvl, reqLevel = item.reqLevel, reqEstimate = item.reqEstimate,
         reqLevelStatus = item.reqLevelStatus, wearable = wearableStatus,
         score = score, scoreStatus = scored and "heuristic" or "not_scored",
-        terms = terms, unquantified = unquantified, explanation = Explain(terms or {}, unquantified or {}, scored),
+        terms = terms, unquantified = unquantified,
+        explanation = query.includeExplanation and Explain(terms or {}, unquantified or {}, scored) or nil,
         relation = relation, provenUpgrade = proven, diff = diff, comparison = comparison,
         blocked = blocked, sources = sources, appearanceSourceType = item.appearanceSourceType,
         conditions = {
@@ -708,7 +766,7 @@ local function Fits(item, spec, mode)
     return item.slot == spec.pool
 end
 
-local function BuildSlot(spec, pool, query, byId, currentEntry, reservedIds, catalog)
+local function BuildSlot(spec, pool, query, byId, currentEntry, reservedIds, catalog, pickupCache, locCache, enrichedSet)
     local counts = { listed = 0, level = 0, class = 0, armor = 0, source = 0, sourceReasons = {} }
     local candidates = {}
     for _, item in ipairs(pool) do
@@ -745,6 +803,14 @@ local function BuildSlot(spec, pool, query, byId, currentEntry, reservedIds, cat
     end
     local shown = {}
     for index = 1, math.min(query.limit, #candidates) do shown[index] = candidates[index] end
+    if query.includePickup then
+        for _, candidate in ipairs(shown) do
+            EnrichCandidatePickups(candidate, pickupCache, locCache, enrichedSet)
+        end
+        if highlight then
+            EnrichCandidatePickups(highlight, pickupCache, locCache, enrichedSet)
+        end
+    end
     local reason, message
     if not highlight then
         local usable = false
@@ -1060,6 +1126,7 @@ function Gear.Recommend(args, catalog)
         if type(key) == "string" and key:find("^unknown:") then unrecognized[#unrecognized + 1] = id end
     end
     local slots, reserved, currentBySlot = {}, {}, {}
+    local pickupCache, locCache, enrichedSet = {}, {}, {}
     local mainWeapon = gear.mainhand and ResolveCurrentItem(gear.mainhand, "mainhand", byId, gearStats)
     for _, spec in ipairs(SLOTS) do
         local current = CurrentFor(spec, gear, byId, query, gearStats)
@@ -1085,7 +1152,7 @@ function Gear.Recommend(args, catalog)
             local siblingId = gear[sibling]
             if siblingId and siblingId ~= gear[spec.id] then reservedIds[siblingId] = true end
         end
-        local built = BuildSlot(spec, pool, query, byId, current, reservedIds, catalog)
+        local built = BuildSlot(spec, pool, query, byId, current, reservedIds, catalog, pickupCache, locCache, enrichedSet)
         if spec.pair and built.highlight then reserved[spec.pair] = built.highlight.id end
         table.insert(slots, built)
     end

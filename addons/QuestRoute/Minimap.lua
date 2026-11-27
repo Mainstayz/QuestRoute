@@ -18,13 +18,22 @@ local function ClipMinimapSegment(ax, ay, bx, by, radius)
     return ax + low * dx, ay + low * dy, ax + high * dx, ay + high * dy
 end
 
+local function StepsWorldMatch(view, steps)
+    local worlds = view.renderedStepWorlds
+    if not worlds or view.renderedStepsCount ~= #steps then return false end
+    for i, step in ipairs(steps) do
+        if worlds[i] ~= step.world then return false end
+    end
+    return true
+end
+
 local function RenderMinimapRoute()
     if not Minimap then return end
     local view = ns.route.minimapView
     local plan, player = ns.route.plan, ns.route.playerLocation
     if not plan or not plan.enabled or not Minimap:IsVisible() or not player or not player.world
         or player.coordinateMapID ~= plan.mapID then
-        if view then view.overlay:Hide() end
+        if view then view.overlay:Hide(); view.renderedSequence = nil end
         return
     end
     local radius = C_Minimap.GetViewRadius()
@@ -33,11 +42,24 @@ local function RenderMinimapRoute()
     local cosine, sine = 1, 0
     if canaccessvalue(rotating) and rotating and canaccessvalue(ignored) and not ignored then
         local facing = GetPlayerFacing()
-        if not IsFinite(facing) then if view then view.overlay:Hide() end; return end
+        if not IsFinite(facing) then if view then view.overlay:Hide(); view.renderedSequence = nil end; return end
         cosine, sine = math.cos(facing), math.sin(facing)
     end
     if not IsFinite(radius) or radius <= 0 or not IsFinite(width) or not IsFinite(height) or width <= 0 or height <= 0 then
-        if view then view.overlay:Hide() end
+        if view then view.overlay:Hide(); view.renderedSequence = nil end
+        return
+    end
+    local world = player.world
+    local opportunitiesRef = plan.discovery and plan.discovery.opportunities
+    local overlayShown = view and (not view.overlay.IsShown or view.overlay:IsShown())
+    if view and overlayShown
+        and view.renderedSequence == plan.sequence and view.renderedMapID == plan.mapID
+        and view.renderedDiscovery == plan.discovery
+        and view.renderedOpportunities == opportunitiesRef
+        and StepsWorldMatch(view, plan.steps)
+        and view.renderedX == world.x and view.renderedY == world.y and view.renderedContinent == world.continentID
+        and view.renderedRadius == radius and view.renderedWidth == width and view.renderedHeight == height
+        and view.renderedCosine == cosine and view.renderedSine == sine then
         return
     end
     if not view then
@@ -100,6 +122,16 @@ local function RenderMinimapRoute()
     for index, line in pairs(view.lines) do if not shownLines[index] then line:Hide() end end
     RenderAlternativePins(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
     Pins.RenderOpportunities(view, plan, placed, width, height, 1, plan.mapID, player.world, radius, cosine, sine)
+    view.renderedSequence, view.renderedMapID, view.renderedDiscovery = plan.sequence, plan.mapID, plan.discovery
+    view.renderedOpportunities = opportunitiesRef
+    local worlds = view.renderedStepWorlds or {}
+    view.renderedStepWorlds = worlds
+    view.renderedStepsCount = #plan.steps
+    for i, step in ipairs(plan.steps) do worlds[i] = step.world end
+    for i = #plan.steps + 1, #worlds do worlds[i] = nil end
+    view.renderedX, view.renderedY, view.renderedContinent = world.x, world.y, world.continentID
+    view.renderedRadius, view.renderedWidth, view.renderedHeight = radius, width, height
+    view.renderedCosine, view.renderedSine = cosine, sine
 end
 
 ns.Minimap = { Render = RenderMinimapRoute }

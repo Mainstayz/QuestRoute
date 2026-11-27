@@ -186,11 +186,11 @@ local function BindHandlers(panel)
         if not current then return end
         current.modeIndex = (current.modeIndex % #MODES) + 1
         current.page = 1
-        current.Refresh()
+        current.Refresh(false)
     end)
     panel.refreshBtn:SetScript("OnClick", function()
         local current = CurrentSheet()
-        if current then current.Refresh() end
+        if current then current.Refresh(true) end
     end)
     panel.prevBtn:SetScript("OnClick", function()
         local current = CurrentSheet()
@@ -328,19 +328,17 @@ local function EnsurePanel(anchor)
     Sheet.panel = panel
 end
 
-function Sheet.Refresh()
-    local host = _G.QuestMapFrame
-    if not host then return end
-    if not HostVisible() then
-        if Sheet.panel then Sheet.panel:Hide() end
-        return
-    end
-    EnsurePanel(host)
+function Sheet.Invalidate()
+    Sheet.lastResult = nil
+    Sheet.lastRefreshAt = nil
+end
+
+local function ApplyResult(result)
     local panel = Sheet.panel
+    if not panel then return end
     local mode = MODES[Sheet.modeIndex] or MODES[1]
     panel.modeBtn.label:SetText("|cffffd100" .. mode.hint .. "|r")
 
-    local result = ns.AnalyzeQuests and ns.AnalyzeQuests({ requestLoad = true }) or nil
     if not result or not result.ok then
         panel.title:SetText("任务价值分析")
         panel.summary:SetText("|cffff6666无法读取任务日志|r")
@@ -369,6 +367,30 @@ function Sheet.Refresh()
     panel:Show()
 end
 
+function Sheet.Refresh(force)
+    local host = _G.QuestMapFrame
+    if not host then return end
+    if not HostVisible() then
+        if Sheet.panel then Sheet.panel:Hide() end
+        return
+    end
+    EnsurePanel(host)
+    if not force and Sheet.lastResult and Sheet.lastResult.ok
+        and ((Sheet.lastResult.summary and Sheet.lastResult.summary.pendingRewardCount or 0) == 0) then
+        ApplyResult(Sheet.lastResult)
+        return
+    end
+
+    local result = ns.AnalyzeQuests and ns.AnalyzeQuests({ requestLoad = true }) or nil
+    if result and result.ok then
+        Sheet.lastResult = result
+        Sheet.lastRefreshAt = type(GetTime) == "function" and GetTime() or nil
+    else
+        Sheet.lastResult = nil
+    end
+    ApplyResult(result)
+end
+
 function Sheet.RefreshIfShown()
     if HostVisible() then
         Sheet.Refresh()
@@ -385,6 +407,11 @@ local function SyncVisibility()
     local current = CurrentSheet()
     if not current then return end
     if HostVisible() then
+        local now = type(GetTime) == "function" and GetTime() or nil
+        if current.panel and current.panel:IsShown() and current.lastResult
+            and current.lastRefreshAt and now and current.lastRefreshAt == now then
+            return
+        end
         current.Refresh()
     else
         current.Hide()
@@ -409,6 +436,7 @@ function Sheet.Attach()
 end
 
 function Sheet.Shutdown()
+    Sheet.Invalidate()
     Sheet.Hide()
     if Sheet.watcher then
         Sheet.watcher:UnregisterAllEvents()
@@ -416,17 +444,20 @@ function Sheet.Shutdown()
     end
 end
 
--- 只监听装备与专精变化；任务日志变化由 QuestRoute.lua 唯一主 driver 转发，避免增加额外驱动框体。
+-- 只监听装备、专精、等级与跨图变化；任务日志变化由 QuestRoute.lua 唯一主 driver 转发，避免增加额外驱动框体。
 Sheet.watcher = CreateFrame("Frame")
 Sheet.watcher:RegisterEvent("ADDON_LOADED")
 Sheet.watcher:RegisterEvent("PLAYER_ENTERING_WORLD")
 Sheet.watcher:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 Sheet.watcher:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 Sheet.watcher:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED")
+Sheet.watcher:RegisterEvent("PLAYER_LEVEL_UP")
+Sheet.watcher:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 Sheet.watcher:SetScript("OnEvent", function(_, event)
     if event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD" then
         Sheet.Attach()
     else
+        Sheet.Invalidate()
         Sheet.RefreshIfShown()
     end
 end)

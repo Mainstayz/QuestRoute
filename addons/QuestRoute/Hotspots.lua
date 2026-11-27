@@ -16,24 +16,31 @@ local function BuildHotspots(points, cacheKey)
         return (a.entityID or 0) < (b.entityID or 0)
     end)
     local unique, duplicateGrid = {}, {}
-    local function CellKey(x, y) return x .. ":" .. y end
     for _, point in ipairs(ordered) do
         local cx, cy = math.floor(point.world.x / hotspotRules.deduplicateRadius), math.floor(point.world.y / hotspotRules.deduplicateRadius)
         local duplicate
         for dx = -1, 1 do
-            for dy = -1, 1 do
-                for _, other in ipairs(duplicateGrid[CellKey(cx + dx, cy + dy)] or {}) do
-                    if DistanceSquared(point.world, other.world) <= hotspotRules.deduplicateRadius ^ 2 then duplicate = true; break end
+            local col = duplicateGrid[cx + dx]
+            if col then
+                for dy = -1, 1 do
+                    local cell = col[cy + dy]
+                    if cell then
+                        for _, other in ipairs(cell) do
+                            if DistanceSquared(point.world, other.world) <= hotspotRules.deduplicateRadius ^ 2 then duplicate = true; break end
+                        end
+                        if duplicate then break end
+                    end
                 end
-                if duplicate then break end
             end
             if duplicate then break end
         end
         if not duplicate then
             unique[#unique + 1] = point
-            local key = CellKey(cx, cy)
-            duplicateGrid[key] = duplicateGrid[key] or {}
-            duplicateGrid[key][#duplicateGrid[key] + 1] = point
+            local col = duplicateGrid[cx]
+            if not col then col = {}; duplicateGrid[cx] = col end
+            local cell = col[cy]
+            if not cell then cell = {}; col[cy] = cell end
+            cell[#cell + 1] = point
         end
     end
     local signatureParts = {}
@@ -48,17 +55,27 @@ local function BuildHotspots(points, cacheKey)
         ns.route.hotspotCacheMisses = ns.route.hotspotCacheMisses + 1
         local grid, ranked = {}, {}
         for index, point in ipairs(unique) do
-            local key = CellKey(math.floor(point.world.x / hotspotRules.radius), math.floor(point.world.y / hotspotRules.radius))
-            grid[key] = grid[key] or {}; grid[key][#grid[key] + 1] = index
+            local gx, gy = math.floor(point.world.x / hotspotRules.radius), math.floor(point.world.y / hotspotRules.radius)
+            local col = grid[gx]
+            if not col then col = {}; grid[gx] = col end
+            local cell = col[gy]
+            if not cell then cell = {}; col[gy] = cell end
+            cell[#cell + 1] = index
         end
         for index, point in ipairs(unique) do
             local cx, cy = math.floor(point.world.x / hotspotRules.radius), math.floor(point.world.y / hotspotRules.radius)
             local count, spread = 0, 0
             for dx = -1, 1 do
-                for dy = -1, 1 do
-                    for _, otherIndex in ipairs(grid[CellKey(cx + dx, cy + dy)] or {}) do
-                        local distance = DistanceSquared(point.world, unique[otherIndex].world)
-                        if distance <= hotspotRules.radius ^ 2 then count, spread = count + 1, spread + distance end
+                local col = grid[cx + dx]
+                if col then
+                    for dy = -1, 1 do
+                        local cell = col[cy + dy]
+                        if cell then
+                            for _, otherIndex in ipairs(cell) do
+                                local distance = DistanceSquared(point.world, unique[otherIndex].world)
+                                if distance <= hotspotRules.radius ^ 2 then count, spread = count + 1, spread + distance end
+                            end
+                        end
                     end
                 end
             end

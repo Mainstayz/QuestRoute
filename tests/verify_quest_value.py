@@ -607,6 +607,33 @@ check(not ns.QuestValueSheet.panel:IsShown(), "panel hides when WorldMapFrame hi
 ns.QuestValueSheet.Shutdown()
 check(next(ns.QuestValueSheet.watcher.events) == nil, "Shutdown unregisters watcher events")
 
+-- 17. 性能回归：同帧双 OnShow 去重 & PumpIndex 完成后零 GetDatabase 调用
+do
+    local analyzeCalls, origAnalyze = 0, ns.AnalyzeQuests
+    ns.AnalyzeQuests = function(a)
+        analyzeCalls = analyzeCalls + 1
+        return origAnalyze(a)
+    end
+    ns.QuestValueSheet.watcher:RegisterEvent("ADDON_LOADED")
+    ns.QuestValueSheet.Attach()
+    WorldMapFrame:Show()
+    QuestMapFrame:Show()
+    check(analyzeCalls == 1, "same-frame WorldMapFrame + QuestMapFrame OnShow analyzes once (got " .. analyzeCalls .. ")")
+    ns.QuestValueSheet.panel.refreshBtn.scripts.OnClick()
+    check(analyzeCalls == 2, "manual refresh button forces fresh analysis")
+    WorldMapFrame:Hide()
+    ns.QuestValueSheet.Shutdown()
+    ns.AnalyzeQuests = origAnalyze
+
+    -- 索引已完成时 PumpIndex 应立即退出而不调用 db.GetAllIds / GetDatabase
+    local origGetAllIds = LibQuestieDB.Quest.GetAllIds
+    local idCalls = 0
+    LibQuestieDB.Quest.GetAllIds = function() idCalls = idCalls + 1; return origGetAllIds() end
+    ns.QuestValue.PumpIndex(64, 2)
+    check(idCalls == 0, "completed PumpIndex exits without querying GetAllIds")
+    LibQuestieDB.Quest.GetAllIds = origGetAllIds
+end
+
 return checks
 '''
 

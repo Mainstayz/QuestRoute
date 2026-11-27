@@ -67,9 +67,20 @@ local function AddPage(result, all, page, field)
     return result
 end
 
+local reusableVec
 local function ToWorld(mapID, x, y)
     if not IsID(mapID) or not IsFinite(x) or not IsFinite(y) then return nil end
-    local ok, continentID, position = pcall(C_Map.GetWorldPosFromMapPos, mapID, CreateVector2D(x, y))
+    local vec
+    if reusableVec and type(reusableVec.SetXY) == "function" then
+        reusableVec:SetXY(x, y)
+        vec = reusableVec
+    else
+        vec = CreateVector2D(x, y)
+        if vec and type(vec.SetXY) == "function" then
+            reusableVec = vec
+        end
+    end
+    local ok, continentID, position = pcall(C_Map.GetWorldPosFromMapPos, mapID, vec)
     if ok and position and IsFinite(continentID) and IsFinite(position.x) and IsFinite(position.y) then
         return { continentID = continentID, x = position.x, y = position.y }
     end
