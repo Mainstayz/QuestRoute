@@ -1153,6 +1153,27 @@ check(plan.reason=='reward_cache_refresh' and plan.steps[1].questID==202,'indepe
 check(plan.levelingPriority.pendingRewardCount==0 and api.route.nextRewardCheck==nil,'fully loaded rewards stop retry polling')
 previousSequence=plan.sequence;Fixture.time=Fixture.time+10;cacheTick(api.route.driver,.2)
 check(api.GetPlan({}).sequence==previousSequence,'loaded data does not trigger recurring route rebuild')
+do -- value sidebar: only a changed route sequence invalidates its cache; the debounce still refreshes it
+    local sheet=api.QuestValueSheet
+    local saved={sheet.Invalidate,sheet.RefreshIfShown}
+    local invalidated,refreshed=0,0
+    sheet.Invalidate=function() invalidated=invalidated+1 end
+    sheet.RefreshIfShown=function() refreshed=refreshed+1 end
+    local function flushSheet() api.route.valueSheetDue=0;Fixture.time=Fixture.time+2;cacheTick(api.route.driver,.2) end
+    api.route.valueSheetDirty,api.route.valueSheetInvalidate=false,false
+    local before=api.GetPlan({}).sequence
+    api.route.dirty,api.route.due,api.route.pendingReason=true,0,'reward_cache_refresh';cacheTick(api.route.driver,.2);flushSheet()
+    local unchanged=api.GetPlan({}).sequence==before
+    check(unchanged and invalidated==0 and refreshed>=1,'sidebar: rebuild without sequence change refreshes but does not Invalidate ('..invalidated..'/'..refreshed..')')
+    api.route.valueSheetDirty,api.route.valueSheetInvalidate=true,true;flushSheet()
+    check(invalidated==1 and not api.route.valueSheetInvalidate,'sidebar: invalidate flag triggers one Invalidate and clears')
+    rows[1].xp=77;rows[2].xp=5;syncPOIs()
+    api.route.dirty,api.route.due,api.route.pendingReason=true,0,'sidebar_test';cacheTick(api.route.driver,.2)
+    check(api.GetPlan({}).sequence~=before and api.route.valueSheetInvalidate==true,'sidebar: changed sequence marks the cache for Invalidate')
+    flushSheet()
+    check(invalidated==2,'sidebar: changed sequence invalidates once after the debounce')
+    sheet.Invalidate,sheet.RefreshIfShown=saved[1],saved[2]
+end
 rows={routeRow(201,100,{xp=0,rewardMissing=true}),routeRow(202,105)}
 plan=scenario(rows);rows[1].rewardMissing=false;Fixture.time=plan.plannedAt+5;cacheTick(api.route.driver,.2)
 plan=api.GetPlan({})

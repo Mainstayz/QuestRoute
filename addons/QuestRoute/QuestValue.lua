@@ -262,6 +262,7 @@ local function StepReverseIndex(state, maxQuests, budgetMs)
         if route then
             if not route.valueSheetDirty then route.valueSheetDue = GetTime() + 0.4 end
             route.valueSheetDirty = true
+            route.valueSheetInvalidate = true
         end
     end
     return state.done

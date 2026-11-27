@@ -38,6 +38,7 @@ local function RouteTick(_, elapsed)
         ns.QuestValue.PumpIndex(128, 2)
     end
     if ns.route.dirty and now >= (ns.route.due or 0) then
+        local previousSequence = ns.route.sequence
         RebuildRoute(ns.route.pendingReason or "quest_update")
         RenderTaskNameplates()
         ns.route.nextNameplateCheck = now + 0.5
@@ -45,12 +46,15 @@ local function RouteTick(_, elapsed)
         if ns.QuestValueSheet then
             if not ns.route.valueSheetDirty then ns.route.valueSheetDue = now + 1 end
             ns.route.valueSheetDirty = true
+            -- 仅路线序号变化才作废缓存；否则 RefreshIfShown 在无待定奖励时直接复用上次结果。
+            if ns.route.sequence ~= previousSequence then ns.route.valueSheetInvalidate = true end
         end
     end
     if ns.route.valueSheetDirty and now >= (ns.route.valueSheetDue or 0) then
         ns.route.valueSheetDirty = false
         if ns.QuestValueSheet then
-            if type(ns.QuestValueSheet.Invalidate) == "function" then ns.QuestValueSheet.Invalidate() end
+            if ns.route.valueSheetInvalidate and type(ns.QuestValueSheet.Invalidate) == "function" then ns.QuestValueSheet.Invalidate() end
+            ns.route.valueSheetInvalidate = false
             ns.QuestValueSheet.RefreshIfShown()
         end
     end
@@ -145,6 +149,7 @@ function ns.StartRoute()
             if ns.route.valuePendingQuestIDs and ns.route.valuePendingQuestIDs[questID] then
                 if not ns.route.valueSheetDirty then ns.route.valueSheetDue = GetTime() + 0.4 end
                 ns.route.valueSheetDirty = true
+                ns.route.valueSheetInvalidate = true
             end
             if not ((ns.route.activeQuestIDs and ns.route.activeQuestIDs[questID])
                 or (ns.route.associationQuestIDs and ns.route.associationQuestIDs[questID])) then return end
@@ -355,6 +360,7 @@ function ns.OnUnload()
     ns.route.lastQuestSnapshots = nil
     ns.route.valuePendingQuestIDs = nil
     ns.route.valueSheetDirty = nil
+    ns.route.valueSheetInvalidate = nil
     HideTaskMarkers()
     if ns.settingsUI and ns.settingsUI.owner == ns then
         ns.settingsUI.applyElite, ns.settingsUI.applySwitchNotice, ns.settingsUI.applyNameplates, ns.settingsUI.applyMonsterLevel = nil, nil, nil, nil
