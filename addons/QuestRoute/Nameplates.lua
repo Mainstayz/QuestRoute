@@ -103,20 +103,20 @@ function ns.GetUnitTasks(args)
     return result
 end
 
--- 轻量级姓名板检查：仅在确认需求时构造标签，避免每个无关姓名板分配完整任务结果表。
+-- 轻量级姓名板检查：先查单位存在性与 NPC 目标索引，命中后再检查存活/敌对与构造标签。
 local function InspectUnitForMarker(unit)
     local index = ns.route.mobIndex
-    if not index or ns.route.dirty then return false end
+    if not index or not index.byNPC or ns.route.dirty then return false end
     local exists = UnitRead(UnitExists, unit)
     if exists ~= true then return false end
+    local id = UnitRead(UnitCreatureID, unit)
+    if not IsID(id) then return false end
+    local goals = index.byNPC[id]
+    if not goals then return false end
     local player = UnitRead(UnitIsPlayer, unit)
     local attack = UnitRead(UnitCanAttack, "player", unit)
     local dead = UnitRead(UnitIsDeadOrGhost, unit)
     if player == nil or attack == nil or dead == nil or player or not attack or dead then return false end
-    local id = UnitRead(UnitCreatureID, unit)
-    if not IsID(id) then return false end
-    local goals = index.byNPC and index.byNPC[id]
-    if not goals then return false end
     local current = ns.route.plan and ns.route.plan.steps[1]
     local currentTarget, label1, label2, pendingCount = false, nil, nil, 0
     for _, task in ipairs(goals) do
@@ -148,8 +148,15 @@ local function HideMarker(marker)
 end
 
 local function HideTaskMarkers(unit)
+    if unit then
+        for _, marker in pairs(ns.route.nameplateView.markers) do
+            if marker.unit == unit then HideMarker(marker) end
+        end
+        return
+    end
+    ns.route.nameplateView.hasVisible = false
     for _, marker in pairs(ns.route.nameplateView.markers) do
-        if not unit or marker.unit == unit then HideMarker(marker) end
+        HideMarker(marker)
     end
 end
 
@@ -192,16 +199,22 @@ local function UpdatePlateMarker(plate, unit)
             marker.text:SetTextColor(1, currentTarget and 0.55 or 0.85, currentTarget and 0.1 or 0.25)
         end
         if not marker.IsShown or not marker:IsShown() then marker:Show() end
+        ns.route.nameplateView.hasVisible = true
     elseif marker then
         HideMarker(marker)
     end
+end
+
+local function HasMobGoals()
+    local index = ns.route.mobIndex
+    return index and index.byNPC and next(index.byNPC) ~= nil
 end
 
 local function RenderUnit(unit)
     if type(unit) ~= "string" or not unit:match("^nameplate%d+$") then return end
     local settings = RouteSettings()
     if not ns.route.running or not settings.enabled or settings.nameplatesEnabled == false or ns.route.dirty
-        or not C_NamePlate then return end
+        or not HasMobGoals() or not C_NamePlate then return end
     if type(C_NamePlate.GetNamePlateForUnit) == "function" then
         local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
         if ok and PlateAllowed(plate) then UpdatePlateMarker(plate, unit) end
@@ -219,23 +232,27 @@ end
 local function RenderTaskNameplates()
     local settings = RouteSettings()
     if not ns.route.running or not settings.enabled or settings.nameplatesEnabled == false or ns.route.dirty
-        or not C_NamePlate or type(C_NamePlate.GetNamePlates) ~= "function" then
-        HideTaskMarkers()
+        or not HasMobGoals() or not C_NamePlate or type(C_NamePlate.GetNamePlates) ~= "function" then
+        if ns.route.nameplateView.hasVisible then HideTaskMarkers() end
         return
     end
     local seenPlates = {}
+    local anyVisible = false
     for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
         if PlateAllowed(plate) then
             local unit = PlateUnit(plate)
             if unit then
                 seenPlates[plate] = true
                 UpdatePlateMarker(plate, unit)
+                local marker = ns.route.nameplateView.markers[plate]
+                if marker and marker.unit then anyVisible = true end
             end
         end
     end
     for plate, marker in pairs(ns.route.nameplateView.markers) do
         if not seenPlates[plate] then HideMarker(marker) end
     end
+    ns.route.nameplateView.hasVisible = anyVisible
 end
 
 ns.Nameplates = { AddGoals = AddNPCGoals, Hide = HideTaskMarkers, Render = RenderTaskNameplates, RenderUnit = RenderUnit }

@@ -9,6 +9,8 @@ local professionCategories = {
     ["珠宝加工"] = true, ["铭文"] = true, ["考古学"] = true,
 }
 
+local cachedName, cachedRealm, cachedKey
+
 local function RouteSettings()
     local name = Accessible(UnitName("player"))
     local settings
@@ -18,11 +20,14 @@ local function RouteSettings()
     else
         QuestRouteDB = QuestRouteDB or {}
         QuestRouteDB.routes = QuestRouteDB.routes or {}
-        local key = GetRealmName() .. ":" .. name
-        settings = QuestRouteDB.routes[key]
+        local realm = GetRealmName()
+        if name ~= cachedName or realm ~= cachedRealm then
+            cachedName, cachedRealm, cachedKey = name, realm, realm .. ":" .. name
+        end
+        settings = QuestRouteDB.routes[cachedKey]
         if not settings then
             settings = { skipped = {}, moveThreshold = 100, enabled = true }
-            QuestRouteDB.routes[key] = settings
+            QuestRouteDB.routes[cachedKey] = settings
         end
     end
     if settings.nameplatesEnabled == nil then settings.nameplatesEnabled = true end

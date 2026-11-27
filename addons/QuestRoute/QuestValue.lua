@@ -207,27 +207,52 @@ end
 local function StepReverseIndex(state, maxQuests, budgetMs)
     if not state or state.done then return true end
     local db, ids, reverse = state.db, state.ids, state.map
+    local questTable = db.Quest
+    local nextFn, preSingleFn, preGroupFn = questTable.nextQuestInChain, questTable.preQuestSingle, questTable.preQuestGroup
     local limit = maxQuests and math.min(#ids, state.cursor + maxQuests - 1) or #ids
     local started = (budgetMs and type(debugprofilestop) == "function") and debugprofilestop() or nil
     local lastProcessed = state.cursor - 1
-    for i = state.cursor, limit do
-        local qid = ids[i]
-        if IsID(qid) then
-            local nxt = SafeCall(db.Quest.nextQuestInChain, qid)
-            if IsID(nxt) then AddReverseEdge(reverse, qid, nxt) end
-            local preSingle = SafeCall(db.Quest.preQuestSingle, qid)
-            if type(preSingle) == "table" then
-                for _, pre in ipairs(preSingle) do AddReverseEdge(reverse, pre, qid) end
+    local function ProcessOne(qid)
+        local nxt = nextFn and Accessible(nextFn(qid))
+        if IsID(nxt) then AddReverseEdge(reverse, qid, nxt) end
+        local preSingle = preSingleFn and Accessible(preSingleFn(qid))
+        if type(preSingle) == "table" then
+            for _, pre in ipairs(preSingle) do AddReverseEdge(reverse, pre, qid) end
+        end
+        local preGroup = preGroupFn and Accessible(preGroupFn(qid))
+        if type(preGroup) == "table" then
+            for _, pre in ipairs(preGroup) do AddReverseEdge(reverse, pre, qid) end
+        end
+    end
+    local i = state.cursor
+    while i <= limit do
+        local chunkEnd = math.min(limit, i + 15)
+        local ok = pcall(function()
+            for j = i, chunkEnd do
+                local qid = ids[j]
+                if IsID(qid) then ProcessOne(qid) end
             end
-            local preGroup = SafeCall(db.Quest.preQuestGroup, qid)
-            if type(preGroup) == "table" then
-                for _, pre in ipairs(preGroup) do AddReverseEdge(reverse, pre, qid) end
+        end)
+        if not ok then
+            for j = i, chunkEnd do
+                local qid = ids[j]
+                if IsID(qid) then
+                    local nxt = SafeCall(nextFn, qid)
+                    if IsID(nxt) then AddReverseEdge(reverse, qid, nxt) end
+                    local preSingle = SafeCall(preSingleFn, qid)
+                    if type(preSingle) == "table" then
+                        for _, pre in ipairs(preSingle) do AddReverseEdge(reverse, pre, qid) end
+                    end
+                    local preGroup = SafeCall(preGroupFn, qid)
+                    if type(preGroup) == "table" then
+                        for _, pre in ipairs(preGroup) do AddReverseEdge(reverse, pre, qid) end
+                    end
+                end
             end
         end
-        lastProcessed = i
-        if started and (i - state.cursor) % 16 == 15 and i < limit then
-            if debugprofilestop() - started >= budgetMs then break end
-        end
+        lastProcessed = chunkEnd
+        i = chunkEnd + 1
+        if started and chunkEnd < limit and debugprofilestop() - started >= budgetMs then break end
     end
     state.cursor = lastProcessed + 1
     if state.cursor > #ids then state.done = true end
@@ -280,7 +305,22 @@ local function GetCatalogIndex()
     return byQuest, byItem
 end
 
-local function BuildGearEvaluation(profile, allowGear)
+local gearEvalCache = { key = nil, value = nil }
+
+local function ResetCache()
+    gearEvalCache.key, gearEvalCache.value = nil, nil
+end
+
+local function WornSignature(worn)
+    if type(worn) ~= "table" then return "" end
+    local parts = {}
+    for _, slotId in pairs(INV_SLOTS) do
+        parts[#parts + 1] = tostring(worn[slotId] or 0)
+    end
+    return table.concat(parts, ",")
+end
+
+local function BuildGearEvaluation(profile, allowGear, canCache)
     if allowGear == false then return { enabled = false, byItem = {}, byQuest = {} } end
     local byQuest, byItemCatalog = GetCatalogIndex()
     local eval = {
@@ -296,6 +336,16 @@ local function BuildGearEvaluation(profile, allowGear)
     end
     if profile.classFile ~= "WARRIOR" and profile.className ~= "战士" then
         return eval
+    end
+    local cacheKey
+    if canCache then
+        cacheKey = table.concat({
+            tostring(profile.level), tostring(profile.classFile), tostring(profile.spec or "防护"),
+            tostring(profile.factionCN), WornSignature(profile.worn), tostring(ns.GearCatalog),
+        }, "|")
+        if gearEvalCache.key == cacheKey and gearEvalCache.value then
+            return gearEvalCache.value
+        end
     end
     -- 放宽 questLevelWindow 与穿戴等级窗口，以便对整条任务链的未来奖励也能给出评分与提升对比。
     local queryLevel = math.min(60, math.max(profile.level, 1))
@@ -337,6 +387,9 @@ local function BuildGearEvaluation(profile, allowGear)
                 }
             end
         end
+    end
+    if canCache and cacheKey then
+        gearEvalCache.key, gearEvalCache.value = cacheKey, eval
     end
     return eval
 end
@@ -1568,7 +1621,7 @@ local function Analyze(args)
     local settings = RouteSettings()
     local db, dbInfo = GetDatabase()
     local reverseNext = (includeChain and db) and GetReverseNextIndex(db) or nil
-    local gearEval = BuildGearEvaluation(profile, includeGear)
+    local gearEval = BuildGearEvaluation(profile, includeGear, args.gear == nil)
 
     local activeByID, statuses = {}, {}
     for _, q in ipairs(questList.quests or {}) do
@@ -1775,6 +1828,7 @@ end
 ns.QuestValue = {
     Analyze = Analyze,
     PumpIndex = PumpReverseIndex,
+    ResetCache = ResetCache,
     FormatAuditLines = FormatAuditLines,
     FormatQuestDetailLines = FormatQuestDetailLines,
     ReadWornGear = ReadWornGear,

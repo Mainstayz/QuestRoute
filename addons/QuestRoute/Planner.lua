@@ -369,9 +369,71 @@ end
 
 local fullScanReasons = {
     startup = true, manual = true, requested = true, rebuild_retry = true, location_data_refresh = true,
-    QUEST_LOG_UPDATE = true, QUEST_ACCEPTED = true, QUEST_TURNED_IN = true, QUEST_REMOVED = true,
+    QUEST_ACCEPTED = true, QUEST_TURNED_IN = true, QUEST_REMOVED = true,
     PLAYER_ENTERING_WORLD = true, ZONE_CHANGED_NEW_AREA = true, quest_update = true,
 }
+
+local function CollectEntitySpawnMaps(mapping, entity, ids, out)
+    if type(entity) ~= "table" or type(entity.spawns) ~= "function" or type(ids) ~= "table" then return end
+    for _, eid in ipairs(ids) do
+        if IsID(eid) then
+            local spawns = entity.spawns(eid)
+            if type(spawns) == "table" then
+                for area in pairs(spawns) do
+                    local mapID = IsID(area) and mapping[area]
+                    if IsID(mapID) then out[mapID] = true end
+                end
+            end
+        end
+    end
+end
+
+-- 只读 QuestieDB spawns 的区域键来预填充外图提示，避免首次定位外图交接任务时全地图树空扫。
+local function SeedQuestHintMaps(db, quest)
+    if type(db) ~= "table" or type(db.Quest) ~= "table" or type(db.Quest.Exists) ~= "function" then return nil end
+    local ok, maps = pcall(function()
+        if not db.Quest.Exists(quest.questID) then return nil end
+        local mapping = ns.Database.AreaMapping(db)
+        if type(mapping) ~= "table" then return nil end
+        local out = {}
+        if quest.readyForTurnIn or quest.isComplete then
+            local finished = type(db.Quest.finishedBy) == "function" and db.Quest.finishedBy(quest.questID)
+            if type(finished) == "table" then
+                CollectEntitySpawnMaps(mapping, db.Npc, finished[1], out)
+                CollectEntitySpawnMaps(mapping, db.Object, finished[2], out)
+            end
+        else
+            local started = type(db.Quest.startedBy) == "function" and db.Quest.startedBy(quest.questID)
+            if type(started) == "table" then
+                CollectEntitySpawnMaps(mapping, db.Npc, started[1], out)
+                CollectEntitySpawnMaps(mapping, db.Object, started[2], out)
+            end
+            local groups = type(db.Quest.objectives) == "function" and db.Quest.objectives(quest.questID)
+            if type(groups) == "table" then
+                for group, entity in ipairs({ db.Npc, db.Object }) do
+                    local ids = {}
+                    for _, row in ipairs(type(groups[group]) == "table" and groups[group] or {}) do
+                        if type(row) == "table" and IsID(row[1]) then ids[#ids + 1] = row[1] end
+                    end
+                    if #ids > 0 then CollectEntitySpawnMaps(mapping, entity, ids, out) end
+                end
+            end
+        end
+        if next(out) then return out end
+    end)
+    if ok then return maps end
+end
+
+local function QuestStateSignature(quest)
+    local objs = quest.objectives
+    if type(objs) ~= "table" or #objs == 0 then return quest.status end
+    local parts = { quest.status }
+    for _, obj in ipairs(objs) do
+        parts[#parts + 1] = tostring(Accessible(obj.finished)) .. ":" .. tostring(Accessible(obj.numFulfilled))
+            .. "/" .. tostring(Accessible(obj.numRequired))
+    end
+    return table.concat(parts, "|")
+end
 
 local function BuildPlan(reason)
     local settings = RouteSettings()
@@ -390,13 +452,15 @@ local function BuildPlan(reason)
     local ids = {}
     for id in pairs(active) do ids[#ids + 1] = id end
     table.sort(ids)
-    local prepared, nativeNeeded, nativeStatuses = {}, {}, {}
+    local prevSnapshots = ns.route.lastQuestSnapshots
+    local prepared, nativeNeeded, nativeStatuses, seedHints, currentSnapshots = {}, {}, {}, {}, {}
     for _, id in ipairs(ids) do
         local entry = active[id]
         local quest = ReadQuest(entry.info, entry.category, false)
         local objectivesOK, objectives = pcall(C_QuestLog.GetQuestObjectives, id)
         quest.objectivesLoaded = objectivesOK and type(objectives) == "table"
         quest.objectives = quest.objectivesLoaded and objectives or {}
+        currentSnapshots[id] = QuestStateSignature(quest)
         local why, source = RouteExclusion(quest, db, settings)
         local resolved
         if not why then
@@ -412,11 +476,26 @@ local function BuildPlan(reason)
             if resolved.mode ~= "objective_locations" then
                 nativeNeeded[id] = true
                 nativeStatuses[id] = quest.status
+                if db then seedHints[id] = SeedQuestHintMaps(db, quest) end
             end
         end
         prepared[#prepared + 1] = { id = id, quest = quest, why = why, source = source, resolved = resolved }
     end
-    local byQuest = CollectPlanPOIs(active, mapID, nativeNeeded, nativeStatuses, fullScanReasons[reason] == true)
+    local allowFull
+    if reason == "QUEST_LOG_UPDATE" and prevSnapshots then
+        local changedQuests = {}
+        for id, sig in pairs(currentSnapshots) do
+            if prevSnapshots[id] ~= sig then changedQuests[id] = true end
+        end
+        for id in pairs(prevSnapshots) do
+            if not currentSnapshots[id] then changedQuests[id] = true end
+        end
+        allowFull = next(changedQuests) and changedQuests or true
+    else
+        allowFull = fullScanReasons[reason] == true
+    end
+    local byQuest = CollectPlanPOIs(active, mapID, nativeNeeded, nativeStatuses, allowFull, seedHints)
+    ns.route.lastQuestSnapshots = currentSnapshots
     for _, prep in ipairs(prepared) do
         local id, quest, why, source, resolved = prep.id, prep.quest, prep.why, prep.source, prep.resolved
         local options, allLocalPoints, hasLocalPoint, avoidedCount = {}, {}, false, 0
@@ -478,7 +557,9 @@ local function BuildPlan(reason)
             if not target then
                 target = { quest = candidate.quest, points = {}, priority = candidate.priority,
                     priorityWeight = candidate.priorityWeight, resolution = candidate.resolution,
-                    objectiveKey = point.objectiveKey, stepKey = key }
+                    objectiveKey = point.objectiveKey, stepKey = key,
+                    sourceToken = point.objectiveKey and candidate.resolution
+                        and candidate.resolution.sourceTokens and candidate.resolution.sourceTokens[point.objectiveKey] or nil }
                 buckets[key] = target
                 objectiveCandidates[#objectiveCandidates + 1] = target
             end
@@ -488,7 +569,8 @@ local function BuildPlan(reason)
     remaining = {}
     local eligibleIDs = {}
     for _, candidate in ipairs(objectiveCandidates) do
-        local choices = candidate.objectiveKey and BuildHotspots(candidate.points, candidate.stepKey .. ":" .. mapID) or candidate.points
+        local choices = candidate.objectiveKey
+            and BuildHotspots(candidate.points, candidate.stepKey .. ":" .. mapID, candidate.sourceToken) or candidate.points
         candidate.points = {}
         for _, point in ipairs(choices) do
             if not SpotBlocked(point, candidate.quest.questID, mapID, now) then candidate.points[#candidate.points + 1] = point end

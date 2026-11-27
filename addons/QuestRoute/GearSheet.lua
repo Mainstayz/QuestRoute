@@ -119,9 +119,9 @@ local function Worn(inv)
     if ok and type(link) == "string" then return tonumber(link:match("item:(%d+)")) end
 end
 
-local function ReadAllWorn()
+local function ReadAllWorn(includeSnapshots)
     if ns.Gear and type(ns.Gear.ReadWorn) == "function" then
-        return ns.Gear.ReadWorn(true)
+        return ns.Gear.ReadWorn(includeSnapshots ~= false)
     end
     local gear = {}
     for inv, id in pairs(INV) do
@@ -142,6 +142,7 @@ function Sheet.InvalidateCache()
     Sheet.cachedKey = nil
     Sheet.cachedResult = nil
     Sheet.cachedGear = nil
+    Sheet.pickupCache = nil
 end
 
 local function QuestProgress(questId)
@@ -206,7 +207,7 @@ local function SourcePickup(source)
     if type(source) ~= "table" or source.kind ~= "quest" then return nil end
     if type(source.pickup) == "table" then return source.pickup end
     if ns.Gear and type(ns.Gear.ResolveQuestPickup) == "function" then
-        return ns.Gear.ResolveQuestPickup(source)
+        return ns.Gear.ResolveQuestPickup(source, Sheet.pickupCache)
     end
     return nil
 end
@@ -674,7 +675,7 @@ function Sheet.Refresh()
     local shownSpec = GetManualSpec() or character.spec or character.className
     panel.title:SetText(slot.label .. "  " .. character.level .. "  " .. shownSpec)
     if character.classFile == "WARRIOR" then panel.specHint:Show() else panel.specHint:Hide() end
-    local gear, gearStats = ReadAllWorn()
+    local gear = ReadAllWorn(false)
     local cacheKey = table.concat({
         tostring(character.level), tostring(character.className), tostring(character.spec or "防护"),
         tostring(character.faction), WornSignature(gear), tostring(ns.GearCatalog),
@@ -683,15 +684,18 @@ function Sheet.Refresh()
     if Sheet.cachedKey == cacheKey and Sheet.cachedResult then
         result = Sheet.cachedResult
     else
+        local _, gearStats = ReadAllWorn(true)
         result = ns.GetGearCandidates({
             level = character.level, class = character.className, spec = character.spec or "防护",
             faction = character.faction, gear = gear, gearStats = gearStats,
-            excludeCompletedQuests = true, includePickupInfo = true, limit = 12,
+            excludeCompletedQuests = true, includePickupInfo = false, includeExplanation = false, limit = 12,
         })
         Sheet.cachedKey = cacheKey
         Sheet.cachedResult = result
         Sheet.cachedGear = gear
+        Sheet.pickupCache = {}
     end
+    Sheet.pickupCache = Sheet.pickupCache or {}
     for _, row in ipairs(panel.rows) do row:Hide(); row.itemID = nil end
     if not result.ok then
         panel.note:SetText(result.error and result.error.message or "没有候选。")

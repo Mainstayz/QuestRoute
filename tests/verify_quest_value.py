@@ -632,6 +632,21 @@ do
     ns.QuestValue.PumpIndex(64, 2)
     check(idCalls == 0, "completed PumpIndex exits without querying GetAllIds")
     LibQuestieDB.Quest.GetAllIds = origGetAllIds
+
+    -- Gear evaluation cache avoids recomputing GetGearCandidates when gear/level/spec are unchanged
+    ns.QuestValue.ResetCache()
+    local gearCalls, origGear = 0, ns.GetGearCandidates
+    ns.GetGearCandidates = function(a)
+        gearCalls = gearCalls + 1
+        return origGear(a)
+    end
+    ns.AnalyzeQuests({})
+    ns.AnalyzeQuests({})
+    check(gearCalls == 1, "unchanged character/gear reuses cached gear evaluation (got " .. gearCalls .. ")")
+    ns.QuestValue.ResetCache()
+    ns.AnalyzeQuests({})
+    check(gearCalls == 2, "QuestValue.ResetCache invalidates gear evaluation cache")
+    ns.GetGearCandidates = origGear
 end
 
 return checks

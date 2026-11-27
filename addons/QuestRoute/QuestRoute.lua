@@ -35,7 +35,7 @@ local function RouteTick(_, elapsed)
     if ns.Discovery.Pump() then
         ns.route.dirty, ns.route.due, ns.route.pendingReason = true, now, "association_index_ready"
     elseif ns.QuestValue and type(ns.QuestValue.PumpIndex) == "function" then
-        ns.QuestValue.PumpIndex(48, 2)
+        ns.QuestValue.PumpIndex(128, 2)
     end
     if ns.route.dirty and now >= (ns.route.due or 0) then
         local previousSequence = ns.route.sequence
@@ -72,8 +72,8 @@ local function RouteTick(_, elapsed)
     end
     if now >= (ns.route.nextPositionCheck or 0) then
         ns.route.nextPositionCheck = now + 0.5
-        local context = ns.GetPlayerContext()
-        ns.route.playerLocation = context.location
+        local sample = ns.QuestData.SamplePlayerLocation()
+        ns.route.playerLocation = sample.location
         local current = ns.route.playerLocation.world
         local distance = DistanceSquared(current, ns.route.lastOrigin)
         local threshold = RouteSettings().moveThreshold
@@ -84,13 +84,13 @@ local function RouteTick(_, elapsed)
             -- 首次重建失败时没有可比对的快照；重试节奏由 nextRebuildRetry 驱动。
         elseif ns.route.playerLocation.coordinateMapID ~= plan.mapID then
             RebuildRoute("player_map_changed")
-        elseif context.character.level ~= plan.levelPriority.referenceLevel then
+        elseif sample.level ~= plan.levelPriority.referenceLevel then
             RebuildRoute("player_level_changed")
         elseif current and (not ns.route.lastOrigin or not distance or distance >= threshold * threshold) then
             RebuildRoute("player_moved")
         else
             local previous = plan.navigation
-            if UpdateNavigation(plan, context.location, now, previous) then
+            if UpdateNavigation(plan, sample.location, now, previous) then
                 RebuildRoute(previous and previous.phase == "unavailable" and "player_position_recovered" or "work_protection_ended")
             end
         end
@@ -351,8 +351,10 @@ WB:Expose("analyze_quests", ns.AnalyzeQuests,
 function ns.OnUnload()
     if ns.QuestData and ns.QuestData.ResetCache then ns.QuestData.ResetCache() end
     if ns.Objectives and ns.Objectives.ResetLocationCache then ns.Objectives.ResetLocationCache() end
+    if ns.QuestValue and ns.QuestValue.ResetCache then ns.QuestValue.ResetCache() end
     if ns.GearSheet then ns.GearSheet.Shutdown() end
     if ns.QuestValueSheet then ns.QuestValueSheet.Shutdown() end
+    ns.route.lastQuestSnapshots = nil
     ns.route.valuePendingQuestIDs = nil
     ns.route.valueSheetDirty = nil
     HideTaskMarkers()

@@ -181,4 +181,4 @@ local function ReadDatabaseQuest(db, info, questID, page)
     return AddPage(result, references, page, "references")
 end
 
-ns.Database = { Get = GetDatabase, ReadLocations = ReadLocations, ReadQuest = ReadDatabaseQuest }
+ns.Database = { Get = GetDatabase, AreaMapping = AreaMapping, ReadLocations = ReadLocations, ReadQuest = ReadDatabaseQuest }

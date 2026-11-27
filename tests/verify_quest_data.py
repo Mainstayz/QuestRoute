@@ -2785,6 +2785,41 @@ do
     api.route.driver:GetScript('OnEvent')(api.route.driver,'BAG_UPDATE_DELAYED')
     api.route.driver:GetScript('OnEvent')(api.route.driver,'GOSSIP_SHOW')
     check(not api.route.dirty and m1:IsVisible(),'perf: association-only events do not dirty route or clear markers when closed')
+    -- 5) Hotspots.Build fast-token path skips table.sort on cache hit while keeping reversed-input signature fallback.
+    local pts={
+        {reportedMapID=101,world={continentID=1,x=100,y=100},entityID=1},
+        {reportedMapID=101,world={continentID=1,x=120,y=100},entityID=2},
+    }
+    local token={{pts}}
+    api.Hotspots.Build(pts,'fast:token:101',token)
+    local missesBefore,hitsBefore,sortCalls,origSort=api.route.hotspotCacheMisses,api.route.hotspotCacheHits,0,table.sort
+    table.sort=function(...) sortCalls=sortCalls+1;return origSort(...) end
+    api.Hotspots.Build(pts,'fast:token:101',token)
+    table.sort=origSort
+    check(sortCalls==0 and api.route.hotspotCacheHits==hitsBefore+1 and api.route.hotspotCacheMisses==missesBefore,
+        'perf: matching sourceToken hits hotspot cache without sorting')
+    local rev={pts[2],pts[1]}
+    api.Hotspots.Build(rev,'fast:token:101')
+    check(api.route.hotspotCacheHits==hitsBefore+2 and api.route.hotspotCacheMisses==missesBefore,
+        'perf: reversed points without token still hit signature cache')
+    -- 6) Progress on quest 201 via QUEST_LOG_UPDATE does not rescan full map tree for unchanged no_native_poi quest 203.
+    scenario({routeRow(201,500),routeRow(203,900,{noPOI=true})},400)
+    scanCalls=0
+    rowFor(201).fulfilled=1;autoPlan()
+    check(scanCalls==1,'perf: QUEST_LOG_UPDATE for progress on 201 scans only current map ('..scanCalls..')')
+    -- 7) QuestieDB finishedBy seed hints locate foreign turn-in quest without scanning the entire map tree.
+    local savedDB={exists=FixtureDB.Quest.Exists,finishedBy=FixtureDB.Quest.finishedBy,spawns=FixtureDB.Npc.spawns,support=FixtureDB.Support.Get}
+    FixtureDB.Quest.Exists=function(id) return id==204 end
+    FixtureDB.Quest.finishedBy=function(id) return id==204 and {{504},{}} or nil end
+    FixtureDB.Npc.spawns=function(id) return id==504 and {[18]={{10,10}}} or {} end
+    FixtureDB.Support.Get=function() return {private={areaIdToUiMapId={[17]=101,[18]=102}}} end
+    api.OnUnload();api.StartRoute()
+    Fixture.routeRows={routeRow(204,700,{ready=true,map=102})};syncPOIs()
+    scanCalls=0
+    local seededPlan=api.Replan({})
+    check(scanCalls==2 and seededPlan.nextMapHint and seededPlan.nextMapHint.mapID==102,
+        'perf: QuestieDB finishedBy seed locates foreign turn-in in 2 map scans ('..scanCalls..')')
+    FixtureDB.Quest.Exists,FixtureDB.Quest.finishedBy,FixtureDB.Npc.spawns,FixtureDB.Support.Get=savedDB.exists,savedDB.finishedBy,savedDB.spawns,savedDB.support
     -- Restore fixture state.
     api.route.mobIndex=savedMobIndex
     C_QuestLog.GetQuestsOnMap,Fixture.mapOrder=savedScan,savedOrder

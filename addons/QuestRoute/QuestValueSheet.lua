@@ -444,7 +444,7 @@ function Sheet.Shutdown()
     end
 end
 
--- 只监听装备、专精、等级与跨图变化；任务日志变化由 QuestRoute.lua 唯一主 driver 转发，避免增加额外驱动框体。
+-- 只监听装备、专精、等级、跨图与任务交付变化；任务日志变化由 QuestRoute.lua 唯一主 driver 转发，避免增加额外驱动框体。
 Sheet.watcher = CreateFrame("Frame")
 Sheet.watcher:RegisterEvent("ADDON_LOADED")
 Sheet.watcher:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -453,10 +453,14 @@ Sheet.watcher:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 Sheet.watcher:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED")
 Sheet.watcher:RegisterEvent("PLAYER_LEVEL_UP")
 Sheet.watcher:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+Sheet.watcher:RegisterEvent("QUEST_TURNED_IN")
 Sheet.watcher:SetScript("OnEvent", function(_, event)
     if event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD" then
         Sheet.Attach()
     else
+        if ns.QuestValue and type(ns.QuestValue.ResetCache) == "function" then
+            ns.QuestValue.ResetCache()
+        end
         Sheet.Invalidate()
         Sheet.RefreshIfShown()
     end

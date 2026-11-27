@@ -7,16 +7,46 @@ local hotspotRules = { radius = 150, separation = 300, maxDisplayed = 3, dedupli
 ns.route.hotspotCache, ns.route.hotspotCacheOrder = {}, {}
 ns.route.hotspotCacheHits, ns.route.hotspotCacheMisses = 0, 0
 
-local function BuildHotspots(points, cacheKey)
+local function TokensEqual(a, b)
+    if type(a) ~= "table" or type(b) ~= "table" or #a == 0 or #a ~= #b then return false end
+    for i = 1, #a do
+        if a[i] ~= b[i] then return false end
+    end
+    return true
+end
+
+local function MaterializeCentres(centres, uniqueCount, sourceList, useInputIndex)
+    local result = {}
+    for _, centre in ipairs(centres) do
+        -- 缓存只含几何索引，不保留旧进度/目标对象；每次返回当前任务快照。
+        local point = sourceList[useInputIndex and centre.inputIndex or centre.index]
+        local copy = {}
+        for key, value in pairs(point) do copy[key] = value end
+        copy.hotspot = { id = point.reportedMapID .. ":" .. string.format("%.3f:%.3f", point.world.x, point.world.y),
+            pointCount = centre.count, uniqueLocationCount = uniqueCount, radius = hotspotRules.radius,
+            sparseFallback = centre.count == 1, algorithm = hotspotRules.algorithm }
+        result[#result + 1] = copy
+    end
+    return result
+end
+
+local function BuildHotspots(points, cacheKey, sourceToken)
+    local cached = ns.route.hotspotCache[cacheKey]
+    if cached and cached.fastToken and sourceToken and cached.fastCount == #points and TokensEqual(cached.fastToken, sourceToken) then
+        ns.route.hotspotCacheHits = ns.route.hotspotCacheHits + 1
+        return MaterializeCentres(cached.centres, cached.uniqueCount, points, true)
+    end
     local ordered = {}
-    for _, point in ipairs(points) do ordered[#ordered + 1] = point end
+    for index, point in ipairs(points) do ordered[index] = { point = point, inputIndex = index } end
     table.sort(ordered, function(a, b)
-        if a.world.x ~= b.world.x then return a.world.x < b.world.x end
-        if a.world.y ~= b.world.y then return a.world.y < b.world.y end
-        return (a.entityID or 0) < (b.entityID or 0)
+        local ap, bp = a.point, b.point
+        if ap.world.x ~= bp.world.x then return ap.world.x < bp.world.x end
+        if ap.world.y ~= bp.world.y then return ap.world.y < bp.world.y end
+        return (ap.entityID or 0) < (bp.entityID or 0)
     end)
-    local unique, duplicateGrid = {}, {}
-    for _, point in ipairs(ordered) do
+    local unique, uniqueInputIndices, duplicateGrid = {}, {}, {}
+    for _, entry in ipairs(ordered) do
+        local point = entry.point
         local cx, cy = math.floor(point.world.x / hotspotRules.deduplicateRadius), math.floor(point.world.y / hotspotRules.deduplicateRadius)
         local duplicate
         for dx = -1, 1 do
@@ -35,7 +65,9 @@ local function BuildHotspots(points, cacheKey)
             if duplicate then break end
         end
         if not duplicate then
-            unique[#unique + 1] = point
+            local idx = #unique + 1
+            unique[idx] = point
+            uniqueInputIndices[idx] = entry.inputIndex
             local col = duplicateGrid[cx]
             if not col then col = {}; duplicateGrid[cx] = col end
             local cell = col[cy]
@@ -49,8 +81,12 @@ local function BuildHotspots(points, cacheKey)
             point.world.continentID, point.world.x, point.world.y, point.entityID or 0 }, ":")
     end
     local signature = table.concat(signatureParts, ";")
-    local cached = ns.route.hotspotCache[cacheKey]
-    if cached and cached.signature == signature then ns.route.hotspotCacheHits = ns.route.hotspotCacheHits + 1
+    if cached and cached.signature == signature then
+        ns.route.hotspotCacheHits = ns.route.hotspotCacheHits + 1
+        cached.fastToken, cached.fastCount, cached.uniqueCount = sourceToken, #points, #unique
+        for _, centre in ipairs(cached.centres) do
+            centre.inputIndex = uniqueInputIndices[centre.index]
+        end
     else
         ns.route.hotspotCacheMisses = ns.route.hotspotCacheMisses + 1
         local grid, ranked = {}, {}
@@ -97,7 +133,10 @@ local function BuildHotspots(points, cacheKey)
                     end
                 end
             end
-            if separated then centres[#centres + 1] = candidate end
+            if separated then
+                candidate.inputIndex = uniqueInputIndices[candidate.index]
+                centres[#centres + 1] = candidate
+            end
         end
         if not cached then
             if #ns.route.hotspotCacheOrder >= hotspotRules.cacheLimit then
@@ -105,21 +144,10 @@ local function BuildHotspots(points, cacheKey)
             end
             ns.route.hotspotCacheOrder[#ns.route.hotspotCacheOrder + 1] = cacheKey
         end
-        cached = { signature = signature, centres = centres }
+        cached = { signature = signature, centres = centres, uniqueCount = #unique, fastToken = sourceToken, fastCount = #points }
         ns.route.hotspotCache[cacheKey] = cached
     end
-    local result = {}
-    for _, centre in ipairs(cached.centres) do
-        -- 缓存只含几何索引，不保留旧进度/目标对象；每次返回当前任务快照。
-        local point = unique[centre.index]
-        local copy = {}
-        for key, value in pairs(point) do copy[key] = value end
-        copy.hotspot = { id = point.reportedMapID .. ":" .. string.format("%.3f:%.3f", point.world.x, point.world.y),
-            pointCount = centre.count, uniqueLocationCount = #unique, radius = hotspotRules.radius,
-            sparseFallback = centre.count == 1, algorithm = hotspotRules.algorithm }
-        result[#result + 1] = copy
-    end
-    return result
+    return MaterializeCentres(cached.centres, #unique, unique, false)
 end
 
 local function VisibleHotspots(points, selected)

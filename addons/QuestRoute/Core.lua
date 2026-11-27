@@ -26,6 +26,7 @@ local function InvalidArguments(message)
 end
 
 local function IsFinite(value)
+    if value == nil then return false end
     return canaccessvalue(value) and type(value) == "number"
         and value == value and value > -math.huge and value < math.huge
 end
@@ -35,6 +36,7 @@ local function IsID(value)
 end
 
 local function Accessible(value)
+    if value == nil then return nil end
     if canaccessvalue(value) then return value end
 end
 

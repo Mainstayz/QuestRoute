@@ -168,6 +168,15 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities, pla
             else sources[1] = { kind = objective.kind, id = objective.id, relation = "objective_entity" } end
             if #sources == 0 then return Fallback("direct_location_source_missing") end
             if #sources > 32 then return Fallback("too_many_location_sources") end
+            local uniqueSources, seenSources = {}, {}
+            for _, source in ipairs(sources) do
+                local key = source.kind .. ":" .. source.id
+                if not seenSources[key] then
+                    seenSources[key] = true
+                    uniqueSources[#uniqueSources + 1] = source
+                end
+            end
+            sources = uniqueSources
             if IsID(playerLevel) then
                 local allowed = {}
                 for _, source in ipairs(sources) do
@@ -178,7 +187,7 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities, pla
                 sources = allowed
                 if #sources == 0 then return Fallback("target_above_level") end
             end
-            local pointCount, seen = 0, {}
+            local pointCount, token = 0, {}
             for _, source in ipairs(sources) do
                 local key = source.kind .. ":" .. source.id
                 local locations = cache.entries[key]
@@ -188,28 +197,33 @@ local function ResolveObjectiveLocations(db, info, quest, cache, identities, pla
                     locations = ReadLocations(db, entity, source.id)
                     StoreLocations(cache, key, locations)
                 end
+                if token and cache.entries[key] == locations then
+                    token[#token + 1] = locations
+                else
+                    token = nil
+                end
                 if #locations > 1200 then return Fallback("too_many_spawn_locations") end
                 for _, location in ipairs(locations) do
                     if location.available and not location.world and (location.phase == nil or location.phase == 0) then
                         return Fallback("world_position_unavailable")
                     end
                     if location.available and location.world and (location.phase == nil or location.phase == 0) then
-                        local fingerprint = key .. ":" .. location.areaID .. ":" .. location.spawnIndex
-                        if not seen[fingerprint] then
-                            seen[fingerprint] = true
-                            pointCount = pointCount + 1
-                            result.points[#result.points + 1] = { questID = quest.questID, objective = objective,
-                                objectiveKey = objective.key, source = "QuestieDB", precision = "static_spawn",
-                                coordinateMapID = location.coordinateMapID, reportedMapID = location.coordinateMapID,
-                                x = location.x, y = location.y, world = location.world, units = "normalized",
-                                entityKind = source.kind, entityID = source.id, relation = source.relation,
-                                areaID = location.areaID, spawnIndex = location.spawnIndex, version = info.version }
-                        end
+                        pointCount = pointCount + 1
+                        result.points[#result.points + 1] = { questID = quest.questID, objective = objective,
+                            objectiveKey = objective.key, source = "QuestieDB", precision = "static_spawn",
+                            coordinateMapID = location.coordinateMapID, reportedMapID = location.coordinateMapID,
+                            x = location.x, y = location.y, world = location.world, units = "normalized",
+                            entityKind = source.kind, entityID = source.id, relation = source.relation,
+                            areaID = location.areaID, spawnIndex = location.spawnIndex, version = info.version }
                     end
                 end
             end
             if pointCount == 0 then return Fallback("objective_locations_unavailable") end
             if #result.points > 2400 then return Fallback("too_many_target_locations") end
+            if token and #token > 0 then
+                result.sourceTokens = result.sourceTokens or {}
+                result.sourceTokens[objective.key] = token
+            end
         end
     end
     if remaining == 0 then return Fallback("objectives_finished_waiting_quest_state") end

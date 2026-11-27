@@ -189,11 +189,44 @@ end
 -- 空结果或 nil 不缓存（客户端暂未就绪时下一次还能拿到真列表）；OnUnload 通过 ResetCache 清空。
 -- 数组只在本文件内只读遍历，不返回给调用方，外部不可修改。
 local mapTreeCache
-local poiMapHints, noNativePOICache = {}, {}
+local poiMapHints, noNativePOICache, mapNameCache = {}, {}, {}
 
 local function ResetCache()
     mapTreeCache = nil
-    poiMapHints, noNativePOICache = {}, {}
+    poiMapHints, noNativePOICache, mapNameCache = {}, {}, {}
+end
+
+local function SamplePlayerLocation()
+    local mapID = Accessible(C_Map.GetBestMapForUnit("player"))
+    local mapName = IsID(mapID) and mapNameCache[mapID] or nil
+    if IsID(mapID) and mapName == nil then
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        if mapInfo then
+            mapName = Accessible(mapInfo.name) or false
+            mapNameCache[mapID] = mapName
+        end
+    end
+    local hasMap = mapName ~= nil
+    local position = hasMap and C_Map.GetPlayerMapPosition(mapID, "player") or nil
+    local x, y = position and Accessible(position.x), position and Accessible(position.y)
+    local hasPosition = IsFinite(x) and IsFinite(y) and x >= 0 and x <= 1 and y >= 0 and y <= 1
+    local location = {
+        available = hasPosition,
+        coordinateMapID = mapID,
+        mapName = type(mapName) == "string" and mapName or nil,
+        units = "normalized",
+        source = "C_Map.GetPlayerMapPosition",
+    }
+    if hasPosition then
+        location.x, location.y = x, y
+        location.world = ToWorld(mapID, x, y)
+    else
+        location.reason = hasMap and "position_unavailable" or "map_unavailable"
+    end
+    return {
+        location = location,
+        level = Accessible(UnitLevel("player")),
+    }
 end
 
 local function MapTreeIDs()
@@ -357,7 +390,7 @@ local function RecordPOIs(list, byQuest)
 end
 
 -- 路线规划优先扫描当前地图与该任务已知的外图位置，仅在缺失且需重扫时回退全地图树。
-local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowFullScan)
+local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowFullScan, seedHints)
     for qid in pairs(poiMapHints) do
         if not active[qid] then poiMapHints[qid] = nil end
     end
@@ -395,6 +428,15 @@ local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowF
                     end
                 end
             end
+            local seeded = seedHints and seedHints[qid]
+            if seeded then
+                for mid in pairs(seeded) do
+                    if IsID(mid) and not scanned[mid] and not hintMapSet[mid] then
+                        hintMapSet[mid] = true
+                        hintMaps[#hintMaps + 1] = mid
+                    end
+                end
+            end
         end
         if #hintMaps > 0 then
             table.sort(hintMaps)
@@ -406,7 +448,8 @@ local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowF
             if not byQuest[qid] then
                 stillMissing[qid] = true
                 local statusKey = (statuses and statuses[qid]) or true
-                if allowFullScan or noNativePOICache[qid] ~= statusKey then
+                local forceScan = allowFullScan == true or (type(allowFullScan) == "table" and allowFullScan[qid] == true)
+                if forceScan or noNativePOICache[qid] ~= statusKey then
                     needsFull = true
                 end
             end
@@ -430,4 +473,4 @@ local function CollectPlanPOIs(active, currentMapID, neededIDs, statuses, allowF
 end
 
 ns.QuestData = { ReadQuest = ReadQuest, ActiveQuestIndex = ActiveQuestIndex, CollectPOIs = CollectPOIs,
-    CollectPlanPOIs = CollectPlanPOIs, ResetCache = ResetCache }
+    CollectPlanPOIs = CollectPlanPOIs, SamplePlayerLocation = SamplePlayerLocation, ResetCache = ResetCache }
