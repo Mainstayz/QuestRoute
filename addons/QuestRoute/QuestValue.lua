@@ -255,7 +255,15 @@ local function StepReverseIndex(state, maxQuests, budgetMs)
         if started and chunkEnd < limit and debugprofilestop() - started >= budgetMs then break end
     end
     state.cursor = lastProcessed + 1
-    if state.cursor > #ids then state.done = true end
+    if state.cursor > #ids then
+        state.done = true
+        -- 侧边栏可能已按不完整索引显示任务链：完成后防抖刷新一次。
+        local route = ns.route
+        if route then
+            if not route.valueSheetDirty then route.valueSheetDue = GetTime() + 0.4 end
+            route.valueSheetDirty = true
+        end
+    end
     return state.done
 end
 
@@ -273,7 +281,7 @@ end
 local function GetReverseNextIndex(db)
     local state = EnsureReverseState(db)
     if not state then return nil end
-    if not state.done then StepReverseIndex(state, nil) end
+    if not state.done then StepReverseIndex(state, nil, 4) end -- 每次≤约4ms，返回可能不完整的映射
     return state.map
 end
 

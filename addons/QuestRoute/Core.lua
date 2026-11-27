@@ -90,7 +90,8 @@ end
 
 local function DistanceSquared(a, b)
     if not a or not b or a.continentID ~= b.continentID then return nil end
-    return (a.x - b.x) ^ 2 + (a.y - b.y) ^ 2
+    local dx, dy = a.x - b.x, a.y - b.y
+    return dx * dx + dy * dy
 end
 
 local function RouteStepKey(questID, objectiveKey)

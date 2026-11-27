@@ -38,15 +38,13 @@ local function RouteTick(_, elapsed)
         ns.QuestValue.PumpIndex(128, 2)
     end
     if ns.route.dirty and now >= (ns.route.due or 0) then
-        local previousSequence = ns.route.sequence
         RebuildRoute(ns.route.pendingReason or "quest_update")
         RenderTaskNameplates()
         ns.route.nextNameplateCheck = now + 0.5
+        -- 价值侧边栏交给下方防抖：重建频繁时最多约每秒整表重算一次。
         if ns.QuestValueSheet then
-            if ns.route.sequence ~= previousSequence and type(ns.QuestValueSheet.Invalidate) == "function" then
-                ns.QuestValueSheet.Invalidate()
-            end
-            ns.QuestValueSheet.RefreshIfShown()
+            if not ns.route.valueSheetDirty then ns.route.valueSheetDue = now + 1 end
+            ns.route.valueSheetDirty = true
         end
     end
     if ns.route.valueSheetDirty and now >= (ns.route.valueSheetDue or 0) then

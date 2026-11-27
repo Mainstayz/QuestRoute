@@ -1335,6 +1335,17 @@ check(api.route.nextLocationCheck>=GetTime()+29,'unchanged location retry backs 
 rows[1].noPOI=false;syncPOIs();Fixture.time=api.route.nextLocationCheck;plan=samplePosition(nil,0)
 check(plan.sequence==unchangedSequence+1 and plan.count==1 and plan.reason=='location_data_refresh' and published==1,'backed-off location retry still publishes when the POI returns')
 api.WB.Emit=previousEmit
+-- Retry timers: quiet back-off to 30s survives a later non-quiet rebuild; an expired timer is re-armed into the future.
+rows={routeRow(201,500)}
+plan=scenario(rows,400);rows[1].noPOI=true;plan=autoPlan()
+plan=samplePosition(nil,5)
+local backedOff=api.route.nextLocationCheck
+check(backedOff>=GetTime()+29,'retry precondition: quiet unchanged rebuild backs off to 30 seconds')
+autoPlan()
+check(api.route.nextLocationCheck==backedOff,'non-quiet rebuild does not pull a backed-off retry back to 5 seconds')
+Fixture.time=backedOff;samplePosition(nil,0)
+check(api.route.nextLocationCheck~=nil and api.route.nextLocationCheck>GetTime(),'expired retry timer is re-armed into the future (no 0.1s rebuild loop)')
+rows[1].noPOI=false;syncPOIs()
 local savedThreshold=api.GetPlan({}).moveThreshold
 api.SetRouteOptions({moveThreshold=100})
 rows={routeRow(201,800)}
@@ -2807,6 +2818,10 @@ do
     scanCalls=0
     rowFor(201).fulfilled=1;autoPlan()
     check(scanCalls==1,'perf: QUEST_LOG_UPDATE for progress on 201 scans only current map ('..scanCalls..')')
+    -- 6b) QUEST_LOG_UPDATE without any quest-state change must not force a full scan for the no-POI quest.
+    scanCalls=0
+    autoPlan()
+    check(scanCalls<=1,'perf: unchanged QUEST_LOG_UPDATE does not force full-map scan ('..scanCalls..')')
     -- 7) QuestieDB finishedBy seed hints locate foreign turn-in quest without scanning the entire map tree.
     local savedDB={exists=FixtureDB.Quest.Exists,finishedBy=FixtureDB.Quest.finishedBy,spawns=FixtureDB.Npc.spawns,support=FixtureDB.Support.Get}
     FixtureDB.Quest.Exists=function(id) return id==204 end

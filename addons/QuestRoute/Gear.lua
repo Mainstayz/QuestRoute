@@ -270,9 +270,9 @@ local function FormatCoords(x, y)
     return string.format("(%d,%d)", math.floor(x + 0.5), math.floor(y + 0.5))
 end
 
-local function ReadCachedLocations(db, entity, kind, id, locCache)
+local function ReadCachedLocations(db, entity, kind, id, locCache, dbInfo)
     if ns.Objectives and type(ns.Objectives.SharedLocationCache) == "function" then
-        local cache = ns.Objectives.SharedLocationCache(db)
+        local cache = ns.Objectives.SharedLocationCache(db, dbInfo)
         local key = kind .. ":" .. id
         local cached = cache.entries[key]
         if not cached then
@@ -301,7 +301,7 @@ local function ReadCachedLocations(db, entity, kind, id, locCache)
     return locs
 end
 
-local function PickStarterEntity(db, ids, entity, kind, locCache)
+local function PickStarterEntity(db, ids, entity, kind, locCache, dbInfo)
     if type(ids) ~= "table" or not entity or type(entity.Exists) ~= "function" then return nil end
     local fallback
     for _, id in ipairs(ids) do
@@ -314,7 +314,7 @@ local function PickStarterEntity(db, ids, entity, kind, locCache)
             }
             if kind == "npc" or kind == "object" then
                 if ns.Database and type(ns.Database.ReadLocations) == "function" then
-                    local locs = ReadCachedLocations(db, entity, kind, id, locCache)
+                    local locs = ReadCachedLocations(db, entity, kind, id, locCache, dbInfo)
                     for _, loc in ipairs(locs or {}) do
                         if loc.available then
                             info.mapID = loc.coordinateMapID
@@ -330,7 +330,7 @@ local function PickStarterEntity(db, ids, entity, kind, locCache)
             elseif kind == "item" and db.Item then
                 local npcDrops = SafeCall(db.Item.npcDrops, id)
                 if type(npcDrops) == "table" and #npcDrops > 0 and db.Npc then
-                    local dropLoc = PickStarterEntity(db, npcDrops, db.Npc, "npc", locCache)
+                    local dropLoc = PickStarterEntity(db, npcDrops, db.Npc, "npc", locCache, dbInfo)
                     if dropLoc then
                         info.mapID = dropLoc.mapID
                         info.mapName = dropLoc.mapName
@@ -449,7 +449,8 @@ local function ResolveQuestPickup(source, pickupCache, locCache)
         return value
     end
     local hasQuestLog = type(C_QuestLog) == "table" and type(C_QuestLog.IsQuestFlaggedCompleted) == "function"
-    local db = ns.Database and type(ns.Database.Get) == "function" and ns.Database.Get() or nil
+    local db, dbInfo
+    if ns.Database and type(ns.Database.Get) == "function" then db, dbInfo = ns.Database.Get() end
     if not hasQuestLog and not db then return Remember(nil) end
     if IsQuestCompleted(questId) then
         local p = { status = "completed", questId = questId, questName = source.name }
@@ -491,9 +492,9 @@ local function ResolveQuestPickup(source, pickupCache, locCache)
     if status ~= "prereq_in_progress" and db and db.Quest and SafeCall(db.Quest.Exists, entryId) == true then
         local startedBy = SafeCall(db.Quest.startedBy, entryId)
         if type(startedBy) == "table" then
-            starter = PickStarterEntity(db, startedBy[1], db.Npc, "npc", locCache)
-                or PickStarterEntity(db, startedBy[2], db.Object, "object", locCache)
-                or PickStarterEntity(db, startedBy[3], db.Item, "item", locCache)
+            starter = PickStarterEntity(db, startedBy[1], db.Npc, "npc", locCache, dbInfo)
+                or PickStarterEntity(db, startedBy[2], db.Object, "object", locCache, dbInfo)
+                or PickStarterEntity(db, startedBy[3], db.Item, "item", locCache, dbInfo)
         end
     end
 

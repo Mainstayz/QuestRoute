@@ -5,6 +5,8 @@ local InvalidArguments, IsID, DistanceSquared, RouteStepKey = Util.InvalidArgume
 local ReadQuest, ActiveQuestIndex, CollectPlanPOIs = QuestData.ReadQuest, QuestData.ActiveQuestIndex, QuestData.CollectPlanPOIs
 local RouteSettings, RouteExclusion = ns.RouteOptions.Get, ns.RouteOptions.Exclusion
 local GetDatabase = ns.Database.Get
+-- 保留尚未到期的复查时刻（包括 quiet 推迟到 30 秒的值）；已到期或无值时重设为 now+5。
+local function RetryAt(old, now) return (old or 0) > now and old or now + 5 end
 local ReadObjectiveIdentities, ReadObjectiveLocations = ns.Objectives.ReadIdentities, ns.Objectives.ReadLocations
 local ReadLevelingData, RewardReference, ApplyLevelingPriority = ns.Priority.Read, ns.Priority.Reference, ns.Priority.Apply
 local difficultyBands, weightBounds = ns.Priority.difficultyBands, ns.Priority.weightBounds
@@ -490,7 +492,7 @@ local function BuildPlan(reason)
         for id in pairs(prevSnapshots) do
             if not currentSnapshots[id] then changedQuests[id] = true end
         end
-        allowFull = next(changedQuests) and changedQuests or true
+        allowFull = changedQuests
     else
         allowFull = fullScanReasons[reason] == true
     end
@@ -613,9 +615,9 @@ local function BuildPlan(reason)
         candidate.priorityWeight = weights[candidate.quest.questID] * factor
     end
     -- 奖励缓存可独立于任务信息就绪；只在仍有暂缺数据时轻量重试，避免依赖单一事件。
-    ns.route.nextRewardCheck = pendingRewards > 0 and now + 5 or nil
-    ns.route.nextLocationCheck = pendingLocations > 0 and now + 5 or nil
-    ns.route.nextObjectiveCheck = pendingObjectives > 0 and now + 5 or nil
+    ns.route.nextRewardCheck = pendingRewards > 0 and RetryAt(ns.route.nextRewardCheck, now) or nil
+    ns.route.nextLocationCheck = pendingLocations > 0 and RetryAt(ns.route.nextLocationCheck, now) or nil
+    ns.route.nextObjectiveCheck = pendingObjectives > 0 and RetryAt(ns.route.nextObjectiveCheck, now) or nil
     ns.route.activeQuestIDs = active
     for id in pairs(ns.route.progress) do if not active[id] then ns.route.progress[id] = nil end end
     ns.route.mobIndex = mobIndex
@@ -664,7 +666,7 @@ local function BuildPlan(reason)
     end
     local discovery = associationOff and Discovery.Disabled() or Discovery.Collect(context, active, remaining, settings)
     ns.route.associationQuestIDs = discovery.pendingQuestIDs
-    ns.route.nextAssociationCheck = (discovery.pendingCount or 0) > 0 and now + 5 or nil
+    ns.route.nextAssociationCheck = (discovery.pendingCount or 0) > 0 and RetryAt(ns.route.nextAssociationCheck, now) or nil
     local baseline = firstIndex and { questID = remaining[firstIndex].quest.questID,
         objectiveKey = firstPoint.objectiveKey, point = firstPoint,
         action = remaining[firstIndex].quest.readyForTurnIn and "turn_in"
